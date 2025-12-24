@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -63,5 +64,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    implementation(libs.koin.android)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.nav3)
 }

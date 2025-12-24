@@ -10,6 +10,9 @@ activityCompose = "1.12.2"
 composeBom = "2025.12.01"
 
 koin = "4.2.0-beta2"
+nav3 = "1.0.0"
+nav3ViewModel = "2.10.0"
+serialization = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -27,10 +30,22 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3" }
+navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3" }
+navigation3-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3ViewModel" }
+
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-navigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
+[bundles]
+nav3 = ["navigation3-runtime", "navigation3-ui", "navigation3-viewmodel"]
+koin = ["koin-android", "koin-compose", "koin-navigation3"]
