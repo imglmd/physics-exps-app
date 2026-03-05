@@ -5,5 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Screen {
     @Serializable
-    object Home : Screen
+    data object Home : Screen
+    @Serializable
+    data class Experiment(val id: Int) : Screen
 }
