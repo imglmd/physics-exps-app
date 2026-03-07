@@ -43,7 +43,7 @@ fun ExperimentTextField(
             )
             .border(
                 width = 1.5.dp,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(16.dp)
             ),
         verticalAlignment = Alignment.CenterVertically

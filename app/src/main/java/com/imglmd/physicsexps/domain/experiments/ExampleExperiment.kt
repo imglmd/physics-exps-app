@@ -11,9 +11,7 @@ class ExampleExperiment: Experiment {
     override val id = "pendulum"
     override val name = "Математический маятник"
     override val category = "Механика"
-    override val description = "Математический маятник — это идеализированная физическая модель, " +
-            "представляющая собой материальную точку, подвешенную на невесомой нерастяжимой нити и " +
-            "способную совершать колебания в вертикальной плоскости под действием силы тяжести."
+    override val description = "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
     override val inputFields = listOf(
         InputField("length", "Длина нити", "L","метр"),
         InputField("period", "Период колебаний", "T", "сек")
