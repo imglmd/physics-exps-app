@@ -1,12 +1,24 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
-import com.imglmd.physicsexps.domain.usecase.GetExperimentsUseCase
+import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class HomeViewModel: ViewModel() {
-    private val getExperimentsUseCase by lazy { GetExperimentsUseCase() }
+class HomeViewModel(
+    private val getAllExperimentsUseCase: GetAllExperimentsUseCase
+): ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
+
+    init {
+        loadExperiments()
+    }
+
+    private fun loadExperiments(){
+        _state.update {
+            it.copy(experiments = getAllExperimentsUseCase())
+        }
+    }
 }

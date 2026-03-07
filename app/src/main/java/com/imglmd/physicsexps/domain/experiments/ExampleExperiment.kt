@@ -26,10 +26,11 @@ class ExampleExperiment: Experiment {
         val g = (4 * PI.pow(2) * L) / T.pow(2)
 
         return ExperimentResult(
+            experiment = this,
             quantities = listOf(
-                PhysicalQuantity("Длина нити", L, "м"),
-                PhysicalQuantity("Период", T, "с"),
-                PhysicalQuantity("g", g, "м/с²")
+                PhysicalQuantity("Длина нити", "L",L, "м"),
+                PhysicalQuantity("Период", "T",T, "с"),
+                PhysicalQuantity("Ускорение", "g",g, "м/с²")
             )
         )
     }

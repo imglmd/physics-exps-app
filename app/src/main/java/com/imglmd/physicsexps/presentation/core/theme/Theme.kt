@@ -18,10 +18,11 @@ private val LightColorScheme = lightColorScheme(
     primary = CherryRose,
     secondary = Silver,
     tertiary = AlabasterGrey,
-    surface = Parchment,
-    background = Parchment,
+    surface = White,
+    background = White,
     surfaceContainer = White,
     primaryContainer = White,
+    onPrimaryContainer = ShadowGrey,
     onPrimary = White,
     onSecondary = White
 )
