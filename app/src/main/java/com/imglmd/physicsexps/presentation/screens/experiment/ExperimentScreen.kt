@@ -106,6 +106,7 @@ fun ExperimentScreen(
             PrimaryButton(
                 text = "Начать",
                 isLoading = state.isLoading,
+                enabled = state.isButtonActive,
                 onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)

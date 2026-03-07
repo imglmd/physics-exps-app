@@ -40,9 +40,16 @@ class ExperimentViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
 
-            val parsedInputs = state.value.inputs.mapValues { (_, value) ->
-                value.toDoubleOrNull()
-                    ?: return@launch _state.update { it.copy(isLoading = false, error = "Некорректное число") }
+            val parsedInputs = mutableMapOf<String, Double>()
+            for ((key, value) in state.value.inputs) {
+                val number = value.toDoubleOrNull()
+                if (number == null) {
+                    _state.update {
+                        it.copy(isLoading = false, error = "Некорректное число")
+                    }
+                    return@launch
+                }
+                parsedInputs[key] = number
             }
             delay(1000) //TODO убрать ес чо
             calculate(id, parsedInputs)
@@ -51,17 +58,28 @@ class ExperimentViewModel(
                     _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(isLoading = false, error = error.message) }
+                    _state.update { it.copy(error = error.message) }
                 }
             _state.update { it.copy(isLoading = false) }
         }
     }
 
     private fun changeValue(key: String, newValue: String) {
-        _state.update {
-            it.copy(
-                inputs = it.inputs + (key to newValue)
+        _state.update { current ->
+
+            val newInputs = current.inputs + (key to newValue)
+            current.copy(
+                inputs = newInputs,
+                isButtonActive = validateInputs(newInputs)
             )
+        }
+    }
+
+    private fun validateInputs(inputs: Map<String, String>): Boolean {
+        if (inputs.isEmpty()) return false
+
+        return inputs.values.any { value -> //TODO  all
+            value.isNotBlank() && value.toDoubleOrNull() != null
         }
     }
 }
