@@ -24,6 +24,7 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = White,
     onPrimaryContainer = ShadowGrey,
     onPrimary = White,
+    error = CherryRose,
     outline = AlabasterGrey,
     outlineVariant = AlabasterGrey,
     onSecondary = White

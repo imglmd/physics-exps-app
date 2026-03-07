@@ -45,7 +45,7 @@ class ExperimentViewModel(
                 val number = value.toDoubleOrNull()
                 if (number == null) {
                     _state.update {
-                        it.copy(isLoading = false, error = "Некорректное число")
+                        it.copy(isLoading = false, error = "Некорректное число", isButtonActive = false)
                     }
                     return@launch
                 }
@@ -58,7 +58,7 @@ class ExperimentViewModel(
                     _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(error = error.message) }
+                    _state.update { it.copy(error = error.message, isButtonActive = false) }
                 }
             _state.update { it.copy(isLoading = false) }
         }
@@ -70,6 +70,7 @@ class ExperimentViewModel(
             val newInputs = current.inputs + (key to newValue)
             current.copy(
                 inputs = newInputs,
+                error = null,
                 isButtonActive = validateInputs(newInputs)
             )
         }

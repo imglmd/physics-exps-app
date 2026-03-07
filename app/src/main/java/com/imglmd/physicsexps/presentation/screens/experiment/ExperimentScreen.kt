@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
@@ -119,7 +120,9 @@ fun ExperimentScreen(
                         label = field.label,
                         symbol = field.symbol,
                         unit = field.unit,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        borderColor = if (state.error != null) MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
+                        else MaterialTheme.colorScheme.outlineVariant
                     )
 
                     LaunchedEffect(textState.text) {
@@ -130,6 +133,18 @@ fun ExperimentScreen(
                             )
                         )
                     }
+                }
+                state.error?.let { error ->
+                    item {
+                        Text(
+                            error,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
                 }
             }
 

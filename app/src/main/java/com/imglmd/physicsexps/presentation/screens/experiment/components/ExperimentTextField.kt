@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -33,6 +34,7 @@ fun ExperimentTextField(
     unit: String,
     modifier: Modifier = Modifier,
     symbolWidth: Dp = 44.dp,
+    borderColor: Color = MaterialTheme.colorScheme.outlineVariant
 ) {
     Row(
         modifier = modifier
@@ -43,7 +45,7 @@ fun ExperimentTextField(
             )
             .border(
                 width = 1.5.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = borderColor,
                 shape = RoundedCornerShape(16.dp)
             ),
         verticalAlignment = Alignment.CenterVertically
@@ -64,7 +66,7 @@ fun ExperimentTextField(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.5.dp)
-                .background(MaterialTheme.colorScheme.tertiary)
+                .background(borderColor)
         )
 
         BasicTextField(
