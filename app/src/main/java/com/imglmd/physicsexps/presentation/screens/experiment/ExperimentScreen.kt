@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,6 +71,26 @@ fun ExperimentScreen(
         }
     }
 
+    val textStates = remember(state.experiment.inputFields) {
+        state.experiment.inputFields.associate { field ->
+            field.key to TextFieldState(initialText = "")
+        }
+    }
+    state.experiment.inputFields.forEach { field ->
+        val textState = textStates[field.key]!!
+        LaunchedEffect(textState) {
+            snapshotFlow { textState.text.toString() }
+                .collect { value ->
+                    viewModel.onIntent(
+                        ExperimentContract.Intent.ChangeValue(
+                            key = field.key,
+                            newValue = value
+                        )
+                    )
+                }
+        }
+    }
+
     Scaffold(
         topBar = {
             ExperimentAppBar(
@@ -82,11 +104,11 @@ fun ExperimentScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
         ) {
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().imePadding(),
                 contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
@@ -109,11 +131,11 @@ fun ExperimentScreen(
                     )
                 }
 
-                items(state.experiment.inputFields) { field ->
-
-                    val textState = rememberTextFieldState(
-                        initialText = state.inputs[field.key] ?: ""
-                    )
+                items(
+                    state.experiment.inputFields,
+                    key = { it. key }
+                ) { field ->
+                    val textState = textStates[field.key]!!
 
                     ExperimentTextField(
                         state = textState,
@@ -124,15 +146,6 @@ fun ExperimentScreen(
                         borderColor = if (state.error != null) MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
                         else MaterialTheme.colorScheme.outlineVariant
                     )
-
-                    LaunchedEffect(textState.text) {
-                        viewModel.onIntent(
-                            ExperimentContract.Intent.ChangeValue(
-                                key = field.key,
-                                newValue = textState.text.toString()
-                            )
-                        )
-                    }
                 }
                 state.error?.let { error ->
                     item {
@@ -155,7 +168,7 @@ fun ExperimentScreen(
                 onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
                     .navigationBarsPadding()
                     .imePadding()
             )
