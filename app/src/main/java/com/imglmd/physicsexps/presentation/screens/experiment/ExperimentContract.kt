@@ -9,7 +9,7 @@ interface ExperimentContract {
         val inputs: Map<String, String> = emptyMap(),
         val error: String? = null,
         val isLoading: Boolean = false,
-        val isButtonActive: Boolean = true
+        val isButtonActive: Boolean = false
     )
     sealed interface Intent {
         data object Start: Intent
