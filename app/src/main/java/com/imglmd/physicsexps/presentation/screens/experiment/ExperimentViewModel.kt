@@ -7,6 +7,7 @@ import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -43,21 +44,16 @@ class ExperimentViewModel(
                 value.toDoubleOrNull()
                     ?: return@launch _state.update { it.copy(isLoading = false, error = "Некорректное число") }
             }
-
+            delay(1000) //TODO убрать ес чо
             calculate(id, parsedInputs)
                 .onSuccess { result ->
                     resultRepository.save(result)
-                    if (resultRepository.get() == null){
-                        println("схуяли null")
-                    } else {
-                        println(resultRepository.get()!!.quantities.toString())
-
-                    }
                     _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, error = error.message) }
                 }
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
