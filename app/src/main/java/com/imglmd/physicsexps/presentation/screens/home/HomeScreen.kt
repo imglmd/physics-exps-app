@@ -78,7 +78,7 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .padding(top = 10.dp)
                 .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            //verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -96,11 +96,25 @@ fun HomeScreen(
                 }
 
             }
-            items(state.experiments){ experiment ->
-                ExperimentItem(
-                    name = experiment.name,
-                    onClick = { navigateToExperiment(experiment.id) }
-                )
+            state.experimentsByCategory.forEach { (category, experiments) ->
+
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                    )
+                }
+
+                items(experiments) { experiment ->
+                    Column {
+                        ExperimentItem(
+                            name = experiment.name,
+                            onClick = { navigateToExperiment(experiment.id) }
+                        )
+                        Spacer(Modifier.height(10.dp))
+                    }
+                }
             }
         }
     }
@@ -116,13 +130,14 @@ private fun ExperimentItem(
         modifier = modifier
             .aspectRatio(1f)
             .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(30.dp)
+                elevation = 6.dp,
+                shape = RoundedCornerShape(30.dp),
+                clip = false  // тень не обрезается — важно!
             )
             .clip(RoundedCornerShape(30.dp))
+            .background(MaterialTheme.colorScheme.surface)
             .clickable(onClick = onClick)
     ) {
-
         Image(
             painter = painterResource(R.drawable.placeholder),
             contentDescription = name,
@@ -140,12 +155,13 @@ private fun ExperimentItem(
             Text(
                 text = name,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center
             )
         }
     }
 }
+
 
 
 @Composable
