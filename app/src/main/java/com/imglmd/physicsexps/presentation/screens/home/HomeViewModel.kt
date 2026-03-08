@@ -16,6 +16,20 @@ class HomeViewModel(
         loadExperiments()
     }
 
+
+    fun onSearchTextChange(text: String) {
+        _state.update { current ->
+            val filtered = getAllExperimentsUseCase()
+                .filter {
+                    it.name.contains(text, ignoreCase = true)
+                }
+
+            current.copy(
+                searchText = text,
+                experiments = filtered
+            )
+        }
+    }
     private fun loadExperiments(){
         _state.update {
             it.copy(experiments = getAllExperimentsUseCase())
