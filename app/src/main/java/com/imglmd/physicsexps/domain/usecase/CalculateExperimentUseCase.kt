@@ -13,7 +13,33 @@ class CalculateExperimentUseCase(
         val experiment = registry.getById(experimentId)
 
         //TODO validation
+        inputs.forEach{ (quantity, value) ->
+            validate(quantity, value)
+        }
 
         experiment.calculate(inputs)
+    }
+
+    private fun validate(quantity: String, value: Double): String {
+        return when(quantity){
+            "length" -> {
+                if (value <= 0)
+                    "Длина не может быть отрицательной и равной 0"
+                else
+                    ""
+            }
+            "period" -> {
+                if (value <= 0)
+                    "Период не может быть отрицательным и равным нулю"
+                else
+                    ""
+            }
+
+            else -> {
+                ""
+            }
+        }
+
+        //TODO() для всех величин доделать
     }
 }
