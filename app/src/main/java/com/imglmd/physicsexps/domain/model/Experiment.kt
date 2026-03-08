@@ -8,6 +8,6 @@ interface Experiment {
     val category: String
     val description: String
     val inputFields: List<InputField>
-
+    val minRequiredInputs: Int
     fun calculate(inputs: Map<String, Double>): ExperimentResult
 }

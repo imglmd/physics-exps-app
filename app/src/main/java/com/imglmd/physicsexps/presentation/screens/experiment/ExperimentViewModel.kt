@@ -23,7 +23,7 @@ class ExperimentViewModel(
     private val experiment = getExperiment(id)
 
     private val _state = MutableStateFlow(
-        ExperimentContract.State(experiment = experiment)
+        ExperimentContract.State(experiment)
     )
     val state = _state.asStateFlow()
 
@@ -40,11 +40,11 @@ class ExperimentViewModel(
 
     private fun start() = viewModelScope.launch {
 
-        val parsedInputs = parseInputs(state.value.inputs)
+        val parsed = parseInputs(state.value.inputs)
 
-        if (parsedInputs.size < 2) {
+        if (parsed.size < experiment.minRequiredInputs) {
             _state.update {
-                it.copy(error = "Введите минимум две величины")
+                it.copy(error = "Введите минимум ${experiment.minRequiredInputs} значения")
             }
             return@launch
         }
@@ -53,7 +53,7 @@ class ExperimentViewModel(
 
         delay(500) //TODO убрать
 
-        calculate(id, parsedInputs)
+        calculate(id, parsed)
             .onSuccess { result ->
                 resultRepository.save(result)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
@@ -77,7 +77,7 @@ class ExperimentViewModel(
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = parsed.size >= 2
+                isButtonActive = parsed.size >= experiment.minRequiredInputs
             )
         }
     }
