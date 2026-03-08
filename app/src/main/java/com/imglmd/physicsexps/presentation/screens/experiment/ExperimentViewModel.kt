@@ -20,8 +20,10 @@ class ExperimentViewModel(
     private val resultRepository: InMemoryResultRepository
 ) : ViewModel() {
 
+    private val experiment = getExperiment(id)
+
     private val _state = MutableStateFlow(
-        ExperimentContract.State(getExperiment(id))
+        ExperimentContract.State(experiment = experiment)
     )
     val state = _state.asStateFlow()
 
@@ -37,21 +39,19 @@ class ExperimentViewModel(
     }
 
     private fun start() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
 
         val parsedInputs = parseInputs(state.value.inputs)
-        if (parsedInputs == null) {
+
+        if (parsedInputs.size < 2) {
             _state.update {
-                it.copy(
-                    isLoading = false,
-                    error = "Некорректное число",
-                    isButtonActive = false
-                )
+                it.copy(error = "Введите минимум две величины")
             }
             return@launch
         }
 
-        delay(1000) // TODO убрать
+        _state.update { it.copy(isLoading = true, error = null) }
+
+        delay(500) //TODO убрать
 
         calculate(id, parsedInputs)
             .onSuccess { result ->
@@ -60,10 +60,7 @@ class ExperimentViewModel(
             }
             .onFailure { error ->
                 _state.update {
-                    it.copy(
-                        error = error.message,
-                        isButtonActive = false
-                    )
+                    it.copy(error = error.message ?: "Ошибка вычисления")
                 }
             }
 
@@ -72,28 +69,22 @@ class ExperimentViewModel(
 
     private fun changeValue(key: String, newValue: String) {
         _state.update { current ->
+
             val newInputs = current.inputs + (key to newValue)
+
+            val parsed = parseInputs(newInputs)
 
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = validateInputs(newInputs)
+                isButtonActive = parsed.size >= 2
             )
         }
     }
 
-    private fun parseInputs(inputs: Map<String, String>): Map<String, Double>? {
-        val parsed = inputs.mapValues { (_, value) ->
-            value.toDoubleOrNull() ?: return null
-        }
-        return parsed
-    }
-
-    private fun validateInputs(inputs: Map<String, String>): Boolean {
-        if (inputs.isEmpty()) return false
-
-        return inputs.values.any {
-            it.isNotBlank() && it.toDoubleOrNull() != null
-        }
+    private fun parseInputs(inputs: Map<String, String>): Map<String, Double> {
+        return inputs.mapNotNull { (key, value) ->
+            value.toDoubleOrNull()?.let { key to it }
+        }.toMap()
     }
 }
