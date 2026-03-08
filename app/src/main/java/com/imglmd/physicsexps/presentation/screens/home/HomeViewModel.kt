@@ -8,17 +8,36 @@ import kotlinx.coroutines.flow.update
 
 class HomeViewModel(
     private val getAllExperimentsUseCase: GetAllExperimentsUseCase
-): ViewModel() {
+) : ViewModel() {
+
+    private val allExperiments = getAllExperimentsUseCase()
+
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     init {
-        loadExperiments()
+        updateExperiments("")
     }
 
-    private fun loadExperiments(){
+    fun onSearchTextChange(text: String) {
+        updateExperiments(text)
+    }
+
+    private fun updateExperiments(search: String) {
+
+        val filtered = allExperiments.filter {
+            it.name.contains(search, ignoreCase = true)
+            it.category.contains(search, ignoreCase = true)
+            it.description.contains(search, ignoreCase = true)
+        }
+
+        val grouped = filtered.groupBy { it.category }
+
         _state.update {
-            it.copy(experiments = getAllExperimentsUseCase())
+            it.copy(
+                searchText = search,
+                experimentsByCategory = grouped
+            )
         }
     }
 }
