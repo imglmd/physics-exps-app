@@ -85,7 +85,7 @@ fun HomeScreen(
                 val searchState = rememberTextFieldState()
 
                 LaunchedEffect(searchState.text) {
-                    viewModel.onSearchTextChange(searchState.text.toString())
+                    viewModel.onIntent(HomeIntent.ChangeSearchText(searchState.text.toString()))
                 }
 
                 Column {
@@ -132,7 +132,7 @@ private fun ExperimentItem(
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(30.dp),
-                clip = false  // тень не обрезается — важно!
+                clip = false
             )
             .clip(RoundedCornerShape(30.dp))
             .background(MaterialTheme.colorScheme.surface)

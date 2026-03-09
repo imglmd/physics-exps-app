@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
+import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,8 +20,10 @@ class HomeViewModel(
         updateExperiments("")
     }
 
-    fun onSearchTextChange(text: String) {
-        updateExperiments(text)
+    fun onIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ChangeSearchText -> updateExperiments(intent.text)
+        }
     }
 
     private fun updateExperiments(search: String) {
