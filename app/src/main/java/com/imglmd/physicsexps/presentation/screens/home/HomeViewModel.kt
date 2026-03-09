@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class HomeViewModel(
-    private val getAllExperimentsUseCase: GetAllExperimentsUseCase
+    getAllExperimentsUseCase: GetAllExperimentsUseCase
 ) : ViewModel() {
 
     private val allExperiments = getAllExperimentsUseCase()
@@ -19,8 +19,10 @@ class HomeViewModel(
         updateExperiments("")
     }
 
-    fun onSearchTextChange(text: String) {
-        updateExperiments(text)
+    fun onIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ChangeSearchText -> updateExperiments(intent.text)
+        }
     }
 
     private fun updateExperiments(search: String) {

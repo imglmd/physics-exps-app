@@ -68,7 +68,7 @@ fun HomeScreen(
                 val searchState = rememberTextFieldState()
 
                 LaunchedEffect(searchState.text) {
-                    viewModel.onSearchTextChange(searchState.text.toString())
+                    viewModel.onIntent(HomeIntent.ChangeSearchText(searchState.text.toString()))
                 }
 
                 Column {
