@@ -26,8 +26,8 @@ class HomeViewModel(
     private fun updateExperiments(search: String) {
 
         val filtered = allExperiments.filter {
-            it.name.contains(search, ignoreCase = true)
-            it.category.contains(search, ignoreCase = true)
+            it.name.contains(search, ignoreCase = true) ||
+            it.category.contains(search, ignoreCase = true) ||
             it.description.contains(search, ignoreCase = true)
         }
 
