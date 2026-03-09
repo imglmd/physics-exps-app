@@ -13,16 +13,16 @@ class ResultViewModel(
     private val resultRepository: InMemoryResultRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
+    private val _state = MutableStateFlow<ResultState>(ResultState.Loading)
     val state = _state.asStateFlow()
 
     init {
         val result = resultRepository.get()
         _state.update {
             if (result != null) {
-                ResultContract.State.Success(result)
+                ResultState.Success(result)
             } else {
-                ResultContract.State.Error("Результат не найден")
+                ResultState.Error("Результат не найден")
             }
         }
     }

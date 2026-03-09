@@ -42,9 +42,9 @@ fun ResultScreen(
         contentAlignment = Alignment.Center
     ) {
         when(val currentState = state){
-            is ResultContract.State.Error -> Text(currentState.message)
-            ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack)
+            is ResultState.Error -> Text(currentState.message)
+            ResultState.Loading -> CircularProgressIndicator()
+            is ResultState.Success -> Content(currentState, navigateBack)
         }
     }
 
@@ -53,7 +53,7 @@ fun ResultScreen(
 
 @Composable
 private fun Content(
-    state: ResultContract.State.Success,
+    state: ResultState.Success,
     navigateBack: () -> Unit
 ) {
     Scaffold(
