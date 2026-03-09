@@ -7,3 +7,14 @@ sealed interface ResultState{
     data class Success(val result: ExperimentResult): ResultState
     data class Error(val message: String): ResultState
 }
+
+sealed interface ResultIntent{
+    object Save: ResultIntent
+    object Delete: ResultIntent
+}
+
+
+sealed interface ResultAction {
+    data object NavigateBack: ResultAction
+    data object NavigateHome: ResultAction
+}

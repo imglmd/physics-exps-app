@@ -36,7 +36,8 @@ val navigationModule = module {
     }
     navigation<Screen.Result> {
         ResultScreen(
-            navigateBack = { get<Navigator>().goBack() }
+            navigateBack = { get<Navigator>().goBack() },
+            navigateHome = { get<Navigator>().popToHome() }
         )
     }
 }

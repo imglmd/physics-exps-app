@@ -13,4 +13,10 @@ class Navigator(startDestination: Screen) {
     fun goBack() {
         backStack.removeLastOrNull()
     }
+
+    fun popToHome() {
+        while (backStack.size > 1) {
+            backStack.removeLast()
+        }
+    }
 }
