@@ -16,7 +16,7 @@ class Navigator(startDestination: Screen) {
 
     fun popToHome() {
         while (backStack.size > 1) {
-            backStack.removeLast()
+            backStack.removeLastOrNull()
         }
     }
 }
