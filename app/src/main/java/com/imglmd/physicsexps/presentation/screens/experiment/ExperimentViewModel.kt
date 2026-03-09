@@ -23,18 +23,18 @@ class ExperimentViewModel(
     private val experiment = getExperiment(id)
 
     private val _state = MutableStateFlow(
-        ExperimentContract.State(experiment)
+        ExperimentState(experiment)
     )
     val state = _state.asStateFlow()
 
-    private val _actionFlow = MutableSharedFlow<ExperimentContract.Action>()
+    private val _actionFlow = MutableSharedFlow<ExperimentAction>()
     val actionFlow = _actionFlow.asSharedFlow()
 
-    fun onIntent(intent: ExperimentContract.Intent) {
+    fun onIntent(intent: ExperimentIntent) {
         when (intent) {
-            is ExperimentContract.Intent.ChangeValue -> changeValue(intent.key, intent.newValue)
+            is ExperimentIntent.ChangeValue -> changeValue(intent.key, intent.newValue)
 
-            ExperimentContract.Intent.Start -> start()
+            ExperimentIntent.Start -> start()
         }
     }
 
@@ -56,7 +56,7 @@ class ExperimentViewModel(
         calculate(id, parsed)
             .onSuccess { result ->
                 resultRepository.save(result)
-                _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
+                _actionFlow.emit(ExperimentAction.NavigateToResult)
             }
             .onFailure { error ->
                 _state.update {

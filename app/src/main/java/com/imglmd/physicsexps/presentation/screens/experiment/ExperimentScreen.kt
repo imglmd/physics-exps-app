@@ -68,8 +68,8 @@ fun ExperimentScreen(
     LaunchedEffect(Unit) {
         viewModel.actionFlow.collect { action ->
             when (action) {
-                is ExperimentContract.Action.NavigateToResult -> navigateToResult()
-                ExperimentContract.Action.NavigateBack -> navigateBack()
+                is ExperimentAction.NavigateToResult -> navigateToResult()
+                ExperimentAction.NavigateBack -> navigateBack()
             }
         }
     }
@@ -85,7 +85,7 @@ fun ExperimentScreen(
             snapshotFlow { textState.text.toString() }
                 .collect { value ->
                     viewModel.onIntent(
-                        ExperimentContract.Intent.ChangeValue(
+                        ExperimentIntent.ChangeValue(
                             key = field.key,
                             newValue = value
                         )
@@ -176,7 +176,7 @@ fun ExperimentScreen(
                     text = "Начать",
                     isLoading = state.isLoading,
                     enabled = state.isButtonActive,
-                    onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
+                    onClick = { viewModel.onIntent(ExperimentIntent.Start) },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .navigationBarsPadding()
@@ -191,7 +191,7 @@ fun ExperimentScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarouselSection(
-    state: ExperimentContract.State,
+    state: ExperimentState,
     modifier: Modifier = Modifier
 ) {
     Column(
