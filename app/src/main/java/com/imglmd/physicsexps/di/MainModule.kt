@@ -1,6 +1,8 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.data.InMemoryResultRepository
+import com.imglmd.physicsexps.data.database.ExpDb
+import com.imglmd.physicsexps.data.repositoryImpl.ExperimentRunRepositoryImpl
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
@@ -25,4 +27,9 @@ val mainModule = module {
     viewModel {
         ResultViewModel(get())
     }
+
+    //db
+    single{ ExpDb.getInstance(get()) }
+    single{get<ExpDb>().dao()}
+    single { ExperimentRunRepositoryImpl(get())}
 }

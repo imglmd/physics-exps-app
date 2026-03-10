@@ -1,22 +1,21 @@
 package com.imglmd.physicsexps.data.database
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.imglmd.physicsexps.data.database.entities.ExperimentEntity
-import com.imglmd.physicsexps.data.database.entities.ExperimentRunEntity
+import com.imglmd.physicsexps.data.database.models.ExperimentRunEntity
 import kotlinx.coroutines.flow.Flow
-
+@Dao()
 interface ExperimentRunsDao {
     @Insert()
-    suspend fun insertItem(experimentRunEntity: ExperimentRunEntity)
+    suspend fun insertExp(experimentRunEntity: ExperimentRunEntity)
     @Delete
-    suspend fun deleteItem(experimentRunEntity: ExperimentRunEntity)
+    suspend fun deleteExp(experimentRunEntity: ExperimentRunEntity)
 
     @Query("SELECT * FROM experiment_runs")
-    fun getAllItems(): Flow<List<ExperimentRunEntity>>
+    fun getAllExps(): List<ExperimentRunEntity>
 
     @Query("SELECT * FROM experiment_runs WHERE id = :id")
-    fun getById(id: Int): Flow<ExperimentRunEntity>
+    fun getExpById(id: Int): ExperimentRunEntity
 }

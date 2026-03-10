@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.database.entities
+package com.imglmd.physicsexps.data.database.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
