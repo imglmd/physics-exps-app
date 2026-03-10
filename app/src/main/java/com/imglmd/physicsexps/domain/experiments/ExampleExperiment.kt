@@ -4,6 +4,7 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import java.time.LocalDate
 import kotlin.math.PI
 import kotlin.math.pow
 
@@ -29,7 +30,8 @@ class ExampleExperiment: Experiment {
                 PhysicalQuantity("Длина нити", "L",L, "м"),
                 PhysicalQuantity("Период", "T",T, "с"),
                 PhysicalQuantity("Ускорение", "g",g, "м/с²")
-            )
+            ),
+            "${LocalDate.now()}"
         )
     }
 }
