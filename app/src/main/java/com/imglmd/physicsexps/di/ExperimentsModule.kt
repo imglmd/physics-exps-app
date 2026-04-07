@@ -8,10 +8,10 @@ import org.koin.dsl.module
 
 val experimentsModule = module {
 
-    factory<Experiment> { ExampleExperiment() }
-
     single<List<Experiment>> {
-        getAll()
+        listOf(
+            ExampleExperiment()
+        )
     }
 
     single { ExperimentRegistry(get()) }

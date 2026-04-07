@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,6 +79,13 @@ fun ExperimentTextField(
                 .weight(1f)
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             lineLimits = TextFieldLineLimits.SingleLine,
+            inputTransformation = InputTransformation {
+                for (i in length - 1 downTo 0) {
+                    if (!charAt(i).isDigit() && charAt(i) != '.') {
+                        delete(i, i + 1)
+                    }
+                }
+            },
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             decorator = { innerTextField ->
                 if (state.text.isEmpty()) {
