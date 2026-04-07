@@ -62,7 +62,8 @@ class ExampleExperiment: Experiment {
                 PhysicalQuantity("Длина нити", "L", length, "м"),
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
-            )
+            ),
+            date = TODO()
         )
     }
 }

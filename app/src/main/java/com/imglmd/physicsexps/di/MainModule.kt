@@ -31,8 +31,12 @@ val mainModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), ExpDb::class.java, "exp_db")
-            .fallbackToDestructiveMigration(false).build()}
+        Room.databaseBuilder(
+            androidContext(),
+            ExpDb::class.java,
+            "exp_db"
+        ).build()
+    }
     single{get<ExpDb>().dao()}
     single { ExperimentRunRepositoryImpl(get())}
 }
