@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class ResultEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val result: String //TODO() json
+    val result: Map<String, Double>
 )
