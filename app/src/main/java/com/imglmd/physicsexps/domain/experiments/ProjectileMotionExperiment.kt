@@ -9,7 +9,7 @@ import kotlin.math.pow
 import kotlin.math.sin
 
 class ProjectileMotionExperiment : Experiment {
-    override val id = "pendulum"
+    override val id = "projectile_motion"
     override val name = "Движение тела, брошенного под углом к горизонту"
     override val category = "Кинематика"
     override val description = "Движение тела, брошенного под углом к горизонту — это движение, при котором тело запускают с начальной скоростью под углом к горизонтальной поверхности."
@@ -18,6 +18,8 @@ class ProjectileMotionExperiment : Experiment {
         InputField("start_height", "Начальная высота", "h0", "м"),
         InputField("angle", "Угол броска", "a", "°")
     )
+
+    override val minRequiredInputs = 3
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val v0 = inputs["start_speed"] ?: 0.0

@@ -4,6 +4,7 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import java.time.LocalDate
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -63,7 +64,7 @@ class ExampleExperiment: Experiment {
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
             ),
-            date = TODO()
+            date = "${LocalDate.now()}"
         )
     }
 }

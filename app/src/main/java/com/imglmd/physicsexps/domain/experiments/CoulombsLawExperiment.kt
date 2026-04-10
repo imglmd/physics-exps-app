@@ -8,7 +8,7 @@ import java.time.LocalDate
 import kotlin.math.pow
 
 class CoulombsLawExperiment: Experiment {
-    override val id = "pendulum"
+    override val id = "coulombs_law"
     override val name = "Закон Кулона"
     override val category = "Электричество"
     override val description = "Закон Кулона — это физический закон, описывающий силу, с которой электрически заряженные тела притягиваются или отталкиваются. Чем больше заряды, тем сильнее взаимодействие."
@@ -18,10 +18,12 @@ class CoulombsLawExperiment: Experiment {
         InputField("distance", "Расстояние между зарядами", "r", "метр")
     )
 
+    override val minRequiredInputs = 3
+
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
-        val q1 = inputs["q1"]!!
-        val q2 = inputs["q2"]!!
-        val r = inputs["distance"]!!
+        val q1 = inputs["q1"] ?: 0.0
+        val q2 = inputs["q2"] ?: 0.0
+        val r = inputs["distance"] ?: 0.0
         val k = 9 * 1e9;
         val F = k * (Math.abs(q1 * q2)/r*r);
 
