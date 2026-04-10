@@ -20,11 +20,22 @@ class FreeFallExperiment: Experiment {
     override val minRequiredInputs = 1
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
-        val v0 = inputs["start_speed"] ?: 0.0
-        val t: Double = inputs["duration"] ?: 0.0
+        val v0 = inputs["start_speed"]
+        val t = inputs["duration"]
         val g = 9.81
-        val v: Double = v0 + g*t
-        val h: Double = v0*t + (g * t.pow(2)) / 2
+        val v: Double
+        val h: Double
+
+        when {
+            v0 != null && t != null -> {
+                v = v0 + g*t
+                h = v0*t + (g * t.pow(2)) / 2
+            }
+            else -> {
+                throw IllegalArgumentException("Нужно ввести две величины")
+            }
+        }
+
         return ExperimentResult(
             experiment = this,
             quantities = listOf(

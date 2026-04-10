@@ -22,14 +22,25 @@ class ProjectileMotionExperiment : Experiment {
     override val minRequiredInputs = 3
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
-        val v0 = inputs["start_speed"] ?: 0.0
-        val h0 = inputs["start_height"] ?: 0.0
-        val a = inputs["angle"] ?: 0.0
+        val v0 = inputs["start_speed"]
+        val h0 = inputs["start_height"]
+        val a = inputs["angle"]
         val g = 9.81
-        val h_max = (v0.pow(2) * sin(a).pow(2)) / 2 * g
-        val L = (v0.pow(2) * sin(2*a)) / g
-        val t_full = (2 * v0 * sin(a)) / g
-        val t_rise = (v0 * sin(a)) / g
+        val h_max: Double
+        val L: Double
+        val t_full: Double
+        val t_rise: Double
+        when {
+            v0 != null && a != null && h0 != null -> {
+                h_max = (v0.pow(2) * sin(a).pow(2)) / 2 * g + h0
+                L = (v0.pow(2) * sin(2*a)) / g
+                t_full = (2 * v0 * sin(a)) / g
+                t_rise = (v0 * sin(a)) / g
+            }
+
+            else -> throw IllegalArgumentException("Нужно ввести три величины")
+        }
+
 
         return ExperimentResult(
             experiment = this,
