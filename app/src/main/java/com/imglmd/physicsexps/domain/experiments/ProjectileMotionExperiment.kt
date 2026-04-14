@@ -14,8 +14,8 @@ class ProjectileMotionExperiment : Experiment {
     override val category = "Кинематика"
     override val description = "Движение тела, брошенного под углом к горизонту — это движение, при котором тело запускают с начальной скоростью под углом к горизонтальной поверхности."
     override val inputFields = listOf(
-        InputField("start_speed", "Начальная скорость", "v0", "м/c"),
-        InputField("start_height", "Начальная высота", "h0", "м"),
+        InputField("start_speed", "Начальная скорость", "v₀", "м/c"),
+        InputField("start_height", "Начальная высота", "h₀", "м"),
         InputField("angle", "Угол броска", "a", "°")
     )
 

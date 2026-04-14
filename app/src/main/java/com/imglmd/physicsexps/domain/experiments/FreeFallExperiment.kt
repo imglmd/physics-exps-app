@@ -13,7 +13,7 @@ class FreeFallExperiment: Experiment {
     override val category = "Кинематика"
     override val description = "Свободным падением тел называют движение, которое совершается под действием только силы тяжести."
     override val inputFields = listOf(
-        InputField("start_speed", "Начальная скорость", "v0", "м/c"),
+        InputField("start_speed", "Начальная скорость", "v₀", "м/c"),
         InputField("duration", "Продолжительность движения тела", "t", "с")
     )
 
