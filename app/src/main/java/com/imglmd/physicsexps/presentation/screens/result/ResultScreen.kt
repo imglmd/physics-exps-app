@@ -18,17 +18,38 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
+import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.VicoScrollState
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
+import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.core.cartesian.CartesianChart
+import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.core.common.Fill
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.round
+import kotlin.math.sin
 
 @Composable
 fun ResultScreen(
@@ -36,6 +57,29 @@ fun ResultScreen(
     viewModel: ResultViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val scrollState = rememberVicoScrollState()
+    val modelProducer = remember { CartesianChartModelProducer() }
+    val chart = rememberCartesianChart(
+        rememberLineCartesianLayer(
+            lineProvider = LineCartesianLayer.LineProvider.series(
+                LineCartesianLayer.rememberLine(
+                    fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
+                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.4f),
+                    stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
+                )
+            )
+        ),
+        startAxis = VerticalAxis.rememberStart(),
+        bottomAxis = HorizontalAxis.rememberBottom()
+    )
+
+    LaunchedEffect(Unit) {
+        modelProducer.runTransaction {
+            lineSeries {
+                series()
+            }
+        }
+    }
 
     Box(
         Modifier.fillMaxSize(),
@@ -44,7 +88,8 @@ fun ResultScreen(
         when(val currentState = state){
             is ResultContract.State.Error -> Text(currentState.message)
             ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack)
+            is ResultContract.State.Success -> Content(currentState, navigateBack, scrollState, modelProducer,
+                chart)
         }
     }
 
@@ -54,7 +99,10 @@ fun ResultScreen(
 @Composable
 private fun Content(
     state: ResultContract.State.Success,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    scrollState: VicoScrollState,
+    modelProducer: CartesianChartModelProducer,
+    chart: CartesianChart
 ) {
     Scaffold(
         topBar = {
@@ -103,6 +151,14 @@ private fun Content(
                         )
                     }
                 }
+            }
+
+            Card(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+                CartesianChartHost(
+                    chart = chart,
+                    modelProducer = modelProducer,
+                    scrollState = scrollState
+                )
             }
         }
 
