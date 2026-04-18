@@ -74,7 +74,7 @@ class ExperimentViewModel(
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = newInputs.values.count { it.isNotBlank() } >= experiment.minRequiredInputs
+                isButtonActive = newInputs.values.count { it.toDoubleOrNull() != null } >= experiment.minRequiredInputs
             )
         }
     }
