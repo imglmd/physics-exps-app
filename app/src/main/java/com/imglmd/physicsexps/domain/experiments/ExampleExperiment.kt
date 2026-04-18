@@ -8,7 +8,7 @@ import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class ExampleExperiment: Experiment {
+class ExampleExperiment : Experiment {
 
     override val id = "pendulum"
     override val name = "Математический маятник"
@@ -17,9 +17,9 @@ class ExampleExperiment: Experiment {
         "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
 
     override val inputFields = listOf(
-        InputField("length", "Длина нити", "L", "м"),
-        InputField("period", "Период колебаний", "T", "с"),
-        InputField("gravity", "Ускорение свободного падения", "g", "м/с²")
+        InputField("length", "Длина нити", "L", "м", min = 0.0),
+        InputField("period", "Период колебаний", "T", "с", min = 0.0, required = true),
+        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0)
     )
 
     override val minRequiredInputs = 2
@@ -53,7 +53,9 @@ class ExampleExperiment: Experiment {
                 gravity = g
             }
 
-            else -> throw IllegalArgumentException("Нужно ввести любые две величины")
+            else -> {
+                error("")
+            }
         }
 
         return ExperimentResult(

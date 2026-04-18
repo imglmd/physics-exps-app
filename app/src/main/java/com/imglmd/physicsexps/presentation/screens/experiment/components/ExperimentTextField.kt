@@ -81,7 +81,7 @@ fun ExperimentTextField(
             lineLimits = TextFieldLineLimits.SingleLine,
             inputTransformation = InputTransformation {
                 for (i in length - 1 downTo 0) {
-                    if (!charAt(i).isDigit() && charAt(i) != '.') {
+                    if (!charAt(i).isDigit() && charAt(i) != '.' && charAt(i) != '-') {
                         delete(i, i + 1)
                     }
                 }
