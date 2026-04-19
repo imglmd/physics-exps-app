@@ -38,13 +38,17 @@ import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
 import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.core.cartesian.CartesianChart
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.core.cartesian.decoration.Decoration
 import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.core.common.Fill
 import org.koin.compose.viewmodel.koinViewModel
@@ -58,28 +62,31 @@ fun ResultScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val scrollState = rememberVicoScrollState()
+    val marker = rememberDefaultCartesianMarker(
+        label = rememberTextComponent()
+    )
     val modelProducer = remember { CartesianChartModelProducer() }
     val chart = rememberCartesianChart(
         rememberLineCartesianLayer(
             lineProvider = LineCartesianLayer.LineProvider.series(
                 LineCartesianLayer.rememberLine(
                     fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.4f),
+                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.01f),
                     stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
                 )
             )
         ),
-        startAxis = VerticalAxis.rememberStart(),
-        bottomAxis = HorizontalAxis.rememberBottom()
-    )
+        startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
+            color = Color.Black
+        )),
+        bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
+            color = Color.Black
+        )),
+        decorations = listOf(
 
-    LaunchedEffect(Unit) {
-        modelProducer.runTransaction {
-            lineSeries {
-                series()
-            }
-        }
-    }
+        ),
+        marker = marker
+    )
 
     Box(
         Modifier.fillMaxSize(),
@@ -104,6 +111,15 @@ private fun Content(
     modelProducer: CartesianChartModelProducer,
     chart: CartesianChart
 ) {
+    LaunchedEffect(Unit) {
+        modelProducer.runTransaction {
+            lineSeries {
+                val (x, y) = state.result.points.unzip()
+                series(x = x, y = y)
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             ExperimentAppBar(
@@ -153,7 +169,7 @@ private fun Content(
                 }
             }
 
-            Card(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+            Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp)) {
                 CartesianChartHost(
                     chart = chart,
                     modelProducer = modelProducer,

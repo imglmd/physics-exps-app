@@ -26,6 +26,7 @@ class CoulombsLawExperiment: Experiment {
         val r = inputs["distance"]
         val k = 9 * 1e9;
         val f: Double
+        val map = mutableMapOf<String, Double>()
 
         when {
             q1 != null && q2 != null && r != null -> {
@@ -43,7 +44,12 @@ class CoulombsLawExperiment: Experiment {
                 PhysicalQuantity("Расстояние между зарядами", "r", r, "м"),
                 PhysicalQuantity("Сила взаимодействия зарядов", "F", f, "Н")
             ),
+            points = getPoints(map),
             "${LocalDate.now()}"
         )
+    }
+
+    override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
+        TODO("Not yet implemented")
     }
 }

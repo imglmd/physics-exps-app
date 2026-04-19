@@ -10,5 +10,5 @@ interface Experiment {
     val inputFields: List<InputField>
     val minRequiredInputs: Int
     fun calculate(inputs: Map<String, Double>): ExperimentResult
-//TODO    fun pointsForChart(inputs: Map<String, Double>): List<Pair<Float, Float>>
+    fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>>
 }

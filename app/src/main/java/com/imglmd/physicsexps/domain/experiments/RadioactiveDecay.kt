@@ -24,6 +24,7 @@ class RadioactiveDecay: Experiment {
         val T = inputs["period"]
         val t = inputs["time"]
         val N: Double
+        val map = mutableMapOf<String, Double>()
 
         when {
             N0 != null && T != null && t != null -> {
@@ -39,8 +40,13 @@ class RadioactiveDecay: Experiment {
                 PhysicalQuantity("Количество оставшихся радиоактивных ядер", "N",
                     N, "")
             ),
+            points = getPoints(map),
             date = "${LocalDate.now()}"
 
         )
+    }
+
+    override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
+        TODO("Not yet implemented")
     }
 }

@@ -25,6 +25,7 @@ class FreeFallExperiment: Experiment {
         val g = 9.81
         val v: Double
         val h: Double
+        val map = mutableMapOf<String, Double>()
 
         when {
             v0 != null && t != null -> {
@@ -48,7 +49,12 @@ class FreeFallExperiment: Experiment {
                     symbol = "h", h, "м"
                 )
             ),
+            points = getPoints(map),
             "${LocalDate.now()}"
         )
+    }
+
+    override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
+        TODO("Not yet implemented")
     }
 }

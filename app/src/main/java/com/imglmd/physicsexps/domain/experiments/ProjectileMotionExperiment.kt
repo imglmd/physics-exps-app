@@ -30,6 +30,7 @@ class ProjectileMotionExperiment : Experiment {
         val L: Double
         val t_full: Double
         val t_rise: Double
+        val map = mutableMapOf<String, Double>()
         when {
             v0 != null && a != null && h0 != null -> {
                 h_max = (v0.pow(2) * sin(a).pow(2)) / 2 * g + h0
@@ -50,7 +51,12 @@ class ProjectileMotionExperiment : Experiment {
                 PhysicalQuantity("Общее время движения", "t", t_full,"с"),
                 PhysicalQuantity("Время подъёма", "t", t_rise, "с")
             ),
+            points = getPoints(map),
             "${LocalDate.now()}"
         )
+    }
+
+    override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
+        TODO("Not yet implemented")
     }
 }
