@@ -17,6 +17,8 @@ class CoulombsLawExperiment: Experiment {
         InputField("q2", "Величина второго заряда", "q2", "Кл"),
         InputField("distance", "Расстояние между зарядами", "r", "метр")
     )
+    override val xLabel = ""
+    override val yLabel = ""
 
     override val minRequiredInputs = 3
 

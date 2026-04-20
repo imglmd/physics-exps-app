@@ -16,6 +16,8 @@ class FreeFallExperiment: Experiment {
         InputField("start_speed", "Начальная скорость", "v₀", "м/c"),
         InputField("duration", "Продолжительность движения тела", "t", "с")
     )
+    override val xLabel =  ""
+    override val yLabel = ""
 
     override val minRequiredInputs = 1
 

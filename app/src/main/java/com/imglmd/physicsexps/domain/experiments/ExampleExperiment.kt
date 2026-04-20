@@ -17,6 +17,8 @@ class ExampleExperiment: Experiment {
     override val description =
         "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
 
+    override val xLabel =  "Длина нити"
+    override val yLabel = "Период"
     override val inputFields = listOf(
         InputField("length", "Длина нити", "L", "м"),
         InputField("period", "Период колебаний", "T", "с"),
@@ -72,7 +74,7 @@ class ExampleExperiment: Experiment {
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
             ),
             points = getPoints(map),
-            date = "${LocalDate.now()}"
+            date = "${LocalDate.now()}",
         )
     }
 
@@ -81,7 +83,7 @@ class ExampleExperiment: Experiment {
         val l: Double = inputs.getValue("length")
         val g: Double = inputs.getValue("gravity")
         val startX = 0.0
-        val step = (l - startX) / 10.0
+        val step = l / 10.0
 
         var x = startX
         while (x <= l + step) {

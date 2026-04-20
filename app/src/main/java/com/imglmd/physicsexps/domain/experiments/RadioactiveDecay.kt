@@ -12,6 +12,8 @@ class RadioactiveDecay: Experiment {
     override val name = "Радиоактивный распад"
     override val category = "Ядерная физика"
     override val description = ""
+    override val xLabel =  "Время полураспада"
+    override val yLabel = "Количество оставшихся радиоактивных ядер"
     override val inputFields = listOf(
         InputField("start_count", "Начальное число радиоактивных ядер", "N₀", ""),
         InputField("period", "Период полураспада", "T", "с"),
@@ -29,6 +31,9 @@ class RadioactiveDecay: Experiment {
         when {
             N0 != null && T != null && t != null -> {
                 N = N0 * 2.0.pow(-t/T)
+                map.put("time", t)
+                map.put("start_count", N0)
+                map.put("period", T)
             }
             else ->
                 throw IllegalArgumentException("Нужно ввести три величины")
@@ -47,6 +52,19 @@ class RadioactiveDecay: Experiment {
     }
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<Pair<Double, Double>>()
+        val t: Double = inputs.getValue("time")
+        val T: Double = inputs.getValue("period")
+        val N0: Double = inputs.getValue("start_count")
+
+        val startX = t
+        val step = startX / 10.0
+        var x = startX
+        while (x > step) {
+            val y = N0 * 2.0.pow(-t/T)
+            list.add(Pair(x, y))
+            x -= step
+        }
+        return list
     }
 }

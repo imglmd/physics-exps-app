@@ -19,6 +19,9 @@ class ProjectileMotionExperiment : Experiment {
         InputField("angle", "Угол броска", "a", "°")
     )
 
+    override val xLabel =  ""
+    override val yLabel = ""
+
     override val minRequiredInputs = 3
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
