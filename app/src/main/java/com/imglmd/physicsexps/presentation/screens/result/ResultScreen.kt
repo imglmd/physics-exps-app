@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -43,6 +44,7 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import com.patrykandpatrick.vico.compose.common.insets
 import com.patrykandpatrick.vico.core.cartesian.CartesianChart
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
@@ -101,14 +103,18 @@ private fun Content(
         )
         ,
         startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
-            color = Color.Black
+            color = Color.Black,
+            textSize = 12.sp,
         ),
-            title = state.result.yLabel
+            title = state.result.yLabel,
+            titleComponent = rememberTextComponent(color = Color(0xFFA90735), textSize = 12.sp )
         ),
         bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
-            color = Color.Black
+            color = Color.Black,
+            textSize = 12.sp,
         ),
-            title = state.result.xLabel
+            title = state.result.xLabel,
+            titleComponent = rememberTextComponent(color = Color(0xFFA90735), textSize = 12.sp )
         ),
         decorations = listOf(
 
@@ -174,11 +180,15 @@ private fun Content(
                 }
             }
 
-            Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp)) {
+            Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp).shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(24.dp)
+            )) {
                 CartesianChartHost(
                     chart = chart,
                     modelProducer = modelProducer,
-                    scrollState = scrollState
+                    scrollState = scrollState,
+                    modifier = Modifier.background(Color.White).padding(5.dp)
                 )
             }
         }
