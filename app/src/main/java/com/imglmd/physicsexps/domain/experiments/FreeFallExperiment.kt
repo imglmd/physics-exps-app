@@ -52,7 +52,9 @@ class FreeFallExperiment: Experiment {
                 )
             ),
             points = getPoints(map),
-            "${LocalDate.now()}"
+            date = "${LocalDate.now()}",
+            xLabel = xLabel,
+            yLabel = yLabel
         )
     }
 

@@ -46,8 +46,9 @@ class RadioactiveDecay: Experiment {
                     N, "")
             ),
             points = getPoints(map),
-            date = "${LocalDate.now()}"
-
+            date = "${LocalDate.now()}",
+            xLabel = xLabel,
+            yLabel = yLabel
         )
     }
 

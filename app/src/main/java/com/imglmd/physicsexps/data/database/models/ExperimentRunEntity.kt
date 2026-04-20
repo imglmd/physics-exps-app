@@ -18,7 +18,7 @@ data class ExperimentRunEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo("experiment_id")
-    val experimentId: Int,
+    val experimentId: String,
     val date: Long,
     val inputData: String, //TODO() json
     @ColumnInfo("result_id")

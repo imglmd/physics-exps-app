@@ -47,7 +47,10 @@ class CoulombsLawExperiment: Experiment {
                 PhysicalQuantity("Сила взаимодействия зарядов", "F", f, "Н")
             ),
             points = getPoints(map),
-            "${LocalDate.now()}"
+            date = "${LocalDate.now()}",
+            xLabel = xLabel,
+            yLabel = yLabel
+
         )
     }
 

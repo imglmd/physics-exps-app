@@ -55,7 +55,9 @@ class ProjectileMotionExperiment : Experiment {
                 PhysicalQuantity("Время подъёма", "t", t_rise, "с")
             ),
             points = getPoints(map),
-            "${LocalDate.now()}"
+            date = "${LocalDate.now()}",
+            xLabel = xLabel,
+            yLabel = yLabel
         )
     }
 

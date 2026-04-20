@@ -62,31 +62,7 @@ fun ResultScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val scrollState = rememberVicoScrollState()
-    val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent()
-    )
     val modelProducer = remember { CartesianChartModelProducer() }
-    val chart = rememberCartesianChart(
-        rememberLineCartesianLayer(
-            lineProvider = LineCartesianLayer.LineProvider.series(
-                LineCartesianLayer.rememberLine(
-                    fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.01f),
-                    stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
-                )
-            )
-        ),
-        startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
-            color = Color.Black
-        )),
-        bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
-            color = Color.Black
-        )),
-        decorations = listOf(
-
-        ),
-        marker = marker
-    )
 
     Box(
         Modifier.fillMaxSize(),
@@ -95,8 +71,7 @@ fun ResultScreen(
         when(val currentState = state){
             is ResultContract.State.Error -> Text(currentState.message)
             ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack, scrollState, modelProducer,
-                chart)
+            is ResultContract.State.Success -> Content(currentState, navigateBack, scrollState, modelProducer)
         }
     }
 
@@ -108,9 +83,39 @@ private fun Content(
     state: ResultContract.State.Success,
     navigateBack: () -> Unit,
     scrollState: VicoScrollState,
-    modelProducer: CartesianChartModelProducer,
-    chart: CartesianChart
+    modelProducer: CartesianChartModelProducer
 ) {
+    val marker = rememberDefaultCartesianMarker(
+        label = rememberTextComponent()
+    )
+
+    val chart = rememberCartesianChart(
+        rememberLineCartesianLayer(
+            lineProvider = LineCartesianLayer.LineProvider.series(
+                LineCartesianLayer.rememberLine(
+                    fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
+                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.01f),
+                    stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
+                )
+            )
+        )
+        ,
+        startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
+            color = Color.Black
+        ),
+            title = state.result.yLabel
+        ),
+        bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
+            color = Color.Black
+        ),
+            title = state.result.xLabel
+        ),
+        decorations = listOf(
+
+        ),
+        marker = marker
+    )
+
     LaunchedEffect(Unit) {
         modelProducer.runTransaction {
             lineSeries {

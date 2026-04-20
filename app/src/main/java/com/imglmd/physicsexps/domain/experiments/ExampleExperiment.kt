@@ -75,6 +75,8 @@ class ExampleExperiment: Experiment {
             ),
             points = getPoints(map),
             date = "${LocalDate.now()}",
+            xLabel = xLabel,
+            yLabel = yLabel
         )
     }
 
