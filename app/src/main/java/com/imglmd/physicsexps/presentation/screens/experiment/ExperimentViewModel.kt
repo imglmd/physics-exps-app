@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
-import kotlinx.coroutines.delay
+import com.imglmd.physicsexps.domain.validation.ValidationError
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -33,36 +33,35 @@ class ExperimentViewModel(
     fun onIntent(intent: ExperimentContract.Intent) {
         when (intent) {
             is ExperimentContract.Intent.ChangeValue -> changeValue(intent.key, intent.newValue)
-
             ExperimentContract.Intent.Start -> start()
         }
     }
 
     private fun start() = viewModelScope.launch {
 
-        val parsed = parseInputs(state.value.inputs)
-
-        if (parsed.size < experiment.minRequiredInputs) {
-            _state.update {
-                it.copy(error = "Введите минимум ${experiment.minRequiredInputs} значения")
-            }
-            return@launch
-        }
-
         _state.update { it.copy(isLoading = true, error = null) }
 
-        delay(500) //TODO убрать
+        when (val result = calculate(id, state.value.inputs)) {
 
-        calculate(id, parsed)
-            .onSuccess { result ->
-                resultRepository.save(result)
+            is CalculateExperimentUseCase.Result.Success -> {
+                resultRepository.save(result.result)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
             }
-            .onFailure { error ->
+
+            is CalculateExperimentUseCase.Result.ValidationError -> {
                 _state.update {
-                    it.copy(error = error.message ?: "Ошибка вычисления")
+                    it.copy(
+                        error = mapValidationErrors(result.errors)
+                    )
                 }
             }
+
+            is CalculateExperimentUseCase.Result.Failure -> {
+                _state.update {
+                    it.copy(error = result.message)
+                }
+            }
+        }
 
         _state.update { it.copy(isLoading = false) }
     }
@@ -72,19 +71,30 @@ class ExperimentViewModel(
 
             val newInputs = current.inputs + (key to newValue)
 
-            val parsed = parseInputs(newInputs)
-
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = parsed.size >= experiment.minRequiredInputs
+                isButtonActive = newInputs.values.count { it.toDoubleOrNull() != null } >= experiment.minRequiredInputs
             )
         }
     }
+    private fun mapValidationErrors(errors: List<ValidationError>): String {
 
-    private fun parseInputs(inputs: Map<String, String>): Map<String, Double> {
-        return inputs.mapNotNull { (key, value) ->
-            value.toDoubleOrNull()?.let { key to it }
-        }.toMap()
+        val first = errors.firstOrNull() ?: return "Ошибка ввода"
+
+        return when (first) {
+
+            is ValidationError.NotEnoughInputs ->
+                "Введите минимум ${experiment.minRequiredInputs} значения"
+
+            is ValidationError.InvalidNumber ->
+                "Некорректное число"
+
+            is ValidationError.OutOfRange ->
+                "Значение вне допустимого диапазона"
+
+            is ValidationError.RequiredField ->
+                "Заполните обязательные поля"
+        }
     }
 }

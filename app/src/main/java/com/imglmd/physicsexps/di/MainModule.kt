@@ -7,6 +7,7 @@ import com.imglmd.physicsexps.data.repositoryImpl.ExperimentRunRepositoryImpl
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
@@ -17,9 +18,11 @@ import org.koin.dsl.module
 val mainModule = module {
     single { InMemoryResultRepository() }
 
+    single { ExperimentValidator() }
+
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
-    factory { CalculateExperimentUseCase(get()) }
+    factory { CalculateExperimentUseCase(get(),get()) }
     viewModel {
         HomeViewModel(get())
     }
