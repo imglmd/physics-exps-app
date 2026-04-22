@@ -17,8 +17,8 @@ class ExampleExperiment : Experiment {
     override val description =
         "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
 
-    override val xLabel =  "Длина нити"
-    override val yLabel = "Период"
+    override val xLabel =  "Длина нити, м"
+    override val yLabel = "Период, с"
     override val inputFields = listOf(
         InputField("length", "Длина нити", "L", "м", min = 0.0),
         InputField("period", "Период колебаний", "T", "с", min = 0.0, required = true),
@@ -84,10 +84,12 @@ class ExampleExperiment : Experiment {
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
         val list = mutableListOf<Pair<Double, Double>>()
+
         val l: Double = inputs.getValue("length")
         val g: Double = inputs.getValue("gravity")
+
         val startX = 0.0
-        val step = l / 10.0
+        val step = l / 100.0
 
         var x = startX
         while (x <= l + step) {

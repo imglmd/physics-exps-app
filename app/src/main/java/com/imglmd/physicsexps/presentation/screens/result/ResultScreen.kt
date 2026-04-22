@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -42,6 +45,7 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLa
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.common.insets
@@ -63,7 +67,6 @@ fun ResultScreen(
     viewModel: ResultViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val scrollState = rememberVicoScrollState()
     val modelProducer = remember { CartesianChartModelProducer() }
 
     Box(
@@ -73,7 +76,7 @@ fun ResultScreen(
         when(val currentState = state){
             is ResultContract.State.Error -> Text(currentState.message)
             ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack, scrollState, modelProducer)
+            is ResultContract.State.Success -> Content(currentState, navigateBack, modelProducer)
         }
     }
 
@@ -84,7 +87,6 @@ fun ResultScreen(
 private fun Content(
     state: ResultContract.State.Success,
     navigateBack: () -> Unit,
-    scrollState: VicoScrollState,
     modelProducer: CartesianChartModelProducer
 ) {
     val marker = rememberDefaultCartesianMarker(
@@ -96,7 +98,7 @@ private fun Content(
             lineProvider = LineCartesianLayer.LineProvider.series(
                 LineCartesianLayer.rememberLine(
                     fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(curvature = 0.01f),
+                    pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f),
                     stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
                 )
             )
@@ -147,7 +149,6 @@ private fun Content(
                 .padding(horizontal = 24.dp)
         ) {
 
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -164,9 +165,9 @@ private fun Content(
                 Text("Результаты вычислений", style = MaterialTheme.typography.titleMedium)
                 HorizontalDivider(Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.tertiary)
                 state.result.quantities.forEach { quantity ->
-                    Row(
+                    Column (
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalAlignment = Alignment.Start
                     ) {
                         Text(
                             text = "${quantity.label} (${quantity.symbol})",
@@ -182,13 +183,15 @@ private fun Content(
 
             Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp).shadow(
                 elevation = 6.dp,
-                shape = RoundedCornerShape(24.dp)
-            )) {
+                shape = RoundedCornerShape(24.dp))
+            ) {
                 CartesianChartHost(
                     chart = chart,
                     modelProducer = modelProducer,
-                    scrollState = scrollState,
-                    modifier = Modifier.background(Color.White).padding(5.dp)
+                    scrollState = rememberVicoScrollState(),
+                    modifier = Modifier.fillMaxSize()
+                        .background(Color.White).padding(5.dp).padding(top=10.dp),
+                    zoomState = rememberVicoZoomState()
                 )
             }
         }

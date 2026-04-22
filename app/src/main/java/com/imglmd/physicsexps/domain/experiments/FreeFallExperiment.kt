@@ -33,6 +33,8 @@ class FreeFallExperiment: Experiment {
             v0 != null && t != null -> {
                 v = v0 + g*t
                 h = v0*t + (g * t.pow(2)) / 2
+                map.put("start_speed", v0)
+                map.put("duration", t)
             }
             else -> {
                 throw IllegalArgumentException("Нужно ввести две величины")
@@ -47,7 +49,7 @@ class FreeFallExperiment: Experiment {
                     symbol = "v", v, "м/с"
                 ),
                 PhysicalQuantity(
-                    label = "Расстояние, которое проходит тело (высота)",
+                    label = "Расстояние, которое проходит тело",
                     symbol = "h", h, "м"
                 )
             ),
@@ -59,6 +61,21 @@ class FreeFallExperiment: Experiment {
     }
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<Pair<Double, Double>>()
+        val v0 = inputs.getValue("start_speed")
+        val t = inputs.getValue("duration")
+        val g = 9.81
+
+        val startX = 0.0
+        val step = t / 100.0
+
+        var x = startX
+        while(x <= t + step) {
+            val y = v0 * x + ((g*x.pow(2))/2)
+            list.add(Pair(x, y))
+            x += step
+        }
+
+        return list
     }
 }

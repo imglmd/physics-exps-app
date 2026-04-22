@@ -17,8 +17,8 @@ class SpringPendulumExperiment: Experiment {
         InputField("weight", "Масса", "m", "кг"),
         InputField("coeff", "Коэффицент упругости пружины", "k", "Н/м")
     )
-    override val xLabel = "Масса груза"
-    override val yLabel = "Период"
+    override val xLabel = "Масса груза, кг"
+    override val yLabel = "Период, с"
 
     override val minRequiredInputs = 2
 
@@ -57,11 +57,11 @@ class SpringPendulumExperiment: Experiment {
         val m = inputs.getValue("weight")
         val k = inputs.getValue("coeff")
         val startX = 0.0
-        val step = m / 10.0
+        val step = m / 100.0
 
         var x = startX
         while (x <= m + step) {
-            val y = 2 * PI * sqrt(m/k)
+            val y = 2 * PI * sqrt(x/k)
             list.add(Pair(x, y))
             x += step
         }

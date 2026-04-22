@@ -12,12 +12,12 @@ class RadioactiveDecay: Experiment {
     override val name = "Радиоактивный распад"
     override val category = "Ядерная физика"
     override val description = ""
-    override val xLabel =  "Время полураспада"
+    override val xLabel =  "Время полураспада, с"
     override val yLabel = "Количество оставшихся радиоактивных ядер"
     override val inputFields = listOf(
         InputField("start_count", "Начальное число радиоактивных ядер", "N₀", ""),
         InputField("period", "Период полураспада", "T", "с"),
-        InputField("time", "Промежутой времени от начала распада", "t", "с")
+        InputField("time", "Время от начала распада", "t", "с")
     )
     override val minRequiredInputs = 3
 
@@ -42,7 +42,10 @@ class RadioactiveDecay: Experiment {
         return ExperimentResult(
             experiment = this,
             quantities = listOf(
-                PhysicalQuantity("Количество оставшихся радиоактивных ядер", "N",
+                PhysicalQuantity("Начальное число ядер", "N₀", N0, ""),
+                PhysicalQuantity("Период полураспада", "T", T, "с"),
+                PhysicalQuantity("Время от начала распада", "t", t, "с"),
+                PhysicalQuantity("Количество оставшихся ядер", "N",
                     N, "")
             ),
             points = getPoints(map),
@@ -58,13 +61,14 @@ class RadioactiveDecay: Experiment {
         val T: Double = inputs.getValue("period")
         val N0: Double = inputs.getValue("start_count")
 
-        val startX = t
-        val step = startX / 10.0
+        val startX = 0.0
+        val step = t / 100.0
+
         var x = startX
-        while (x > step) {
-            val y = N0 * 2.0.pow(-t/T)
+        while (x <= t + step) {
+            val y = N0 * 2.0.pow(-x/T)
             list.add(Pair(x, y))
-            x -= step
+            x += step
         }
         return list
     }

@@ -13,12 +13,12 @@ class CoulombsLawExperiment: Experiment {
     override val category = "Электричество"
     override val description = "Закон Кулона — это физический закон, описывающий силу, с которой электрически заряженные тела притягиваются или отталкиваются. Чем больше заряды, тем сильнее взаимодействие."
     override val inputFields = listOf(
-        InputField("q1", "Величина первого заряда", "q1", "Кл"),
-        InputField("q2", "Величина второго заряда", "q2", "Кл"),
-        InputField("distance", "Расстояние между зарядами", "r", "метр")
+        InputField("q1", "Первый заряд × 10⁻⁹", "q1", "Кл"),
+        InputField("q2", "Второй заряд × 10⁻⁹", "q2", "Кл"),
+        InputField("distance", "Расстояние между зарядами", "r", "м")
     )
-    override val xLabel = ""
-    override val yLabel = ""
+    override val xLabel = "Расстояние, м"
+    override val yLabel = "Электрическая сила, нН"
 
     override val minRequiredInputs = 3
 
@@ -32,7 +32,10 @@ class CoulombsLawExperiment: Experiment {
 
         when {
             q1 != null && q2 != null && r != null -> {
-                f = k * (abs(q1 * q2) /r*r)
+                f = k * (abs(q1 * q2*1e-18) /(r*r)) * 1e9
+                map.put("q1", q1)
+                map.put("q2", q2)
+                map.put("distance", r)
             }
 
             else -> throw IllegalArgumentException("Нужно ввести любые три величины")
@@ -41,10 +44,10 @@ class CoulombsLawExperiment: Experiment {
         return ExperimentResult(
             experiment = this,
             quantities = listOf(
-                PhysicalQuantity("Величина первого заряда", "q1", q1, "Кл"),
-                PhysicalQuantity("Величина второго заряда", "q2", q2, "Кл"),
-                PhysicalQuantity("Расстояние между зарядами", "r", r, "м"),
-                PhysicalQuantity("Сила взаимодействия зарядов", "F", f, "Н")
+                PhysicalQuantity("Первый заряд", "q1", q1, "нКл"),
+                PhysicalQuantity("Второй заряд", "q2", q2, "нКл"),
+                PhysicalQuantity("Расстояние", "r", r, "м"),
+                PhysicalQuantity("Электрическая сила", "F", f, "нН")
             ),
             points = getPoints(map),
             date = "${LocalDate.now()}",
@@ -55,6 +58,22 @@ class CoulombsLawExperiment: Experiment {
     }
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<Pair<Double, Double>>()
+        val k = 9 * 1e9;
+        val q1: Double = inputs.getValue("q1") * 1e-9
+        val q2: Double = inputs.getValue("q2") * 1e-9
+        val r: Double = inputs.getValue("distance")
+
+        val startX = r * 0.1
+        val step = (r - startX) / 100.0
+
+        var x = startX
+        while(x <= r + step) {
+            val y = (k * (abs(q1 * q2) /(x*x))) * 1e9
+            list.add(Pair(x, y))
+            x += step
+        }
+
+        return list
     }
 }
