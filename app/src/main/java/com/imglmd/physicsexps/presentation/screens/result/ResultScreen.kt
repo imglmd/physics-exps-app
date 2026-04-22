@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
+import com.imglmd.physicsexps.presentation.core.theme.CherryRose
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.VicoScrollState
@@ -90,14 +91,14 @@ private fun Content(
     modelProducer: CartesianChartModelProducer
 ) {
     val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent()
+        label = rememberTextComponent(color = Color.Black)
     )
 
     val chart = rememberCartesianChart(
         rememberLineCartesianLayer(
             lineProvider = LineCartesianLayer.LineProvider.series(
                 LineCartesianLayer.rememberLine(
-                    fill = LineCartesianLayer.LineFill.single(Fill(Color(0xFFA90735).toArgb())),
+                    fill = LineCartesianLayer.LineFill.single(Fill(CherryRose.toArgb())),
                     pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f),
                     stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
                 )
@@ -106,20 +107,17 @@ private fun Content(
         ,
         startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
             color = Color.Black,
-            textSize = 12.sp,
+            textSize = 14.sp,
         ),
             title = state.result.yLabel,
-            titleComponent = rememberTextComponent(color = Color(0xFFA90735), textSize = 12.sp )
+            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp)
         ),
         bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
             color = Color.Black,
-            textSize = 12.sp,
+            textSize = 14.sp,
         ),
             title = state.result.xLabel,
-            titleComponent = rememberTextComponent(color = Color(0xFFA90735), textSize = 12.sp )
-        ),
-        decorations = listOf(
-
+            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp )
         ),
         marker = marker
     )
