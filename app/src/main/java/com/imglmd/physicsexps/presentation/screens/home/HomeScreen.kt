@@ -85,7 +85,7 @@ fun HomeScreen(
                     Text(
                         text = category,
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(top = 20.dp, bottom = 8.dp)
                     )
                 }
 
@@ -152,7 +152,6 @@ private fun SearchTextField(
     state: TextFieldState,
     modifier: Modifier = Modifier,
 ) {
-
     val textStyle = MaterialTheme.typography.bodyLarge
 
     Row(

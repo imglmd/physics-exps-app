@@ -1,66 +1,26 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
-import com.imglmd.physicsexps.presentation.core.theme.CherryRose
-import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
-import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.VicoScrollState
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
-import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
-import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
-import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
-import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
-import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
-import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
-import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
-import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.compose.common.insets
-import com.patrykandpatrick.vico.core.cartesian.CartesianChart
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
+import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
+import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.decoration.Decoration
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.core.common.Fill
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.math.round
-import kotlin.math.sin
 
 @Composable
 fun ResultScreen(
@@ -71,17 +31,23 @@ fun ResultScreen(
     val modelProducer = remember { CartesianChartModelProducer() }
 
     Box(
-        Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        when(val currentState = state){
-            is ResultContract.State.Error -> Text(currentState.message)
-            ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack, modelProducer)
+        when (state) {
+            is ResultContract.State.Loading -> CircularProgressIndicator()
+
+            is ResultContract.State.Error -> Text(
+                (state as ResultContract.State.Error).message
+            )
+
+            is ResultContract.State.Success -> Content(
+                state = state as ResultContract.State.Success,
+                navigateBack = navigateBack,
+                modelProducer = modelProducer
+            )
         }
     }
-
-
 }
 
 @Composable
@@ -90,47 +56,6 @@ private fun Content(
     navigateBack: () -> Unit,
     modelProducer: CartesianChartModelProducer
 ) {
-    val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent(color = Color.Black)
-    )
-
-    val chart = rememberCartesianChart(
-        rememberLineCartesianLayer(
-            lineProvider = LineCartesianLayer.LineProvider.series(
-                LineCartesianLayer.rememberLine(
-                    fill = LineCartesianLayer.LineFill.single(Fill(CherryRose.toArgb())),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f),
-                    stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
-                )
-            )
-        )
-        ,
-        startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
-            color = Color.Black,
-            textSize = 14.sp,
-        ),
-            title = state.result.yLabel,
-            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp)
-        ),
-        bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
-            color = Color.Black,
-            textSize = 14.sp,
-        ),
-            title = state.result.xLabel,
-            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp )
-        ),
-        marker = marker
-    )
-
-    LaunchedEffect(Unit) {
-        modelProducer.runTransaction {
-            lineSeries {
-                val (x, y) = state.result.points.unzip()
-                series(x = x, y = y)
-            }
-        }
-    }
-
     Scaffold(
         topBar = {
             ExperimentAppBar(
@@ -139,67 +64,20 @@ private fun Content(
                 navigateBack = navigateBack
             )
         }
-    ) { innerPadding ->
+    ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(padding)
                 .padding(horizontal = 24.dp)
         ) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                        elevation = 6.dp,
-                        shape = RoundedCornerShape(24.dp)
-                    )
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text("Результаты вычислений", style = MaterialTheme.typography.titleMedium)
-                HorizontalDivider(Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.tertiary)
-                state.result.quantities.forEach { quantity ->
-                    Column (
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = "${quantity.label} (${quantity.symbol})",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "${round(quantity.value * 1000) / 1000} ${quantity.unit}",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                }
-            }
+            ResultCard(state)
 
-            Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp).shadow(
-                elevation = 6.dp,
-                shape = RoundedCornerShape(24.dp))
-            ) {
-                CartesianChartHost(
-                    chart = chart,
-                    modelProducer = modelProducer,
-                    scrollState = rememberVicoScrollState(),
-                    modifier = Modifier.fillMaxSize()
-                        .background(Color.White).padding(5.dp).padding(top=10.dp),
-                    zoomState = rememberVicoZoomState()
-                )
-            }
+            Spacer(Modifier.height(8.dp))
+
+            ChartCard(state, modelProducer)
         }
-
     }
-}
-
-@Composable
-private fun ResultItem(
-    title: String,
-){
-
 }
