@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -18,17 +21,46 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
+import com.imglmd.physicsexps.presentation.core.theme.CherryRose
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
+import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.VicoScrollState
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
+import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
+import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import com.patrykandpatrick.vico.compose.common.insets
+import com.patrykandpatrick.vico.core.cartesian.CartesianChart
+import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.core.cartesian.decoration.Decoration
+import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
+import com.patrykandpatrick.vico.core.common.Fill
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.round
+import kotlin.math.sin
 
 @Composable
 fun ResultScreen(
@@ -36,6 +68,7 @@ fun ResultScreen(
     viewModel: ResultViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val modelProducer = remember { CartesianChartModelProducer() }
 
     Box(
         Modifier.fillMaxSize(),
@@ -44,7 +77,7 @@ fun ResultScreen(
         when(val currentState = state){
             is ResultContract.State.Error -> Text(currentState.message)
             ResultContract.State.Loading -> CircularProgressIndicator()
-            is ResultContract.State.Success -> Content(currentState, navigateBack)
+            is ResultContract.State.Success -> Content(currentState, navigateBack, modelProducer)
         }
     }
 
@@ -54,8 +87,50 @@ fun ResultScreen(
 @Composable
 private fun Content(
     state: ResultContract.State.Success,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    modelProducer: CartesianChartModelProducer
 ) {
+    val marker = rememberDefaultCartesianMarker(
+        label = rememberTextComponent(color = Color.Black)
+    )
+
+    val chart = rememberCartesianChart(
+        rememberLineCartesianLayer(
+            lineProvider = LineCartesianLayer.LineProvider.series(
+                LineCartesianLayer.rememberLine(
+                    fill = LineCartesianLayer.LineFill.single(Fill(CherryRose.toArgb())),
+                    pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f),
+                    stroke = LineCartesianLayer.LineStroke.continuous(thickness = 3.dp)
+                )
+            )
+        )
+        ,
+        startAxis = VerticalAxis.rememberStart(label = rememberTextComponent(
+            color = Color.Black,
+            textSize = 14.sp,
+        ),
+            title = state.result.yLabel,
+            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp)
+        ),
+        bottomAxis = HorizontalAxis.rememberBottom(label = rememberTextComponent(
+            color = Color.Black,
+            textSize = 14.sp,
+        ),
+            title = state.result.xLabel,
+            titleComponent = rememberTextComponent(color = CherryRose, textSize = 14.sp )
+        ),
+        marker = marker
+    )
+
+    LaunchedEffect(Unit) {
+        modelProducer.runTransaction {
+            lineSeries {
+                val (x, y) = state.result.points.unzip()
+                series(x = x, y = y)
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             ExperimentAppBar(
@@ -71,7 +146,6 @@ private fun Content(
                 .padding(innerPadding)
                 .padding(horizontal = 24.dp)
         ) {
-
 
             Column(
                 modifier = Modifier
@@ -89,9 +163,9 @@ private fun Content(
                 Text("Результаты вычислений", style = MaterialTheme.typography.titleMedium)
                 HorizontalDivider(Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.tertiary)
                 state.result.quantities.forEach { quantity ->
-                    Row(
+                    Column (
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalAlignment = Alignment.Start
                     ) {
                         Text(
                             text = "${quantity.label} (${quantity.symbol})",
@@ -103,6 +177,20 @@ private fun Content(
                         )
                     }
                 }
+            }
+
+            Card(modifier = Modifier.fillMaxWidth().padding(top=30.dp).shadow(
+                elevation = 6.dp,
+                shape = RoundedCornerShape(24.dp))
+            ) {
+                CartesianChartHost(
+                    chart = chart,
+                    modelProducer = modelProducer,
+                    scrollState = rememberVicoScrollState(),
+                    modifier = Modifier.fillMaxSize()
+                        .background(Color.White).padding(5.dp).padding(top=10.dp),
+                    zoomState = rememberVicoZoomState()
+                )
             }
         }
 

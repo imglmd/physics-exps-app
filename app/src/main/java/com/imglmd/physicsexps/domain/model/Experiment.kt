@@ -10,4 +10,7 @@ interface Experiment {
     val inputFields: List<InputField>
     val minRequiredInputs: Int
     fun calculate(inputs: Map<String, Double>): ExperimentResult
+    fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>>
+    val xLabel: String
+    val yLabel: String
 }
