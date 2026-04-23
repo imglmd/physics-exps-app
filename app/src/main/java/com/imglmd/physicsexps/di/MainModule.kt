@@ -4,6 +4,8 @@ import androidx.room.Room
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.data.database.ExpDb
 import com.imglmd.physicsexps.data.repositoryImpl.ExperimentRunRepositoryImpl
+import com.imglmd.physicsexps.data.repositoryImpl.ExperimentRunsRepositoryImpl
+import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
@@ -41,5 +43,5 @@ val mainModule = module {
         ).build()
     }
     single{get<ExpDb>().dao()}
-    single { ExperimentRunRepositoryImpl(get())}
+    single<ExperimentRunsRepository> { ExperimentRunsRepositoryImpl(get()) }
 }

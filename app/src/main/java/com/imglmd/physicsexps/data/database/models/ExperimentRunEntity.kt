@@ -20,7 +20,7 @@ data class ExperimentRunEntity(
     @ColumnInfo("experiment_id")
     val experimentId: String,
     val date: Long,
-    val inputData: String, //TODO() json
+    val inputData: String,
     @ColumnInfo("result_id")
     val resultId: Int,
     val status: String
