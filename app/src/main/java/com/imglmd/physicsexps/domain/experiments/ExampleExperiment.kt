@@ -75,7 +75,7 @@ class ExampleExperiment : Experiment {
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
             ),
-            points = getPoints(map),
+            points = null,  //TODO: пример отсутствия графика у эксперимента. заменить на getPoints(map)
             date = "${LocalDate.now()}",
             xLabel = xLabel,
             yLabel = yLabel

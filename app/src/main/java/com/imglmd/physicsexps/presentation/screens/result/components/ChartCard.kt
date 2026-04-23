@@ -42,6 +42,8 @@ fun ChartCard(
     state: ResultContract.State.Success,
     modelProducer: CartesianChartModelProducer
 ) {
+    val points = state.result.points ?: return
+
     val colors = MaterialTheme.colorScheme
 
     val marker = rememberDefaultCartesianMarker(
@@ -50,9 +52,9 @@ fun ChartCard(
 
     val chart = rememberChart(state, marker)
 
-    LaunchedEffect(state.result.points) {
+    LaunchedEffect(points) {
         modelProducer.runTransaction {
-            val (x, y) = state.result.points.unzip()
+            val (x, y) = points.unzip()
             lineSeries { series(x, y) }
         }
     }

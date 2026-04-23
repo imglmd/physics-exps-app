@@ -71,13 +71,15 @@ private fun Content(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 24.dp)
+                .padding(top = 16.dp)
         ) {
 
             ResultCard(state)
 
-            Spacer(Modifier.height(8.dp))
-
-            ChartCard(state, modelProducer)
+            if (!state.result.points.isNullOrEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                ChartCard(state, modelProducer)
+            }
         }
     }
 }
