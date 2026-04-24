@@ -76,7 +76,7 @@ fun ExperimentScreen(
 
     val textStates = remember(state.experiment.inputFields) {
         state.experiment.inputFields.associate { field ->
-            field.key to TextFieldState(initialText = "")
+            field.key to TextFieldState(initialText = state.inputs[field.key] ?: "")
         }
     }
     state.experiment.inputFields.forEach { field ->
