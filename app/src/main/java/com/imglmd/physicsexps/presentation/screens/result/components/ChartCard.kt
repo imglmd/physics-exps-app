@@ -66,8 +66,8 @@ fun ChartCard(
             .shadow(
                 elevation = 32.dp,
                 shape = RoundedCornerShape(24.dp),
-                ambientColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                spotColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.42f)
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.42f)
             )
             .padding(top = 16.dp),
         colors = CardDefaults.cardColors(

@@ -25,8 +25,8 @@ fun ResultCard(state: ResultContract.State.Success) {
             .shadow(
                 elevation = 32.dp,
                 shape = RoundedCornerShape(24.dp),
-                ambientColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                spotColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.42f)
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.42f)
             )
             .clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)

@@ -12,8 +12,23 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = CherryRose,
+    secondary = Silver,
+    tertiary = DimSilver,
+    surface = DarkSurface,
+    background = NightBlack,
+    surfaceContainer = DarkSurface,
+    primaryContainer = DarkSurfaceVariant,
+    onPrimaryContainer = Parchment,
+    onPrimary = White,
+    onBackground = Parchment,
+    onSurface = Parchment,
+    onSurfaceVariant = Silver,
+    error = CherryRose,
+    outline = DimSilver,
+    outlineVariant = DimSilver,
+    onSecondary = White,
+    scrim = NightBlack
 )
-
 private val LightColorScheme = lightColorScheme(
     primary = CherryRose,
     secondary = Silver,
@@ -30,12 +45,13 @@ private val LightColorScheme = lightColorScheme(
     error = CherryRose,
     outline = AlabasterGrey,
     outlineVariant = AlabasterGrey,
-    onSecondary = White
+    onSecondary = White,
+    scrim = ShadowGrey
 )
 
 @Composable
 fun PhysicsExpsTheme(
-    darkTheme: Boolean = false, //isSystemInDarkTheme(),
+    darkTheme: Boolean = isSystemInDarkTheme(), //isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

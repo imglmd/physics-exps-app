@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -58,11 +59,12 @@ fun HomeScreen(
             columns = GridCells.Adaptive(150.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .imePadding()
                 .padding(top = 10.dp)
                 .padding(horizontal = 24.dp),
             //verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = innerPadding
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 val searchState = rememberTextFieldState()
@@ -113,9 +115,10 @@ private fun ExperimentItem(
         modifier = modifier
             .aspectRatio(1f)
             .shadow(
-                elevation = 6.dp,
+                elevation = 28.dp,
                 shape = RoundedCornerShape(30.dp),
-                clip = false
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
             )
             .clip(RoundedCornerShape(30.dp))
             .background(MaterialTheme.colorScheme.surface)
@@ -158,7 +161,12 @@ private fun SearchTextField(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .shadow(6.dp, RoundedCornerShape(100))
+            .shadow(
+                elevation = 32.dp,
+                shape = RoundedCornerShape(100.dp),
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.28f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.58f)
+            )
             .clip(RoundedCornerShape(100))
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(start = 20.dp).padding(vertical = 6.dp),
