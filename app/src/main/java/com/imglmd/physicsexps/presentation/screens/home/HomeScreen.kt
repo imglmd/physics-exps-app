@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -156,7 +157,7 @@ private fun ExperimentItem(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.Black.copy(alpha = 0.6f)
+                            Color.Black.copy(alpha = if(isSystemInDarkTheme()) 0.6f else 0.3f)
                         )
                     )
                 )
@@ -199,9 +200,18 @@ private fun SearchTextField(
             )
             .clip(RoundedCornerShape(100))
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(start = 20.dp).padding(vertical = 6.dp),
+            .padding(start = 16.dp, end = 4.dp)
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable .search),
+            contentDescription = "Search",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
 
         BasicTextField(
             state = state,
