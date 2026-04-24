@@ -68,7 +68,7 @@ class ProjectileMotionExperiment : Experiment {
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
         val list = mutableListOf<Pair<Double, Double>>()
 
-        val a = Math.toRadians(inputs.getValue("angle"))
+        val a = inputs.getValue("angle")
         val v0 = inputs.getValue("start_speed")
         val t_full = inputs.getValue("time_full")
         val g = ExpConstants.GRAVITY
@@ -78,7 +78,7 @@ class ProjectileMotionExperiment : Experiment {
 
         var t = startT
         while (t <= t_full + step) {
-            val x = round( (v0 * cos(a) * t) * 1000.0) / 1000.0
+            val x = round( (v0 * cos(a) * t) * 10000.0) / 10000.0
             val y = round((v0 * sin(a) * t - (g*t.pow(2))/2) * 1000.0) / 1000.0
             list.add(Pair(x, y))
             t += step
