@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -12,6 +13,7 @@ class CoulombsLawExperiment: Experiment {
     override val name = "Закон Кулона"
     override val category = "Электричество"
     override val description = "Закон Кулона — это физический закон, описывающий силу, с которой электрически заряженные тела притягиваются или отталкиваются. Чем больше заряды, тем сильнее взаимодействие."
+    override val imageRes = R.drawable.coulombs_law
     override val inputFields = listOf(
         InputField("q1", "Первый заряд × 10⁻⁹", "q1", "Кл"),
         InputField("q2", "Второй заряд × 10⁻⁹", "q2", "Кл"),
@@ -62,7 +64,7 @@ class CoulombsLawExperiment: Experiment {
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
         val list = mutableListOf<Pair<Double, Double>>()
-        val k = ExpConstants.COULOMB_CONSTANT;
+        val k = ExpConstants.COULOMB_CONSTANT
         val q1: Double = inputs.getValue("q1") * ExpConstants.NANO
         val q2: Double = inputs.getValue("q2") * ExpConstants.NANO
         val r: Double = inputs.getValue("distance")

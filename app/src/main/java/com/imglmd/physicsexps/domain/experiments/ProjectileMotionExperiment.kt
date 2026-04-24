@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -15,6 +16,7 @@ class ProjectileMotionExperiment : Experiment {
     override val name = "Движение тела, брошенного под углом к горизонту"
     override val category = "Кинематика"
     override val description = "Движение тела, брошенного под углом к горизонту — это движение, при котором тело запускают с начальной скоростью под углом к горизонтальной поверхности."
+    override val imageRes = R.drawable.projectile_motion
     override val inputFields = listOf(
         InputField("start_speed", "Начальная скорость", "v₀", "м/c"),
         InputField("angle", "Угол броска", "a", "°")

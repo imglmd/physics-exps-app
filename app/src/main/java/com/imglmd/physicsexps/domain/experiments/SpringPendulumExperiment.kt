@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -13,6 +14,8 @@ class SpringPendulumExperiment: Experiment {
     override val name = "Пружинный маятник"
     override val category = "Механика"
     override val description = "Пружинный маятник — это механическая колебательная система, состоящая из груза определённой массы , прикрепленного к упругой пружине с коэффицентом упругости, другой конец которой жестко закреплен. Он совершает колебания под действием силы упругости около положения равновесия."
+    override val imageRes = R.drawable.spring_pendulum
+
     override val inputFields = listOf(
         InputField("weight", "Масса", "m", "кг"),
         InputField("coeff", "Коэффицент упругости пружины", "k", "Н/м")
