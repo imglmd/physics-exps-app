@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -16,6 +17,7 @@ class ExampleExperiment : Experiment {
     override val category = "Механика"
     override val description =
         "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
+    override val imageRes = R.drawable.pendulum
 
     override val xLabel =  "Длина нити, м"
     override val yLabel = "Период, с"

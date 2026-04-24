@@ -3,6 +3,7 @@ package com.imglmd.physicsexps.presentation.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -97,6 +100,7 @@ fun HomeScreen(
                     Column {
                         ExperimentItem(
                             name = experiment.name,
+                            imageRes = experiment.imageRes,
                             onClick = { navigateToExperiment(experiment.id) }
                         )
                         Spacer(Modifier.height(10.dp))
@@ -110,6 +114,7 @@ fun HomeScreen(
 @Composable
 private fun ExperimentItem(
     name: String,
+    imageRes: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -126,29 +131,46 @@ private fun ExperimentItem(
             .clickable(onClick = onClick)
     ) {
         Image(
-            painter = painterResource(R.drawable.placeholder),
+            painter = painterResource(imageRes),
             contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
+        )
+
+        // затемнение картинки
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Color.Black.copy(
+                        alpha = if (isSystemInDarkTheme()) 0.15f else 0f
+                    )
+                )
         )
 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface),
-            contentAlignment = Alignment.Center
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black.copy(alpha = 0.6f)
+                        )
+                    )
+                )
         ) {
             Text(
                 text = name,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = Color.White,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                    .padding(horizontal = 10.dp, vertical = 10.dp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
