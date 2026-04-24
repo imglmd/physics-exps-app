@@ -127,7 +127,7 @@ fun ExperimentScreen(
                         text = state.experiment.description,
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(24.dp))
                     Text(
                         text = "Введите известные величины:",
                         style = MaterialTheme.typography.titleMedium
