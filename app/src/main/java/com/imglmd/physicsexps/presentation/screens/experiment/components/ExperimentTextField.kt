@@ -5,9 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -37,39 +36,50 @@ fun ExperimentTextField(
     unit: String,
     modifier: Modifier = Modifier,
     symbolWidth: Dp = 44.dp,
-    borderColor: Color = MaterialTheme.colorScheme.outlineVariant
+    isError: Boolean = false
 ) {
+    val colors = MaterialTheme.colorScheme
+
+    val borderColor = when {
+        isError -> colors.error
+        else -> colors.outlineVariant
+    }
+
     Row(
         modifier = modifier
             .height(IntrinsicSize.Min)
+            .heightIn(min = 60.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = colors.surfaceVariant,
                 shape = RoundedCornerShape(16.dp)
             )
             .border(
-                width = 1.5.dp,
+                width = 1.dp,
                 color = borderColor,
                 shape = RoundedCornerShape(16.dp)
-            ),
+            )
+            .padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .width(symbolWidth)
-                .fillMaxHeight()
+                .padding(vertical = 12.dp)
         ) {
             Text(
                 text = symbol,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = colors.onSurfaceVariant
             )
         }
 
         Box(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(1.5.dp)
-                .background(borderColor)
+                .height(32.dp)
+                .width(1.dp)
+                .background(colors.outlineVariant.copy(alpha = 0.5f))
         )
 
         BasicTextField(
@@ -77,11 +87,14 @@ fun ExperimentTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
             ),
-            textStyle = MaterialTheme.typography.titleLarge,
+            textStyle = MaterialTheme.typography.titleLarge.copy(
+                color = colors.onSurface
+            ),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 12.dp),
+                .padding(horizontal = 12.dp),
             lineLimits = TextFieldLineLimits.SingleLine,
+
             inputTransformation = InputTransformation {
 
                 for (i in 0 until length) {
@@ -101,54 +114,49 @@ fun ExperimentTextField(
                         c.isDigit() -> Unit
 
                         c == '.' -> {
-                            if (hasDecimal) {
-                                delete(i, i + 1)
-                            } else {
-                                hasDecimal = true
-                            }
+                            if (hasDecimal) delete(i, i + 1)
+                            else hasDecimal = true
                         }
 
                         c == '-' -> {
-                            if (i != 0 || hasMinus) {
-                                delete(i, i + 1)
-                            } else {
-                                hasMinus = true
-                            }
+                            if (i != 0 || hasMinus) delete(i, i + 1)
+                            else hasMinus = true
                         }
 
                         else -> delete(i, i + 1)
                     }
                 }
 
-                if (length == 1 && charAt(0) == '.') {
-                    insert(0, "0")
-                }
-
-                if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') {
-                    insert(1, "0")
-                }
+                if (length == 1 && charAt(0) == '.') insert(0, "0")
+                if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
             },
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+
+            cursorBrush = SolidColor(colors.primary),
+
             decorator = { innerTextField ->
-                if (state.text.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart){
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (state.text.isEmpty()) {
                         Text(
                             text = label,
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = colors.onSurfaceVariant
                         )
                     }
 
+                    innerTextField()
                 }
-                innerTextField()
-
             }
         )
 
         Text(
             text = unit,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(end = 14.dp, start = 4.dp)
+            color = colors.onSurfaceVariant,
+            modifier = Modifier.padding(end = 12.dp, start = 4.dp)
         )
     }
 }

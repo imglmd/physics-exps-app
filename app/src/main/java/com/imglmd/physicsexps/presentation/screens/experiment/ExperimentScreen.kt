@@ -146,8 +146,7 @@ fun ExperimentScreen(
                         symbol = field.symbol,
                         unit = field.unit,
                         modifier = Modifier.fillMaxWidth(),
-                        borderColor = if (state.error != null) MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
-                        else MaterialTheme.colorScheme.outlineVariant
+                        isError = state.error != null
                     )
                 }
                 state.error?.let { error ->

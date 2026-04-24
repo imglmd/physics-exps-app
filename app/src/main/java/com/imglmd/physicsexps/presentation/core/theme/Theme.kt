@@ -15,6 +15,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Silver,
     tertiary = DimSilver,
     surface = DarkSurface,
+    surfaceVariant = DarkSurface,
     background = NightBlack,
     surfaceContainer = DarkSurface,
     primaryContainer = DarkSurfaceVariant,
@@ -34,6 +35,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = Silver,
     tertiary = AlabasterGrey,
     surface = White,
+    surfaceVariant = White,
     background = White,
     surfaceContainer = White,
     primaryContainer = White,
@@ -51,7 +53,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun PhysicsExpsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(), //isSystemInDarkTheme(),
+    darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

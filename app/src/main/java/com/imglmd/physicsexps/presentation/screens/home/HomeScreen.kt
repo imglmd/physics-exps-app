@@ -42,7 +42,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import org.koin.compose.viewmodel.koinViewModel
@@ -87,7 +89,7 @@ fun HomeScreen(
                     Text(
                         text = category,
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(top = 20.dp, bottom = 8.dp)
+                        modifier = Modifier.padding(top = 22.dp, bottom = 6.dp)
                     )
                 }
 
@@ -116,12 +118,11 @@ private fun ExperimentItem(
             .aspectRatio(1f)
             .shadow(
                 elevation = 28.dp,
-                shape = RoundedCornerShape(30.dp),
+                shape = RoundedCornerShape(24.dp),
                 ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
                 spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
             )
-            .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
     ) {
         Image(
@@ -135,14 +136,21 @@ private fun ExperimentItem(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = name,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -168,14 +176,14 @@ private fun SearchTextField(
                 spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.58f)
             )
             .clip(RoundedCornerShape(100))
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(start = 20.dp).padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         BasicTextField(
             state = state,
-            textStyle = textStyle,
+            textStyle = textStyle.copy(color = MaterialTheme.colorScheme.onSurface),
             modifier = Modifier.weight(1f),
             lineLimits = TextFieldLineLimits.SingleLine,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
