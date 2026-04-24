@@ -26,13 +26,16 @@ class CoulombsLawExperiment: Experiment {
         val q1 = inputs["q1"]
         val q2 = inputs["q2"]
         val r = inputs["distance"]
-        val k = 9 * 1e9;
+        val k = ExpConstants.COULOMB_CONSTANT
+        val nano = ExpConstants.NANO
+        val nanoInv = ExpConstants.NANO_INVERSE
+
         val f: Double
         val map = mutableMapOf<String, Double>()
 
         when {
             q1 != null && q2 != null && r != null -> {
-                f = k * (abs(q1 * q2*1e-18) /(r*r)) * 1e9
+                f = k * (abs(q1 * q2 * nano * nano) /(r*r)) * nanoInv
                 map.put("q1", q1)
                 map.put("q2", q2)
                 map.put("distance", r)
@@ -59,17 +62,17 @@ class CoulombsLawExperiment: Experiment {
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
         val list = mutableListOf<Pair<Double, Double>>()
-        val k = 9 * 1e9;
-        val q1: Double = inputs.getValue("q1") * 1e-9
-        val q2: Double = inputs.getValue("q2") * 1e-9
+        val k = ExpConstants.COULOMB_CONSTANT;
+        val q1: Double = inputs.getValue("q1") * ExpConstants.NANO
+        val q2: Double = inputs.getValue("q2") * ExpConstants.NANO
         val r: Double = inputs.getValue("distance")
 
         val startX = r * 0.1
-        val step = (r - startX) / 100.0
+        val step = (r - startX) / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while(x <= r + step) {
-            val y = (k * (abs(q1 * q2) /(x*x))) * 1e9
+            val y = (k * (abs(q1 * q2) /(x*x))) * ExpConstants.NANO_INVERSE
             list.add(Pair(x, y))
             x += step
         }

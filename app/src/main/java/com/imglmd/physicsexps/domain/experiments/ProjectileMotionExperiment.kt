@@ -29,7 +29,7 @@ class ProjectileMotionExperiment : Experiment {
         val v0 = inputs["start_speed"]
         val a_ = inputs["angle"]
         val a = Math.toRadians(a_!!)
-        val g = 9.81
+        val g = ExpConstants.GRAVITY
         val h_max: Double
         val L: Double
         val t_full: Double
@@ -71,10 +71,10 @@ class ProjectileMotionExperiment : Experiment {
         val a = Math.toRadians(inputs.getValue("angle"))
         val v0 = inputs.getValue("start_speed")
         val t_full = inputs.getValue("time_full")
-        val g = 9.81
+        val g = ExpConstants.GRAVITY
 
         val startT = 0.0
-        val step = t_full / 100.0
+        val step = t_full / ExpConstants.DEFAULT_POINTS_COUNT
 
         var t = startT
         while (t <= t_full + step) {

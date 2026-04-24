@@ -89,7 +89,7 @@ class ExampleExperiment : Experiment {
         val g: Double = inputs.getValue("gravity")
 
         val startX = 0.0
-        val step = l / 100.0
+        val step = l / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while (x <= l + step) {

@@ -57,7 +57,7 @@ class SpringPendulumExperiment: Experiment {
         val m = inputs.getValue("weight")
         val k = inputs.getValue("coeff")
         val startX = 0.0
-        val step = m / 100.0
+        val step = m / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while (x <= m + step) {

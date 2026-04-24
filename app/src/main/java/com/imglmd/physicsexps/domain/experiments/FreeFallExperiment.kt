@@ -24,7 +24,7 @@ class FreeFallExperiment: Experiment {
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val v0 = inputs["start_speed"]
         val t = inputs["duration"]
-        val g = 9.81
+        val g = ExpConstants.GRAVITY
         val v: Double
         val h: Double
         val map = mutableMapOf<String, Double>()
@@ -64,10 +64,10 @@ class FreeFallExperiment: Experiment {
         val list = mutableListOf<Pair<Double, Double>>()
         val v0 = inputs.getValue("start_speed")
         val t = inputs.getValue("duration")
-        val g = 9.81
+        val g = ExpConstants.GRAVITY
 
         val startX = 0.0
-        val step = t / 100.0
+        val step = t / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while(x <= t + step) {
