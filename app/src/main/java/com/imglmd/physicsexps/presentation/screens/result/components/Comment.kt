@@ -32,13 +32,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Comment(
     text: String,
-    onClick: (String) -> Unit,
     onClickDelete: (String) -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable{
-            onClick(text)
-        }
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().background(CherryRose),

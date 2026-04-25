@@ -1,5 +1,7 @@
 package com.imglmd.physicsexps.domain.repository
 
+import com.imglmd.physicsexps.data.mapper.toModel
+import com.imglmd.physicsexps.data.mapper.toUi
 import com.imglmd.physicsexps.domain.model.ExperimentRun
 
 interface ExperimentRunsRepository {

@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.round
@@ -61,7 +63,7 @@ class ProjectileMotionExperiment : Experiment {
                 PhysicalQuantity("Время подъёма", "t", t_rise, "с")
             ),
             points = getPoints(map),
-            date = "${LocalDate.now()}",
+            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

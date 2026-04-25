@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -77,8 +79,8 @@ class ExampleExperiment : Experiment {
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
             ),
-            points = null,  //TODO: пример отсутствия графика у эксперимента. заменить на getPoints(map)
-            date = "${LocalDate.now()}",
+            points = getPoints(map),  //TODO: пример отсутствия графика у эксперимента. заменить на getPoints(map)
+            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )
