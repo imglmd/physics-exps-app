@@ -29,6 +29,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
+import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
 import org.koin.compose.viewmodel.koinViewModel
@@ -184,6 +187,8 @@ fun ExperimentScreen(
                     isLoading = state.isLoading,
                     enabled = state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
+                    iconPosition = IconPosition.EdgeEnd,
+                    icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .navigationBarsPadding()

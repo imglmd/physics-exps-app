@@ -1,8 +1,6 @@
 package com.imglmd.physicsexps.di
 
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.data.database.ExpDb
 import com.imglmd.physicsexps.data.repository.ExperimentRunsRepositoryImpl
@@ -13,9 +11,9 @@ import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
@@ -51,22 +49,7 @@ val mainModule = module {
             androidContext(),
             ExpDb::class.java,
             "exp_db"
-        )
-            //TODO: убрать ()
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    db.execSQL("""
-                INSERT INTO experiment_runs (experiment_id, date, inputData, result_id)
-                VALUES 
-                ('pendulum', ${System.currentTimeMillis()}, '{"v": 10.0}', 0),
-                ('free_fall', ${System.currentTimeMillis()}, '{"h": 20.0}', 0),
-                ('projectile_motion', ${System.currentTimeMillis()}, '{"v": 20.0}', 1)
-                
-            """.trimIndent())
-                }
-            })
-            .build()
+        ).build()
     }
     single { get<ExpDb>().resDao() }
     single{get<ExpDb>().dao()}
