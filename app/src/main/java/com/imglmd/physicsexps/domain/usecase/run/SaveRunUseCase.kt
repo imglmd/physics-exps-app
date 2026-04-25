@@ -9,9 +9,9 @@ class SaveRunUseCase(
     private val runsRepository: ExperimentRunsRepository,
     private val resultsRepository: ResultsRepository
 ) {
-    suspend operator fun invoke(result: ExperimentResult) {
+    suspend operator fun invoke(result: ExperimentResult): Int {
         val resultId = resultsRepository.insert(result)
-        runsRepository.insert(
+        return runsRepository.insert(
             ExperimentRun(
                 experimentId = result.experiment.id,
                 date = result.date,

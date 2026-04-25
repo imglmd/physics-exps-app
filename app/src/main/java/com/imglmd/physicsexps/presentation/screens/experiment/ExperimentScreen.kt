@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,12 +65,19 @@ fun ExperimentScreen(
     viewModel: ExperimentViewModel = koinViewModel { parametersOf(id) }
 ) {
     val state by viewModel.state.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         viewModel.actionFlow.collect { action ->
             when (action) {
-                is ExperimentContract.Action.NavigateToResult -> navigateToResult()
-                ExperimentContract.Action.NavigateBack -> navigateBack()
+                is ExperimentContract.Action.NavigateToResult -> {
+                    keyboardController?.hide()
+                    navigateToResult()
+                }
+                ExperimentContract.Action.NavigateBack -> {
+                    keyboardController?.hide()
+                    navigateBack()
+                }
             }
         }
     }

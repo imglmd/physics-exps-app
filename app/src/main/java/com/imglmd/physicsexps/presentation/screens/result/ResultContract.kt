@@ -8,4 +8,13 @@ interface ResultContract {
         data class Success(val result: ExperimentResult): State
         data class Error(val message: String): State
     }
+    sealed interface Intent {
+        object DeleteAndGoHome : Intent
+        object DeleteAndGoBack : Intent
+    }
+
+    sealed interface Effect {
+        object NavigateBack: Effect
+        object NavigateHome: Effect
+    }
 }

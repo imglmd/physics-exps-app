@@ -10,6 +10,11 @@ class Navigator(startDestination: Screen) {
         backStack.add(destination)
     }
 
+    fun goHome() {
+        if (backStack.size > 1) {
+            backStack.subList(1, backStack.size).clear()
+        }
+    }
     fun goBack() {
         backStack.removeLastOrNull()
     }

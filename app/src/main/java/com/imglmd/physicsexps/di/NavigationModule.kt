@@ -5,12 +5,9 @@ package com.imglmd.physicsexps.di
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
-import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
 import com.imglmd.physicsexps.presentation.screens.result.ResultScreen
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.parameter.parametersOf
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
@@ -36,7 +33,8 @@ val navigationModule = module {
     }
     navigation<Screen.Result> {
         ResultScreen(
-            navigateBack = { get<Navigator>().goBack() }
+            navigateBack = { get<Navigator>().goBack() },
+            navigateHome = { get<Navigator>().goHome() }
         )
     }
 }

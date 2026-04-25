@@ -43,7 +43,7 @@ val mainModule = module {
         ExperimentViewModel(params.get(), get(), get(), get())
     }
     viewModel {
-        ResultViewModel(get(), get())
+        ResultViewModel(get(), get(), get())
     }
 
     single {

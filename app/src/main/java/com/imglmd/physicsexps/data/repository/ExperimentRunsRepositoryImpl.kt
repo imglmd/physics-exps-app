@@ -19,9 +19,9 @@ class ExperimentRunsRepositoryImpl(
         return experimentRunsDao.getExpById(id).toUi()
     }
 
-    override suspend fun insert(experimentRun: ExperimentRun) {
-        experimentRunsDao.insertExp(experimentRun.toModel())
-    }
+    override suspend fun insert(experimentRun: ExperimentRun): Int =
+        experimentRunsDao.insertExp(experimentRun.toModel()).toInt()
+
 
     override suspend fun delete(experimentRun: ExperimentRun) {
         experimentRunsDao.deleteExp(experimentRun.toModel())
