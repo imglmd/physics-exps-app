@@ -12,7 +12,7 @@ class PhysicsExpsApp: Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin{
-            modules(mainModule, experimentsModule, navigationModule)
+            modules(experimentsModule, mainModule, navigationModule)
             androidContext(this@PhysicsExpsApp)
         }
     }

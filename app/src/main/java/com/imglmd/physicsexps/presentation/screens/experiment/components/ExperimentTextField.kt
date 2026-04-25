@@ -2,12 +2,13 @@ package com.imglmd.physicsexps.presentation.screens.experiment.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,51 +38,65 @@ fun ExperimentTextField(
     unit: String,
     modifier: Modifier = Modifier,
     symbolWidth: Dp = 44.dp,
-    borderColor: Color = MaterialTheme.colorScheme.outlineVariant
+    isError: Boolean = false
 ) {
+    val colors = MaterialTheme.colorScheme
+
+    val borderColor = when {
+        isError -> colors.error
+        else -> if(!isSystemInDarkTheme()) colors.outlineVariant else Color.Transparent
+    }
+
     Row(
         modifier = modifier
             .height(IntrinsicSize.Min)
+            .heightIn(min = 60.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(16.dp)
+                color = colors.surfaceVariant,
+                shape = RoundedCornerShape(20.dp)
             )
             .border(
-                width = 1.5.dp,
+                width = 1.dp,
                 color = borderColor,
-                shape = RoundedCornerShape(16.dp)
-            ),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .width(symbolWidth)
-                .fillMaxHeight()
+                .padding(vertical = 12.dp)
         ) {
             Text(
                 text = symbol,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = colors.onSurface.copy(alpha = 0.8f)
             )
         }
 
-        Box(
+        /*Box(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(1.5.dp)
-                .background(borderColor)
-        )
+                .height(32.dp)
+                .width(1.dp)
+                .background(colors.outlineVariant.copy(alpha = 0.5f))
+        )*/
 
         BasicTextField(
             state = state,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
             ),
-            textStyle = MaterialTheme.typography.titleLarge,
+            textStyle = MaterialTheme.typography.titleLarge.copy(
+                color = colors.onSurface
+            ),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 12.dp, vertical = 12.dp),
+                .padding(horizontal = 4.dp),
             lineLimits = TextFieldLineLimits.SingleLine,
+
             inputTransformation = InputTransformation {
 
                 for (i in 0 until length) {
@@ -101,54 +116,49 @@ fun ExperimentTextField(
                         c.isDigit() -> Unit
 
                         c == '.' -> {
-                            if (hasDecimal) {
-                                delete(i, i + 1)
-                            } else {
-                                hasDecimal = true
-                            }
+                            if (hasDecimal) delete(i, i + 1)
+                            else hasDecimal = true
                         }
 
                         c == '-' -> {
-                            if (i != 0 || hasMinus) {
-                                delete(i, i + 1)
-                            } else {
-                                hasMinus = true
-                            }
+                            if (i != 0 || hasMinus) delete(i, i + 1)
+                            else hasMinus = true
                         }
 
                         else -> delete(i, i + 1)
                     }
                 }
 
-                if (length == 1 && charAt(0) == '.') {
-                    insert(0, "0")
-                }
-
-                if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') {
-                    insert(1, "0")
-                }
+                if (length == 1 && charAt(0) == '.') insert(0, "0")
+                if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
             },
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+
+            cursorBrush = SolidColor(colors.primary),
+
             decorator = { innerTextField ->
-                if (state.text.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart){
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (state.text.isEmpty()) {
                         Text(
                             text = label,
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = colors.onSurfaceVariant
                         )
                     }
 
+                    innerTextField()
                 }
-                innerTextField()
-
             }
         )
 
         Text(
             text = unit,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(end = 14.dp, start = 4.dp)
+            color = colors.onSurface.copy(alpha = 0.6f),
+            modifier = Modifier.padding(end = 12.dp, start = 4.dp)
         )
     }
 }

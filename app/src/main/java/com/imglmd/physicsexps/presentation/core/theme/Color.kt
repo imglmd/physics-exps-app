@@ -9,3 +9,8 @@ val Parchment = Color(0xFFF4F3EE)
 val Silver = Color(0xFFB2B2AB)
 val White = Color(0xFFFFFFFF)
 val AlabasterGrey = Color(0xFFD9D9D9)
+
+val NightBlack = Color(0xFF141212)
+val DarkSurface = Color(0xFF1E1B1B)
+val DarkSurfaceVariant = Color(0xFF2A2626)
+val DimSilver = Color(0xFF6E6B6B)

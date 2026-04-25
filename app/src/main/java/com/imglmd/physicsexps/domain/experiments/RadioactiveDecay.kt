@@ -64,7 +64,7 @@ class RadioactiveDecay: Experiment {
         val N0: Double = inputs.getValue("start_count")
 
         val startX = 0.0
-        val step = t / 100.0
+        val step = t / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while (x <= t + step) {

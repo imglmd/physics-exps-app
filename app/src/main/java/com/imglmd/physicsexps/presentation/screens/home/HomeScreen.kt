@@ -3,16 +3,20 @@ package com.imglmd.physicsexps.presentation.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -36,12 +40,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import org.koin.compose.viewmodel.koinViewModel
@@ -58,11 +66,15 @@ fun HomeScreen(
             columns = GridCells.Adaptive(150.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(top = 10.dp)
-                .padding(horizontal = 24.dp),
+                .imePadding(),
             //verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(
+                top = innerPadding.calculateTopPadding() + 20.dp,
+                bottom = innerPadding.calculateBottomPadding(),
+                start = 24.dp,
+                end = 24.dp
+            )
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 val searchState = rememberTextFieldState()
@@ -72,10 +84,20 @@ fun HomeScreen(
                 }
 
                 Column {
-                    Spacer(Modifier.height(20.dp))
+                    if (state.history.isNotEmpty()){
+                        HistorySection(
+                            history = state.history,
+                            onSeeAllClick = {  },
+                            onItemClick = {  }
+                        )
+
+                        Spacer(Modifier.height(30.dp))
+
+                    }
                     SearchTextField(
                         state = searchState
                     )
+
                 }
 
             }
@@ -85,7 +107,7 @@ fun HomeScreen(
                     Text(
                         text = category,
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(top = 22.dp, bottom = 6.dp)
                     )
                 }
 
@@ -93,6 +115,7 @@ fun HomeScreen(
                     Column {
                         ExperimentItem(
                             name = experiment.name,
+                            imageRes = experiment.imageRes,
                             onClick = { navigateToExperiment(experiment.id) }
                         )
                         Spacer(Modifier.height(10.dp))
@@ -106,6 +129,7 @@ fun HomeScreen(
 @Composable
 private fun ExperimentItem(
     name: String,
+    imageRes: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -113,33 +137,57 @@ private fun ExperimentItem(
         modifier = modifier
             .aspectRatio(1f)
             .shadow(
-                elevation = 6.dp,
-                shape = RoundedCornerShape(30.dp),
-                clip = false
+                elevation = 28.dp,
+                shape = RoundedCornerShape(24.dp),
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
             )
-            .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
     ) {
         Image(
-            painter = painterResource(R.drawable.placeholder),
+            painter = painterResource(imageRes),
             contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
+        )
+
+        // затемнение картинки
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Color.Black.copy(
+                        alpha = if (isSystemInDarkTheme()) 0.15f else 0f
+                    )
+                )
         )
 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black.copy(alpha = if (isSystemInDarkTheme()) 0.6f else 0.3f)
+                        )
+                    )
+                )
         ) {
             Text(
                 text = name,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(horizontal = 10.dp, vertical = 10.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -152,23 +200,36 @@ private fun SearchTextField(
     state: TextFieldState,
     modifier: Modifier = Modifier,
 ) {
-
     val textStyle = MaterialTheme.typography.bodyLarge
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .shadow(6.dp, RoundedCornerShape(100))
+            .shadow(
+                elevation = 32.dp,
+                shape = RoundedCornerShape(100.dp),
+                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.28f),
+                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.58f)
+            )
             .clip(RoundedCornerShape(100))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(start = 20.dp).padding(vertical = 6.dp),
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(start = 16.dp, end = 4.dp)
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable .search),
+            contentDescription = "Search",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
         BasicTextField(
             state = state,
-            textStyle = textStyle,
+            textStyle = textStyle.copy(color = MaterialTheme.colorScheme.onSurface),
             modifier = Modifier.weight(1f),
             lineLimits = TextFieldLineLimits.SingleLine,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),

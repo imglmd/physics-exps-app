@@ -76,7 +76,7 @@ fun ExperimentScreen(
 
     val textStates = remember(state.experiment.inputFields) {
         state.experiment.inputFields.associate { field ->
-            field.key to TextFieldState(initialText = "")
+            field.key to TextFieldState(initialText = state.inputs[field.key] ?: "")
         }
     }
     state.experiment.inputFields.forEach { field ->
@@ -127,7 +127,7 @@ fun ExperimentScreen(
                         text = state.experiment.description,
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(24.dp))
                     Text(
                         text = "Введите известные величины:",
                         style = MaterialTheme.typography.titleMedium
@@ -146,8 +146,7 @@ fun ExperimentScreen(
                         symbol = field.symbol,
                         unit = field.unit,
                         modifier = Modifier.fillMaxWidth(),
-                        borderColor = if (state.error != null) MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
-                        else MaterialTheme.colorScheme.outlineVariant
+                        isError = state.error != null
                     )
                 }
                 state.error?.let { error ->

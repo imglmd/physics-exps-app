@@ -1,12 +1,11 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -18,6 +17,7 @@ class ExampleExperiment : Experiment {
     override val category = "Механика"
     override val description =
         "Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести."
+    override val imageRes = R.drawable.pendulum
 
     override val xLabel =  "Длина нити, м"
     override val yLabel = "Период, с"
@@ -77,8 +77,8 @@ class ExampleExperiment : Experiment {
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
             ),
-            points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
+            points = null,  //TODO: пример отсутствия графика у эксперимента. заменить на getPoints(map)
+            date = "${LocalDate.now()}",
             xLabel = xLabel,
             yLabel = yLabel
         )
@@ -91,7 +91,7 @@ class ExampleExperiment : Experiment {
         val g: Double = inputs.getValue("gravity")
 
         val startX = 0.0
-        val step = l / 100.0
+        val step = l / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
         while (x <= l + step) {

@@ -1,7 +1,5 @@
 package com.imglmd.physicsexps.domain.model
 
-import java.util.Date
-
 
 data class ExperimentRun (
     val id: Int,
