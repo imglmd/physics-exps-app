@@ -9,5 +9,4 @@ data class ExperimentRun (
     val date: Long,
     val inputData: String,
     val resultId: Int,
-    val status: String
 )

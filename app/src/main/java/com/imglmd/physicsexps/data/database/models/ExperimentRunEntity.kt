@@ -23,5 +23,4 @@ data class ExperimentRunEntity(
     val inputData: String,
     @ColumnInfo("result_id")
     val resultId: Int,
-    val status: String
 )
