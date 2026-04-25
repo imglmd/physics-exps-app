@@ -189,7 +189,7 @@ fun ExperimentScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CarouselSection(
+private fun CarouselSection(
     state: ExperimentContract.State,
     modifier: Modifier = Modifier
 ) {
@@ -236,7 +236,7 @@ fun CarouselSection(
                             if (selected)
                                 MaterialTheme.colorScheme.primary
                             else
-                                MaterialTheme.colorScheme.outlineVariant
+                                MaterialTheme.colorScheme.outline
                         )
                 )
             }

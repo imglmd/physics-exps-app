@@ -2,7 +2,6 @@ package com.imglmd.physicsexps.presentation.screens.experiment.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -44,7 +42,7 @@ fun ExperimentTextField(
 
     val borderColor = when {
         isError -> colors.error
-        else -> if(!isSystemInDarkTheme()) colors.outlineVariant else Color.Transparent
+        else -> colors.outlineVariant
     }
 
     Row(

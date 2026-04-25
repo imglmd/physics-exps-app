@@ -77,7 +77,7 @@ private fun Content(
             ResultCard(state)
 
             if (!state.result.points.isNullOrEmpty()) {
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(12.dp))
                 ChartCard(state, modelProducer)
             }
         }

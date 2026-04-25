@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
@@ -98,7 +97,7 @@ private fun HistoryCard(
             .width(160.dp)
             .border(
                 width = 1.dp,
-                color = if(!isSystemInDarkTheme()) MaterialTheme.colorScheme.outlineVariant else Color.Transparent,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
