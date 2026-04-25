@@ -18,5 +18,7 @@ data class CommentEntity(
     val id: Int,
     val text: String,
     @ColumnInfo("experiment_run_id")
-    val experimentRunId: Int
+    val experimentRunId: Int,
+    @ColumnInfo("created_at")
+    val createdAt: Long
 )
