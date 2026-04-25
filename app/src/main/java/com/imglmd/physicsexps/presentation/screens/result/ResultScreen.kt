@@ -32,12 +32,14 @@ import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ResultScreen(
+    runId: Int?,
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
-    viewModel: ResultViewModel = koinViewModel()
+    viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
     val state by viewModel.state.collectAsState()
     val modelProducer = remember { CartesianChartModelProducer() }

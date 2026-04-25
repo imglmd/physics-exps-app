@@ -9,5 +9,5 @@ sealed interface Screen {
     @Serializable
     data class Experiment(val id: String) : Screen
     @Serializable
-    data object Result : Screen
+    data class Result(val runId: Int? = null) : Screen
 }

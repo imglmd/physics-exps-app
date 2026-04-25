@@ -57,9 +57,19 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(
     navigateToExperiment: (String) -> Unit,
+    navigateToResult: (Int) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.actionFlow.collect { effect ->
+            when (effect) {
+                is HomeAction.NavigateToResult -> navigateToResult(effect.runId)
+                is HomeAction.NavigateToExperiment -> navigateToExperiment(effect.id)
+            }
+        }
+    }
 
     Scaffold() { innerPadding ->
         LazyVerticalGrid(
@@ -88,7 +98,7 @@ fun HomeScreen(
                         HistorySection(
                             history = state.history,
                             onSeeAllClick = {  },
-                            onItemClick = {  }
+                            onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }
                         )
 
                         Spacer(Modifier.height(30.dp))
@@ -116,7 +126,7 @@ fun HomeScreen(
                         ExperimentItem(
                             name = experiment.name,
                             imageRes = experiment.imageRes,
-                            onClick = { navigateToExperiment(experiment.id) }
+                            onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
                         )
                         Spacer(Modifier.height(10.dp))
                     }

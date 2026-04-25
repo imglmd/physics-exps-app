@@ -17,6 +17,9 @@ val navigationModule = module {
         HomeScreen(
             navigateToExperiment = { id ->
                 get<Navigator>().navigateTo(Screen.Experiment(id))
+            },
+            navigateToResult = { runId ->
+                get<Navigator>().navigateTo(Screen.Result(runId))
             }
         )
     }
@@ -27,12 +30,13 @@ val navigationModule = module {
                 get<Navigator>().goBack()
             },
             navigateToResult = {
-                get<Navigator>().navigateTo(Screen.Result)
+                get<Navigator>().navigateTo(Screen.Result())
             }
         )
     }
-    navigation<Screen.Result> {
+    navigation<Screen.Result> { route ->
         ResultScreen(
+            runId = route.runId,
             navigateBack = { get<Navigator>().goBack() },
             navigateHome = { get<Navigator>().goHome() }
         )

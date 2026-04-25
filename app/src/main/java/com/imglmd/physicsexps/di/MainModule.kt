@@ -14,6 +14,7 @@ import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
@@ -31,17 +32,19 @@ val mainModule = module {
     factory { SaveRunUseCase(get(), get()) }
     factory { DeleteRunUseCase(get(), get()) }
     factory { GetAllRunsUseCase(get()) }
+    factory { GetResultUseCase(get()) }
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
     viewModel {
-        HomeViewModel(get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get())
     }
     viewModel { params ->
         ExperimentViewModel(params.get(), get(), get(), get())
     }
-    viewModel {
-        ResultViewModel(get(), get(), get())
+    viewModel { params ->
+        val runId: Int? = params.getOrNull()
+        ResultViewModel(runId, get(), get(), get())
     }
 
     single {

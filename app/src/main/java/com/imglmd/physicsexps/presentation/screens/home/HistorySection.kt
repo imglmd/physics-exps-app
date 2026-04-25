@@ -40,6 +40,7 @@ data class HistoryItemUi(
     val experimentName: String,
     val category: String,
     val date: Long,
+    val resultId: Int
 )
 
 @Composable
@@ -81,7 +82,7 @@ fun HistorySection(
             items(history) { item ->
                 HistoryCard(
                     item = item,
-                    onClick = { onItemClick(0) }
+                    onClick = { onItemClick(item.resultId) }
                 )
             }
         }

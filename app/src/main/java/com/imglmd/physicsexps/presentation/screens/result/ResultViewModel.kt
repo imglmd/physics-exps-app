@@ -11,14 +11,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ResultViewModel(
+    private val runId: Int?,
     private val resultRepository: InMemoryResultRepository,
     private val saveRunUseCase: SaveRunUseCase,
     private val deleteRunUseCase: DeleteRunUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
     val state = _state.asStateFlow()
@@ -26,22 +26,25 @@ class ResultViewModel(
     private val _effect = Channel<ResultContract.Effect>(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
-    private var savedRunId: Int? = null
+    private var savedRunId: Int? = runId
 
     init {
         val result = resultRepository.get()
         if (result != null) {
-            _state.update { ResultContract.State.Success(result) }
-            saveRun(result)
+            _state.value = ResultContract.State.Success(result)
+
+            if (runId == null) {
+                saveRun(result)
+            }
         } else {
-            _state.update { ResultContract.State.Error("Результат не найден") }
+            _state.value = ResultContract.State.Error("Результат не найден")
         }
     }
 
     fun onIntent(intent: ResultContract.Intent) {
         when (intent) {
-            ResultContract.Intent.DeleteAndGoHome -> deleteRun(goHome = true)
-            ResultContract.Intent.DeleteAndGoBack -> deleteRun(goHome = false)
+            ResultContract.Intent.DeleteAndGoHome -> deleteRunAndNavigate(home = true)
+            ResultContract.Intent.DeleteAndGoBack -> handleBack()
         }
     }
 
@@ -49,27 +52,45 @@ class ResultViewModel(
         viewModelScope.launch {
             runCatching { saveRunUseCase(result) }
                 .onSuccess { savedRunId = it }
-                .onFailure { Log.e("ResultViewModel", "Ошибка сохранения", it) }
+                .onFailure {
+                    Log.e("ResultViewModel", "Ошибка сохранения", it)
+                }
         }
     }
 
-    private fun deleteRun(goHome: Boolean) {
-        val runId = savedRunId ?: return
-
+    private fun handleBack() {
         viewModelScope.launch {
-            runCatching { deleteRunUseCase(runId) }
-                .onSuccess {
-                    _effect.send(
-                        if (goHome) {
-                            ResultContract.Effect.NavigateHome
-                        } else {
-                            ResultContract.Effect.NavigateBack
-                        }
-                    )
+            if (runId == null) {
+                deleteRunInternal {
+                    _effect.send(ResultContract.Effect.NavigateBack)
                 }
-                .onFailure {
-                    Log.e("ResultViewModel", "Ошибка удаления", it)
-                }
+            } else {
+                _effect.send(ResultContract.Effect.NavigateBack)
+            }
         }
+    }
+
+    private fun deleteRunAndNavigate(home: Boolean) {
+        viewModelScope.launch {
+            deleteRunInternal {
+                _effect.send(
+                    if (home) {
+                        ResultContract.Effect.NavigateHome
+                    } else {
+                        ResultContract.Effect.NavigateBack
+                    }
+                )
+            }
+        }
+    }
+
+    private suspend fun deleteRunInternal(onSuccess: suspend () -> Unit) {
+        val id = savedRunId ?: return
+
+        runCatching { deleteRunUseCase(id) }
+            .onSuccess { onSuccess() }
+            .onFailure {
+                Log.e("ResultViewModel", "Ошибка удаления", it)
+            }
     }
 }
