@@ -3,9 +3,12 @@ package com.imglmd.physicsexps.presentation.screens.result
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +20,8 @@ class ResultViewModel(
     private val runId: Int?,
     private val resultRepository: InMemoryResultRepository,
     private val saveRunUseCase: SaveRunUseCase,
-    private val deleteRunUseCase: DeleteRunUseCase
+    private val deleteRunUseCase: DeleteRunUseCase,
+    private val getRunUseCase: GetRunUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
@@ -45,6 +49,7 @@ class ResultViewModel(
         when (intent) {
             ResultContract.Intent.DeleteAndGoHome -> deleteRunAndNavigate(home = true)
             ResultContract.Intent.DeleteAndGoBack -> handleBack()
+            ResultContract.Intent.ChangeInputs -> goToChangeInputs()
         }
     }
 
@@ -55,6 +60,28 @@ class ResultViewModel(
                 .onFailure {
                     Log.e("ResultViewModel", "Ошибка сохранения", it)
                 }
+        }
+    }
+    private fun goToChangeInputs(){
+        viewModelScope.launch {
+            if (runId == null) {
+                handleBack()
+                return@launch
+            }
+            val run = getRunUseCase(runId)
+            Log.d("JSON", run.inputData)
+
+            val inputs: Map<String, String> = Gson().fromJson(
+                run.inputData,
+                object : TypeToken<Map<String, String>>() {}.type
+            )
+            deleteRunInternal{  //TODO: заменить на чета хз что
+                _effect.send(ResultContract.Effect.NavigateExperiment(
+                    id = run.experimentId,
+                    inputs = inputs
+                ))
+            }
+
         }
     }
 

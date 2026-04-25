@@ -23,6 +23,20 @@ class Converters {
     @TypeConverter
     fun stringToResult(value: String): ExperimentResult =
         gson.fromJson(value, ExperimentResult::class.java)
+
+
+    @TypeConverter
+    fun fromMap(map: Map<String, String>): String {
+        return gson.toJson(map)
+    }
+
+    @TypeConverter
+    fun toMap(json: String): Map<String, String> {
+        return gson.fromJson(
+            json,
+            object : com.google.gson.reflect.TypeToken<Map<String, String>>() {}.type
+        )
+    }
 }
 
 class ExperimentAdapter : JsonSerializer<Experiment>, JsonDeserializer<Experiment> {

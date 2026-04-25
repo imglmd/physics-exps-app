@@ -2,7 +2,7 @@ package com.imglmd.physicsexps.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room3.TypeConverters
+import androidx.room.TypeConverters
 import com.imglmd.physicsexps.data.database.models.CommentEntity
 import com.imglmd.physicsexps.data.database.models.ExperimentRunEntity
 import com.imglmd.physicsexps.data.database.models.ResultEntity

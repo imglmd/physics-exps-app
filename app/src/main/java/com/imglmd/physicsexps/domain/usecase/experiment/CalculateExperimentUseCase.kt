@@ -32,7 +32,7 @@ class CalculateExperimentUseCase(
             is ValidationResult.Success -> {
                 try {
                     val result = experiment.calculate(validation.values)
-                    Result.Success(result)
+                    Result.Success(result.copy(inputs = validation.values))
                 } catch (e: Exception) {
                     Result.Failure(e.message ?: "Ошибка вычисления")
                 }

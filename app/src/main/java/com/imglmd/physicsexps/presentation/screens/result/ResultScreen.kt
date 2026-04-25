@@ -39,6 +39,7 @@ fun ResultScreen(
     runId: Int?,
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
+    navigateExperiment: (String, Map<String, String>) -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
     val state by viewModel.state.collectAsState()
@@ -49,6 +50,7 @@ fun ResultScreen(
             when (effect) {
                 ResultContract.Effect.NavigateBack -> navigateBack()
                 ResultContract.Effect.NavigateHome -> navigateHome()
+                is ResultContract.Effect.NavigateExperiment -> navigateExperiment(effect.id, effect.inputs)
             }
         }
     }
@@ -69,7 +71,8 @@ fun ResultScreen(
                 navigateBack = { viewModel.onIntent(ResultContract.Intent.DeleteAndGoBack) },
                 modelProducer = modelProducer,
                 onDeleteClick = { viewModel.onIntent(ResultContract.Intent.DeleteAndGoHome) },
-                onSaveClick = { navigateHome() }
+                onSaveClick = { navigateHome() },
+                onChangeClick = { viewModel.onIntent(ResultContract.Intent.ChangeInputs) }
             )
         }
     }
@@ -81,7 +84,8 @@ private fun Content(
     navigateBack: () -> Unit,
     modelProducer: CartesianChartModelProducer,
     onDeleteClick: () -> Unit,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onChangeClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -102,7 +106,7 @@ private fun Content(
                     .padding(top = 16.dp)
             ) {
 
-                ResultCard(state)
+                ResultCard(state, onChangeClick)
 
                 if (state.result.points.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))

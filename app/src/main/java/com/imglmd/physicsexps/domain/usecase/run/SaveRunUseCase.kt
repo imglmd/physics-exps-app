@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.run
 
+import com.google.gson.Gson
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
@@ -11,11 +12,12 @@ class SaveRunUseCase(
 ) {
     suspend operator fun invoke(result: ExperimentResult): Int {
         val resultId = resultsRepository.insert(result)
+
         return runsRepository.insert(
             ExperimentRun(
                 experimentId = result.experiment.id,
                 date = result.date,
-                inputData = result.quantities.joinToString { "${it.label}=${it.value}" },
+                inputData = Gson().toJson(result.inputs),
                 resultId = resultId
             )
         )

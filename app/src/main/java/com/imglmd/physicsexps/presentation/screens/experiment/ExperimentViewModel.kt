@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class ExperimentViewModel(
     private val id: String,
+    private val inputs: Map<String, String>?,
     private val getExperiment: GetExperimentByIdUseCase,
     private val calculate: CalculateExperimentUseCase,
     private val resultRepository: InMemoryResultRepository
@@ -23,7 +24,7 @@ class ExperimentViewModel(
     private val experiment = getExperiment(id)
 
     private val _state = MutableStateFlow(
-        ExperimentContract.State(experiment)
+        ExperimentContract.State(experiment, inputs?: emptyMap())
     )
     val state = _state.asStateFlow()
 

@@ -10,6 +10,15 @@ class Navigator(startDestination: Screen) {
         backStack.add(destination)
     }
 
+    fun navigateBackTo(destination: Screen) {
+        if (backStack.isEmpty()) return
+
+        val lastIndex = backStack.lastIndex
+
+        backStack.add(lastIndex, destination)
+
+        backStack.removeLastOrNull()
+    }
     fun goHome() {
         if (backStack.size > 1) {
             backStack.subList(1, backStack.size).clear()
