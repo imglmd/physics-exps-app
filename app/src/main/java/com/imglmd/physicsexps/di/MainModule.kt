@@ -10,9 +10,12 @@ import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
+import com.imglmd.physicsexps.domain.usecase.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.InsertCommentUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -30,6 +33,9 @@ val mainModule = module {
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
+    factory { GetCommentsUseCase(get()) }
+    factory { InsertCommentUseCase(get()) }
+    factory { DeleteCommentUseCase(get()) }
     viewModel {
         HomeViewModel(get(), get(), get())
     }
