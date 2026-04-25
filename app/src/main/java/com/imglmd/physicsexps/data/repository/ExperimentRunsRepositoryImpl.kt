@@ -1,7 +1,6 @@
-package com.imglmd.physicsexps.data.repositoryImpl
+package com.imglmd.physicsexps.data.repository
 
 import com.imglmd.physicsexps.data.database.ExperimentRunsDao
-import com.imglmd.physicsexps.data.database.models.ExperimentRunEntity
 import com.imglmd.physicsexps.data.mapper.toModel
 import com.imglmd.physicsexps.data.mapper.toUi
 import com.imglmd.physicsexps.domain.model.ExperimentRun

@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.sql.Date
 
 @Entity("experiment_runs",
     foreignKeys = [
@@ -23,5 +22,4 @@ data class ExperimentRunEntity(
     val inputData: String,
     @ColumnInfo("result_id")
     val resultId: Int,
-    val status: String
 )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -65,12 +66,15 @@ fun HomeScreen(
             columns = GridCells.Adaptive(150.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .imePadding()
-                .padding(top = 10.dp)
-                .padding(horizontal = 24.dp),
+                .imePadding(),
             //verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = innerPadding
+            contentPadding = PaddingValues(
+                top = innerPadding.calculateTopPadding() + 20.dp,
+                bottom = innerPadding.calculateBottomPadding(),
+                start = 24.dp,
+                end = 24.dp
+            )
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 val searchState = rememberTextFieldState()
@@ -80,10 +84,20 @@ fun HomeScreen(
                 }
 
                 Column {
-                    Spacer(Modifier.height(20.dp))
+                    if (state.history.isNotEmpty()){
+                        HistorySection(
+                            history = state.history,
+                            onSeeAllClick = {  },
+                            onItemClick = {  }
+                        )
+
+                        Spacer(Modifier.height(30.dp))
+
+                    }
                     SearchTextField(
                         state = searchState
                     )
+
                 }
 
             }
@@ -157,7 +171,7 @@ private fun ExperimentItem(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.Black.copy(alpha = if(isSystemInDarkTheme()) 0.6f else 0.3f)
+                            Color.Black.copy(alpha = if (isSystemInDarkTheme()) 0.6f else 0.3f)
                         )
                     )
                 )
