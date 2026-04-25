@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.imglmd.physicsexps.data.database.models.ExperimentRunEntity
 import kotlinx.coroutines.flow.Flow
+
 @Dao()
 interface ExperimentRunsDao {
     @Insert()
@@ -13,9 +14,8 @@ interface ExperimentRunsDao {
     @Delete
     suspend fun deleteExp(experimentRunEntity: ExperimentRunEntity)
 
-    @Query("SELECT * FROM experiment_runs")
-    fun getAllExps(): List<ExperimentRunEntity>
-
+    @Query("SELECT * FROM experiment_runs ORDER BY date DESC")
+    fun getAllExps(): Flow<List<ExperimentRunEntity>>
     @Query("SELECT * FROM experiment_runs WHERE id = :id")
     fun getExpById(id: Int): ExperimentRunEntity
 }

@@ -8,6 +8,8 @@ import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -52,21 +54,24 @@ class HomeViewModel(
     }
 
     private fun loadHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val runs = getAllRunsUseCase()
-            val historyUi = runs.map { run ->
-                val name = runCatching { registry.getById(run.experimentId).name }
-                    .getOrDefault(run.experimentId)
-                HistoryItemUi(
-                    id = run.id,
-                    experimentName = name,
-                    category = runCatching { registry.getById(run.experimentId).category }
-                        .getOrDefault(""),
-                    date = run.date
-                )
-            }
-            _state.update { it.copy(history = historyUi) }
+        viewModelScope.launch {
+            getAllRunsUseCase()
+                .flowOn(Dispatchers.IO)
+                .collectLatest { runs ->
+                    val historyUi = runs.map { run ->
+                        HistoryItemUi(
+                            id = run.id,
+                            experimentName = runCatching { registry.getById(run.experimentId).name }
+                                .getOrDefault(run.experimentId),
+                            category = runCatching { registry.getById(run.experimentId).category }
+                                .getOrDefault(""),
+                            date = run.date
+                        )
+                    }
+                    _state.update { it.copy(history = historyUi) }
+                }
         }
     }
+
 
 }
