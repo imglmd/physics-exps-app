@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.usecase
+package com.imglmd.physicsexps.domain.usecase.experiment
 
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.ExperimentResult

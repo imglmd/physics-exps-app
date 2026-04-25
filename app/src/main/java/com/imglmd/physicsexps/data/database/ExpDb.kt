@@ -1,8 +1,6 @@
 package com.imglmd.physicsexps.data.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room3.TypeConverters
 import com.imglmd.physicsexps.data.database.models.CommentEntity
@@ -22,4 +20,5 @@ import com.imglmd.physicsexps.data.database.models.ResultEntity
 abstract class ExpDb: RoomDatabase() {
     abstract fun dao(): ExperimentRunsDao
     abstract fun comDao(): CommentsDao
+    abstract fun resDao(): ResultsDao
 }

@@ -10,6 +10,6 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 @TypeConverters(Converters::class)
 data class ResultEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val result: ExperimentResult
 )

@@ -3,8 +3,8 @@ package com.imglmd.physicsexps.presentation.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

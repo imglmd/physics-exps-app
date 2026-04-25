@@ -1,12 +1,12 @@
-package com.imglmd.physicsexps.domain.usecase
+package com.imglmd.physicsexps.domain.usecase.experiment
 
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.Experiment
 
-class GetExperimentByIdUseCase(
+class GetAllExperimentsUseCase(
     private val registry: ExperimentRegistry
 ) {
-    operator fun invoke(id: String): Experiment{
-        return registry.getById(id)
+    operator fun invoke() : List<Experiment>{
+        return registry.getAll()
     }
 }

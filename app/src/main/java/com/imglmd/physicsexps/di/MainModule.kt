@@ -6,13 +6,17 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.data.database.ExpDb
 import com.imglmd.physicsexps.data.repository.ExperimentRunsRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ResultsRepositoryImpl
 import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
-import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
-import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetAllRunsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -23,9 +27,11 @@ import org.koin.dsl.module
 
 val mainModule = module {
     single { InMemoryResultRepository() }
-
+    single<ResultsRepository> { ResultsRepositoryImpl(get()) }
     single { ExperimentValidator() }
 
+    factory { SaveRunUseCase(get(), get()) }
+    factory { DeleteRunUseCase(get(), get()) }
     factory { GetAllRunsUseCase(get()) }
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
@@ -37,7 +43,7 @@ val mainModule = module {
         ExperimentViewModel(params.get(), get(), get(), get())
     }
     viewModel {
-        ResultViewModel(get())
+        ResultViewModel(get(), get())
     }
 
     single {
@@ -62,6 +68,7 @@ val mainModule = module {
             })
             .build()
     }
+    single { get<ExpDb>().resDao() }
     single{get<ExpDb>().dao()}
     single{get<ExpDb>().comDao()}
     single<ExperimentRunsRepository> { ExperimentRunsRepositoryImpl(get()) }

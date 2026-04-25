@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     ])
 data class CommentEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val text: String,
     @ColumnInfo("experiment_run_id")
     val experimentRunId: Int,
