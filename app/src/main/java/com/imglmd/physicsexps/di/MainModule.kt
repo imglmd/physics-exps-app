@@ -40,7 +40,7 @@ val mainModule = module {
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
     viewModel {
-        HomeViewModel(get(), get(), get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get(), get())
     }
     viewModel { params ->
         val inputs: Map<String, String>? = params.getOrNull()
@@ -51,7 +51,7 @@ val mainModule = module {
         ResultViewModel(runId, get(), get(), get(), get())
     }
     viewModel {
-        HistoryViewModel(get(), get(), get(), get())
+        HistoryViewModel(get(), get(), get(), get(), get())
     }
 
     single {

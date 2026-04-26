@@ -10,14 +10,17 @@ class SaveRunUseCase(
     private val runsRepository: ExperimentRunsRepository,
     private val resultsRepository: ResultsRepository
 ) {
-    suspend operator fun invoke(result: ExperimentResult): Int {
+    suspend operator fun invoke(
+        result: ExperimentResult,
+        inputs: Map<String, Double>
+    ): Int {
         val resultId = resultsRepository.insert(result)
 
         return runsRepository.insert(
             ExperimentRun(
                 experimentId = result.experiment.id,
                 date = result.date,
-                inputData = Gson().toJson(result.inputs),
+                inputData = Gson().toJson(inputs),
                 resultId = resultId
             )
         )

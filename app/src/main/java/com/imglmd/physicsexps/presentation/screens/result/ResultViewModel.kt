@@ -33,11 +33,13 @@ class ResultViewModel(
     private var savedRunId: Int? = runId
 
     init {
-        val result = resultRepository.get()
-        if (result != null) {
-            _state.value = ResultContract.State.Success(result)
+        val bundle = resultRepository.get()
+
+        if (bundle != null) {
+            _state.value = ResultContract.State.Success(bundle.result)
+
             if (runId == null) {
-                saveRun(result)
+                saveRun(bundle.result, bundle.inputs)
             }
         } else {
             _state.value = ResultContract.State.Error("Результат не найден")
@@ -84,15 +86,16 @@ class ResultViewModel(
                 val id = savedRunId ?: return@launch
                 runCatching { getRunUseCase(id) }
                     .onSuccess { run ->
-                        val inputs: Map<String, String> = Gson().fromJson(
+                        val inputs: Map<String, Double> = Gson().fromJson(
                             run.inputData,
-                            object : TypeToken<Map<String, String>>() {}.type
+                            object : TypeToken<Map<String, Double>>() {}.type
                         )
+                        val stringInputs = inputs.mapValues { it.value.toString() }
                         deleteRunInternal {
                             _effect.send(
                                 ResultContract.Effect.NavigateExperiment(
                                     id = run.experimentId,
-                                    inputs = inputs
+                                    inputs = stringInputs
                                 )
                             )
                         }
@@ -106,9 +109,12 @@ class ResultViewModel(
 
 
 
-    private fun saveRun(result: ExperimentResult) {
+    private fun saveRun(
+        result: ExperimentResult,
+        inputs: Map<String, Double>
+    ) {
         viewModelScope.launch {
-            runCatching { saveRunUseCase(result) }
+            runCatching { saveRunUseCase(result, inputs) }
                 .onSuccess { savedRunId = it }
                 .onFailure { Log.e("ResultViewModel", "Ошибка сохранения", it) }
         }

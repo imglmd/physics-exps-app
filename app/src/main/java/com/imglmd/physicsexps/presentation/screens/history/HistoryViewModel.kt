@@ -8,6 +8,7 @@ import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class HistoryViewModel(
     private val registry: ExperimentRegistry,
     private val getResultUseCase: GetResultUseCase,
+    private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
     private val getAllRunsUseCase: GetAllRunsUseCase
 ) : ViewModel() {
@@ -47,8 +49,15 @@ class HistoryViewModel(
 
     private fun navigateToResult(id: Int){
         viewModelScope.launch {
+            val run = getRunUseCase(id) ?: return@launch
+
+            val inputs: Map<String, Double> =
+                gson.fromJson(run.inputData, type) ?: emptyMap()
+
             val result = getResultUseCase(id) ?: return@launch
-            resultRepository.save(result)
+
+            resultRepository.save(result, inputs)
+
             _actionFlow.emit(HistoryContract.Action.NavigateToResult(id))
         }
     }
@@ -68,13 +77,16 @@ class HistoryViewModel(
                                 registry.getById(run.experimentId)
                             }.getOrNull()
 
+                            val result = getResultUseCase(run.resultId)
+
                             HistoryItemUi(
                                 id = run.id,
                                 experimentName = experiment?.name ?: run.experimentId,
                                 category = experiment?.category ?: "",
                                 date = run.date,
                                 resultId = run.resultId,
-                                inputs = inputs
+                                inputs = inputs,
+                                points = result?.points ?: emptyList()
                             )
                         }
 

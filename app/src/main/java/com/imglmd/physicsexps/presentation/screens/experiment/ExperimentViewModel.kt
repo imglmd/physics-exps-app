@@ -45,7 +45,7 @@ class ExperimentViewModel(
         when (val result = calculate(id, state.value.inputs)) {
 
             is CalculateExperimentUseCase.Result.Success -> {
-                resultRepository.save(result.result)
+                resultRepository.save(result.result, result.inputs)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
             }
 
