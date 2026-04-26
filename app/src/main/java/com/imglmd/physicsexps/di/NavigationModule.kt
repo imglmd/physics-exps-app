@@ -5,6 +5,7 @@ package com.imglmd.physicsexps.di
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
+import com.imglmd.physicsexps.presentation.screens.history.HistoryScreen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
 import com.imglmd.physicsexps.presentation.screens.result.ResultScreen
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -20,6 +21,9 @@ val navigationModule = module {
             },
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))
+            },
+            navigateToHistory = {
+                get<Navigator>().navigateTo(Screen.History)
             }
         )
     }
@@ -42,6 +46,14 @@ val navigationModule = module {
             navigateHome = { get<Navigator>().goHome() },
             navigateExperiment = { expId, inputs ->
                 get<Navigator>().navigateBackTo(Screen.Experiment(expId, inputs))
+            }
+        )
+    }
+    navigation<Screen.History>{
+        HistoryScreen(
+            navigateBack = { get<Navigator>().goBack() },
+            navigateToResult = { runId ->
+                get<Navigator>().navigateTo(Screen.Result(runId))
             }
         )
     }

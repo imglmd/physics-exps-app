@@ -19,6 +19,7 @@ import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
+import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
 import org.koin.android.ext.koin.androidContext
@@ -48,6 +49,9 @@ val mainModule = module {
     viewModel { params ->
         val runId: Int? = params.getOrNull()
         ResultViewModel(runId, get(), get(), get(), get())
+    }
+    viewModel {
+        HistoryViewModel(get(), get(), get(), get())
     }
 
     single {

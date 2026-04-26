@@ -9,6 +9,7 @@ import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
+import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,7 @@ class HomeViewModel(
             is HomeIntent.ChangeSearchText -> updateExperiments(intent.text)
             is HomeIntent.NavigateToRunResult -> navigateToResult(intent.id)
             is HomeIntent.NavigateToExperiment -> navigateToExperiment(intent.id)
+            HomeIntent.NavigateToHistory -> navigateToHistory()
         }
     }
 
@@ -108,4 +110,9 @@ class HomeViewModel(
     }
 
 
+    private fun navigateToHistory() {
+        viewModelScope.launch {
+            _actionFlow.emit(HomeAction.NavigateToHistory)
+        }
+    }
 }

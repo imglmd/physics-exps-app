@@ -58,6 +58,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     navigateToExperiment: (String) -> Unit,
     navigateToResult: (Int) -> Unit,
+    navigateToHistory: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -67,6 +68,7 @@ fun HomeScreen(
             when (effect) {
                 is HomeAction.NavigateToResult -> navigateToResult(effect.runId)
                 is HomeAction.NavigateToExperiment -> navigateToExperiment(effect.id)
+                is HomeAction.NavigateToHistory -> navigateToHistory()
             }
         }
     }
@@ -97,7 +99,7 @@ fun HomeScreen(
                     if (state.history.isNotEmpty()){
                         HistorySection(
                             history = state.history,
-                            onSeeAllClick = {  },
+                            onSeeAllClick = { viewModel.onIntent(HomeIntent.NavigateToHistory) },
                             onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }
                         )
 

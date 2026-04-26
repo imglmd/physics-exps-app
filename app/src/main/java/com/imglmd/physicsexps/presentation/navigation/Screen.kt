@@ -10,4 +10,6 @@ sealed interface Screen {
     data class Experiment(val id: String, val inputs: Map<String, String>? = null) : Screen
     @Serializable
     data class Result(val runId: Int? = null) : Screen
+    @Serializable
+    data object History : Screen
 }
