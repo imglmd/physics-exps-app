@@ -13,30 +13,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.presentation.normalizePoints
-import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
-import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
+import com.patrykandpatrick.vico.compose.cartesian.Zoom
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
+import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.core.cartesian.Zoom
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
-import com.patrykandpatrick.vico.core.common.Fill
 
 
 @Composable
@@ -49,7 +45,9 @@ fun ChartCard(
     val colors = MaterialTheme.colorScheme
 
     val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent(color = colors.onSurface)
+        label = rememberTextComponent(
+            TextStyle(color = colors.onSurface)
+        )
     )
 
     val chart = rememberChart(xLabel, yLabel, marker)
@@ -91,6 +89,7 @@ fun ChartCard(
         )
     }
 }
+
 @Composable
 private fun rememberChart(
     xLabel: String,
@@ -102,44 +101,46 @@ private fun rememberChart(
         lineProvider = LineCartesianLayer.LineProvider.series(
             LineCartesianLayer.rememberLine(
                 fill = LineCartesianLayer.LineFill.single(
-                    Fill(MaterialTheme.colorScheme.primary.toArgb())
+                    Fill(MaterialTheme.colorScheme.primary)
                 ),
-                stroke = LineCartesianLayer.LineStroke.continuous(3.dp),
+                stroke = LineCartesianLayer.LineStroke.Continuous(3.dp),
                 pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f)
             )
         )
     ),
 
     startAxis = VerticalAxis.rememberStart(
-        title = yLabel,
-
+        title = { yLabel },
         label = rememberTextComponent(
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            TextStyle(
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         ),
-
         titleComponent = rememberTextComponent(
-            color = MaterialTheme.colorScheme.primary
+            TextStyle(
+                color = MaterialTheme.colorScheme.primary
+            )
         ),
-
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f).toArgb()),
+            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
             thickness = 1.dp
         )
     ),
 
     bottomAxis = HorizontalAxis.rememberBottom(
-        title = xLabel,
-
+        title = { xLabel },
         label = rememberTextComponent(
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            TextStyle(
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         ),
-
         titleComponent = rememberTextComponent(
-            color = MaterialTheme.colorScheme.primary
+            TextStyle(
+                color = MaterialTheme.colorScheme.primary
+            )
         ),
-
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f).toArgb()),
+            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
             thickness = 1.dp
         )
     ),

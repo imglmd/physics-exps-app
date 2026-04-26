@@ -31,7 +31,7 @@ import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
