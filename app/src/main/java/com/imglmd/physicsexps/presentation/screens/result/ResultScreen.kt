@@ -25,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -44,6 +46,8 @@ fun ResultScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val modelProducer = remember { CartesianChartModelProducer() }
+
+    val registry = koinInject<ExperimentRegistry>()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -68,6 +72,7 @@ fun ResultScreen(
             is ResultContract.State.Success -> Content(
                 state = s,
                 isFromHistory = runId != null,
+                registry = registry,
                 onBackClick = { viewModel.onIntent(ResultContract.Intent.Back) },
                 modelProducer = modelProducer,
                 onDeleteClick = { viewModel.onIntent(ResultContract.Intent.Delete) },
@@ -81,6 +86,7 @@ fun ResultScreen(
 @Composable
 private fun Content(
     state: ResultContract.State.Success,
+    registry: ExperimentRegistry,
     isFromHistory: Boolean,
     onBackClick: () -> Unit,
     modelProducer: CartesianChartModelProducer,
@@ -88,11 +94,16 @@ private fun Content(
     onSaveClick: () -> Unit,
     onChangeClick: () -> Unit,
 ) {
+
+    val experiment = remember(state.result.experimentId) {
+        registry.getById(state.result.experimentId)
+    }
+
     Scaffold(
         topBar = {
             ExperimentAppBar(
-                title = state.result.experiment.name,
-                subtitle = state.result.experiment.category,
+                title = experiment.name,
+                subtitle = experiment.category,
                 navigateBack = onBackClick
             )
         }

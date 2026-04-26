@@ -2,8 +2,6 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
@@ -20,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class HomeViewModel(
     getAllExperimentsUseCase: GetAllExperimentsUseCase,
@@ -37,6 +36,8 @@ class HomeViewModel(
 
     private val _actionFlow = MutableSharedFlow<HomeAction>()
     val actionFlow = _actionFlow.asSharedFlow()
+
+    private val json = Json
 
     init {
         updateExperiments("")
@@ -79,11 +80,9 @@ class HomeViewModel(
 
             val run = getRunUseCase(id) ?: return@launch
 
-            val type = object : TypeToken<Map<String, Double>>() {}.type
-
             val inputs: Map<String, Double> =
                 runCatching {
-                    Gson().fromJson<Map<String, Double>>(run.inputData, type)
+                    json.decodeFromString<Map<String, Double>>(run.inputData)
                 }.getOrDefault(emptyMap())
 
             val result = getResultUseCase(id) ?: return@launch
@@ -99,11 +98,10 @@ class HomeViewModel(
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
                     val historyUi = runs.map { run ->
-                        val type = object : TypeToken<Map<String, Double>>() {}.type
-
-                        val inputs: Map<String, Double> = runCatching {
-                            Gson().fromJson<Map<String, Double>>(run.inputData, type)
-                        }.getOrDefault(emptyMap())
+                        val inputs: Map<String, Double> =
+                            runCatching {
+                                json.decodeFromString<Map<String, Double>>(run.inputData)
+                            }.getOrDefault(emptyMap())
 
                         val experiment = runCatching {
                             registry.getById(run.experimentId)

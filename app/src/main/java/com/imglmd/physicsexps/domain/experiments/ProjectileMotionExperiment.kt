@@ -5,7 +5,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.cos
@@ -55,7 +54,7 @@ class ProjectileMotionExperiment : Experiment {
 
 
         return ExperimentResult(
-            experiment = this,
+            experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Максимальная высота подъёма", "Hmax", h_max, "м"),
                 PhysicalQuantity("Дальность броска", "L", L, "м"),
