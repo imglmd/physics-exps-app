@@ -28,11 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.collections.take
 import kotlin.text.uppercase
 
 @Composable
@@ -81,9 +83,9 @@ fun HistoryCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            if (item.inputs.isNotEmpty()) {
+            if (item.quantities.isNotEmpty()) {
                 Spacer(Modifier.height(2.dp))
-                InputsSection(item.inputs)
+                QuantitiesSection(item.quantities)
             }
 
             if (item.points.isNotEmpty()) {
@@ -121,26 +123,16 @@ fun HistoryCard(
 }
 
 @Composable
-private fun InputsSection(inputs: Map<String, Double>) {
+private fun QuantitiesSection(quantities: List<PhysicalQuantity>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        inputs.values.take(3).forEach { value ->
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                    .padding(horizontal = 6.dp, vertical = 2.dp)
-            ) {
-                Text(
-                    text = formatDouble(value),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+        quantities.take(3).forEach { q ->
+            QuantityChip(q)
         }
-        val remaining = inputs.size - 3
+
+        val remaining = quantities.size - 3
         if (remaining > 0) {
             Box(
                 modifier = Modifier
@@ -155,6 +147,30 @@ private fun InputsSection(inputs: Map<String, Double>) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun QuantityChip(q: PhysicalQuantity) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = buildString {
+                append(q.symbol)
+                append(" = ")
+                append(formatDouble(q.value))
+                if (q.unit.isNotBlank()) {
+                    append(" ")
+                    append(q.unit)
+                }
+            },
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+        )
     }
 }
 
