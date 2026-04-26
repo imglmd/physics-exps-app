@@ -50,7 +50,8 @@ fun ResultScreen(
             when (effect) {
                 ResultContract.Effect.NavigateBack -> navigateBack()
                 ResultContract.Effect.NavigateHome -> navigateHome()
-                is ResultContract.Effect.NavigateExperiment -> navigateExperiment(effect.id, effect.inputs)
+                is ResultContract.Effect.NavigateExperiment ->
+                    navigateExperiment(effect.id, effect.inputs)
             }
         }
     }
@@ -59,20 +60,19 @@ fun ResultScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        when (state) {
+        when (val s = state) {
             is ResultContract.State.Loading -> CircularProgressIndicator()
 
-            is ResultContract.State.Error -> Text(
-                (state as ResultContract.State.Error).message
-            )
+            is ResultContract.State.Error -> Text(s.message)
 
             is ResultContract.State.Success -> Content(
-                state = state as ResultContract.State.Success,
-                navigateBack = { viewModel.onIntent(ResultContract.Intent.DeleteAndGoBack) },
+                state = s,
+                isFromHistory = runId != null,
+                onBackClick = { viewModel.onIntent(ResultContract.Intent.Back) },
                 modelProducer = modelProducer,
-                onDeleteClick = { viewModel.onIntent(ResultContract.Intent.DeleteAndGoHome) },
-                onSaveClick = { navigateHome() },
-                onChangeClick = { viewModel.onIntent(ResultContract.Intent.ChangeInputs) }
+                onDeleteClick = { viewModel.onIntent(ResultContract.Intent.Delete) },
+                onSaveClick = navigateHome,
+                onChangeClick = { viewModel.onIntent(ResultContract.Intent.Change) }
             )
         }
     }
@@ -81,7 +81,8 @@ fun ResultScreen(
 @Composable
 private fun Content(
     state: ResultContract.State.Success,
-    navigateBack: () -> Unit,
+    isFromHistory: Boolean,
+    onBackClick: () -> Unit,
     modelProducer: CartesianChartModelProducer,
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
@@ -92,12 +93,12 @@ private fun Content(
             ExperimentAppBar(
                 title = state.result.experiment.name,
                 subtitle = state.result.experiment.category,
-                navigateBack = navigateBack
+                navigateBack = onBackClick
             )
         }
     ) { padding ->
 
-        Box(Modifier.fillMaxSize()){
+        Box(Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -105,7 +106,6 @@ private fun Content(
                     .padding(horizontal = 24.dp)
                     .padding(top = 16.dp)
             ) {
-
                 ResultCard(state, onChangeClick)
 
                 if (state.result.points.isNotEmpty()) {
@@ -113,6 +113,7 @@ private fun Content(
                     ChartCard(state, modelProducer)
                 }
             }
+
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -138,8 +139,6 @@ private fun Content(
                     modifier = Modifier.weight(2f)
                 )
             }
-
         }
-
     }
 }

@@ -2,21 +2,23 @@ package com.imglmd.physicsexps.presentation.screens.result
 
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 
-interface ResultContract {
-    sealed interface State{
-        object Loading: State
+object ResultContract {
+
+    sealed interface State {
+        data object Loading: State
         data class Success(val result: ExperimentResult): State
         data class Error(val message: String): State
     }
+
     sealed interface Intent {
-        object DeleteAndGoHome: Intent
-        object DeleteAndGoBack: Intent
-        object ChangeInputs: Intent
+        data object Back: Intent
+        data object Delete: Intent
+        data object Change: Intent
     }
 
     sealed interface Effect {
-        object NavigateBack: Effect
-        object NavigateHome: Effect
+        data object NavigateBack: Effect
+        data object NavigateHome: Effect
         data class NavigateExperiment(val id: String, val inputs: Map<String, String>): Effect
     }
 }

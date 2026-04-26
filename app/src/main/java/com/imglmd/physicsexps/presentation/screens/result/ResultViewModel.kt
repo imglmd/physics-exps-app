@@ -36,7 +36,6 @@ class ResultViewModel(
         val result = resultRepository.get()
         if (result != null) {
             _state.value = ResultContract.State.Success(result)
-
             if (runId == null) {
                 saveRun(result)
             }
@@ -47,41 +46,9 @@ class ResultViewModel(
 
     fun onIntent(intent: ResultContract.Intent) {
         when (intent) {
-            ResultContract.Intent.DeleteAndGoHome -> deleteRunAndNavigate(home = true)
-            ResultContract.Intent.DeleteAndGoBack -> handleBack()
-            ResultContract.Intent.ChangeInputs -> goToChangeInputs()
-        }
-    }
-
-    private fun saveRun(result: ExperimentResult) {
-        viewModelScope.launch {
-            runCatching { saveRunUseCase(result) }
-                .onSuccess { savedRunId = it }
-                .onFailure {
-                    Log.e("ResultViewModel", "Ошибка сохранения", it)
-                }
-        }
-    }
-    private fun goToChangeInputs(){
-        viewModelScope.launch {
-            if (runId == null) {
-                handleBack()
-                return@launch
-            }
-            val run = getRunUseCase(runId)
-            Log.d("JSON", run.inputData)
-
-            val inputs: Map<String, String> = Gson().fromJson(
-                run.inputData,
-                object : TypeToken<Map<String, String>>() {}.type
-            )
-            deleteRunInternal{  //TODO: заменить на чета хз что
-                _effect.send(ResultContract.Effect.NavigateExperiment(
-                    id = run.experimentId,
-                    inputs = inputs
-                ))
-            }
-
+            ResultContract.Intent.Back -> handleBack()
+            ResultContract.Intent.Delete -> handleDelete()
+            ResultContract.Intent.Change -> handleChange()
         }
     }
 
@@ -97,27 +64,60 @@ class ResultViewModel(
         }
     }
 
-    private fun deleteRunAndNavigate(home: Boolean) {
+
+    private fun handleDelete() {
         viewModelScope.launch {
             deleteRunInternal {
-                _effect.send(
-                    if (home) {
-                        ResultContract.Effect.NavigateHome
-                    } else {
-                        ResultContract.Effect.NavigateBack
-                    }
-                )
+                _effect.send(ResultContract.Effect.NavigateHome)
             }
+        }
+    }
+
+
+    private fun handleChange() {
+        viewModelScope.launch {
+            if (runId == null) {
+                deleteRunInternal {
+                    _effect.send(ResultContract.Effect.NavigateBack)
+                }
+            } else {
+                val id = savedRunId ?: return@launch
+                runCatching { getRunUseCase(id) }
+                    .onSuccess { run ->
+                        val inputs: Map<String, String> = Gson().fromJson(
+                            run.inputData,
+                            object : TypeToken<Map<String, String>>() {}.type
+                        )
+                        deleteRunInternal {
+                            _effect.send(
+                                ResultContract.Effect.NavigateExperiment(
+                                    id = run.experimentId,
+                                    inputs = inputs
+                                )
+                            )
+                        }
+                    }
+                    .onFailure {
+                        Log.e("ResultViewModel", "Ошибка получения run", it)
+                    }
+            }
+        }
+    }
+
+
+
+    private fun saveRun(result: ExperimentResult) {
+        viewModelScope.launch {
+            runCatching { saveRunUseCase(result) }
+                .onSuccess { savedRunId = it }
+                .onFailure { Log.e("ResultViewModel", "Ошибка сохранения", it) }
         }
     }
 
     private suspend fun deleteRunInternal(onSuccess: suspend () -> Unit) {
         val id = savedRunId ?: return
-
         runCatching { deleteRunUseCase(id) }
             .onSuccess { onSuccess() }
-            .onFailure {
-                Log.e("ResultViewModel", "Ошибка удаления", it)
-            }
+            .onFailure { Log.e("ResultViewModel", "Ошибка удаления", it) }
     }
 }
