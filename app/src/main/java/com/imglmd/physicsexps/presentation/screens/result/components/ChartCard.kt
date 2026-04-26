@@ -11,6 +11,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
@@ -43,21 +44,20 @@ fun ChartCard(
     modelProducer: CartesianChartModelProducer
 ) {
     val colors = MaterialTheme.colorScheme
+    val normalized = remember(points) { normalizePoints(points) }
 
     val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent(
-            TextStyle(color = colors.onSurface)
-        )
+        label = rememberTextComponent(TextStyle(color = colors.onSurface))
     )
 
     val chart = rememberChart(xLabel, yLabel, marker)
 
-    LaunchedEffect(points) {
-        val normalized = normalizePoints(points)
-
+    LaunchedEffect(normalized) {
         modelProducer.runTransaction {
-            val (x, y) = normalized.unzip()
-            lineSeries { series(x, y) }
+            val xValues = normalized.map { it.first }
+            val yValues = normalized.map { it.second }
+
+            lineSeries { series(xValues, yValues) }
         }
     }
 
@@ -112,14 +112,10 @@ private fun rememberChart(
     startAxis = VerticalAxis.rememberStart(
         title = { yLabel },
         label = rememberTextComponent(
-            TextStyle(
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
         ),
         titleComponent = rememberTextComponent(
-            TextStyle(
-                color = MaterialTheme.colorScheme.primary
-            )
+            TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
         guideline = rememberLineComponent(
             fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
@@ -130,19 +126,16 @@ private fun rememberChart(
     bottomAxis = HorizontalAxis.rememberBottom(
         title = { xLabel },
         label = rememberTextComponent(
-            TextStyle(
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
         ),
         titleComponent = rememberTextComponent(
-            TextStyle(
-                color = MaterialTheme.colorScheme.primary
-            )
+            TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
         guideline = rememberLineComponent(
             fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
             thickness = 1.dp
-        )
+        ),
+        itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 3 }) }
     ),
 
     marker = marker
