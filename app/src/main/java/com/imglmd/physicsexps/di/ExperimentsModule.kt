@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.experiments.CoulombsLawExperiment
+import com.imglmd.physicsexps.domain.experiments.DopplerEffectExperiment
 import com.imglmd.physicsexps.domain.experiments.ExampleExperiment
 import com.imglmd.physicsexps.domain.experiments.FreeFallExperiment
 import com.imglmd.physicsexps.domain.experiments.ProjectileMotionExperiment
@@ -20,7 +21,8 @@ val experimentsModule = module {
             FreeFallExperiment(),
             ProjectileMotionExperiment(),
             RadioactiveDecay(),
-            SpringPendulumExperiment()
+            SpringPendulumExperiment(),
+            DopplerEffectExperiment()
         )
     }
 
