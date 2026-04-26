@@ -40,18 +40,18 @@ import com.patrykandpatrick.vico.core.common.Fill
 
 @Composable
 fun ChartCard(
-    state: ResultContract.State.Success,
+    points: List<Pair<Double, Double>>,
+    xLabel: String,
+    yLabel: String,
     modelProducer: CartesianChartModelProducer
 ) {
-    val points = state.result.points ?: return
-
     val colors = MaterialTheme.colorScheme
 
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(color = colors.onSurface)
     )
 
-    val chart = rememberChart(state, marker)
+    val chart = rememberChart(xLabel, yLabel, marker)
 
     LaunchedEffect(points) {
         modelProducer.runTransaction {
@@ -90,7 +90,8 @@ fun ChartCard(
 }
 @Composable
 private fun rememberChart(
-    state: ResultContract.State.Success,
+    xLabel: String,
+    yLabel: String,
     marker: CartesianMarker
 ) = rememberCartesianChart(
 
@@ -107,7 +108,7 @@ private fun rememberChart(
     ),
 
     startAxis = VerticalAxis.rememberStart(
-        title = state.result.yLabel,
+        title = yLabel,
 
         label = rememberTextComponent(
             color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -124,7 +125,7 @@ private fun rememberChart(
     ),
 
     bottomAxis = HorizontalAxis.rememberBottom(
-        title = state.result.xLabel,
+        title = xLabel,
 
         label = rememberTextComponent(
             color = MaterialTheme.colorScheme.onPrimaryContainer

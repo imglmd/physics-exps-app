@@ -110,7 +110,7 @@ private fun Content(
 
                 if (state.result.points.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))
-                    ChartCard(state, modelProducer)
+                    ChartCard(state.result.points, state.result.xLabel, state.result.yLabel, modelProducer)
                 }
             }
 
