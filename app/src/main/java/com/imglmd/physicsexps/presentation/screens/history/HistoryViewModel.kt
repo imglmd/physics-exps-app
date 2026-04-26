@@ -9,7 +9,9 @@ import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
+import com.imglmd.physicsexps.presentation.downsamplePoints
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.imglmd.physicsexps.presentation.normalizePoints
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,7 +88,7 @@ class HistoryViewModel(
                                 date = run.date,
                                 resultId = run.resultId,
                                 inputs = inputs,
-                                points = result?.points ?: emptyList()
+                                points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30))
                             )
                         }
 

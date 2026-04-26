@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -41,6 +44,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +54,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import org.koin.compose.viewmodel.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -122,13 +127,13 @@ private fun Content(
     onItemClick: (id: Int) -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Adaptive(150.dp),
         modifier = Modifier
             .fillMaxSize()
             .imePadding(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalItemSpacing = 12.dp,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(
             top = padding.calculateTopPadding() + 20.dp,
             bottom = padding.calculateBottomPadding(),
@@ -136,7 +141,10 @@ private fun Content(
             end = 24.dp
         )
     ) {
-        items(state.history){ item ->
+        items(
+            items = state.history,
+            key = { it.id }
+        ) { item ->
             HistoryCard(item, onClick = { onItemClick(item.id) })
         }
     }
@@ -191,6 +199,17 @@ private fun HistoryCard(
             if (item.inputs.isNotEmpty()) {
                 Spacer(Modifier.height(2.dp))
                 InputsSection(item.inputs)
+            }
+
+            if (item.points.isNotEmpty()) {
+                val modelProducer = remember { CartesianChartModelProducer() }
+
+                Spacer(Modifier.height(6.dp))
+
+                HistoryChartCard(
+                    points = item.points,
+                    modelProducer = modelProducer
+                )
             }
 
             Spacer(Modifier.height(4.dp))

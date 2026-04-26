@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -54,8 +55,10 @@ fun ChartCard(
     val chart = rememberChart(xLabel, yLabel, marker)
 
     LaunchedEffect(points) {
+        val normalized = normalizePoints(points)
+
         modelProducer.runTransaction {
-            val (x, y) = points.unzip()
+            val (x, y) = normalized.unzip()
             lineSeries { series(x, y) }
         }
     }
