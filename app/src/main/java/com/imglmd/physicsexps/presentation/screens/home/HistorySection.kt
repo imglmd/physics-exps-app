@@ -7,6 +7,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +41,8 @@ data class HistoryItemUi(
     val experimentName: String,
     val category: String,
     val date: Long,
-    val resultId: Int
+    val resultId: Int,
+    val inputs: Map<String, Double> = emptyMap()
 )
 
 @Composable
@@ -105,7 +107,7 @@ private fun HistoryCard(
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() }
     ) {
-        if (isSystemInDarkTheme()){
+        if (isSystemInDarkTheme()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -134,6 +136,11 @@ private fun HistoryCard(
                 overflow = TextOverflow.Ellipsis
             )
 
+            if (item.inputs.isNotEmpty()) {
+                Spacer(Modifier.height(2.dp))
+                InputsSection(item.inputs)
+            }
+
             Spacer(Modifier.height(4.dp))
 
             Row(
@@ -154,5 +161,51 @@ private fun HistoryCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun InputsSection(inputs: Map<String, Double>) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        inputs.values.take(3).forEach { value ->
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
+            ) {
+                Text(
+                    text = formatDouble(value),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+        val remaining = inputs.size - 3
+        if (remaining > 0) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
+            ) {
+                Text(
+                    text = "+$remaining",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+private fun formatDouble(value: Double): String {
+    return if (value == value.toLong().toDouble()) {
+        value.toLong().toString()
+    } else {
+        "%.3g".format(value)
     }
 }

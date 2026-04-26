@@ -2,6 +2,8 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
@@ -83,6 +85,12 @@ class HomeViewModel(
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
                     val historyUi = runs.map { run ->
+                        val type = object : TypeToken<Map<String, Double>>() {}.type
+
+                        val inputs: Map<String, Double> = runCatching {
+                            Gson().fromJson<Map<String, Double>>(run.inputData, type)
+                        }.getOrDefault(emptyMap())
+
                         HistoryItemUi(
                             id = run.id,
                             experimentName = runCatching { registry.getById(run.experimentId).name }
@@ -90,7 +98,8 @@ class HomeViewModel(
                             category = runCatching { registry.getById(run.experimentId).category }
                                 .getOrDefault(""),
                             date = run.date,
-                            resultId = run.resultId
+                            resultId = run.resultId,
+                            inputs = inputs
                         )
                     }
                     _state.update { it.copy(history = historyUi) }
