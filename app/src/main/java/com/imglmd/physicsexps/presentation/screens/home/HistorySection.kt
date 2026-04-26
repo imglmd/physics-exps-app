@@ -104,7 +104,7 @@ private fun HistoryCard(
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.surface)
             .clickable { onClick() }
     ) {
         if (isSystemInDarkTheme()) {

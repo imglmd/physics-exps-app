@@ -1,19 +1,25 @@
 package com.imglmd.physicsexps.presentation.screens.experiment
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,15 +29,18 @@ import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,15 +50,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
@@ -83,6 +98,17 @@ fun ExperimentScreen(
                     navigateBack()
                 }
             }
+        }
+    }
+
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(state.error) {
+        if (state.error != null) {
+            listState.animateScrollToItem(
+                index = listState.layoutInfo.totalItemsCount - 1,
+                scrollOffset = -200
+            )
         }
     }
 
@@ -121,58 +147,82 @@ fun ExperimentScreen(
                 .fillMaxSize()
                 .padding(top = innerPadding.calculateTopPadding())
         ) {
-
             LazyColumn(
-                modifier = Modifier.fillMaxSize().imePadding(),
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
                 contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp,
-                    bottom = 100.dp
+                    bottom = 120.dp
                 ),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
                 item {
                     CarouselSection(state)
-                    Text(
-                        text = state.experiment.description,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Spacer(Modifier.height(24.dp))
-                    Text(
-                        text = "Введите известные величины:",
-                        style = MaterialTheme.typography.titleMedium
+                }
+
+                item {
+                    ExpandableDescription(
+                        text = state.experiment.description
                     )
                 }
 
-                items(
-                    state.experiment.inputFields,
-                    key = { it. key }
-                ) { field ->
-                    val textState = textStates[field.key]!!
-
-                    ExperimentTextField(
-                        state = textState,
-                        label = field.label,
-                        symbol = field.symbol,
-                        unit = field.unit,
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = state.error != null
+                item {
+                    Text(
+                        text = "Введите известные величины",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp).clip(RoundedCornerShape(20.dp)),
+                        verticalArrangement = Arrangement.spacedBy(3.dp)
+                    ) {
+                        state.experiment.inputFields.forEachIndexed { index, field ->
+                            val textState = textStates[field.key]!!
+                            ExperimentTextField(
+                                state = textState,
+                                label = field.label,
+                                symbol = field.symbol,
+                                unit = field.unit,
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = state.error != null
+                            )
+                        }
+                    }
                 }
+
                 state.error?.let { error ->
                     item {
-                        Text(
-                            error,
-                            modifier = Modifier.fillMaxWidth(),
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.titleMedium,
-                            textAlign = TextAlign.Center
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.errorContainer)
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.error),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onErrorContainer,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = error,
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Start
+                            )
+                        }
                     }
-
                 }
+
             }
 
             val imeVisible = WindowInsets.isImeVisible
@@ -184,7 +234,7 @@ fun ExperimentScreen(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 PrimaryButton(
-                    text = "Начать",
+                    text = "Начать эксперимент",
                     isLoading = state.isLoading,
                     enabled = state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
@@ -207,12 +257,13 @@ private fun CarouselSection(
     state: ExperimentContract.State,
     modifier: Modifier = Modifier
 ) {
+    val imageCount = 4
+    val carouselState = rememberCarouselState { imageCount }
+
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        val carouselState = rememberCarouselState() { 4 }
-
         HorizontalMultiBrowseCarousel(
             state = carouselState,
             modifier = Modifier
@@ -222,12 +273,11 @@ private fun CarouselSection(
             preferredItemWidth = 200.dp,
             itemSpacing = 8.dp
         ) {
-
             Image(
                 painter = painterResource(R.drawable.placeholder),
                 contentDescription = null,
                 modifier = Modifier
-                    .height(140.dp)
+                    .height(160.dp)
                     .maskClip(RoundedCornerShape(20.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -235,25 +285,105 @@ private fun CarouselSection(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            repeat(4) { index ->
-
+            repeat(imageCount) { index ->
                 val selected = carouselState.currentItem == index
+
+                val dotWidth by animateDpAsState(
+                    targetValue = if (selected) 20.dp else 6.dp,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    ),
+                    label = "dotWidth_$index"
+                )
+                val dotColor by animateColorAsState(
+                    targetValue = if (selected)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.outline,
+                    label = "dotColor_$index"
+                )
 
                 Box(
                     modifier = Modifier
-                        .padding(4.dp)
-                        .size(if (selected) 10.dp else 8.dp)
+                        .padding(horizontal = 3.dp)
+                        .width(dotWidth)
+                        .height(6.dp)
                         .clip(CircleShape)
-                        .background(
-                            if (selected)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.outline
-                        )
+                        .background(dotColor)
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+fun ExpandableDescription(
+    text: String,
+    modifier: Modifier = Modifier,
+    collapsedMaxLines: Int = 3
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var isOverflowing by remember { mutableStateOf(false) }
+
+    val shape = RoundedCornerShape(24.dp)
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .then(
+                if (isOverflowing) {
+                    Modifier.clickable { expanded = !expanded }
+                } else Modifier
+            )
+            .padding(16.dp)
+    ) {
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            maxLines = if (expanded) Int.MAX_VALUE else collapsedMaxLines,
+            overflow = TextOverflow.Ellipsis,
+            onTextLayout = { result ->
+                if (!expanded) {
+                    isOverflowing = result.hasVisualOverflow
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 32.dp)
+        )
+
+        AnimatedVisibility(
+            visible = isOverflowing,
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) {
+            val rotation by animateFloatAsState(
+                targetValue = if (expanded) 180f else 0f,
+                label = "arrow_rotation"
+            )
+
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .size(24.dp)
+                    .graphicsLayer { rotationZ = rotation }
+            )
         }
     }
 }

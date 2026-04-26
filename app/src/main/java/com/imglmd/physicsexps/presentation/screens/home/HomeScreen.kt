@@ -216,7 +216,7 @@ private fun SearchTextField(
                 shape = RoundedCornerShape(100)
             )
             .clip(RoundedCornerShape(100))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(start = 16.dp, end = 4.dp)
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
