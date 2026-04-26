@@ -89,13 +89,11 @@ fun HistoryCard(
             }
 
             if (item.points.isNotEmpty()) {
-                val modelProducer = remember { CartesianChartModelProducer() }
 
                 Spacer(Modifier.height(6.dp))
 
                 HistoryChartCard(
                     points = item.points,
-                    modelProducer = modelProducer
                 )
             }
 
