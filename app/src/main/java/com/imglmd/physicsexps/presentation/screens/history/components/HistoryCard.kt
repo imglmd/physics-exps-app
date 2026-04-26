@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.presentation.screens.home
+package com.imglmd.physicsexps.presentation.screens.history.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,75 +15,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+import kotlin.collections.take
+import kotlin.text.uppercase
 
 @Composable
-fun HistorySection(
-    history: List<HistoryItemUi>,
-    onSeeAllClick: () -> Unit,
-    onItemClick: (id: Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Последнее",
-                style = MaterialTheme.typography.titleLarge
-            )
-            TextButton(onClick = onSeeAllClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                )
-            ) {
-                Text(
-                    text = "Все",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        LazyRow(
-            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-
-            items(history) { item ->
-                HistoryCard(
-                    item = item,
-                    onClick = { onItemClick(item.resultId) }
-                )
-            }
-        }
-    }
-}
-@Composable
-private fun HistoryCard(
+fun HistoryCard(
     item: HistoryItemUi,
     onClick: () -> Unit
 ) {
@@ -128,9 +83,20 @@ private fun HistoryCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            if (item.inputs.isNotEmpty()) {
+            if (item.quantities.isNotEmpty()) {
                 Spacer(Modifier.height(2.dp))
-                InputsSection(item.inputs)
+                QuantitiesSection(item.quantities)
+            }
+
+            if (item.points.isNotEmpty()) {
+                val modelProducer = remember { CartesianChartModelProducer() }
+
+                Spacer(Modifier.height(6.dp))
+
+                HistoryChartCard(
+                    points = item.points,
+                    modelProducer = modelProducer
+                )
             }
 
             Spacer(Modifier.height(4.dp))
@@ -157,26 +123,16 @@ private fun HistoryCard(
 }
 
 @Composable
-private fun InputsSection(inputs: Map<String, Double>) {
+private fun QuantitiesSection(quantities: List<PhysicalQuantity>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        inputs.values.take(3).forEach { value ->
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                    .padding(horizontal = 6.dp, vertical = 2.dp)
-            ) {
-                Text(
-                    text = formatDouble(value),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+        quantities.take(3).forEach { q ->
+            QuantityChip(q)
         }
-        val remaining = inputs.size - 3
+
+        val remaining = quantities.size - 3
         if (remaining > 0) {
             Box(
                 modifier = Modifier
@@ -191,6 +147,30 @@ private fun InputsSection(inputs: Map<String, Double>) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun QuantityChip(q: PhysicalQuantity) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = buildString {
+                append(q.symbol)
+                append(" = ")
+                append(formatDouble(q.value))
+                if (q.unit.isNotBlank()) {
+                    append(" ")
+                    append(q.unit)
+                }
+            },
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+        )
     }
 }
 

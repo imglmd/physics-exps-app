@@ -7,5 +7,4 @@ data class ExperimentResult(
     val xLabel: String,
     val yLabel: String,
     val date: Long,
-    val inputs: Map<String, Double> = emptyMap()
 )

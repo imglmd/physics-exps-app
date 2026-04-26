@@ -9,6 +9,8 @@ import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
+import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,7 @@ class HomeViewModel(
     private val getAllRunsUseCase: GetAllRunsUseCase,
     private val getResultUseCase: GetResultUseCase,
     private val registry: ExperimentRegistry,
+    private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository
 ) : ViewModel() {
 
@@ -45,6 +48,7 @@ class HomeViewModel(
             is HomeIntent.ChangeSearchText -> updateExperiments(intent.text)
             is HomeIntent.NavigateToRunResult -> navigateToResult(intent.id)
             is HomeIntent.NavigateToExperiment -> navigateToExperiment(intent.id)
+            HomeIntent.NavigateToHistory -> navigateToHistory()
         }
     }
 
@@ -72,11 +76,21 @@ class HomeViewModel(
     }
     private fun navigateToResult(id: Int){
         viewModelScope.launch {
+
+            val run = getRunUseCase(id) ?: return@launch
+
+            val type = object : TypeToken<Map<String, Double>>() {}.type
+
+            val inputs: Map<String, Double> =
+                runCatching {
+                    Gson().fromJson<Map<String, Double>>(run.inputData, type)
+                }.getOrDefault(emptyMap())
+
             val result = getResultUseCase(id) ?: return@launch
-            resultRepository.save(result)
+
+            resultRepository.save(result, inputs)
             _actionFlow.emit(HomeAction.NavigateToResult(id))
         }
-
     }
 
     private fun loadHistory() {
@@ -91,11 +105,15 @@ class HomeViewModel(
                             Gson().fromJson<Map<String, Double>>(run.inputData, type)
                         }.getOrDefault(emptyMap())
 
+                        val experiment = runCatching {
+                            registry.getById(run.experimentId)
+                        }.getOrNull()
+
                         HistoryItemUi(
                             id = run.id,
-                            experimentName = runCatching { registry.getById(run.experimentId).name }
+                            experimentName = runCatching { experiment?.name ?: run.experimentId }
                                 .getOrDefault(run.experimentId),
-                            category = runCatching { registry.getById(run.experimentId).category }
+                            category = runCatching { experiment?.category ?: "" }
                                 .getOrDefault(""),
                             date = run.date,
                             resultId = run.resultId,
@@ -108,4 +126,9 @@ class HomeViewModel(
     }
 
 
+    private fun navigateToHistory() {
+        viewModelScope.launch {
+            _actionFlow.emit(HomeAction.NavigateToHistory)
+        }
+    }
 }

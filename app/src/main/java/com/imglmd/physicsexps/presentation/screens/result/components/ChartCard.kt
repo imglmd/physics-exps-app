@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -40,22 +41,24 @@ import com.patrykandpatrick.vico.core.common.Fill
 
 @Composable
 fun ChartCard(
-    state: ResultContract.State.Success,
+    points: List<Pair<Double, Double>>,
+    xLabel: String,
+    yLabel: String,
     modelProducer: CartesianChartModelProducer
 ) {
-    val points = state.result.points ?: return
-
     val colors = MaterialTheme.colorScheme
 
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(color = colors.onSurface)
     )
 
-    val chart = rememberChart(state, marker)
+    val chart = rememberChart(xLabel, yLabel, marker)
 
     LaunchedEffect(points) {
+        val normalized = normalizePoints(points)
+
         modelProducer.runTransaction {
-            val (x, y) = points.unzip()
+            val (x, y) = normalized.unzip()
             lineSeries { series(x, y) }
         }
     }
@@ -90,7 +93,8 @@ fun ChartCard(
 }
 @Composable
 private fun rememberChart(
-    state: ResultContract.State.Success,
+    xLabel: String,
+    yLabel: String,
     marker: CartesianMarker
 ) = rememberCartesianChart(
 
@@ -107,7 +111,7 @@ private fun rememberChart(
     ),
 
     startAxis = VerticalAxis.rememberStart(
-        title = state.result.yLabel,
+        title = yLabel,
 
         label = rememberTextComponent(
             color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -124,7 +128,7 @@ private fun rememberChart(
     ),
 
     bottomAxis = HorizontalAxis.rememberBottom(
-        title = state.result.xLabel,
+        title = xLabel,
 
         label = rememberTextComponent(
             color = MaterialTheme.colorScheme.onPrimaryContainer

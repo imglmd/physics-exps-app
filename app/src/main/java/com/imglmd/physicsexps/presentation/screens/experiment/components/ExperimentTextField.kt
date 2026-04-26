@@ -1,16 +1,15 @@
 package com.imglmd.physicsexps.presentation.screens.experiment.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
@@ -40,123 +39,117 @@ fun ExperimentTextField(
 ) {
     val colors = MaterialTheme.colorScheme
 
-    val borderColor = when {
-        isError -> colors.error
-        else -> colors.outlineVariant
-    }
-
-    Row(
+    Box(
         modifier = modifier
             .height(IntrinsicSize.Min)
             .heightIn(min = 60.dp)
-            .background(
-                color = colors.surfaceVariant,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Box(
-            contentAlignment = Alignment.Center,
+        Row(
             modifier = Modifier
-                .width(symbolWidth)
-                .padding(vertical = 12.dp)
+                .matchParentSize()
+                .background(colors.surfaceVariant)
+                .padding(start = if (isError) 4.dp else 0.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .width(symbolWidth)
+                    .padding(vertical = 12.dp)
+            ) {
+                Text(
+                    text = symbol,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = colors.onSurface.copy(alpha = 0.8f)
+                )
+            }
+
+            BasicTextField(
+                state = state,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal
+                ),
+                textStyle = MaterialTheme.typography.titleLarge.copy(
+                    color = colors.onSurface
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp),
+                lineLimits = TextFieldLineLimits.SingleLine,
+
+                inputTransformation = InputTransformation {
+
+                    for (i in 0 until length) {
+                        if (charAt(i) == ',') {
+                            delete(i, i + 1)
+                            insert(i, ".")
+                        }
+                    }
+
+                    var hasDecimal = false
+                    var hasMinus = false
+
+                    for (i in 0 until length) {
+                        val c = charAt(i)
+
+                        when {
+                            c.isDigit() -> Unit
+
+                            c == '.' -> {
+                                if (hasDecimal) delete(i, i + 1)
+                                else hasDecimal = true
+                            }
+
+                            c == '-' -> {
+                                if (i != 0 || hasMinus) delete(i, i + 1)
+                                else hasMinus = true
+                            }
+
+                            else -> delete(i, i + 1)
+                        }
+                    }
+
+                    if (length == 1 && charAt(0) == '.') insert(0, "0")
+                    if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
+                },
+
+                cursorBrush = SolidColor(colors.primary),
+
+                decorator = { innerTextField ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        if (state.text.isEmpty()) {
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = colors.onSurfaceVariant
+                            )
+                        }
+
+                        innerTextField()
+                    }
+                }
+            )
+
             Text(
-                text = symbol,
-                style = MaterialTheme.typography.titleLarge,
-                color = colors.onSurface.copy(alpha = 0.8f)
+                text = unit,
+                style = MaterialTheme.typography.titleMedium,
+                color = colors.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(end = 12.dp, start = 4.dp)
             )
         }
 
-        /*Box(
-            modifier = Modifier
-                .height(32.dp)
-                .width(1.dp)
-                .background(colors.outlineVariant.copy(alpha = 0.5f))
-        )*/
-
-        BasicTextField(
-            state = state,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
-            textStyle = MaterialTheme.typography.titleLarge.copy(
-                color = colors.onSurface
-            ),
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 4.dp),
-            lineLimits = TextFieldLineLimits.SingleLine,
-
-            inputTransformation = InputTransformation {
-
-                for (i in 0 until length) {
-                    if (charAt(i) == ',') {
-                        delete(i, i + 1)
-                        insert(i, ".")
-                    }
-                }
-
-                var hasDecimal = false
-                var hasMinus = false
-
-                for (i in 0 until length) {
-                    val c = charAt(i)
-
-                    when {
-                        c.isDigit() -> Unit
-
-                        c == '.' -> {
-                            if (hasDecimal) delete(i, i + 1)
-                            else hasDecimal = true
-                        }
-
-                        c == '-' -> {
-                            if (i != 0 || hasMinus) delete(i, i + 1)
-                            else hasMinus = true
-                        }
-
-                        else -> delete(i, i + 1)
-                    }
-                }
-
-                if (length == 1 && charAt(0) == '.') insert(0, "0")
-                if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
-            },
-
-            cursorBrush = SolidColor(colors.primary),
-
-            decorator = { innerTextField ->
-
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (state.text.isEmpty()) {
-                        Text(
-                            text = label,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = colors.onSurfaceVariant
-                        )
-                    }
-
-                    innerTextField()
-                }
-            }
-        )
-
-        Text(
-            text = unit,
-            style = MaterialTheme.typography.titleMedium,
-            color = colors.onSurface.copy(alpha = 0.6f),
-            modifier = Modifier.padding(end = 12.dp, start = 4.dp)
-        )
+        if (isError) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .fillMaxHeight()
+                    .background(colors.error)
+                    .align(Alignment.CenterStart)
+            )
+        }
     }
 }

@@ -11,7 +11,10 @@ class CalculateExperimentUseCase(
 ) {
 
     sealed class Result {
-        data class Success(val result: ExperimentResult): Result()
+        data class Success(
+            val result: ExperimentResult,
+            val inputs: Map<String, Double>
+        ): Result()
         data class ValidationError(val errors: List<com.imglmd.physicsexps.domain.validation.ValidationError>): Result()
         data class Failure(val message: String): Result()
     }
@@ -32,7 +35,10 @@ class CalculateExperimentUseCase(
             is ValidationResult.Success -> {
                 try {
                     val result = experiment.calculate(validation.values)
-                    Result.Success(result.copy(inputs = validation.values))
+                    Result.Success(
+                        result = result,
+                        inputs = validation.values
+                    )
                 } catch (e: Exception) {
                     Result.Failure(e.message ?: "Ошибка вычисления")
                 }
