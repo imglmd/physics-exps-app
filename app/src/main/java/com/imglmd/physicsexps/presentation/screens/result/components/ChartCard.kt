@@ -2,20 +2,39 @@ package com.imglmd.physicsexps.presentation.screens.result.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
@@ -34,6 +53,7 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -41,7 +61,8 @@ fun ChartCard(
     points: List<Pair<Double, Double>>,
     xLabel: String,
     yLabel: String,
-    modelProducer: CartesianChartModelProducer
+    modelProducer: CartesianChartModelProducer,
+    onChartClick: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
     val normalized = remember(points) { normalizePoints(points) }
@@ -52,12 +73,27 @@ fun ChartCard(
 
     val chart = rememberChart(xLabel, yLabel, marker)
 
-    LaunchedEffect(normalized) {
-        modelProducer.runTransaction {
-            val xValues = normalized.map { it.first }
-            val yValues = normalized.map { it.second }
+    val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
 
-            lineSeries { series(xValues, yValues) }
+    var resetKey by remember { mutableIntStateOf(0) }
+
+    val zoomState = key(resetKey) {
+        rememberVicoZoomState(initialZoom = initialZoom)
+    }
+    val scrollState = key(resetKey) {
+        rememberVicoScrollState()
+    }
+
+    LaunchedEffect(normalized) {
+        if (normalized.isEmpty()) return@LaunchedEffect
+
+        modelProducer.runTransaction {
+            lineSeries {
+                series(
+                    normalized.map { it.first },
+                    normalized.map { it.second }
+                )
+            }
         }
     }
 
@@ -75,18 +111,54 @@ fun ChartCard(
             containerColor = colors.surface
         )
     ) {
-        CartesianChartHost(
-            chart = chart,
-            modelProducer = modelProducer,
-            scrollState = rememberVicoScrollState(),
-            zoomState = rememberVicoZoomState(initialZoom = Zoom.Content),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(260.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(colors.surface)
-                .padding(8.dp)
-        )
+        Column {
+            CartesianChartHost(
+                chart = chart,
+                modelProducer = modelProducer,
+                scrollState = scrollState,
+                zoomState = zoomState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(colors.surface)
+                    .padding(PaddingValues(top = 8.dp, start = 8.dp, end = 8.dp))
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingValues(start = 4.dp, end = 4.dp, bottom = 4.dp)),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                IconButton(
+                    onClick = { resetKey++ },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Reset zoom",
+                        tint = colors.primary
+                    )
+                }
+
+                IconButton(
+                    onClick = onChartClick,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.expand_content),
+                        contentDescription = "Fullscreen",
+                        tint = colors.primary
+                    )
+                }
+            }
+        }
     }
 }
 

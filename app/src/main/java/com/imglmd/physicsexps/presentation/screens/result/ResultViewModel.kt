@@ -54,7 +54,7 @@ class ResultViewModel(
             ResultContract.Intent.Change -> handleChange()
         }
     }
-
+    fun getRunId(): Int? = savedRunId
     private fun handleBack() {
         viewModelScope.launch {
             if (runId == null) {

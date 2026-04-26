@@ -43,10 +43,12 @@ fun ResultScreen(
     runId: Int?,
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
+    navigateChart: (Int) -> Unit,
     navigateExperiment: (String, Map<String, String>) -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
     val state by viewModel.state.collectAsState()
+
     val modelProducer = remember { CartesianChartModelProducer() }
 
     val registry = koinInject<ExperimentRegistry>()
@@ -79,7 +81,11 @@ fun ResultScreen(
                 modelProducer = modelProducer,
                 onDeleteClick = { viewModel.onIntent(ResultContract.Intent.Delete) },
                 onSaveClick = navigateHome,
-                onChangeClick = { viewModel.onIntent(ResultContract.Intent.Change) }
+                onChangeClick = { viewModel.onIntent(ResultContract.Intent.Change) },
+                onChartClick = {
+                    val id = viewModel.getRunId() ?: return@Content
+                    navigateChart(id)
+                }
             )
         }
     }
@@ -90,11 +96,13 @@ private fun Content(
     state: ResultContract.State.Success,
     registry: ExperimentRegistry,
     isFromHistory: Boolean,
-    onBackClick: () -> Unit,
     modelProducer: CartesianChartModelProducer,
+
+    onBackClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onSaveClick: () -> Unit,
     onChangeClick: () -> Unit,
+    onChartClick: () -> Unit
 ) {
     val experiment = remember(state.result.experimentId) {
         registry.getById(state.result.experimentId)
@@ -130,7 +138,8 @@ private fun Content(
                         state.result.points,
                         state.result.xLabel,
                         state.result.yLabel,
-                        modelProducer
+                        modelProducer,
+                        onChartClick
                     )
                 }
             }
