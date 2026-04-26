@@ -88,7 +88,8 @@ class HistoryViewModel(
                                 date = run.date,
                                 resultId = run.resultId,
                                 inputs = inputs,
-                                points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30))
+                                points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
+                                quantities = result?.quantities ?: emptyList()
                             )
                         }
 

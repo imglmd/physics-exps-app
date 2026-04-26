@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.presentation.screens.history
+package com.imglmd.physicsexps.presentation.screens.history.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
