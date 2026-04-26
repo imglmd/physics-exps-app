@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.presentation.screens.result.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
@@ -64,15 +64,14 @@ fun ChartCard(
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 32.dp,
-                shape = RoundedCornerShape(24.dp),
-                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
-                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.42f)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant,
+                shape = RoundedCornerShape(24.dp)
             )
             .padding(top = 16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colors.primaryContainer
+            containerColor = colors.surface
         )
     ) {
         CartesianChartHost(
@@ -84,7 +83,7 @@ fun ChartCard(
                 .fillMaxWidth()
                 .height(260.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(colors.primaryContainer)
+                .background(colors.surface)
                 .padding(8.dp)
         )
     }

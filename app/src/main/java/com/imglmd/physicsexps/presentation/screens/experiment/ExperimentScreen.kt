@@ -29,6 +29,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -45,11 +47,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
+import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
 import org.koin.compose.viewmodel.koinViewModel
@@ -59,17 +63,25 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ExperimentScreen(
     id: String,
+    inputs: Map<String, String>?,
     navigateBack: () -> Unit,
     navigateToResult: () -> Unit,
-    viewModel: ExperimentViewModel = koinViewModel { parametersOf(id) }
+    viewModel: ExperimentViewModel = koinViewModel { parametersOf(id, inputs) }
 ) {
     val state by viewModel.state.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         viewModel.actionFlow.collect { action ->
             when (action) {
-                is ExperimentContract.Action.NavigateToResult -> navigateToResult()
-                ExperimentContract.Action.NavigateBack -> navigateBack()
+                is ExperimentContract.Action.NavigateToResult -> {
+                    keyboardController?.hide()
+                    navigateToResult()
+                }
+                ExperimentContract.Action.NavigateBack -> {
+                    keyboardController?.hide()
+                    navigateBack()
+                }
             }
         }
     }
@@ -176,6 +188,8 @@ fun ExperimentScreen(
                     isLoading = state.isLoading,
                     enabled = state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
+                    iconPosition = IconPosition.EdgeEnd,
+                    icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .navigationBarsPadding()
@@ -189,7 +203,7 @@ fun ExperimentScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CarouselSection(
+private fun CarouselSection(
     state: ExperimentContract.State,
     modifier: Modifier = Modifier
 ) {
@@ -236,7 +250,7 @@ fun CarouselSection(
                             if (selected)
                                 MaterialTheme.colorScheme.primary
                             else
-                                MaterialTheme.colorScheme.outlineVariant
+                                MaterialTheme.colorScheme.outline
                         )
                 )
             }

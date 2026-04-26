@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -57,9 +57,19 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(
     navigateToExperiment: (String) -> Unit,
+    navigateToResult: (Int) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.actionFlow.collect { effect ->
+            when (effect) {
+                is HomeAction.NavigateToResult -> navigateToResult(effect.runId)
+                is HomeAction.NavigateToExperiment -> navigateToExperiment(effect.id)
+            }
+        }
+    }
 
     Scaffold() { innerPadding ->
         LazyVerticalGrid(
@@ -88,7 +98,7 @@ fun HomeScreen(
                         HistorySection(
                             history = state.history,
                             onSeeAllClick = {  },
-                            onItemClick = {  }
+                            onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }
                         )
 
                         Spacer(Modifier.height(30.dp))
@@ -116,7 +126,7 @@ fun HomeScreen(
                         ExperimentItem(
                             name = experiment.name,
                             imageRes = experiment.imageRes,
-                            onClick = { navigateToExperiment(experiment.id) }
+                            onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
                         )
                         Spacer(Modifier.height(10.dp))
                     }
@@ -136,12 +146,6 @@ private fun ExperimentItem(
     Box(
         modifier = modifier
             .aspectRatio(1f)
-            .shadow(
-                elevation = 28.dp,
-                shape = RoundedCornerShape(24.dp),
-                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.08f),
-                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f)
-            )
             .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
     ) {
@@ -206,11 +210,10 @@ private fun SearchTextField(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .shadow(
-                elevation = 32.dp,
-                shape = RoundedCornerShape(100.dp),
-                ambientColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.28f),
-                spotColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.58f)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant,
+                shape = RoundedCornerShape(100)
             )
             .clip(RoundedCornerShape(100))
             .background(MaterialTheme.colorScheme.surfaceVariant)

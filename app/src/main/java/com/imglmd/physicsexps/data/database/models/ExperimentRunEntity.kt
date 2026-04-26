@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     ])
 data class ExperimentRunEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     @ColumnInfo("experiment_id")
     val experimentId: String,
     val date: Long,

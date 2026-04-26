@@ -1,21 +1,22 @@
 package com.imglmd.physicsexps.di
 
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.data.database.ExpDb
 import com.imglmd.physicsexps.data.repository.ExperimentRunsRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ResultsRepositoryImpl
 import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
-import com.imglmd.physicsexps.domain.usecase.CalculateExperimentUseCase
-import com.imglmd.physicsexps.domain.usecase.DeleteCommentUseCase
-import com.imglmd.physicsexps.domain.usecase.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetAllRunsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetCommentsUseCase
-import com.imglmd.physicsexps.domain.usecase.GetExperimentByIdUseCase
-import com.imglmd.physicsexps.domain.usecase.InsertCommentUseCase
+import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -26,24 +27,27 @@ import org.koin.dsl.module
 
 val mainModule = module {
     single { InMemoryResultRepository() }
-
+    single<ResultsRepository> { ResultsRepositoryImpl(get()) }
     single { ExperimentValidator() }
 
+    factory { SaveRunUseCase(get(), get()) }
+    factory { DeleteRunUseCase(get(), get()) }
     factory { GetAllRunsUseCase(get()) }
+    factory { GetRunUseCase(get()) }
+    factory { GetResultUseCase(get()) }
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
-    factory { GetCommentsUseCase(get()) }
-    factory { InsertCommentUseCase(get()) }
-    factory { DeleteCommentUseCase(get()) }
     viewModel {
-        HomeViewModel(get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get())
     }
     viewModel { params ->
-        ExperimentViewModel(params.get(), get(), get(), get())
+        val inputs: Map<String, String>? = params.getOrNull()
+        ExperimentViewModel(params.get(), inputs, get(), get(), get())
     }
-    viewModel {
-        ResultViewModel(get())
+    viewModel { params ->
+        val runId: Int? = params.getOrNull()
+        ResultViewModel(runId, get(), get(), get(), get())
     }
 
     single {
@@ -51,23 +55,9 @@ val mainModule = module {
             androidContext(),
             ExpDb::class.java,
             "exp_db"
-        )
-            //TODO: убрать ()
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    db.execSQL("""
-                INSERT INTO experiment_runs (experiment_id, date, inputData, result_id)
-                VALUES 
-                ('pendulum', ${System.currentTimeMillis()}, '{"v": 10.0}', 0),
-                ('free_fall', ${System.currentTimeMillis()}, '{"h": 20.0}', 0),
-                ('projectile_motion', ${System.currentTimeMillis()}, '{"v": 20.0}', 1)
-                
-            """.trimIndent())
-                }
-            })
-            .build()
+        ).build()
     }
+    single { get<ExpDb>().resDao() }
     single{get<ExpDb>().dao()}
     single{get<ExpDb>().comDao()}
     single<ExperimentRunsRepository> { ExperimentRunsRepositoryImpl(get()) }
