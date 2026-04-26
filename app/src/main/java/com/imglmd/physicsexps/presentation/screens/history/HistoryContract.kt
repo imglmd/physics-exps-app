@@ -7,7 +7,8 @@ interface HistoryContract {
     sealed interface State {
         data object Loading: State
         data class Success(
-            val history: List<HistoryItemUi>
+            val history: List<HistoryItemUi>,
+            val isLoading: Boolean = false
         ): State
         data class Error(val message: String): State
     }

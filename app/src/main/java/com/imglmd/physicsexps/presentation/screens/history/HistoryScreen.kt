@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -17,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -84,20 +86,21 @@ fun HistoryScreen(
     ) { innerPadding ->
         when (val s = state) {
             is HistoryContract.State.Error -> Text(s.message)
-            HistoryContract.State.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+
+            HistoryContract.State.Loading -> Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
+
             is HistoryContract.State.Success -> Content(
                 state = s,
-                onItemClick = { viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it))},
-                padding = innerPadding
+                onItemClick = {
+                    viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it))
+                },
+                padding = innerPadding,
+                isLoading = s.isLoading
             )
         }
     }
@@ -106,28 +109,43 @@ fun HistoryScreen(
 @Composable
 private fun Content(
     state: HistoryContract.State.Success,
+    isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Adaptive(150.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        verticalItemSpacing = 12.dp,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(
-            top = padding.calculateTopPadding() + 20.dp,
-            bottom = padding.calculateBottomPadding(),
-            start = 24.dp,
-            end = 24.dp
-        )
-    ) {
-        items(
-            items = state.history,
-            key = { it.id }
-        ) { item ->
-            HistoryCard(item, onClick = { onItemClick(item.id) })
+    Box(Modifier.fillMaxSize()) {
+
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(150.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .imePadding(),
+            verticalItemSpacing = 12.dp,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(
+                top = padding.calculateTopPadding() + 20.dp,
+                bottom = padding.calculateBottomPadding(),
+                start = 24.dp,
+                end = 24.dp
+            )
+        ) {
+            items(
+                items = state.history,
+                key = { it.id }
+            ) { item ->
+                HistoryCard(item, onClick = { onItemClick(item.id) })
+            }
+        }
+
+        if (isLoading) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(top = padding.calculateTopPadding()),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surface
+            )
         }
     }
 }
