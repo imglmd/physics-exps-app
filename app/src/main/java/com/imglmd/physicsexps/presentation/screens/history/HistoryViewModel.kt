@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.ExperimentRun
+import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -26,7 +28,8 @@ class HistoryViewModel(
     private val getResultUseCase: GetResultUseCase,
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val getAllRunsUseCase: GetAllRunsUseCase
+    private val getAllRunsUseCase: GetAllRunsUseCase,
+    private val deleteAllRunsUseCase: DeleteAllRunsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HistoryContract.State>(
@@ -46,6 +49,19 @@ class HistoryViewModel(
     fun onIntent(intent: HistoryContract.Intent){
         when (intent) {
             is HistoryContract.Intent.NavigateToResult -> navigateToResult(intent.resultId)
+
+            HistoryContract.Intent.ShowDeleteDialog -> {
+                _state.update {
+                    (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = true) ?: it
+                }
+            }
+            HistoryContract.Intent.HideDeleteDialog -> {
+                _state.update {
+                    (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = false) ?: it
+                }
+            }
+            HistoryContract.Intent.DeleteAll -> deleteAllHistory()
+
         }
     }
 
@@ -101,6 +117,7 @@ class HistoryViewModel(
         }
     }
 
+
     private suspend fun processRun(run: ExperimentRun): HistoryItemUi {
         val inputs: Map<String, Double> = runCatching {
             json.decodeFromString<Map<String, Double>>(run.inputData)
@@ -118,5 +135,17 @@ class HistoryViewModel(
             points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
             quantities = result?.quantities ?: emptyList()
         )
+    }
+
+    private fun deleteAllHistory(){
+        viewModelScope.launch {
+            deleteAllRunsUseCase()
+            _state.update {
+                (it as? HistoryContract.State.Success)?.copy(
+                    showDeleteDialog = false,
+                    history = emptyList()
+                ) ?: it
+            }
+        }
     }
 }

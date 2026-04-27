@@ -27,9 +27,6 @@ class ResultsRepositoryImpl(
         ).toInt()
     }
 
-    override suspend fun deleteByRunId(runId: Int) {
-        dao.deleteByRunId(runId)
-    }
 
     override suspend fun deleteAll() {
         dao.deleteAll()

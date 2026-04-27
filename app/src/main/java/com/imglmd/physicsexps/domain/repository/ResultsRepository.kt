@@ -5,7 +5,5 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 interface ResultsRepository {
     suspend fun getByRunId(runId: Int): ExperimentResult?
     suspend fun insert(runId: Int, result: ExperimentResult): Int
-    suspend fun deleteByRunId(runId: Int)
-
     suspend fun deleteAll()
 }

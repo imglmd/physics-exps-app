@@ -10,8 +10,7 @@ interface ResultsDao {
     @Insert
     suspend fun insert(entity: ResultEntity): Long
 
-    @Query("DELETE FROM results WHERE run_id = :runId")
-    suspend fun deleteByRunId(runId: Int)
+    //deleteByRunId не нужен тк result удаляеться вместе с run
 
     @Query("DELETE FROM results")
     suspend fun deleteAll()
