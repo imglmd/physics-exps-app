@@ -36,6 +36,7 @@ class SpringPendulumExperiment: Experiment {
         val frequency: Double
         val koeff: Double
         val weight: Double
+        val angularFrequency: Double
         val map = mutableMapOf<String, Double>()
 
         when {
@@ -44,6 +45,7 @@ class SpringPendulumExperiment: Experiment {
                 weight = m
                 koeff = k
                 frequency = 1 / period
+                angularFrequency = sqrt(koeff/weight)
                 map.put("weight", weight)
                 map.put("coeff", koeff)
             }
@@ -53,6 +55,7 @@ class SpringPendulumExperiment: Experiment {
                 weight = m
                 period = T
                 frequency = 1 / period
+                angularFrequency = sqrt(koeff/weight)
                 map.put("weight", weight)
                 map.put("coeff", koeff)
             }
@@ -65,7 +68,8 @@ class SpringPendulumExperiment: Experiment {
                 PhysicalQuantity("Период", "T", period, "с"),
                 PhysicalQuantity("Масса", "m", weight, "кг"),
                 PhysicalQuantity("Коэффицент упругости", "k", koeff, "Н/м"),
-                PhysicalQuantity("Частота колебаний", "V", frequency, "Гц")
+                PhysicalQuantity("Частота колебаний", "V", frequency, "Гц"),
+                PhysicalQuantity("Циклическая частота", "w₀", angularFrequency, "рад/с")
             ),
             points = getPoints(map),
             date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
