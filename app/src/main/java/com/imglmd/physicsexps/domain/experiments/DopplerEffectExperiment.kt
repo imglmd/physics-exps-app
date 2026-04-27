@@ -48,7 +48,7 @@ class DopplerEffectExperiment: Experiment {
         }
 
         return ExperimentResult(
-            experiment = this,
+            experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
                 PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц")
