@@ -3,8 +3,6 @@ package com.imglmd.physicsexps.presentation.screens.result
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
@@ -15,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class ResultViewModel(
     private val runId: Int?,
@@ -31,6 +30,8 @@ class ResultViewModel(
     val effect = _effect.receiveAsFlow()
 
     private var savedRunId: Int? = runId
+
+    private val json = Json
 
     init {
         val bundle = resultRepository.get()
@@ -53,7 +54,7 @@ class ResultViewModel(
             ResultContract.Intent.Change -> handleChange()
         }
     }
-
+    fun getRunId(): Int? = savedRunId
     private fun handleBack() {
         viewModelScope.launch {
             if (runId == null) {
@@ -86,10 +87,9 @@ class ResultViewModel(
                 val id = savedRunId ?: return@launch
                 runCatching { getRunUseCase(id) }
                     .onSuccess { run ->
-                        val inputs: Map<String, Double> = Gson().fromJson(
-                            run.inputData,
-                            object : TypeToken<Map<String, Double>>() {}.type
-                        )
+                        val inputs: Map<String, Double> =
+                            json.decodeFromString(run.inputData)
+
                         val stringInputs = inputs.mapValues { it.value.toString() }
                         deleteRunInternal {
                             _effect.send(

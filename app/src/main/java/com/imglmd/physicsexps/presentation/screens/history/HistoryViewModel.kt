@@ -2,10 +2,9 @@ package com.imglmd.physicsexps.presentation.screens.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
+import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class HistoryViewModel(
     private val registry: ExperimentRegistry,
@@ -36,8 +36,8 @@ class HistoryViewModel(
 
     private val _actionFlow = MutableSharedFlow<HistoryContract.Action>()
     val actionFlow = _actionFlow.asSharedFlow()
-    private val gson = Gson()
-    private val type = object : TypeToken<Map<String, Double>>() {}.type
+
+    private val json = Json
 
     init {
         loadHistory()
@@ -54,7 +54,9 @@ class HistoryViewModel(
             val run = getRunUseCase(id) ?: return@launch
 
             val inputs: Map<String, Double> =
-                gson.fromJson(run.inputData, type) ?: emptyMap()
+                runCatching {
+                    json.decodeFromString<Map<String, Double>>(run.inputData)
+                }.getOrDefault(emptyMap())
 
             val result = getResultUseCase(id) ?: return@launch
 
@@ -68,39 +70,54 @@ class HistoryViewModel(
             getAllRunsUseCase()
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
-                    runCatching {
 
-                        val historyUi = runs.map { run ->
+                    _state.value = HistoryContract.State.Success(
+                        history = emptyList(),
+                        isLoading = true
+                    )
 
-                            val inputs: Map<String, Double> =
-                                gson.fromJson(run.inputData, type) ?: emptyMap()
+                    val chunkSize = 5
+                    val resultList = mutableListOf<HistoryItemUi>()
 
-                            val experiment = runCatching {
-                                registry.getById(run.experimentId)
-                            }.getOrNull()
+                    runs.chunked(chunkSize).forEach { chunk ->
 
-                            val result = getResultUseCase(run.resultId)
-
-                            HistoryItemUi(
-                                id = run.id,
-                                experimentName = experiment?.name ?: run.experimentId,
-                                category = experiment?.category ?: "",
-                                date = run.date,
-                                resultId = run.resultId,
-                                inputs = inputs,
-                                points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
-                                quantities = result?.quantities ?: emptyList()
-                            )
+                        val processed = chunk.mapNotNull { run ->
+                            runCatching { processRun(run) }.getOrNull()
                         }
 
-                        _state.value = HistoryContract.State.Success(historyUi)
+                        resultList += processed
 
-                    }.onFailure { e ->
-                        _state.value = HistoryContract.State.Error(
-                            e.message ?: "Unknown error"
+                        _state.value = HistoryContract.State.Success(
+                            history = resultList.toList(),
+                            isLoading = true
                         )
                     }
+
+                    _state.value = HistoryContract.State.Success(
+                        history = resultList,
+                        isLoading = false
+                    )
                 }
         }
+    }
+
+    private suspend fun processRun(run: ExperimentRun): HistoryItemUi {
+        val inputs: Map<String, Double> = runCatching {
+            json.decodeFromString<Map<String, Double>>(run.inputData)
+        }.getOrDefault(emptyMap())
+
+        val experiment = runCatching { registry.getById(run.experimentId) }.getOrNull()
+        val result = getResultUseCase(run.resultId)
+
+        return HistoryItemUi(
+            id = run.id,
+            experimentName = experiment?.name ?: run.experimentId,
+            category = experiment?.category ?: "",
+            date = run.date,
+            resultId = run.resultId,
+            inputs = inputs,
+            points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
+            quantities = result?.quantities ?: emptyList()
+        )
     }
 }

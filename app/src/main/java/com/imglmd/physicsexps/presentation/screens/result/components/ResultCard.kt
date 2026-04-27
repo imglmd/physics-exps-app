@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
@@ -48,9 +49,10 @@ fun ResultCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Результаты вычислений",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = "Результаты",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.SemiBold
             )
             TextButton(
                 onClick = onChangeClick,

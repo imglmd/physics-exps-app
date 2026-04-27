@@ -2,41 +2,58 @@ package com.imglmd.physicsexps.presentation.screens.result.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.normalizePoints
-import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
-import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
-import com.patrykandpatrick.vico.compose.cartesian.layer.continuous
+import com.patrykandpatrick.vico.compose.cartesian.Zoom
+import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
+import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.core.cartesian.Zoom
-import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
-import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
-import com.patrykandpatrick.vico.core.cartesian.layer.LineCartesianLayer
-import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
-import com.patrykandpatrick.vico.core.common.Fill
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -44,22 +61,39 @@ fun ChartCard(
     points: List<Pair<Double, Double>>,
     xLabel: String,
     yLabel: String,
-    modelProducer: CartesianChartModelProducer
+    modelProducer: CartesianChartModelProducer,
+    onChartClick: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
+    val normalized = remember(points) { normalizePoints(points) }
 
     val marker = rememberDefaultCartesianMarker(
-        label = rememberTextComponent(color = colors.onSurface)
+        label = rememberTextComponent(TextStyle(color = colors.onSurface))
     )
 
     val chart = rememberChart(xLabel, yLabel, marker)
 
-    LaunchedEffect(points) {
-        val normalized = normalizePoints(points)
+    val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
+
+    var resetKey by remember { mutableIntStateOf(0) }
+
+    val zoomState = key(resetKey) {
+        rememberVicoZoomState(initialZoom = initialZoom)
+    }
+    val scrollState = key(resetKey) {
+        rememberVicoScrollState()
+    }
+
+    LaunchedEffect(normalized) {
+        if (normalized.isEmpty()) return@LaunchedEffect
 
         modelProducer.runTransaction {
-            val (x, y) = normalized.unzip()
-            lineSeries { series(x, y) }
+            lineSeries {
+                series(
+                    normalized.map { it.first },
+                    normalized.map { it.second }
+                )
+            }
         }
     }
 
@@ -77,20 +111,57 @@ fun ChartCard(
             containerColor = colors.surface
         )
     ) {
-        CartesianChartHost(
-            chart = chart,
-            modelProducer = modelProducer,
-            scrollState = rememberVicoScrollState(),
-            zoomState = rememberVicoZoomState(initialZoom = Zoom.Content),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(260.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(colors.surface)
-                .padding(8.dp)
-        )
+        Column {
+            CartesianChartHost(
+                chart = chart,
+                modelProducer = modelProducer,
+                scrollState = scrollState,
+                zoomState = zoomState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(colors.surface)
+                    .padding(PaddingValues(top = 8.dp, start = 8.dp, end = 8.dp))
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingValues(start = 4.dp, end = 4.dp, bottom = 4.dp)),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                IconButton(
+                    onClick = { resetKey++ },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Reset zoom",
+                        tint = colors.primary
+                    )
+                }
+
+                IconButton(
+                    onClick = onChartClick,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.expand_content),
+                        contentDescription = "Fullscreen",
+                        tint = colors.primary
+                    )
+                }
+            }
+        }
     }
 }
+
 @Composable
 private fun rememberChart(
     xLabel: String,
@@ -102,46 +173,41 @@ private fun rememberChart(
         lineProvider = LineCartesianLayer.LineProvider.series(
             LineCartesianLayer.rememberLine(
                 fill = LineCartesianLayer.LineFill.single(
-                    Fill(MaterialTheme.colorScheme.primary.toArgb())
+                    Fill(MaterialTheme.colorScheme.primary)
                 ),
-                stroke = LineCartesianLayer.LineStroke.continuous(3.dp),
+                stroke = LineCartesianLayer.LineStroke.Continuous(3.dp),
                 pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f)
             )
         )
     ),
 
     startAxis = VerticalAxis.rememberStart(
-        title = yLabel,
-
+        title = { yLabel },
         label = rememberTextComponent(
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
         ),
-
         titleComponent = rememberTextComponent(
-            color = MaterialTheme.colorScheme.primary
+            TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
-
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f).toArgb()),
+            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
             thickness = 1.dp
         )
     ),
 
     bottomAxis = HorizontalAxis.rememberBottom(
-        title = xLabel,
-
+        title = { xLabel },
         label = rememberTextComponent(
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
         ),
-
         titleComponent = rememberTextComponent(
-            color = MaterialTheme.colorScheme.primary
+            TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
-
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f).toArgb()),
+            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
             thickness = 1.dp
-        )
+        ),
+        itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 3 }) }
     ),
 
     marker = marker

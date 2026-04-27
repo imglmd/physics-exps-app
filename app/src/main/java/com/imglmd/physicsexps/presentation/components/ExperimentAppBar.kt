@@ -35,7 +35,8 @@ fun ExperimentAppBar(
                     text = title, maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
@@ -43,13 +44,14 @@ fun ExperimentAppBar(
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.85f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f)
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = MaterialTheme.colorScheme.surface
+            /*containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,*/
         ),
         modifier = Modifier.clip(RoundedCornerShape(bottomStart = 26.dp, bottomEnd = 26.dp)),
         navigationIcon = {
@@ -68,8 +70,9 @@ private fun BackButton(
         modifier = modifier,
         onClick = onClick,
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.22f),
-            contentColor = MaterialTheme.colorScheme.onPrimary
+            //containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.22f),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
     ) {
         Icon(

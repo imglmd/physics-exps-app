@@ -49,43 +49,47 @@ android {
 }
 
 dependencies {
+
+    // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.core:core-splashscreen:1.2.0")
-    implementation(libs.androidx.room3.runtime)
-    implementation(libs.compose)
-    implementation(libs.compose.m2)
-    implementation(libs.compose.m3)
-    implementation(libs.core)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Icons
     implementation(libs.androidx.compose.material.icons.core)
+
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // Navigation + DI
+    implementation(libs.bundles.nav3)
+    implementation(libs.bundles.koin)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization)
+
+    // Room (чистый набор)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Charts (Vico)
+    implementation(libs.vico.compose.m3)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.bundles.koin)
-    implementation(libs.bundles.nav3)
-
-    val room_version = "2.8.4"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-rxjava2:$room_version")
-    implementation("androidx.room:room-rxjava3:$room_version")
-    implementation("androidx.room:room-guava:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
-    implementation("com.google.code.gson:gson:2.10.1")
 }

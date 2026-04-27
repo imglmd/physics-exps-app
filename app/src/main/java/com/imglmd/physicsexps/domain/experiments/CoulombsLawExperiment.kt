@@ -48,7 +48,7 @@ class CoulombsLawExperiment: Experiment {
         }
 
         return ExperimentResult(
-            experiment = this,
+            experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Первый заряд", "q1", q1, "нКл"),
                 PhysicalQuantity("Второй заряд", "q2", q2, "нКл"),

@@ -7,6 +7,7 @@ import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
 import com.imglmd.physicsexps.presentation.screens.history.HistoryScreen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
+import com.imglmd.physicsexps.presentation.screens.result.FullScreenChartScreen
 import com.imglmd.physicsexps.presentation.screens.result.ResultScreen
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.module
@@ -46,6 +47,9 @@ val navigationModule = module {
             navigateHome = { get<Navigator>().goHome() },
             navigateExperiment = { expId, inputs ->
                 get<Navigator>().navigateBackTo(Screen.Experiment(expId, inputs))
+            },
+            navigateChart = { runId ->
+                get<Navigator>().navigateTo(Screen.FullScreenChart(runId))
             }
         )
     }
@@ -55,6 +59,12 @@ val navigationModule = module {
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))
             }
+        )
+    }
+    navigation<Screen.FullScreenChart> { route ->
+        FullScreenChartScreen(
+            runId = route.runId,
+            navigateBack = { get<Navigator>().goBack() }
         )
     }
 }

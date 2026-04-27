@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
-import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -89,13 +89,11 @@ fun HistoryCard(
             }
 
             if (item.points.isNotEmpty()) {
-                val modelProducer = remember { CartesianChartModelProducer() }
 
                 Spacer(Modifier.height(6.dp))
 
                 HistoryChartCard(
                     points = item.points,
-                    modelProducer = modelProducer
                 )
             }
 

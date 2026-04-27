@@ -1,15 +1,17 @@
 package com.imglmd.physicsexps.domain.usecase.run
 
-import com.google.gson.Gson
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import kotlinx.serialization.json.Json
 
 class SaveRunUseCase(
     private val runsRepository: ExperimentRunsRepository,
     private val resultsRepository: ResultsRepository
 ) {
+    private val json = Json
+
     suspend operator fun invoke(
         result: ExperimentResult,
         inputs: Map<String, Double>
@@ -18,9 +20,9 @@ class SaveRunUseCase(
 
         return runsRepository.insert(
             ExperimentRun(
-                experimentId = result.experiment.id,
+                experimentId = result.experimentId,
                 date = result.date,
-                inputData = Gson().toJson(inputs),
+                inputData = json.encodeToString(inputs),
                 resultId = resultId
             )
         )

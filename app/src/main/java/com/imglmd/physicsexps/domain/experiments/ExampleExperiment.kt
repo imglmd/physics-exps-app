@@ -5,7 +5,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.PI
@@ -73,7 +72,7 @@ class ExampleExperiment : Experiment {
         }
 
         return ExperimentResult(
-            experiment = this,
+            experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Длина нити", "L", length, "м"),
                 PhysicalQuantity("Период", "T", period, "с"),
