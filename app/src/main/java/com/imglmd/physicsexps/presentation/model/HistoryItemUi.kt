@@ -8,7 +8,6 @@ data class HistoryItemUi(
     val experimentName: String,
     val category: String,
     val date: Long,
-    val resultId: Int,
     val inputs: Map<String, Double> = emptyMap(),
     val points: List<Pair<Double, Double>> = emptyList(),
     val quantities: List<PhysicalQuantity> = emptyList(),

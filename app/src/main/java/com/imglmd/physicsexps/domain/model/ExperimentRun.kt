@@ -6,5 +6,4 @@ data class ExperimentRun (
     val experimentId: String,
     val date: Long,
     val inputData: String,
-    val resultId: Int,
 )

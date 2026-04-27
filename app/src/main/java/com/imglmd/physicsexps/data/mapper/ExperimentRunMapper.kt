@@ -5,10 +5,10 @@ import com.imglmd.physicsexps.domain.model.ExperimentRun
 
 fun ExperimentRunEntity.toUi(): ExperimentRun {
     return ExperimentRun(id = id, experimentId = experimentId, date = date,
-        inputData = inputData, resultId = resultId)
+        inputData = inputData)
 }
 
 fun ExperimentRun.toModel(): ExperimentRunEntity {
     return ExperimentRunEntity(id = id, experimentId = experimentId, date = date,
-        inputData = inputData, resultId = resultId)
+        inputData = inputData)
 }

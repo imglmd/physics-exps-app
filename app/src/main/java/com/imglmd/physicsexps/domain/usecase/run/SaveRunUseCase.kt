@@ -16,15 +16,14 @@ class SaveRunUseCase(
         result: ExperimentResult,
         inputs: Map<String, Double>
     ): Int {
-        val resultId = resultsRepository.insert(result)
-
-        return runsRepository.insert(
+        val runId = runsRepository.insert(
             ExperimentRun(
                 experimentId = result.experimentId,
                 date = result.date,
                 inputData = json.encodeToString(inputs),
-                resultId = resultId
             )
         )
+        resultsRepository.insert(runId, result)
+        return runId
     }
 }

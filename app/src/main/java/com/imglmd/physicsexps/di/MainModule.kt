@@ -12,8 +12,10 @@ import com.imglmd.physicsexps.domain.repository.ResultsRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
@@ -32,13 +34,15 @@ val mainModule = module {
     single { ExperimentValidator() }
 
     factory { SaveRunUseCase(get(), get()) }
-    factory { DeleteRunUseCase(get(), get()) }
+    factory { DeleteRunUseCase(get()) }
+    factory { DeleteAllRunsUseCase(get()) }
     factory { GetAllRunsUseCase(get()) }
     factory { GetRunUseCase(get()) }
     factory { GetResultUseCase(get()) }
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
+    factory { GetLastRunsUseCase(get()) }
     viewModel {
         HomeViewModel(get(), get(), get(), get(), get(), get())
     }
@@ -51,7 +55,7 @@ val mainModule = module {
         ResultViewModel(runId, get(), get(), get(), get())
     }
     viewModel {
-        HistoryViewModel(get(), get(), get(), get(), get())
+        HistoryViewModel(get(), get(), get(), get(), get(),get())
     }
 
     single {

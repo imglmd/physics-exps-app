@@ -2,16 +2,28 @@
 
 package com.imglmd.physicsexps.presentation.screens.history
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +34,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +42,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.screens.history.components.HistoryCard
@@ -77,6 +92,20 @@ fun HistoryScreen(
                         )
                     }
                 },
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.onIntent(HistoryContract.Intent.ShowDeleteDialog) },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Удалить всё"
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     scrolledContainerColor = MaterialTheme.colorScheme.background
@@ -104,6 +133,81 @@ fun HistoryScreen(
             )
         }
     }
+
+    if (state is HistoryContract.State.Success && (state as HistoryContract.State.Success).showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog)
+            },
+
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(24.dp),
+
+            icon = {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+
+            title = {
+                Text(
+                    text = "Удалить историю?",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            },
+
+            text = {
+                Text(
+                    text = "Все эксперименты будут удалены без возможности восстановления.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onIntent(HistoryContract.Intent.DeleteAll)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Text(
+                        "Удалить",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
+                    )
+                ) {
+                    Text(
+                        "Отмена",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -115,28 +219,31 @@ private fun Content(
 ) {
     Box(Modifier.fillMaxSize()) {
 
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(150.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding(),
-            verticalItemSpacing = 12.dp,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(
-                top = padding.calculateTopPadding() + 20.dp,
-                bottom = padding.calculateBottomPadding(),
-                start = 24.dp,
-                end = 24.dp
-            )
-        ) {
-            items(
-                items = state.history,
-                key = { it.id }
-            ) { item ->
-                HistoryCard(item, onClick = { onItemClick(item.id) })
+        if (state.history.isEmpty() && !isLoading) {
+            EmptyHistory(modifier = Modifier.fillMaxSize())
+        } else {
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Adaptive(150.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+                verticalItemSpacing = 12.dp,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(
+                    top = padding.calculateTopPadding() + 20.dp,
+                    bottom = padding.calculateBottomPadding(),
+                    start = 24.dp,
+                    end = 24.dp
+                )
+            ) {
+                items(
+                    items = state.history,
+                    key = { it.id }
+                ) { item ->
+                    HistoryCard(item, onClick = { onItemClick(item.id) })
+                }
             }
         }
-
         if (isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier
@@ -147,5 +254,47 @@ private fun Content(
                 trackColor = MaterialTheme.colorScheme.surface
             )
         }
+    }
+}
+
+
+@Composable
+private fun EmptyHistory(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.DateRange,
+                contentDescription = null,
+                modifier = Modifier.size(36.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            text = "Нет экспериментов",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        Text(
+            text = "Результаты ваших экспериментов\nпоявятся здесь",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
     }
 }

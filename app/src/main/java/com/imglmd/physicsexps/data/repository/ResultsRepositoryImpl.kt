@@ -10,25 +10,25 @@ class ResultsRepositoryImpl(
     private val dao: ResultsDao
 ) : ResultsRepository {
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
+    private val json = Json { ignoreUnknownKeys = true }
 
-    override suspend fun getById(id: Int): ExperimentResult? {
-        return dao.getById(id)?.let {
+    override suspend fun getByRunId(runId: Int): ExperimentResult? {
+        return dao.getByRunId(runId)?.let {
             json.decodeFromString<ExperimentResult>(it.json)
         }
     }
 
-    override suspend fun insert(result: ExperimentResult): Int {
+    override suspend fun insert(runId: Int, result: ExperimentResult): Int {
         return dao.insert(
             ResultEntity(
+                runId = runId,
                 json = json.encodeToString(result)
             )
         ).toInt()
     }
 
-    override suspend fun deleteById(id: Int) {
-        dao.deleteById(id)
+
+    override suspend fun deleteAll() {
+        dao.deleteAll()
     }
 }
