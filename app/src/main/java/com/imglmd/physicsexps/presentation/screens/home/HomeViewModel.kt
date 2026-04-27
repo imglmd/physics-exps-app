@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -115,7 +114,6 @@ class HomeViewModel(
                             category = runCatching { experiment?.category ?: "" }
                                 .getOrDefault(""),
                             date = run.date,
-                            resultId = run.resultId,
                             inputs = inputs
                         )
                     }

@@ -33,7 +33,7 @@ val mainModule = module {
     single { ExperimentValidator() }
 
     factory { SaveRunUseCase(get(), get()) }
-    factory { DeleteRunUseCase(get(), get()) }
+    factory { DeleteRunUseCase(get()) }
     factory { GetAllRunsUseCase(get()) }
     factory { GetRunUseCase(get()) }
     factory { GetResultUseCase(get()) }

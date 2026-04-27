@@ -30,4 +30,8 @@ class ExperimentRunsRepositoryImpl(
     override suspend fun delete(experimentRun: ExperimentRun) {
         experimentRunsDao.deleteExp(experimentRun.toModel())
     }
+
+    override suspend fun deleteAll() {
+        experimentRunsDao.deleteAll()
+    }
 }

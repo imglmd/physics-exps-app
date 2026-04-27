@@ -107,14 +107,13 @@ class HistoryViewModel(
         }.getOrDefault(emptyMap())
 
         val experiment = runCatching { registry.getById(run.experimentId) }.getOrNull()
-        val result = getResultUseCase(run.resultId)
+        val result = getResultUseCase(run.id)
 
         return HistoryItemUi(
             id = run.id,
             experimentName = experiment?.name ?: run.experimentId,
             category = experiment?.category ?: "",
             date = run.date,
-            resultId = run.resultId,
             inputs = inputs,
             points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
             quantities = result?.quantities ?: emptyList()

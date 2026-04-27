@@ -12,4 +12,6 @@ interface ExperimentRunsRepository {
     suspend fun insert(experimentRun: ExperimentRun): Int
 
     suspend fun delete(experimentRun: ExperimentRun)
+
+    suspend fun deleteAll()
 }

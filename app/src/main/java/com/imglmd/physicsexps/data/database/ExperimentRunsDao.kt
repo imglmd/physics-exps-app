@@ -14,6 +14,9 @@ interface ExperimentRunsDao {
     @Delete
     suspend fun deleteExp(experimentRunEntity: ExperimentRunEntity)
 
+    @Query("DELETE FROM experiment_runs")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM experiment_runs ORDER BY date DESC")
     fun getAllExps(): Flow<List<ExperimentRunEntity>>
 
