@@ -7,5 +7,5 @@ interface CommentRepository {
 
     suspend fun insertComment(comment: Comment)
 
-    suspend fun deleteComment(comment: Comment)
+    suspend fun deleteComment(id: Int)
 }

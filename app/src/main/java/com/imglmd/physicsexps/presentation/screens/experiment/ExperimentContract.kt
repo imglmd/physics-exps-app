@@ -1,7 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.experiment
 
 import com.imglmd.physicsexps.domain.model.Experiment
-import com.imglmd.physicsexps.domain.model.ExperimentResult
 
 interface ExperimentContract {
     data class State (
@@ -9,11 +8,13 @@ interface ExperimentContract {
         val inputs: Map<String, String> = emptyMap(),
         val error: String? = null,
         val isLoading: Boolean = false,
-        val isButtonActive: Boolean = false
+        val isButtonActive: Boolean = false,
+        val isAdvancedMode: Boolean = false
     )
     sealed interface Intent {
         data object Start: Intent
         data class ChangeValue(val key: String, val newValue: String): Intent
+        data object ToggleAdvancedMode: Intent
     }
     sealed interface Action {
         data object NavigateToResult: Action

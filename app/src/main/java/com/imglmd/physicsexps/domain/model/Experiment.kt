@@ -1,7 +1,6 @@
 package com.imglmd.physicsexps.domain.model
 
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.InputField
 
 interface Experiment {
     val id: String
@@ -12,6 +11,7 @@ interface Experiment {
 
     val inputFields: List<InputField>
     val minRequiredInputs: Int
+    val additionalInputFields: List<InputField> get() = emptyList()
 
     val xLabel: String
     val yLabel: String
