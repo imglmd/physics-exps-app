@@ -19,7 +19,8 @@ class SpringPendulumExperiment: Experiment {
 
     override val inputFields = listOf(
         InputField("weight", "Масса", "m", "кг"),
-        InputField("coeff", "Коэффицент упругости пружины", "k", "Н/м")
+        InputField("coeff", "Коэффицент упругости пружины", "k", "Н/м"),
+        InputField("period", "Период колебаний", "T", "с", min = 0.0)
     )
     override val xLabel = "Масса груза, кг"
     override val yLabel = "Период, с"
@@ -29,15 +30,31 @@ class SpringPendulumExperiment: Experiment {
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val m = inputs["weight"]
         val k = inputs["coeff"]
+        val T = inputs["period"]
 
-        val T: Double
+        val period: Double
+        val frequency: Double
+        val koeff: Double
+        val weight: Double
         val map = mutableMapOf<String, Double>()
 
         when {
             m != null && k != null -> {
-                T = 2 * PI * sqrt(m/k)
-                map.put("weight", m)
-                map.put("coeff", k)
+                period = 2 * PI * sqrt(m/k)
+                weight = m
+                koeff = k
+                frequency = 1 / period
+                map.put("weight", weight)
+                map.put("coeff", koeff)
+            }
+
+            m != null && T != null -> {
+                koeff = (4*PI*PI*m)/T*T
+                weight = m
+                period = T
+                frequency = 1 / period
+                map.put("weight", weight)
+                map.put("coeff", koeff)
             }
             else -> throw IllegalArgumentException("Нужно ввести две величины")
         }
@@ -45,9 +62,10 @@ class SpringPendulumExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Период", "T", T, "с"),
-                PhysicalQuantity("Масса", "m", m, "кг"),
-                PhysicalQuantity("Коэффицент упругости", "k", k, "Н/м")
+                PhysicalQuantity("Период", "T", period, "с"),
+                PhysicalQuantity("Масса", "m", weight, "кг"),
+                PhysicalQuantity("Коэффицент упругости", "k", koeff, "Н/м"),
+                PhysicalQuantity("Частота колебаний", "V", frequency, "Гц")
             ),
             points = getPoints(map),
             date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),

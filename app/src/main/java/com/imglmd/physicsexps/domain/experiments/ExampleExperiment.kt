@@ -8,7 +8,9 @@ import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 class ExampleExperiment : Experiment {
@@ -23,45 +25,74 @@ class ExampleExperiment : Experiment {
     override val xLabel =  "Длина нити, м"
     override val yLabel = "Период, с"
     override val inputFields = listOf(
-        InputField("length", "Длина нити", "L", "м", min = 0.0),
+        InputField("length", "Длина нити", "L", "м", min = 0.0, required = true),
         InputField("period", "Период колебаний", "T", "с", min = 0.0, required = true),
-        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0)
+        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0),
+        InputField("angle", "Угол отклонения", "α", "°", required = true,
+            min = 0.0, max = 90.0)
     )
 
-    override val minRequiredInputs = 2
+    override val minRequiredInputs = 3
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
 
         val L = inputs["length"]
         val T = inputs["period"]
         val g = inputs["gravity"]
+        val a = inputs["angle"]
 
         val length: Double
         val period: Double
         val gravity: Double
+        val frequency: Double
+        val angularFrequency: Double
+        val amplitude: Double
+        val maxSpeed: Double
+        val maxHeight: Double
         val map = mutableMapOf<String, Double>()
 
         when {
-            L != null && T != null -> {
+            L != null && T != null && a != null-> {
                 gravity = (4 * PI.pow(2) * L) / T.pow(2)
                 length = L
                 period = T
+                frequency = 1 / period
+                angularFrequency = sqrt(gravity/length)
+                val rad = a * PI / 180.0
+                amplitude = length * sin(rad)
+                maxSpeed = sqrt(2*gravity*length*(1 - cos(rad)))
+                maxHeight = length*(1 - cos(rad))
+
                 map.put("length", length)
                 map.put("gravity", gravity)
             }
 
-            T != null && g != null -> {
+            T != null && g != null && a != null-> {
                 length = (g * T.pow(2)) / (4 * PI.pow(2))
                 period = T
                 gravity = g
+                frequency = 1 / period
+                angularFrequency = sqrt(gravity/length)
+                val rad = a * PI / 180.0
+                amplitude = length * sin(rad)
+                maxSpeed = sqrt(2*gravity*length*(1 - cos(rad)))
+                maxHeight = length*(1 - cos(rad))
+
                 map.put("gravity", gravity)
                 map.put("length", length)
             }
 
-            L != null && g != null -> {
+            L != null && g != null && a != null-> {
                 period = 2 * PI * sqrt(L / g)
                 length = L
                 gravity = g
+                frequency = 1 / period
+                angularFrequency = sqrt(gravity/length)
+                val rad = a * PI / 180.0
+                amplitude = length * sin(rad)
+                maxSpeed = sqrt(2*gravity*length*(1 - cos(rad)))
+                maxHeight = length*(1 - cos(rad))
+
                 map.put("length", length)
                 map.put("gravity", gravity)
             }
@@ -76,7 +107,12 @@ class ExampleExperiment : Experiment {
             quantities = listOf(
                 PhysicalQuantity("Длина нити", "L", length, "м"),
                 PhysicalQuantity("Период", "T", period, "с"),
-                PhysicalQuantity("Ускорение", "g", gravity, "м/с²")
+                PhysicalQuantity("Ускорение", "g", gravity, "м/с²"),
+                PhysicalQuantity("Частота колебаний", "V", frequency, "Гц"),
+                PhysicalQuantity("Циклическая частота", "w₀", angularFrequency, "рад/с"),
+                PhysicalQuantity("Амплитуда", "A", amplitude, "м"),
+                PhysicalQuantity("Максимальная скорость", "vₘₐₓ", maxSpeed, "м/с"),
+                PhysicalQuantity("Максимальная высота подъёма", "hₘₐₓ", maxHeight, "м")
             ),
             points = getPoints(map),  //TODO: пример отсутствия графика у эксперимента. заменить на getPoints(map)
             date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
