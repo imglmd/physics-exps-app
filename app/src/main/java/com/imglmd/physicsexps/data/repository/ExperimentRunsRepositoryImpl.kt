@@ -15,6 +15,10 @@ class ExperimentRunsRepositoryImpl(
     override fun getAllExps(): Flow<List<ExperimentRun>> =
         experimentRunsDao.getAllExps().map { list -> list.map { it.toUi() } }
 
+    override fun getLastRuns(limit: Int): Flow<List<ExperimentRun>> =
+        experimentRunsDao.getLastRuns(limit).map { list -> list.map { it.toUi() } }
+
+
     override suspend fun getExpById(id: Int): ExperimentRun {
         return experimentRunsDao.getExpById(id).toUi()
     }

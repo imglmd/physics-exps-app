@@ -16,6 +16,9 @@ interface ExperimentRunsDao {
 
     @Query("SELECT * FROM experiment_runs ORDER BY date DESC")
     fun getAllExps(): Flow<List<ExperimentRunEntity>>
+
+    @Query("SELECT * FROM experiment_runs ORDER BY date DESC LIMIT :limit")
+    fun getLastRuns(limit: Int): Flow<List<ExperimentRunEntity>>
     @Query("SELECT * FROM experiment_runs WHERE id = :id")
     suspend fun getExpById(id: Int): ExperimentRunEntity
 }

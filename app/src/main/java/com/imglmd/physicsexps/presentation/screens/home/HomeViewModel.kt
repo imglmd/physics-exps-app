@@ -6,6 +6,7 @@ import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
@@ -22,7 +23,7 @@ import kotlinx.serialization.json.Json
 
 class HomeViewModel(
     getAllExperimentsUseCase: GetAllExperimentsUseCase,
-    private val getAllRunsUseCase: GetAllRunsUseCase,
+    private val getLastRunsUseCase: GetLastRunsUseCase,
     private val getResultUseCase: GetResultUseCase,
     private val registry: ExperimentRegistry,
     private val getRunUseCase: GetRunUseCase,
@@ -94,7 +95,7 @@ class HomeViewModel(
 
     private fun loadHistory() {
         viewModelScope.launch {
-            getAllRunsUseCase()
+            getLastRunsUseCase(6)
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
                     val historyUi = runs.map { run ->
