@@ -9,6 +9,9 @@ import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
+import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
+import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
@@ -37,6 +40,9 @@ val mainModule = module {
     factory { DeleteRunUseCase(get()) }
     factory { DeleteAllRunsUseCase(get()) }
     factory { GetAllRunsUseCase(get()) }
+    factory { AddCommentUseCase(get()) }
+    factory { DeleteCommentUseCase(get()) }
+    factory { GetCommentsUseCase(get()) }
     factory { GetRunUseCase(get()) }
     factory { GetResultUseCase(get()) }
     factory { GetAllExperimentsUseCase(get()) }
@@ -52,7 +58,7 @@ val mainModule = module {
     }
     viewModel { params ->
         val runId: Int? = params.getOrNull()
-        ResultViewModel(runId, get(), get(), get(), get())
+        ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
         HistoryViewModel(get(), get(), get(), get(), get(),get())

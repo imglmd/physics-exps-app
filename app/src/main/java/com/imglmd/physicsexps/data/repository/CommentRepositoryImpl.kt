@@ -17,7 +17,7 @@ class CommentRepositoryImpl(
         commentsDao.insertComment(comment.toModel())
     }
 
-    override suspend fun deleteComment(comment: Comment) {
-        commentsDao.deleteComment(comment.toModel())
+    override suspend fun deleteComment(id: Int) {
+        commentsDao.deleteComment(id)
     }
 }
