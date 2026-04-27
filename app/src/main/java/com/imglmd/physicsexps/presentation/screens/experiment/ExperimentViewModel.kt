@@ -35,6 +35,7 @@ class ExperimentViewModel(
         when (intent) {
             is ExperimentContract.Intent.ChangeValue -> changeValue(intent.key, intent.newValue)
             ExperimentContract.Intent.Start -> start()
+            ExperimentContract.Intent.ToggleAdvancedMode -> _state.update { it.copy(isAdvancedMode = !it.isAdvancedMode) }
         }
     }
 

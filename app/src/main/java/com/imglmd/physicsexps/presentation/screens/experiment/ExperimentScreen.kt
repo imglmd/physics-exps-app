@@ -67,6 +67,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.components.AdvancedToggle
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
@@ -112,6 +113,18 @@ fun ExperimentScreen(
         }
     }
 
+    LaunchedEffect(state.isAdvancedMode) {
+        if (state.isAdvancedMode) {
+            kotlinx.coroutines.delay(200)
+
+            listState.animateScrollToItem(
+                index = listState.layoutInfo.totalItemsCount - 1,
+                scrollOffset = -200
+
+            )
+        }
+    }
+
     val textStates = remember(state.experiment.inputFields) {
         state.experiment.inputFields.associate { field ->
             field.key to TextFieldState(initialText = state.inputs[field.key] ?: "")
@@ -128,6 +141,21 @@ fun ExperimentScreen(
                             newValue = value
                         )
                     )
+                }
+        }
+    }
+
+    val advancedTextStates = remember(state.experiment.additionalInputFields) {
+        state.experiment.additionalInputFields.associate { field ->
+            field.key to TextFieldState(initialText = state.inputs[field.key] ?: "")
+        }
+    }
+    state.experiment.additionalInputFields.forEach { field ->
+        val textState = advancedTextStates[field.key]!!
+        LaunchedEffect(textState) {
+            snapshotFlow { textState.text.toString() }
+                .collect { value ->
+                    viewModel.onIntent(ExperimentContract.Intent.ChangeValue(field.key, value))
                 }
         }
     }
@@ -163,13 +191,13 @@ fun ExperimentScreen(
                 item {
                     CarouselSection(state)
                 }
-
+                if (state.experiment.description.isNotEmpty()){
                 item {
                     ExpandableDescription(
                         text = state.experiment.description
                     )
                 }
-
+                    }
                 item {
                     Text(
                         text = "Введите известные величины",
@@ -179,7 +207,9 @@ fun ExperimentScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp).clip(RoundedCornerShape(20.dp)),
+                            .animateContentSize()
+                            .padding(vertical = 8.dp)
+                            .clip(RoundedCornerShape(20.dp)),
                         verticalArrangement = Arrangement.spacedBy(3.dp)
                     ) {
                         state.experiment.inputFields.forEachIndexed { index, field ->
@@ -193,6 +223,33 @@ fun ExperimentScreen(
                                 isError = state.error != null
                             )
                         }
+                        if (state.experiment.additionalInputFields.isNotEmpty() && state.isAdvancedMode) {
+                            state.experiment.additionalInputFields.forEach { field ->
+                                val textState = textStates[field.key]!!
+                                ExperimentTextField(
+                                    state = textState,
+                                    label = field.label,
+                                    symbol = field.symbol,
+                                    unit = field.unit,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    isError = state.error != null
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (state.experiment.additionalInputFields.isNotEmpty()){
+                    item {
+                        AdvancedToggle(
+                            title = "Расширенный режим",
+                            subtitle = if (state.isAdvancedMode) "Дополнительные параметры включены" else "Только основные параметры",
+                            icon = ImageVector.vectorResource(R.drawable.rocket),
+                            enabled = state.isAdvancedMode,
+                            onToggle = {
+                                viewModel.onIntent(ExperimentContract.Intent.ToggleAdvancedMode)
+                            }
+                        )
                     }
                 }
 
