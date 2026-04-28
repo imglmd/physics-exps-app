@@ -249,15 +249,11 @@ class ProjectileMotionExperiment : Experiment {
 
         // результаты
         steps += SolutionStep.Result(
-            PhysicalQuantity("Дальность броска", "L", range, "м")
-        )
-
-        steps += SolutionStep.Result(
-            PhysicalQuantity("Максимальная высота", "H", hMax, "м")
-        )
-
-        steps += SolutionStep.Result(
-            PhysicalQuantity("Время полёта", "t", tFull, "с")
+            listOf(
+                PhysicalQuantity("Дальность броска", "L", range, "м"),
+                PhysicalQuantity("Максимальная высота", "H", hMax, "м"),
+                PhysicalQuantity("Время полёта", "t", tFull, "с")
+            )
         )
 
         return steps

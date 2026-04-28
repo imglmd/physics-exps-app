@@ -47,6 +47,6 @@ sealed interface SolutionStep {
      * может быть несколько
      */
     data class Result(
-        val quantity: PhysicalQuantity
+        val quantities: List<PhysicalQuantity>
     ): SolutionStep
 }
