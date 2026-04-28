@@ -400,7 +400,7 @@ fun ExpandableDescription(
                 )
             )
             .clip(shape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .then(
                 if (isOverflowing) {
                     Modifier.clickable { expanded = !expanded }

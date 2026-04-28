@@ -42,7 +42,7 @@ fun HistoryChartCard(
     Canvas(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .fillMaxWidth()
             .height(70.dp)
     ) {

@@ -82,7 +82,7 @@ fun HistoryScreen(
                     IconButton(
                         onClick = navigateBack,
                         colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
                             contentColor = MaterialTheme.colorScheme.onSurface
                         ),
                     ) {

@@ -153,7 +153,7 @@ private fun QuantityChip(q: PhysicalQuantity) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
@@ -167,7 +167,7 @@ private fun QuantityChip(q: PhysicalQuantity) {
                 }
             },
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
         )
     }
 }
