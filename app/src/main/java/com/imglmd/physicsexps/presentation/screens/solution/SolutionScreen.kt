@@ -91,7 +91,7 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(end = 12.dp)
+            modifier = Modifier.padding(end = 12.dp, top = 16.dp)
         ) {
             Surface(
                 shape = CircleShape,
