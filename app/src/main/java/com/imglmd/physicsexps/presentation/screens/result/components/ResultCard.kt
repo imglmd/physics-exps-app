@@ -40,6 +40,7 @@ import kotlin.math.round
 @Composable
 fun ResultCard(
     state: ResultContract.State.Success,
+    hasSolution: Boolean,
     navigateSolution: () -> Unit,
     onChangeClick: () -> Unit
 ) {
@@ -57,7 +58,7 @@ fun ResultCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                .padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -82,18 +83,20 @@ fun ResultCard(
                     modifier = Modifier.size(18.dp)
                 )
             }
-            Spacer(Modifier.width(4.dp))
-            TextButton(
-                onClick = navigateSolution,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                )
-            ) {
-                Text(
-                    text = "Решение",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+            if (hasSolution){
+                Spacer(Modifier.width(4.dp))
+                TextButton(
+                    onClick = navigateSolution,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    )
+                ) {
+                    Text(
+                        text = "Решение",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
 

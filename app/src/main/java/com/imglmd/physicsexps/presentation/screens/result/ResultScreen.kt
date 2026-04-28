@@ -104,6 +104,13 @@ private fun Content(
     val experiment = remember(state.result.experimentId) {
         registry.getById(state.result.experimentId)
     }
+
+    val hasSolution = remember(state.result.experimentId) {
+        registry.getById(state.result.experimentId)
+            .getSolutionSteps(null)
+            .isNotEmpty()
+    }
+
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
 
@@ -134,6 +141,7 @@ private fun Content(
 
             ResultCard(
                 state = state,
+                hasSolution = hasSolution,
                 navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
                 onChangeClick = { onIntent(ResultContract.Intent.Change) }
             )
