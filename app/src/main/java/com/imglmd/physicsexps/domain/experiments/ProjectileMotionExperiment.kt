@@ -152,61 +152,109 @@ class ProjectileMotionExperiment : Experiment {
     override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
         val steps = mutableListOf<SolutionStep>()
 
+        val g = ExpConstants.GRAVITY
+
+        // 1. Теория
         steps += SolutionStep.Theory(
-            title = "Что происходит?",
-            body = "Тело движется одновременно равномерно по горизонтали " +
-                    "и равноускоренно по вертикали под действием силы тяжести g = 9.81 м/с²."
+            title = "Идея решения",
+            body = "Движение раскладывается на два независимых: " +
+                    "по горизонтали — равномерное, по вертикали — равноускоренное с ускорением g."
+        )
+
+        // 2. Разложение скорости
+        steps += SolutionStep.Formula(
+            description = "Разложим начальную скорость на оси",
+            expression = "v_x = v_0 \\cos(\\alpha), \\quad v_{y0} = v_0 \\sin(\\alpha)"
+        )
+
+        // 3. Уравнения движения
+        steps += SolutionStep.Formula(
+            description = "Запишем уравнения движения",
+            expression = "x(t) = v_x t \\\\ y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
+        )
+
+        // 4. Время полёта (идея)
+        steps += SolutionStep.Formula(
+            description = "В момент падения высота равна нулю",
+            expression = "0 = h_0 + v_{y0} t - \\frac{g t^2}{2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Начальная скорость раскладывается на составляющие",
-            expression = "vₓ = v₀·cos(α),   vy₀ = v₀·sin(α)"
+            description = "Решаем квадратное уравнение",
+            expression = "t = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2 g h_0}}{g}"
+        )
+
+        if (inputs == null) return steps
+
+        val v0 = inputs.getValue("start_speed")
+        val angleDeg = inputs.getValue("angle")
+        val h0 = inputs["initial_height"] ?: 0.0
+        val alpha = Math.toRadians(angleDeg)
+
+        val vx = v0 * cos(alpha)
+        val vy0 = v0 * sin(alpha)
+        val discriminant = vy0.pow(2) + 2 * g * h0
+        val tFull = (vy0 + sqrt(discriminant)) / g
+        val range = vx * tFull
+        val hMax = h0 + vy0.pow(2) / (2 * g)
+
+        val fmt = { d: Double -> "%.2f".format(d) }
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём горизонтальную скорость",
+            expression = "v_x = ${fmt(v0)} \\cdot \\cos(${fmt(angleDeg)}^\\circ)",
+            result = "v_x = ${fmt(vx)} \\text{м/с}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём вертикальную скорость",
+            expression = "v_{y0} = ${fmt(v0)} \\cdot \\sin(${fmt(angleDeg)}^\\circ)",
+            result = "v_{y0} = ${fmt(vy0)} \\text{м/с}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Вычислим время полёта",
+            expression = "t = \\frac{${fmt(vy0)} + \\sqrt{${fmt(vy0)}^2 + 2 \\cdot ${g} \\cdot ${
+                fmt(
+                    h0
+                )
+            }}}{${g}}",
+            result = "t = ${fmt(tFull)} \\text{с}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Уравнения движения",
-            expression = "x(t) = vₓ·t\ny(t) = h₀ + vy₀·t − g·t²/2"
+            description = "Дальность полёта",
+            expression = "L = v_x t"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Подставим значения",
+            expression = "L = ${fmt(vx)} \\cdot ${fmt(tFull)}",
+            result = "L = ${fmt(range)} \\text{м}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Время полёта (из условия y = 0)",
-            expression = "t = (vy₀ + √(vy₀² + 2·g·h₀)) / g"
+            description = "Максимальная высота",
+            expression = "H = h_0 + \\frac{v_{y0}^2}{2g}"
         )
 
-        if (inputs != null) {
-            val v0 = inputs.getValue("start_speed")
-            val angleDeg = inputs.getValue("angle")
-            val h0 = inputs["initial_height"] ?: 0.0
-            val alpha = Math.toRadians(angleDeg)
-            val g = ExpConstants.GRAVITY
+        steps += SolutionStep.Substitution(
+            description = "Подставим значения",
+            expression = "H = ${fmt(h0)} + \\frac{${fmt(vy0)}^2}{2 \\cdot ${g}}",
+            result = "H = ${fmt(hMax)} \\text{м}"
+        )
 
-            val vx = v0 * cos(alpha)
-            val vy0 = v0 * sin(alpha)
-            val discriminant = vy0.pow(2) + 2 * g * h0
-            val tFull = (vy0 + sqrt(discriminant)) / g
-            val range = vx * tFull
-            val hMax = h0 + vy0.pow(2) / (2 * g)
+        steps += SolutionStep.Result(
+            PhysicalQuantity("Дальность броска", "L", range, "м")
+        )
 
-            val fmt = { d: Double -> "%.2f".format(d) }
+        steps += SolutionStep.Result(
+            PhysicalQuantity("Максимальная высота", "H", hMax, "м")
+        )
 
-            steps += SolutionStep.Substitution(
-                description = "Горизонтальная составляющая",
-                expression = "vₓ = ${fmt(v0)}·cos(${fmt(angleDeg)}°)",
-                result = "vₓ = ${fmt(vx)} м/с"
-            )
-            steps += SolutionStep.Substitution(
-                description = "Вертикальная составляющая",
-                expression = "vy₀ = ${fmt(v0)}·sin(${fmt(angleDeg)}°)",
-                result = "vy₀ = ${fmt(vy0)} м/с"
-            )
-            steps += SolutionStep.Substitution(
-                description = "Время полёта",
-                expression = "t = (${fmt(vy0)} + √(${fmt(vy0)}² + 2·${g}·${fmt(h0)})) / ${g}",
-                result = "t = ${fmt(tFull)} с"
-            )
-            steps += SolutionStep.Result(PhysicalQuantity("Дальность броска", "L", range, "м"))
-            steps += SolutionStep.Result(PhysicalQuantity("Максимальная высота", "H", hMax, "м"))
-        }
+        steps += SolutionStep.Result(
+            PhysicalQuantity("Время полёта", "t", tFull, "с")
+        )
 
         return steps
     }
