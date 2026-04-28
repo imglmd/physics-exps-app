@@ -220,12 +220,13 @@ fun ExperimentScreen(
                                 symbol = field.symbol,
                                 unit = field.unit,
                                 modifier = Modifier.fillMaxWidth(),
-                                isError = state.error != null
+                                isError = state.error != null,
+                                isRequired = field.required
                             )
                         }
                         if (state.experiment.additionalInputFields.isNotEmpty() && state.isAdvancedMode) {
                             state.experiment.additionalInputFields.forEach { field ->
-                                val textState = textStates[field.key]!!
+                                val textState = advancedTextStates[field.key]!!
                                 ExperimentTextField(
                                     state = textState,
                                     label = field.label,

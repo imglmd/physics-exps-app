@@ -26,14 +26,14 @@ import com.imglmd.physicsexps.presentation.screens.home.components.SeeAllCard
 @Composable
 fun HistorySection(
     history: List<HistoryItemUi>,
+    hasMore: Boolean,
     onSeeAllClick: () -> Unit,
     onItemClick: (id: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -66,8 +66,13 @@ fun HistorySection(
                     modifier = Modifier.fillParentMaxHeight()
                 )
             }
-            item {
-                SeeAllCard(onClick = onSeeAllClick, modifier = Modifier.fillParentMaxHeight())
+            if (hasMore) {
+                item {
+                    SeeAllCard(
+                        onClick = onSeeAllClick,
+                        modifier = Modifier.fillParentMaxHeight()
+                    )
+                }
             }
         }
     }

@@ -7,7 +7,9 @@ import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 data class HomeState(
     val experimentsByCategory: Map<String, List<Experiment>> = emptyMap(),
     val history: List<HistoryItemUi> = emptyList(),
-    val searchText: String = ""
+    val hasMoreHistory: Boolean = false,
+    val searchText: String = "",
+    val isHistoryLoaded: Boolean = false
 )
 sealed interface HomeIntent{
     data class ChangeSearchText(val text: String): HomeIntent

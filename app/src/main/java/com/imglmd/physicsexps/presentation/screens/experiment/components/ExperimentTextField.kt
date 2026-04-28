@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
@@ -22,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -34,8 +37,9 @@ fun ExperimentTextField(
     symbol: String,
     unit: String,
     modifier: Modifier = Modifier,
-    symbolWidth: Dp = 44.dp,
-    isError: Boolean = false
+    symbolWidth: Dp = 46.dp,
+    isError: Boolean = false,
+    isRequired: Boolean = false
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -51,9 +55,7 @@ fun ExperimentTextField(
                 .padding(start = if (isError) 4.dp else 0.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Box(
-                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .width(symbolWidth)
                     .padding(vertical = 12.dp)
@@ -61,15 +63,24 @@ fun ExperimentTextField(
                 Text(
                     text = symbol,
                     style = MaterialTheme.typography.titleLarge,
-                    color = colors.onSurface.copy(alpha = 0.8f)
+                    color = colors.onSurface.copy(alpha = 0.8f),
+                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp)
                 )
+                if (isRequired) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(end = 4.dp)
+                            .size(6.dp)
+                            .clip(CircleShape)
+                            .background(colors.primary.copy(alpha = 0.7f))
+                    )
+                }
             }
 
             BasicTextField(
                 state = state,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal
-                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 textStyle = MaterialTheme.typography.titleLarge.copy(
                     color = colors.onSurface
                 ),
@@ -77,45 +88,34 @@ fun ExperimentTextField(
                     .weight(1f)
                     .padding(horizontal = 4.dp),
                 lineLimits = TextFieldLineLimits.SingleLine,
-
                 inputTransformation = InputTransformation {
-
                     for (i in 0 until length) {
                         if (charAt(i) == ',') {
                             delete(i, i + 1)
                             insert(i, ".")
                         }
                     }
-
                     var hasDecimal = false
                     var hasMinus = false
-
                     for (i in 0 until length) {
                         val c = charAt(i)
-
                         when {
                             c.isDigit() -> Unit
-
                             c == '.' -> {
                                 if (hasDecimal) delete(i, i + 1)
                                 else hasDecimal = true
                             }
-
                             c == '-' -> {
                                 if (i != 0 || hasMinus) delete(i, i + 1)
                                 else hasMinus = true
                             }
-
                             else -> delete(i, i + 1)
                         }
                     }
-
                     if (length == 1 && charAt(0) == '.') insert(0, "0")
                     if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
                 },
-
                 cursorBrush = SolidColor(colors.primary),
-
                 decorator = { innerTextField ->
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -128,7 +128,6 @@ fun ExperimentTextField(
                                 color = colors.onSurfaceVariant
                             )
                         }
-
                         innerTextField()
                     }
                 }

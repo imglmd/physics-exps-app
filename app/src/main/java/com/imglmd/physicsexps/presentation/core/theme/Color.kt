@@ -16,12 +16,12 @@ val DarkSurface = Color(0xFF1E1B1B)
 val DarkSurfaceVariant = Color(0xFF2A2626)
 val DimSilver = Color(0xFF403E3E)
 
+val WarmGrey = Color(0xFF6B6966)
+val StoneGrey = Color(0xFFC4C3BE)
 
 val ErrorRose = Color(0xFF8E1C2F)
 val ErrorRoseDark = Color(0xFFFFB3C1)
-
 val ErrorContainerLight = Color(0xFFFDECEF)
 val ErrorContainerDark = Color(0xFF3A0F18)
-
 val OnErrorContainerLight = Color(0xFF5A0F1F)
 val OnErrorContainerDark = Color(0xFFFFD9E0)

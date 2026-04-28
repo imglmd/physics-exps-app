@@ -72,11 +72,22 @@ class ExperimentViewModel(
         _state.update { current ->
 
             val newInputs = current.inputs + (key to newValue)
+            val allFields = current.experiment.inputFields + current.experiment.additionalInputFields
+
+            val allRequiredFilled = allFields
+                .filter { it.required }
+                .all { field ->
+                    newInputs[field.key]?.toDoubleOrNull() != null
+                }
+
+            val validCount = newInputs.values.count { it.toDoubleOrNull() != null }
+
+            val isEnoughInputs = validCount >= experiment.minRequiredInputs
 
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = newInputs.values.count { it.toDoubleOrNull() != null } >= experiment.minRequiredInputs
+                isButtonActive = allRequiredFilled && isEnoughInputs
             )
         }
     }

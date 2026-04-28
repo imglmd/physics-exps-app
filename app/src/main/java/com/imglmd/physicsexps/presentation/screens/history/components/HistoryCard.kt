@@ -110,7 +110,7 @@ fun HistoryCard(
                     modifier = Modifier.size(12.dp)
                 )
                 Text(
-                    text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                    text = SimpleDateFormat("dd MMM HH:mm", Locale.getDefault())
                         .format(Date(item.date)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant

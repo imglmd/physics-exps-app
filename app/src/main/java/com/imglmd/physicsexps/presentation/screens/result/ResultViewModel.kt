@@ -62,6 +62,7 @@ class ResultViewModel(
         when (intent) {
             ResultContract.Intent.Back -> handleBack()
             ResultContract.Intent.Delete -> handleDelete()
+            ResultContract.Intent.Save -> handleSave()
             ResultContract.Intent.Change -> handleChange()
             is ResultContract.Intent.AddComment -> addComment(intent.text)
             is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
@@ -91,6 +92,11 @@ class ResultViewModel(
             deleteRunInternal {
                 _effect.send(ResultContract.Effect.NavigateHome)
             }
+        }
+    }
+    private fun handleSave() {
+        viewModelScope.launch {
+            _effect.send(ResultContract.Effect.NavigateHome)
         }
     }
 

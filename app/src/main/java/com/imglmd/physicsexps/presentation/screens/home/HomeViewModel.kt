@@ -94,10 +94,13 @@ class HomeViewModel(
 
     private fun loadHistory() {
         viewModelScope.launch {
-            getLastRunsUseCase(6)
+            getLastRunsUseCase(HISTORY_LIMIT + 1)
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
-                    val historyUi = runs.map { run ->
+                    val hasMore = runs.size > HISTORY_LIMIT
+                    val visibleRuns = runs.take(HISTORY_LIMIT)
+
+                    val historyUi = visibleRuns.map { run ->
                         val inputs: Map<String, Double> =
                             runCatching {
                                 json.decodeFromString<Map<String, Double>>(run.inputData)
@@ -109,15 +112,20 @@ class HomeViewModel(
 
                         HistoryItemUi(
                             id = run.id,
-                            experimentName = runCatching { experiment?.name ?: run.experimentId }
-                                .getOrDefault(run.experimentId),
-                            category = runCatching { experiment?.category ?: "" }
-                                .getOrDefault(""),
+                            experimentName = experiment?.name ?: run.experimentId,
+                            category = experiment?.category ?: "",
                             date = run.date,
                             inputs = inputs
                         )
                     }
-                    _state.update { it.copy(history = historyUi) }
+
+                    _state.update {
+                        it.copy(
+                            history = historyUi,
+                            hasMoreHistory = hasMore,
+                            isHistoryLoaded = true
+                        )
+                    }
                 }
         }
     }
@@ -128,4 +136,9 @@ class HomeViewModel(
             _actionFlow.emit(HomeAction.NavigateToHistory)
         }
     }
+
+    private companion object {
+        const val HISTORY_LIMIT = 6
+    }
+
 }
