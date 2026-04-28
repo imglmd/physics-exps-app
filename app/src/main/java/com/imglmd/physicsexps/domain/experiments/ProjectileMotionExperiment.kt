@@ -154,26 +154,22 @@ class ProjectileMotionExperiment : Experiment {
 
         val g = ExpConstants.GRAVITY
 
-        // 1. Теория
         steps += SolutionStep.Theory(
             title = "Идея решения",
             body = "Движение раскладывается на два независимых: " +
                     "по горизонтали — равномерное, по вертикали — равноускоренное с ускорением g."
         )
 
-        // 2. Разложение скорости
         steps += SolutionStep.Formula(
             description = "Разложим начальную скорость на оси",
             expression = "v_x = v_0 \\cos(\\alpha), \\quad v_{y0} = v_0 \\sin(\\alpha)"
         )
 
-        // 3. Уравнения движения
         steps += SolutionStep.Formula(
             description = "Запишем уравнения движения",
             expression = "x(t) = v_x t \\\\ y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
         )
 
-        // 4. Время полёта (идея)
         steps += SolutionStep.Formula(
             description = "В момент падения высота равна нулю",
             expression = "0 = h_0 + v_{y0} t - \\frac{g t^2}{2}"
@@ -184,6 +180,11 @@ class ProjectileMotionExperiment : Experiment {
             expression = "t = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2 g h_0}}{g}"
         )
 
+        /**
+         * если входных данных нет, возвращается только теория без чисел
+         * сейчас в этом смысла особо нет, но так лучше разделять.
+         * в будущем мб добавлю объяснение теории на экран экспериментов
+         */
         if (inputs == null) return steps
 
         val v0 = inputs.getValue("start_speed")
@@ -191,6 +192,7 @@ class ProjectileMotionExperiment : Experiment {
         val h0 = inputs["initial_height"] ?: 0.0
         val alpha = Math.toRadians(angleDeg)
 
+        // вычисляються величины которые будут подставляться в формулы
         val vx = v0 * cos(alpha)
         val vy0 = v0 * sin(alpha)
         val discriminant = vy0.pow(2) + 2 * g * h0
@@ -198,6 +200,7 @@ class ProjectileMotionExperiment : Experiment {
         val range = vx * tFull
         val hMax = h0 + vy0.pow(2) / (2 * g)
 
+        // лямбда для форматирования
         val fmt = { d: Double -> "%.2f".format(d) }
 
         steps += SolutionStep.Substitution(
@@ -244,6 +247,7 @@ class ProjectileMotionExperiment : Experiment {
             result = "H = ${fmt(hMax)} \\text{м}"
         )
 
+        // результаты
         steps += SolutionStep.Result(
             PhysicalQuantity("Дальность броска", "L", range, "м")
         )
