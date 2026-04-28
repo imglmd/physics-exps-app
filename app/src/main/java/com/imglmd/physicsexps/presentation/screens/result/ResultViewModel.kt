@@ -12,6 +12,7 @@ import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,9 +70,11 @@ class ResultViewModel(
             ResultContract.Intent.OpenChart -> {
                 viewModelScope.launch {
                     val id = savedRunId ?: return@launch
-                    _effect.send(ResultContract.Effect.NavigateChart(id))
+                    _effect.send(NavigateChart(id))
                 }
             }
+
+            ResultContract.Intent.OpenSolution -> { viewModelScope.launch { _effect.send(NavigateSolution) } }
         }
     }
     private fun handleBack() {

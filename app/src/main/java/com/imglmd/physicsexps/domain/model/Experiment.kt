@@ -19,4 +19,9 @@ interface Experiment {
     fun calculate(inputs: Map<String, Double>): ExperimentResult
     fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>>
 
+    /**
+     * пустой список - режим обучения недоступен для этого эксперимента
+     * inputs null - возвращает только теорию и формулы без подстановки
+     */
+    fun getSolutionSteps(inputs: Map<String, Double>? = null): List<SolutionStep> = emptyList()
 }

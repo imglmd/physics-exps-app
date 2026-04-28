@@ -50,6 +50,7 @@ fun ResultScreen(
     navigateHome: () -> Unit,
     navigateChart: (Int) -> Unit,
     navigateExperiment: (String, Map<String, String>) -> Unit,
+    navigateSolution: () -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
     val state by viewModel.state.collectAsState()
@@ -64,6 +65,7 @@ fun ResultScreen(
                     navigateExperiment(effect.id, effect.inputs)
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
+                ResultContract.Effect.NavigateSolution -> navigateSolution()
             }
         }
     }
@@ -102,6 +104,13 @@ private fun Content(
     val experiment = remember(state.result.experimentId) {
         registry.getById(state.result.experimentId)
     }
+
+    val hasSolution = remember(state.result.experimentId) {
+        registry.getById(state.result.experimentId)
+            .getSolutionSteps(null)
+            .isNotEmpty()
+    }
+
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
 
@@ -132,6 +141,8 @@ private fun Content(
 
             ResultCard(
                 state = state,
+                hasSolution = hasSolution,
+                navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
                 onChangeClick = { onIntent(ResultContract.Intent.Change) }
             )
 

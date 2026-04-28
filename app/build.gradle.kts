@@ -78,13 +78,16 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization)
 
-    // Room (чистый набор)
+    // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
     // Charts (Vico)
     implementation(libs.vico.compose.m3)
+
+    // Latex
+    implementation(libs.latex.renderer)
 
     // Tests
     testImplementation(libs.junit)
