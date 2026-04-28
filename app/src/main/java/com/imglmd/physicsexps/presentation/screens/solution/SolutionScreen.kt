@@ -21,6 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -133,14 +135,14 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                 }
 
                 is SolutionStep.Formula -> {
-                    StepTitle(step.description, Icons.Default.Build)
+                    StepTitle(step.description, ImageVector.vectorResource(R.drawable.science))
                     Spacer(Modifier.height(12.dp))
 
                     FormulaBox(step.expression)
                 }
 
                 is SolutionStep.Substitution -> {
-                    StepTitle(step.description, ImageVector.vectorResource(R.drawable.rocket))
+                    StepTitle(step.description, ImageVector.vectorResource(R.drawable.bolt))
 
                     Spacer(Modifier.height(8.dp))
 
@@ -157,7 +159,8 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                             modifier = Modifier.padding(12.dp),
                             config = LatexConfig(
                                 fontSize = 18.sp,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.onSurface,
+                                darkColor = MaterialTheme.colorScheme.onSurface
                             )
                         )
                     }
@@ -166,7 +169,7 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                 is SolutionStep.Result -> {
                     StepTitle("Ответ", Icons.Default.CheckCircle)
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     Surface(
                         color = MaterialTheme.colorScheme.primaryContainer,
@@ -187,7 +190,8 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                                 latex = "${step.quantity.symbol} = ${"%.3g".format(step.quantity.value)} \\text{${step.quantity.unit}}",
                                 config = LatexConfig(
                                     fontSize = 22.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    darkColor = MaterialTheme.colorScheme.onSurface
                                 )
                             )
                         }
@@ -211,7 +215,8 @@ private fun FormulaBox(expression: String) {
             modifier = Modifier.padding(12.dp),
             config = LatexConfig(
                 fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                darkColor = MaterialTheme.colorScheme.onSurface
             )
         )
     }
