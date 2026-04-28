@@ -22,8 +22,8 @@ class JouleLenzExperiment: Experiment {
     )
 
     override val minRequiredInputs = 3
-    override val xLabel = "Количество теплоты, выделяемое проводником"
-    override val yLabel = "Сила тока"
+    override val xLabel = "Сила тока"
+    override val yLabel = "Количество теплоты, выделяемое проводником"
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val t = inputs["time"]
@@ -49,6 +49,9 @@ class JouleLenzExperiment: Experiment {
                 power = U * amperage
                 q = amperage * t
                 work = U * amperage * t
+                map.put("amperage", amperage)
+                map.put("time", t)
+                map.put("resistance", resistance)
             }
 
             t != null && R != null && I != null -> {
@@ -59,6 +62,9 @@ class JouleLenzExperiment: Experiment {
                 power = voltage * I
                 q = I * t
                 work = power * t
+                map.put("amperage", amperage)
+                map.put("time", t)
+                map.put("resistance", resistance)
             }
 
             t != null && U != null && I != null -> {
@@ -69,6 +75,9 @@ class JouleLenzExperiment: Experiment {
                 power = U * I
                 q = I * t
                 work = power * t
+                map.put("amperage", amperage)
+                map.put("time", t)
+                map.put("resistance", resistance)
             }
 
             else -> throw IllegalArgumentException("Нужно ввести три величины")
@@ -77,6 +86,7 @@ class JouleLenzExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
+                PhysicalQuantity("Время прохождения тока", "t", t, "с"),
                 PhysicalQuantity("Количество теплоты", "Q", heat, "Дж"),
                 PhysicalQuantity("Сила тока", "I", amperage, "А"),
                 PhysicalQuantity("Напряжение", "U", voltage, "В"),
@@ -94,6 +104,20 @@ class JouleLenzExperiment: Experiment {
     }
 
     override fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<Pair<Double, Double>>()
+        val amp = inputs.getValue("amperage")
+        val time = inputs.getValue("time")
+        val res = inputs.getValue("resistance")
+
+        val startX = 0.0
+        val step = amp / ExpConstants.DEFAULT_POINTS_COUNT
+        var x = startX
+
+        while(x <= amp + step) {
+            val y = x.pow(2)*res*time
+            list.add(Pair(x,y))
+            x += step
+        }
+        return list
     }
 }
