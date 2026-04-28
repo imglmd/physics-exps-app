@@ -1,5 +1,8 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -52,6 +55,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
+import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -96,22 +101,41 @@ fun HomeScreen(
                 }
 
                 Column {
-                    if (state.history.isNotEmpty()){
-                        HistorySection(
-                            history = state.history,
-                            onSeeAllClick = { viewModel.onIntent(HomeIntent.NavigateToHistory) },
-                            onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }
+                    Crossfade(
+                        targetState = state.isHistoryLoaded,
+                        animationSpec = tween(400),
+                        label = "historyCrossfade",
+                        modifier = Modifier.animateContentSize(
+                            animationSpec = tween(
+                                durationMillis = 150
+                            )
                         )
+                    ) { isLoaded ->
 
-                        Spacer(Modifier.height(30.dp))
+                        Box {
+                            if (!isLoaded) {
+                                HomeHistoryPlaceholder()
+                            }
 
+                            if (isLoaded && state.history.isNotEmpty()) {
+                                HistorySection(
+                                    history = state.history,
+                                    hasMore = state.hasMoreHistory,
+                                    onSeeAllClick = { viewModel.onIntent(HomeIntent.NavigateToHistory) },
+                                    onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }
+                                )
+                            }
+                            if (isLoaded && state.history.isEmpty()) {
+                                HomeHistoryEmpty()
+                            }
+                        }
                     }
+                    Spacer(Modifier.height(30.dp))
+
                     SearchTextField(
                         state = searchState
                     )
-
                 }
-
             }
             state.experimentsByCategory.forEach { (category, experiments) ->
 

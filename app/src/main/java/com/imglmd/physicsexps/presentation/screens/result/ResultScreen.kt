@@ -54,7 +54,6 @@ fun ResultScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val registry = koinInject<ExperimentRegistry>()
-    val modelProducer = remember { CartesianChartModelProducer() }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -63,7 +62,6 @@ fun ResultScreen(
                 ResultContract.Effect.NavigateHome -> navigateHome()
                 is ResultContract.Effect.NavigateExperiment ->
                     navigateExperiment(effect.id, effect.inputs)
-
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
             }
@@ -76,18 +74,19 @@ fun ResultScreen(
                 CircularProgressIndicator()
             }
         }
-
         is ResultContract.State.Error -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(s.message)
+                Text(
+                    text = s.message,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
-
         is ResultContract.State.Success -> {
             Content(
                 state = s,
                 registry = registry,
-                modelProducer = modelProducer,
                 onIntent = viewModel::onIntent
             )
         }
@@ -98,39 +97,37 @@ fun ResultScreen(
 private fun Content(
     state: ResultContract.State.Success,
     registry: ExperimentRegistry,
-    modelProducer: CartesianChartModelProducer,
     onIntent: (ResultContract.Intent) -> Unit
 ) {
     val experiment = remember(state.result.experimentId) {
         registry.getById(state.result.experimentId)
     }
-
+    val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
 
     Scaffold(
-        bottomBar = {
-            BottomActions(
-                onDelete = { onIntent(ResultContract.Intent.Delete) },
-                onSave = { onIntent(ResultContract.Intent.Back) }
-            )
-        },
         topBar = {
             ExperimentAppBar(
                 title = experiment.name,
                 subtitle = experiment.category,
                 navigateBack = { onIntent(ResultContract.Intent.Back) }
             )
+        },
+        bottomBar = {
+            BottomActions(
+                onDelete = { onIntent(ResultContract.Intent.Delete) },
+                onSave = { onIntent(ResultContract.Intent.Save) }
+            )
         }
     ) { padding ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .padding(padding)
-                .padding(horizontal = 24.dp).imePadding()
+                .padding(horizontal = 24.dp)
+                .imePadding()
         ) {
-
             Spacer(Modifier.height(16.dp))
 
             ResultCard(
@@ -138,37 +135,28 @@ private fun Content(
                 onChangeClick = { onIntent(ResultContract.Intent.Change) }
             )
 
-
             if (state.result.points.isNotEmpty()) {
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(16.dp))
 
                 ChartCard(
                     points = state.result.points,
                     xLabel = state.result.xLabel,
                     yLabel = state.result.yLabel,
                     modelProducer = modelProducer,
-                    onChartClick = {
-                        onIntent(ResultContract.Intent.OpenChart)
-                    }
+                    onChartClick = { onIntent(ResultContract.Intent.OpenChart) }
                 )
             }
 
-            Spacer(Modifier.height(12.dp))
-
+            Spacer(Modifier.height(20.dp))
 
             CommentSection(
                 comments = state.comments,
-                onAddComment = {
-                    onIntent(ResultContract.Intent.AddComment(it))
-                },
-                onClickDelete = {
-                    onIntent(ResultContract.Intent.DeleteComment(it))
-                },
-                modifier = Modifier
+                onAddComment = { onIntent(ResultContract.Intent.AddComment(it)) },
+                onClickDelete = { onIntent(ResultContract.Intent.DeleteComment(it)) }
             )
+
+            Spacer(Modifier.height(16.dp))
         }
-
-
     }
 }
 

@@ -16,6 +16,7 @@ object ResultContract {
 
     sealed interface Intent {
         data object Back: Intent
+        data object Save : Intent
         data object Delete: Intent
         data object Change: Intent
 

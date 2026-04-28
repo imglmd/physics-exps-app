@@ -3,29 +3,29 @@ package com.imglmd.physicsexps.presentation.screens.result.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.normalizePoints
@@ -53,7 +54,6 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -72,21 +72,14 @@ fun ChartCard(
     )
 
     val chart = rememberChart(xLabel, yLabel, marker)
-
     val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
-
     var resetKey by remember { mutableIntStateOf(0) }
 
-    val zoomState = key(resetKey) {
-        rememberVicoZoomState(initialZoom = initialZoom)
-    }
-    val scrollState = key(resetKey) {
-        rememberVicoScrollState()
-    }
+    val zoomState = key(resetKey) { rememberVicoZoomState(initialZoom = initialZoom) }
+    val scrollState = key(resetKey) { rememberVicoScrollState() }
 
     LaunchedEffect(normalized) {
         if (normalized.isEmpty()) return@LaunchedEffect
-
         modelProducer.runTransaction {
             lineSeries {
                 series(
@@ -97,68 +90,75 @@ fun ChartCard(
         }
     }
 
-    Card(
-        shape = RoundedCornerShape(24.dp),
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = colors.outlineVariant,
                 shape = RoundedCornerShape(24.dp)
             )
-            .padding(top = 16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colors.surface
-        )
+            .clip(RoundedCornerShape(24.dp))
+            .background(colors.surface)
     ) {
-        Column {
-            CartesianChartHost(
-                chart = chart,
-                modelProducer = modelProducer,
-                scrollState = scrollState,
-                zoomState = zoomState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(260.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(colors.surface)
-                    .padding(PaddingValues(top = 8.dp, start = 8.dp, end = 8.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "График",
+                style = MaterialTheme.typography.titleMedium,
+                color = colors.onSurface,
+                fontWeight = FontWeight.SemiBold
             )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingValues(start = 4.dp, end = 4.dp, bottom = 4.dp)),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
+            Row {
                 IconButton(
                     onClick = { resetKey++ },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    )
+                        containerColor = colors.primary.copy(alpha = 0.1f)
+                    ),
+                    modifier = Modifier.size(36.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
-                        contentDescription = "Reset zoom",
-                        tint = colors.primary
+                        contentDescription = "Сбросить масштаб",
+                        tint = colors.primary,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
-
+                Spacer(Modifier.width(4.dp))
                 IconButton(
                     onClick = onChartClick,
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    )
+                        containerColor = colors.primary.copy(alpha = 0.1f)
+                    ),
+                    modifier = Modifier.size(36.dp)
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.expand_content),
-                        contentDescription = "Fullscreen",
-                        tint = colors.primary
+                        contentDescription = "На весь экран",
+                        tint = colors.primary,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
         }
+
+        HorizontalDivider(color = colors.outline)
+
+        CartesianChartHost(
+            chart = chart,
+            modelProducer = modelProducer,
+            scrollState = scrollState,
+            zoomState = zoomState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(260.dp)
+                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 12.dp)
+        )
     }
 }
 
@@ -168,7 +168,6 @@ private fun rememberChart(
     yLabel: String,
     marker: CartesianMarker
 ) = rememberCartesianChart(
-
     rememberLineCartesianLayer(
         lineProvider = LineCartesianLayer.LineProvider.series(
             LineCartesianLayer.rememberLine(
@@ -184,13 +183,13 @@ private fun rememberChart(
     startAxis = VerticalAxis.rememberStart(
         title = { yLabel },
         label = rememberTextComponent(
-            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
+            TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)
         ),
         titleComponent = rememberTextComponent(
             TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
+            fill = Fill(MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)),
             thickness = 1.dp
         )
     ),
@@ -198,13 +197,13 @@ private fun rememberChart(
     bottomAxis = HorizontalAxis.rememberBottom(
         title = { xLabel },
         label = rememberTextComponent(
-            TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)
+            TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)
         ),
         titleComponent = rememberTextComponent(
             TextStyle(color = MaterialTheme.colorScheme.primary)
         ),
         guideline = rememberLineComponent(
-            fill = Fill(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
+            fill = Fill(MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)),
             thickness = 1.dp
         ),
         itemPlacer = remember { HorizontalAxis.ItemPlacer.aligned(spacing = { 3 }) }
