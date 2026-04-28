@@ -21,11 +21,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +51,8 @@ import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.presentation.components.IconPosition
+import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -77,6 +82,19 @@ fun SolutionScreen(
         ) {
             itemsIndexed(steps.value) { index, step ->
                 SolutionStepCard(index = index + 1, step = step)
+            }
+            item {
+                PrimaryButton(
+                    text = "Вернуться назад",
+                    onClick = navigateBack,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    ),
+                    borderColor = MaterialTheme.colorScheme.primary,
+                    icon = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    iconPosition = IconPosition.Start
+                )
+                Spacer(Modifier.height(10.dp))
             }
         }
     }
