@@ -21,6 +21,7 @@ object ResultContract {
         data object Change: Intent
 
         data object OpenChart: Intent
+        data object OpenSolution: Intent
 
         data class AddComment(val text: String): Intent
         data class DeleteComment(val id: Int): Intent
@@ -32,5 +33,6 @@ object ResultContract {
         data class NavigateExperiment(val id: String, val inputs: Map<String, String>): Effect
 
         data class NavigateChart(val runId: Int): Effect
+        data object NavigateSolution: Effect
     }
 }

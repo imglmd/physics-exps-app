@@ -16,4 +16,6 @@ sealed interface Screen {
     data class FullScreenChart(
         val runId: Int
     ) : Screen
+    @Serializable
+    data object Solution : Screen
 }

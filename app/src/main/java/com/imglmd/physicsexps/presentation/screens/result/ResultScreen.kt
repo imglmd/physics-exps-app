@@ -50,6 +50,7 @@ fun ResultScreen(
     navigateHome: () -> Unit,
     navigateChart: (Int) -> Unit,
     navigateExperiment: (String, Map<String, String>) -> Unit,
+    navigateSolution: () -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
     val state by viewModel.state.collectAsState()
@@ -64,6 +65,7 @@ fun ResultScreen(
                     navigateExperiment(effect.id, effect.inputs)
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
+                ResultContract.Effect.NavigateSolution -> navigateSolution()
             }
         }
     }
@@ -132,6 +134,7 @@ private fun Content(
 
             ResultCard(
                 state = state,
+                navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
                 onChangeClick = { onIntent(ResultContract.Intent.Change) }
             )
 
