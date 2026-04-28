@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import com.imglmd.physicsexps.domain.model.SolutionStep
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.*
@@ -146,5 +147,67 @@ class ProjectileMotionExperiment : Experiment {
         }
 
         return points
+    }
+
+    override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
+        val steps = mutableListOf<SolutionStep>()
+
+        steps += SolutionStep.Theory(
+            title = "Что происходит?",
+            body = "Тело движется одновременно равномерно по горизонтали " +
+                    "и равноускоренно по вертикали под действием силы тяжести g = 9.81 м/с²."
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Начальная скорость раскладывается на составляющие",
+            expression = "vₓ = v₀·cos(α),   vy₀ = v₀·sin(α)"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Уравнения движения",
+            expression = "x(t) = vₓ·t\ny(t) = h₀ + vy₀·t − g·t²/2"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Время полёта (из условия y = 0)",
+            expression = "t = (vy₀ + √(vy₀² + 2·g·h₀)) / g"
+        )
+
+        if (inputs != null) {
+            val v0 = inputs.getValue("start_speed")
+            val angleDeg = inputs.getValue("angle")
+            val h0 = inputs["initial_height"] ?: 0.0
+            val alpha = Math.toRadians(angleDeg)
+            val g = ExpConstants.GRAVITY
+
+            val vx = v0 * cos(alpha)
+            val vy0 = v0 * sin(alpha)
+            val discriminant = vy0.pow(2) + 2 * g * h0
+            val tFull = (vy0 + sqrt(discriminant)) / g
+            val range = vx * tFull
+            val hMax = h0 + vy0.pow(2) / (2 * g)
+
+            val fmt = { d: Double -> "%.2f".format(d) }
+
+            steps += SolutionStep.Substitution(
+                description = "Горизонтальная составляющая",
+                expression = "vₓ = ${fmt(v0)}·cos(${fmt(angleDeg)}°)",
+                result = "vₓ = ${fmt(vx)} м/с"
+            )
+            steps += SolutionStep.Substitution(
+                description = "Вертикальная составляющая",
+                expression = "vy₀ = ${fmt(v0)}·sin(${fmt(angleDeg)}°)",
+                result = "vy₀ = ${fmt(vy0)} м/с"
+            )
+            steps += SolutionStep.Substitution(
+                description = "Время полёта",
+                expression = "t = (${fmt(vy0)} + √(${fmt(vy0)}² + 2·${g}·${fmt(h0)})) / ${g}",
+                result = "t = ${fmt(tFull)} с"
+            )
+            steps += SolutionStep.Result(PhysicalQuantity("Дальность броска", "L", range, "м"))
+            steps += SolutionStep.Result(PhysicalQuantity("Максимальная высота", "H", hMax, "м"))
+        }
+
+        return steps
     }
 }
