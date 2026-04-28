@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.solution
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -121,6 +122,11 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                 .background(
                     MaterialTheme.colorScheme.surface
                 )
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = RoundedCornerShape(24.dp)
+                )
                 .padding(16.dp)
         ) {
 
@@ -233,6 +239,11 @@ private fun FormulaBox(expression: String) {
         color = MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant,
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
 
         LatexAutoWrap(
