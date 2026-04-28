@@ -1,9 +1,11 @@
 package com.imglmd.physicsexps.presentation.screens.solution
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -118,7 +120,8 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                 .clip(RoundedCornerShape(24.dp))
                 .background(
                     MaterialTheme.colorScheme.surface
-            ).padding(16.dp)
+                )
+                .padding(16.dp)
         ) {
 
             when (step) {
@@ -151,8 +154,13 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                     Spacer(Modifier.height(8.dp))
 
                     Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(12.dp)
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         LatexAutoWrap(
                             latex = step.result,
@@ -172,28 +180,45 @@ private fun SolutionStepCard(index: Int, step: SolutionStep) {
                     Spacer(Modifier.height(8.dp))
 
                     Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
                         shape = RoundedCornerShape(16.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text(
-                                step.quantity.label,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
 
-                            Spacer(Modifier.height(4.dp))
+                            step.quantities.forEach { q ->
 
-                            Latex(
-                                latex = "${step.quantity.symbol} = ${"%.3g".format(step.quantity.value)} \\text{${step.quantity.unit}}",
-                                config = LatexConfig(
-                                    fontSize = 22.sp,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    darkColor = MaterialTheme.colorScheme.onSurface
-                                )
-                            )
+                                Column(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            shape = RoundedCornerShape(16.dp)
+                                        )
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .padding(horizontal = 12.dp, vertical = 10.dp)
+                                ) {
+
+                                    Text(
+                                        q.label,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+
+                                    Spacer(Modifier.height(4.dp))
+
+                                    Latex(
+                                        latex = "${q.symbol} = ${"%.3g".format(q.value)} \\text{${q.unit}}",
+                                        config = LatexConfig(
+                                            fontSize = 18.sp,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            darkColor = MaterialTheme.colorScheme.onSurface
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }
