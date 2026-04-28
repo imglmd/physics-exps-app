@@ -43,9 +43,9 @@ class CoulombsLawExperiment: Experiment {
         when {
             q1 != null && q2 != null && r != null -> {
                 f = k * (abs(q1 * q2 * nano * nano) /(r*r)) * nanoInv
-                intensity1 = k * q1 / r.pow(2)
-                intensity2 = k * q2 / r.pow(2)
-                potentialEnergy = k * (q1*q2/r)
+                intensity1 = k * q1 * ExpConstants.NANO / r.pow(2)
+                intensity2 = k * q2 * ExpConstants.NANO / r.pow(2)
+                potentialEnergy = k * (q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
                 map.put("q1", q1)
                 map.put("q2", q2)
                 map.put("distance", r)
@@ -64,7 +64,7 @@ class CoulombsLawExperiment: Experiment {
                 PhysicalQuantity("Напряжённость 1-го заряда", "E1", intensity1, "В/м"),
                 PhysicalQuantity("Напряжённость 2-го заряда", "E2", intensity2, "В/м"),
                 PhysicalQuantity("Потенциальная энергия взаимодействия", "W",
-                    potentialEnergy, "Дж")
+                    potentialEnergy, "нДж")
             ),
             points = getPoints(map),
             date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
