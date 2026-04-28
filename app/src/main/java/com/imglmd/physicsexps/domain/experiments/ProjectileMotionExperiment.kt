@@ -38,7 +38,9 @@ class ProjectileMotionExperiment : Experiment {
             required = true,
             min = 0.0,
             max = 90.0
-        ),
+        )
+    )
+    override val additionalInputFields = listOf(
         InputField(
             key = "initial_height",
             label = "Начальная высота",

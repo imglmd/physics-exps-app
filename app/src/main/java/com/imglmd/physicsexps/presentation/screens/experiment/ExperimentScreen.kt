@@ -225,7 +225,7 @@ fun ExperimentScreen(
                         }
                         if (state.experiment.additionalInputFields.isNotEmpty() && state.isAdvancedMode) {
                             state.experiment.additionalInputFields.forEach { field ->
-                                val textState = textStates[field.key]!!
+                                val textState = advancedTextStates[field.key]!!
                                 ExperimentTextField(
                                     state = textState,
                                     label = field.label,
