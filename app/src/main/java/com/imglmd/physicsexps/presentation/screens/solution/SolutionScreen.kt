@@ -1,8 +1,13 @@
 package com.imglmd.physicsexps.presentation.screens.solution
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +23,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,12 +38,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hrm.latex.renderer.Latex
@@ -51,9 +53,6 @@ import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.SolutionStep
-import com.imglmd.physicsexps.presentation.components.IconPosition
-import com.imglmd.physicsexps.presentation.components.PrimaryButton
-import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -63,39 +62,106 @@ fun SolutionScreen(
 ) {
     val steps = viewModel.solutionSteps.collectAsState()
 
+    val listState = rememberLazyListState()
+
     LaunchedEffect(Unit) {
         viewModel.goBackFlow.collect {
             navigateBack()
         }
     }
 
+    val isAtBottom by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisible == layoutInfo.totalItemsCount - 1
+        }
+    }
+
+    val width by animateDpAsState(
+        targetValue = if (isAtBottom) 360.dp else 56.dp,
+        label = ""
+    )
+
+    val height by animateDpAsState(
+        targetValue = if (isAtBottom) 56.dp else 56.dp,
+        label = ""
+    )
+
+    val corner by animateDpAsState(
+        targetValue = if (isAtBottom) 16.dp else 28.dp,
+        label = ""
+    )
+
     Scaffold() { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(
-                top = padding.calculateTopPadding(),
-                bottom = padding.calculateBottomPadding(),
-                start = 16.dp,
-                end = 16.dp
-            )
-        ) {
-            itemsIndexed(steps.value) { index, step ->
-                SolutionStepCard(index = index + 1, step = step)
-            }
-            item {
-                PrimaryButton(
-                    text = "Вернуться назад",
-                    onClick = navigateBack,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    ),
-                    borderColor = MaterialTheme.colorScheme.primary,
-                    icon = Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    iconPosition = IconPosition.Start
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding(),
+                    start = 16.dp,
+                    end = 16.dp
                 )
-                Spacer(Modifier.height(10.dp))
+            ) {
+                itemsIndexed(steps.value) { index, step ->
+                    SolutionStepCard(index = index + 1, step = step)
+                }
+                item {
+                    Spacer(Modifier.height(60.dp))
+                }
+                item {
+                }
             }
+            Surface(
+                onClick = navigateBack,
+                shape = RoundedCornerShape(corner),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = padding.calculateBottomPadding() + 4.dp)
+                    .size(width, height)
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = if (isAtBottom) 16.dp else 0.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+
+                    AnimatedVisibility(
+                        visible = isAtBottom,
+                        enter = fadeIn(animationSpec = tween(200)) +
+                                slideInHorizontally(
+                                    animationSpec = tween(200),
+                                    initialOffsetX = { it / 2 }
+                                ),
+                        exit = fadeOut(animationSpec = tween(100))
+                    ) {
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Spacer(Modifier.width(8.dp))
+
+                            Text(
+                                "Вернуться назад",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
