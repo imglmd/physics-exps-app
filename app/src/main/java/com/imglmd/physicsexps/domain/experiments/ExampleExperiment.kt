@@ -245,7 +245,7 @@ class ExampleExperiment : Experiment {
         steps += SolutionStep.Substitution(
             description = "Наёдём циклическую частоту",
             expression = "\\omega = \\sqrt{\\frac{${fmt(g)}}{${fmt(l)}}}",
-            result = "\\omega = ${fmt(aF)} \\text{\\frac{рад}{с}}"
+            result = "\\omega = ${fmt(aF)} \\frac{рад}{с}"
         )
 
         if (a != null) {
