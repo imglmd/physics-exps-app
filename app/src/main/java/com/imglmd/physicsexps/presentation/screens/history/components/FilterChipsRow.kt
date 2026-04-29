@@ -34,8 +34,8 @@ private fun formatDateRange(from: Long?, to: Long?): String {
     val fmt = SimpleDateFormat("d MMM", Locale.getDefault())
     return when {
         from != null && to != null -> "${fmt.format(Date(from))} — ${fmt.format(Date(to))}"
-        from != null -> "${fmt.format(Date(from))}"
-        to != null -> "${fmt.format(Date(to))}"
+        from != null -> "c ${fmt.format(Date(from))}"
+        to != null -> "по ${fmt.format(Date(to))}"
         else -> "Период"
     }
 }
