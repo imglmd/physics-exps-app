@@ -2,6 +2,7 @@
 
 package com.imglmd.physicsexps.presentation.screens.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,7 @@ fun ResultScreen(
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
     navigateChart: (Int) -> Unit,
-    navigateExperiment: (String, Map<String, String>) -> Unit,
+    navigateExperiment: (String, Map<String, String>, Int?) -> Unit,
     navigateSolution: () -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
@@ -65,7 +66,7 @@ fun ResultScreen(
                 ResultContract.Effect.NavigateBack -> navigateBack()
                 ResultContract.Effect.NavigateHome -> navigateHome()
                 is ResultContract.Effect.NavigateExperiment ->
-                    navigateExperiment(effect.id, effect.inputs)
+                    navigateExperiment(effect.id, effect.inputs, effect.replaceRunId)
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
                 ResultContract.Effect.NavigateSolution -> navigateSolution()
@@ -116,6 +117,8 @@ private fun Content(
 
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
+
+    BackHandler { onIntent(ResultContract.Intent.Back) }
 
     Scaffold(
         topBar = {

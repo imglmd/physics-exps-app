@@ -55,11 +55,12 @@ val mainModule = module {
     }
     viewModel { params ->
         val inputs: Map<String, String>? = params.getOrNull()
-        ExperimentViewModel(params.get(), inputs, get(), get(), get())
+        val replaceRunId: Int? = params.getOrNull()
+        ExperimentViewModel(params.get(), inputs, replaceRunId, get(), get(), get())
     }
     viewModel { params ->
         val runId: Int? = params.getOrNull()
-        ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get())
+        ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
         HistoryViewModel(get(), get(), get(), get(), get(),get())

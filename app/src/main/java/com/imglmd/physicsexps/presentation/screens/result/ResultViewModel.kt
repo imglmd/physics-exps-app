@@ -10,6 +10,7 @@ import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.*
@@ -28,6 +29,7 @@ class ResultViewModel(
     private val saveRunUseCase: SaveRunUseCase,
     private val deleteRunUseCase: DeleteRunUseCase,
     private val getRunUseCase: GetRunUseCase,
+    private val getResultUseCase: GetResultUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase,
     private val addCommentUseCase: AddCommentUseCase
@@ -39,151 +41,170 @@ class ResultViewModel(
     private val _effect = Channel<ResultContract.Effect>(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
+    private val isNewRun: Boolean = runId == null
     private var savedRunId: Int? = runId
 
     private val json = Json
 
     init {
+        if (isNewRun) initNewRun()
+        else loadExistingRun(runId!!)
+    }
+
+    // инициализация
+    private fun initNewRun() {
         val bundle = resultRepository.get()
-
-        if (bundle != null) {
-            _state.value = ResultContract.State.Success(bundle.result)
-
-            loadComments()
-
-            if (runId == null) {
-                saveRun(bundle.result, bundle.inputs)
-            }
-        } else {
+        if (bundle == null) {
             _state.value = ResultContract.State.Error("Результат не найден")
+            return
         }
+        _state.value = ResultContract.State.Success(
+            result = bundle.result,
+            isSaved = false,
+            isSaving = true
+        )
+        saveRun(bundle.result, bundle.inputs, bundle.replaceRunId)
     }
 
-    fun onIntent(intent: ResultContract.Intent) {
-        when (intent) {
-            ResultContract.Intent.Back -> handleBack()
-            ResultContract.Intent.Delete -> handleDelete()
-            ResultContract.Intent.Save -> handleSave()
-            ResultContract.Intent.Change -> handleChange()
-            is ResultContract.Intent.AddComment -> addComment(intent.text)
-            is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
-            ResultContract.Intent.OpenChart -> {
-                viewModelScope.launch {
-                    val id = savedRunId ?: return@launch
-                    _effect.send(NavigateChart(id))
-                }
-            }
-
-            ResultContract.Intent.OpenSolution -> { viewModelScope.launch { _effect.send(NavigateSolution) } }
-        }
-    }
-    private fun handleBack() {
-        viewModelScope.launch {
-            if (runId == null) {
-                deleteRunInternal {
-                    _effect.send(ResultContract.Effect.NavigateBack)
-                }
-            } else {
-                _effect.send(ResultContract.Effect.NavigateBack)
-            }
-        }
-    }
-
-
-    private fun handleDelete() {
-        viewModelScope.launch {
-            deleteRunInternal {
-                _effect.send(ResultContract.Effect.NavigateHome)
-            }
-        }
-    }
-    private fun handleSave() {
-        viewModelScope.launch {
-            _effect.send(ResultContract.Effect.NavigateHome)
-        }
-    }
-
-    private fun loadComments(){
+    private fun loadExistingRun(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val runId = savedRunId ?: return@launch
-            val comments = getCommentsUseCase(runId)
-            _state.update { state ->
-                if (state is ResultContract.State.Success) {
-                    state.copy(comments = comments)
-                } else state
+            runCatching { getResultUseCase(id) }
+                .onSuccess { result ->
+                    if (result != null) {
+                        _state.value = ResultContract.State.Success(result)
+                        loadComments()
+                    } else {
+                        _state.value = ResultContract.State.Error("Результат не найден в базе")
+                    }
+                }
+                .onFailure {
+                    _state.value = ResultContract.State.Error("Ошибка загрузки: ${it.message}")
+                }
+        }
+    }
+
+    // интенты
+    fun onIntent(intent: ResultContract.Intent) = when (intent) {
+        ResultContract.Intent.Back -> handleBack()
+        ResultContract.Intent.Save -> emit(NavigateHome)
+        ResultContract.Intent.Delete -> deleteRunThen { emit(NavigateHome) }
+        ResultContract.Intent.Change -> handleChange()
+
+        ResultContract.Intent.OpenChart -> savedRunId?.let { emit(NavigateChart(savedRunId!!)) }
+        ResultContract.Intent.OpenSolution -> emit(NavigateSolution)
+        is ResultContract.Intent.AddComment -> addComment(intent.text)
+        is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
+    }
+
+
+    private fun handleBack() {
+        if (isNewRun) {
+            deleteRunThen { emit(NavigateBack) }
+        } else {
+            emit(NavigateBack)
+        }
+    }
+
+
+    // change: передаём inputs + replaceRunId на экран эксперимента
+    // старый run удаляется только после успешного сохранения нового (в следующем initNewRun)
+    private fun handleChange() {
+        val id = savedRunId ?: return
+        viewModelScope.launch {
+            runCatching { getRunUseCase(id) }
+                .onSuccess { run ->
+                    val inputs: Map<String, Double> = json.decodeFromString(run.inputData)
+                    emit(
+                        NavigateExperiment(
+                            id = run.experimentId,
+                            inputs = inputs.mapValues { it.value.toString() },
+                            replaceRunId = id
+                        )
+                    )
+                }
+                .onFailure { Log.e(TAG, "Ошибка получения run для Change", it) }
+        }
+    }
+
+    private fun saveRun(
+        result: ExperimentResult,
+        inputs: Map<String, Double>,
+        replaceRunId: Int?
+    ) {
+        viewModelScope.launch {
+            runCatching { saveRunUseCase(result, inputs) }
+                .onSuccess { newId ->
+                    savedRunId = newId
+
+                    // удаление старого run только после успешного сохранения нового
+                    if (replaceRunId != null) {
+                        runCatching { deleteRunUseCase(replaceRunId) }
+                            .onFailure { Log.e(TAG, "Ошибка удаления заменяемого run", it) }
+                    }
+
+                    _state.update { s ->
+                        if (s is ResultContract.State.Success)
+                            s.copy(isSaved = true, isSaving = false)
+                        else s
+                    }
+                    loadComments()
+                }
+                .onFailure {
+                    Log.e(TAG, "Ошибка сохранения", it)
+                    _state.update { s ->
+                        if (s is ResultContract.State.Success) s.copy(isSaving = false) else s
+                    }
+                }
+        }
+    }
+
+    private fun deleteRunThen(onSuccess: suspend () -> Unit) {
+        viewModelScope.launch {
+            val id = savedRunId
+            if (id != null) {
+                runCatching { deleteRunUseCase(id) }
+                    .onSuccess { onSuccess() }
+                    .onFailure { Log.e(TAG, "Ошибка удаления run", it) }
+            } else {
+                // run ещё не сохранен или уже удален
+                onSuccess()
             }
         }
     }
 
-    private fun addComment(text: String){
+    // комментарии
+    private fun loadComments() {
+        val id = savedRunId ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val comments = getCommentsUseCase(id)
+            _state.update { s ->
+                if (s is ResultContract.State.Success) s.copy(comments = comments) else s
+            }
+        }
+    }
+
+    private fun addComment(text: String) {
+        val id = savedRunId ?: return
         viewModelScope.launch {
-            val runId = savedRunId ?: return@launch
-            addCommentUseCase(
-                Comment(
-                    experimentRunId = runId,
-                    text = text,
-                )
-            )
+            addCommentUseCase(Comment(experimentRunId = id, text = text))
             loadComments()
         }
     }
 
-    private fun deleteComment(id: Int){
+    private fun deleteComment(id: Int) {
         viewModelScope.launch {
             deleteCommentUseCase(id)
             loadComments()
         }
     }
 
-    private fun saveRun(
-        result: ExperimentResult,
-        inputs: Map<String, Double>
-    ) {
-        viewModelScope.launch {
-            runCatching { saveRunUseCase(result, inputs) }
-                .onSuccess {
-                    savedRunId = it
-                    loadComments()
-                }
-                .onFailure { Log.e("ResultViewModel", "Ошибка сохранения", it) }
-        }
+
+
+    private fun emit(effect: ResultContract.Effect) {
+        viewModelScope.launch { _effect.send(effect) }
     }
 
-    private suspend fun deleteRunInternal(onSuccess: suspend () -> Unit) {
-        val id = savedRunId ?: return
-        runCatching { deleteRunUseCase(id) }
-            .onSuccess { onSuccess() }
-            .onFailure { Log.e("ResultViewModel", "Ошибка удаления", it) }
+    companion object {
+        private const val TAG = "ResultViewModel"
     }
-
-    private fun handleChange() {
-        viewModelScope.launch {
-            if (runId == null) {
-                deleteRunInternal {
-                    _effect.send(ResultContract.Effect.NavigateBack)
-                }
-            } else {
-                val id = savedRunId ?: return@launch
-                runCatching { getRunUseCase(id) }
-                    .onSuccess { run ->
-                        val inputs: Map<String, Double> =
-                            json.decodeFromString(run.inputData)
-
-                        val stringInputs = inputs.mapValues { it.value.toString() }
-                        deleteRunInternal {
-                            _effect.send(
-                                ResultContract.Effect.NavigateExperiment(
-                                    id = run.experimentId,
-                                    inputs = stringInputs
-                                )
-                            )
-                        }
-                    }
-                    .onFailure {
-                        Log.e("ResultViewModel", "Ошибка получения run", it)
-                    }
-            }
-        }
-    }
-
 }

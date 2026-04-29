@@ -80,9 +80,10 @@ import org.koin.core.parameter.parametersOf
 fun ExperimentScreen(
     id: String,
     inputs: Map<String, String>?,
+    replaceRunId: Int?,
     navigateBack: () -> Unit,
     navigateToResult: () -> Unit,
-    viewModel: ExperimentViewModel = koinViewModel { parametersOf(id, inputs) }
+    viewModel: ExperimentViewModel = koinViewModel { parametersOf(id, inputs, replaceRunId) }
 ) {
     val state by viewModel.state.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current

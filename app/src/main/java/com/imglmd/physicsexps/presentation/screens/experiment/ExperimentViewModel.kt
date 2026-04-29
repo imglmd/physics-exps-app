@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 class ExperimentViewModel(
     private val id: String,
     private val inputs: Map<String, String>?,
+    private val replaceRunId: Int?,
     private val getExperiment: GetExperimentByIdUseCase,
     private val calculate: CalculateExperimentUseCase,
     private val resultRepository: InMemoryResultRepository
@@ -46,7 +47,7 @@ class ExperimentViewModel(
         when (val result = calculate(id, state.value.inputs)) {
 
             is CalculateExperimentUseCase.Result.Success -> {
-                resultRepository.save(result.result, result.inputs)
+                resultRepository.save(result.result, result.inputs, replaceRunId)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
             }
 
