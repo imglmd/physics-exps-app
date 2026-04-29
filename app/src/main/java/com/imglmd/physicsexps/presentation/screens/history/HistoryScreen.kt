@@ -140,7 +140,13 @@ fun HistoryScreen(
                 padding = innerPadding,
                 isLoading = s.isLoading,
                 onIntent = viewModel::onIntent,
-                onDateChipClick = { showDatePicker = true }
+                onDateChipClick = {
+                    if (s.filter.dateFrom != null || s.filter.dateTo != null) {
+                        viewModel.onIntent(
+                            HistoryContract.Intent.SetDateRange(null, null)
+                        )
+                    } else showDatePicker = true
+                }
             )
         }
     }
@@ -179,28 +185,13 @@ fun HistoryScreen(
                 }
             },
             dismissButton = {
-                Row {
-                    TextButton(
-                        onClick = {
-                            viewModel.onIntent(
-                                HistoryContract.Intent.SetDateRange(null, null)
-                            )
-                            showDatePicker = false
-                        },
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Text("Сбросить")
-                    }
-                    TextButton(
-                        onClick = { showDatePicker = false },
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    ) {
-                        Text("Отмена")
-                    }
+                TextButton(
+                    onClick = { showDatePicker = false },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                ) {
+                    Text("Отмена")
                 }
             }
         ) {

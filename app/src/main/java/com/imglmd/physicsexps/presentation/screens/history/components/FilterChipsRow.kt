@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -100,7 +101,7 @@ fun FilterChipsRow(
                 },
                 border = BorderStroke(
                     width = 1.dp,
-                    color = if (state.filter.sortOrder != SortOrder.DATE_DESC) colors.primary else MaterialTheme.colorScheme.outlineVariant
+                    color = if (hasDateFilter) colors.primary else MaterialTheme.colorScheme.outlineVariant
                 ),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = colors.surface,
@@ -142,7 +143,7 @@ fun FilterChipsRow(
                 label = { Text(experiment.name) },
                 border = BorderStroke(
                     width = 1.dp,
-                    color = if (state.filter.sortOrder != SortOrder.DATE_DESC) colors.primary else MaterialTheme.colorScheme.outlineVariant
+                    color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant
                 )
             )
         }
