@@ -1,8 +1,10 @@
 package com.imglmd.physicsexps.presentation.screens.solution
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hrm.latex.renderer.Latex
@@ -109,12 +112,19 @@ fun SolutionScreen(
 
     val width by animateDpAsState(
         targetValue = if (isAtBottom) 360.dp else 56.dp,
-        animationSpec = tween(300),
+        animationSpec = spring(
+            dampingRatio = 0.7f,
+            stiffness = 400f
+        ),
         label = "fab_width"
     )
+
     val corner by animateDpAsState(
         targetValue = if (isAtBottom) 16.dp else 28.dp,
-        animationSpec = tween(300),
+        animationSpec = spring(
+            dampingRatio = 0.8f,
+            stiffness = 500f
+        ),
         label = "fab_corner"
     )
 
@@ -180,6 +190,7 @@ fun SolutionScreen(
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 "Вернуться назад",
+                                maxLines = 1,
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
