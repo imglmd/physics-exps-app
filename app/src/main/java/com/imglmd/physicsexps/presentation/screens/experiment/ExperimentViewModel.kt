@@ -25,7 +25,11 @@ class ExperimentViewModel(
     private val experiment = getExperiment(id)
 
     private val _state = MutableStateFlow(
-        ExperimentContract.State(experiment, inputs?: emptyMap())
+        ExperimentContract.State(
+            experiment = experiment,
+            inputs = inputs?: emptyMap(),
+            isAdvancedMode = hasAdvancedInputs(inputs)
+        )
     )
     val state = _state.asStateFlow()
 
@@ -69,6 +73,15 @@ class ExperimentViewModel(
         _state.update { it.copy(isLoading = false) }
     }
 
+    private fun hasAdvancedInputs(inputs: Map<String, String>?): Boolean {
+        if (inputs.isNullOrEmpty()) return false
+
+        val additionalKeys = experiment.additionalInputFields.map { it.key }
+
+        return inputs.any { (key, value) ->
+            key in additionalKeys && value.toDoubleOrNull() != null
+        }
+    }
     private fun changeValue(key: String, newValue: String) {
         _state.update { current ->
 
