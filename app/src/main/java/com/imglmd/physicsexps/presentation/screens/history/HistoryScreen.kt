@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -48,6 +47,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.model.HistoryFilter
+import com.imglmd.physicsexps.presentation.screens.history.components.FilterChipsRow
 import com.imglmd.physicsexps.presentation.screens.history.components.HistoryCard
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -129,7 +130,8 @@ fun HistoryScreen(
                     viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it))
                 },
                 padding = innerPadding,
-                isLoading = s.isLoading
+                isLoading = s.isLoading,
+                onIntent = viewModel::onIntent
             )
         }
     }
@@ -215,32 +217,40 @@ private fun Content(
     state: HistoryContract.State.Success,
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
+    onIntent: (HistoryContract.Intent) -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
     Box(Modifier.fillMaxSize()) {
 
-        if (state.history.isEmpty() && !isLoading) {
-            EmptyHistory(modifier = Modifier.fillMaxSize())
-        } else {
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(150.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .imePadding(),
-                verticalItemSpacing = 12.dp,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(
-                    top = padding.calculateTopPadding() + 20.dp,
-                    bottom = padding.calculateBottomPadding(),
-                    start = 24.dp,
-                    end = 24.dp
+        Column(Modifier.fillMaxSize().padding(top = padding.calculateTopPadding() + 4.dp)) {
+            FilterChipsRow(state, onIntent)
+
+
+            if (state.history.isEmpty() && !isLoading) {
+                EmptyHistory(
+                    hasFilters = state.filter != HistoryFilter(),
+                    modifier = Modifier.fillMaxSize()
                 )
-            ) {
-                items(
-                    items = state.history,
-                    key = { it.id }
-                ) { item ->
-                    HistoryCard(item, onClick = { onItemClick(item.id) })
+            } else {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Adaptive(150.dp),
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalItemSpacing = 12.dp,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(
+                        top = 10.dp,
+                        bottom = padding.calculateBottomPadding(),
+                        start = 24.dp,
+                        end = 24.dp
+                    )
+                ) {
+                    items(
+                        items = state.history,
+                        key = { it.id }
+                    ) { item ->
+                        HistoryCard(item, onClick = { onItemClick(item.id) })
+                    }
                 }
             }
         }
@@ -257,9 +267,23 @@ private fun Content(
     }
 }
 
-
 @Composable
-private fun EmptyHistory(modifier: Modifier = Modifier) {
+private fun EmptyHistory(
+    hasFilters: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val title = if (hasFilters) {
+        "Ничего не найдено"
+    } else {
+        "Пока нет экспериментов"
+    }
+
+    val subtitle = if (hasFilters) {
+        "Попробуйте изменить фильтры\nили сбросить их"
+    } else {
+        "Проведите первый эксперимент —\nрезультаты появятся здесь"
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -283,7 +307,7 @@ private fun EmptyHistory(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "Нет экспериментов",
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -291,7 +315,7 @@ private fun EmptyHistory(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(4.dp))
 
         Text(
-            text = "Результаты ваших экспериментов\nпоявятся здесь",
+            text = subtitle,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center

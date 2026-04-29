@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.ExperimentRun
+import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetFilteredRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.presentation.downsamplePoints
+import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import com.imglmd.physicsexps.presentation.normalizePoints
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +30,9 @@ class HistoryViewModel(
     private val getResultUseCase: GetResultUseCase,
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val getAllRunsUseCase: GetAllRunsUseCase,
-    private val deleteAllRunsUseCase: DeleteAllRunsUseCase
+    private val deleteAllRunsUseCase: DeleteAllRunsUseCase,
+    private val getFilteredRunsUseCase: GetFilteredRunsUseCase,
+    private val getExperimentsUseCase: GetAllExperimentsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HistoryContract.State>(
@@ -37,31 +40,45 @@ class HistoryViewModel(
     )
     val state = _state.asStateFlow()
 
+    private val _filter = MutableStateFlow(HistoryFilter())
+
     private val _actionFlow = MutableSharedFlow<HistoryContract.Action>()
     val actionFlow = _actionFlow.asSharedFlow()
 
-    private val json = Json
 
     init {
         loadHistory()
+
+        viewModelScope.launch {
+            _filter.collect { filter ->
+                _state.update {
+                    (it as? HistoryContract.State.Success)?.copy(
+                        filter = filter
+                    ) ?: it
+                }
+            }
+        }
     }
 
     fun onIntent(intent: HistoryContract.Intent){
         when (intent) {
             is HistoryContract.Intent.NavigateToResult -> navigateToResult(intent.resultId)
 
-            HistoryContract.Intent.ShowDeleteDialog -> {
-                _state.update {
-                    (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = true) ?: it
-                }
+            HistoryContract.Intent.ShowDeleteDialog -> _state.update {
+                (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = true) ?: it
             }
-            HistoryContract.Intent.HideDeleteDialog -> {
-                _state.update {
-                    (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = false) ?: it
-                }
+            HistoryContract.Intent.HideDeleteDialog -> _state.update {
+                (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = false) ?: it
             }
             HistoryContract.Intent.DeleteAll -> deleteAllHistory()
 
+            is HistoryContract.Intent.SetDateRange -> _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
+            is HistoryContract.Intent.SetExperimentFilter -> _filter.update { it.copy(experimentId = intent.experimentId) }
+            is HistoryContract.Intent.SetSortOrder -> _filter.update { it.copy(sortOrder = intent.order) }
+            HistoryContract.Intent.ClearFilters -> _filter.value = HistoryFilter()
+            HistoryContract.Intent.ToggleFilterSheet -> _state.update {
+                (it as? HistoryContract.State.Success)?.copy(isFilterOpen = !it.isFilterOpen) ?: it
+            }
         }
     }
 
@@ -71,7 +88,7 @@ class HistoryViewModel(
 
             val inputs: Map<String, Double> =
                 runCatching {
-                    json.decodeFromString<Map<String, Double>>(run.inputData)
+                    Json.decodeFromString<Map<String, Double>>(run.inputData)
                 }.getOrDefault(emptyMap())
 
             val result = getResultUseCase(id) ?: return@launch
@@ -83,13 +100,18 @@ class HistoryViewModel(
     }
     private fun loadHistory() {
         viewModelScope.launch {
-            getAllRunsUseCase()
+
+            val experiments = getExperimentsUseCase()
+
+            getFilteredRunsUseCase(_filter)
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
 
                     _state.value = HistoryContract.State.Success(
                         history = emptyList(),
-                        isLoading = true
+                        isLoading = true,
+                        availableExperiments = experiments,
+                        filter = _filter.value
                     )
 
                     val chunkSize = 5
@@ -105,13 +127,17 @@ class HistoryViewModel(
 
                         _state.value = HistoryContract.State.Success(
                             history = resultList.toList(),
-                            isLoading = true
+                            isLoading = true,
+                            availableExperiments = experiments,
+                            filter = _filter.value
                         )
                     }
 
                     _state.value = HistoryContract.State.Success(
                         history = resultList,
-                        isLoading = false
+                        isLoading = false,
+                        availableExperiments = experiments,
+                        filter = _filter.value
                     )
                 }
         }
@@ -120,7 +146,7 @@ class HistoryViewModel(
 
     private suspend fun processRun(run: ExperimentRun): HistoryItemUi {
         val inputs: Map<String, Double> = runCatching {
-            json.decodeFromString<Map<String, Double>>(run.inputData)
+            Json.decodeFromString<Map<String, Double>>(run.inputData)
         }.getOrDefault(emptyMap())
 
         val experiment = runCatching { registry.getById(run.experimentId) }.getOrNull()
