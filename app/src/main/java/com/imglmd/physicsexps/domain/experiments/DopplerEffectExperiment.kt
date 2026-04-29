@@ -34,11 +34,20 @@ class DopplerEffectExperiment: Experiment {
 
         val fSep: Double // отдаление
         val fApr: Double // сближение
+        val shiftSep: Double
+        val shiftApr: Double
+        val lengthWaveSep: Double
+        val lengthWaveApr: Double
 
         when {
             vO != null && vS != null && fS != null -> {
                 fApr = fS * ((v + vO)/(v - vS))
                 fSep = fS * ((v - vO)/(v + vS))
+                shiftSep = fSep - fS
+                shiftApr = fApr - fS
+                lengthWaveApr = (v - vS) / fS
+                lengthWaveSep = (v + vS) / fS
+
                 map.put("v_source", vS)
                 map.put("v_obs", vO)
                 map.put("frequency", fS)
@@ -51,7 +60,11 @@ class DopplerEffectExperiment: Experiment {
             experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
-                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц")
+                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц"),
+                PhysicalQuantity("Доплеровский сдвиг при сближении", "Δf_apr", shiftApr, "Гц"),
+                PhysicalQuantity("Доплеровский сдвиг при отдалении", "Δf_sep", shiftSep, "Гц"),
+                PhysicalQuantity("Длина волны при сближении", "λ_apr", lengthWaveApr, "м"),
+                PhysicalQuantity("Длина волны при отдалении", "λ_sep", lengthWaveSep, "м")
             ),
             points = getPoints(map),
             xLabel = xLabel,

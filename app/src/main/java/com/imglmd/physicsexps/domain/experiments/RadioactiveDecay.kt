@@ -6,6 +6,7 @@ import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import kotlin.math.ln
 import kotlin.math.pow
 
 class RadioactiveDecay: Experiment {
@@ -26,12 +27,21 @@ class RadioactiveDecay: Experiment {
         val N0 = inputs["start_count"]
         val T = inputs["period"]
         val t = inputs["time"]
+
         val N: Double
+        val constRadioactiveDecay: Double
+        val time: Double
+        val period: Double
+        val srTime: Double
         val map = mutableMapOf<String, Double>()
 
         when {
             N0 != null && T != null && t != null -> {
                 N = N0 * 2.0.pow(-t/T)
+                period = T
+                time = t
+                constRadioactiveDecay = ln(2.0)/period
+                srTime = 1 / constRadioactiveDecay
                 map.put("time", t)
                 map.put("start_count", N0)
                 map.put("period", T)
@@ -44,10 +54,13 @@ class RadioactiveDecay: Experiment {
             experimentId = this.id,
             quantities = listOf(
                 PhysicalQuantity("Начальное число ядер", "N₀", N0, ""),
-                PhysicalQuantity("Период полураспада", "T", T, "с"),
-                PhysicalQuantity("Время от начала распада", "t", t, "с"),
+                PhysicalQuantity("Период полураспада", "T", period, "с"),
+                PhysicalQuantity("Время от начала распада", "t", time, "с"),
                 PhysicalQuantity("Количество оставшихся ядер", "N",
-                    N, "")
+                    N, ""),
+                PhysicalQuantity("Постоянная радиоактивного распада", "λ",
+                    constRadioactiveDecay, "с⁻¹"),
+                PhysicalQuantity("Среднее время жизни", "τ", srTime, "с")
             ),
             points = getPoints(map),
             date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
