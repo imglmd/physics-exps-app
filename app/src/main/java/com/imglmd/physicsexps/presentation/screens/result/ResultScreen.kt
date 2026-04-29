@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.presentation.blendWith
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
@@ -207,10 +206,10 @@ private fun BottomActions(
                 icon = Icons.Outlined.Delete,
                 onClick = onDelete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary.blendWith(
-                        MaterialTheme.colorScheme.background, 0.1f),
-                    contentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
                 ),
+                borderColor = MaterialTheme.colorScheme.error,
                 modifier = Modifier.weight(1.5f),
             )
 
