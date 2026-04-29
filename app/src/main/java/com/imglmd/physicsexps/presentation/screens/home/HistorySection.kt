@@ -44,7 +44,7 @@ fun HistorySection(
             TextButton(onClick = onSeeAllClick,
                 colors = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
                 )
             ) {
                 Text(

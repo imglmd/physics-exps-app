@@ -51,7 +51,7 @@ fun ExperimentTextField(
         Row(
             modifier = Modifier
                 .matchParentSize()
-                .background(colors.surfaceVariant)
+                .background(colors.surfaceContainer)
                 .padding(start = if (isError) 4.dp else 0.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

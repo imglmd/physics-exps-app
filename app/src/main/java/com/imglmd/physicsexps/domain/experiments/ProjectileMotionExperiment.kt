@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import com.imglmd.physicsexps.domain.model.SolutionStep
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.*
@@ -146,5 +147,115 @@ class ProjectileMotionExperiment : Experiment {
         }
 
         return points
+    }
+
+    override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
+        val steps = mutableListOf<SolutionStep>()
+
+        val g = ExpConstants.GRAVITY
+
+        steps += SolutionStep.Theory(
+            title = "Идея решения",
+            body = "Движение раскладывается на два независимых: " +
+                    "по горизонтали — равномерное, по вертикали — равноускоренное с ускорением g."
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Разложим начальную скорость на оси",
+            expression = "v_x = v_0 \\cos(\\alpha), \\quad v_{y0} = v_0 \\sin(\\alpha)"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Запишем уравнения движения",
+            expression = "x(t) = v_x t \\\\ y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "В момент падения высота равна нулю",
+            expression = "0 = h_0 + v_{y0} t - \\frac{g t^2}{2}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Решаем квадратное уравнение",
+            expression = "t = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2 g h_0}}{g}"
+        )
+
+        /**
+         * если входных данных нет, возвращается только теория без чисел
+         * сейчас в этом смысла особо нет, но так лучше разделять.
+         * в будущем мб добавлю объяснение теории на экран экспериментов
+         */
+        if (inputs == null) return steps
+
+        val v0 = inputs.getValue("start_speed")
+        val angleDeg = inputs.getValue("angle")
+        val h0 = inputs["initial_height"] ?: 0.0
+        val alpha = Math.toRadians(angleDeg)
+
+        // вычисляються величины которые будут подставляться в формулы
+        val vx = v0 * cos(alpha)
+        val vy0 = v0 * sin(alpha)
+        val discriminant = vy0.pow(2) + 2 * g * h0
+        val tFull = (vy0 + sqrt(discriminant)) / g
+        val range = vx * tFull
+        val hMax = h0 + vy0.pow(2) / (2 * g)
+
+        // лямбда для форматирования
+        val fmt = { d: Double -> "%.2f".format(d) }
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём горизонтальную скорость",
+            expression = "v_x = ${fmt(v0)} \\cdot \\cos(${fmt(angleDeg)}^\\circ)",
+            result = "v_x = ${fmt(vx)} \\text{м/с}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём вертикальную скорость",
+            expression = "v_{y0} = ${fmt(v0)} \\cdot \\sin(${fmt(angleDeg)}^\\circ)",
+            result = "v_{y0} = ${fmt(vy0)} \\text{м/с}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Вычислим время полёта",
+            expression = "t = \\frac{${fmt(vy0)} + \\sqrt{${fmt(vy0)}^2 + 2 \\cdot ${g} \\cdot ${
+                fmt(
+                    h0
+                )
+            }}}{${g}}",
+            result = "t = ${fmt(tFull)} \\text{с}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Дальность полёта",
+            expression = "L = v_x t"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Подставим значения",
+            expression = "L = ${fmt(vx)} \\cdot ${fmt(tFull)}",
+            result = "L = ${fmt(range)} \\text{м}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Максимальная высота",
+            expression = "H = h_0 + \\frac{v_{y0}^2}{2g}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Подставим значения",
+            expression = "H = ${fmt(h0)} + \\frac{${fmt(vy0)}^2}{2 \\cdot ${g}}",
+            result = "H = ${fmt(hMax)} \\text{м}"
+        )
+
+        // результаты
+        steps += SolutionStep.Result(
+            listOf(
+                PhysicalQuantity("Дальность броска", "L", range, "м"),
+                PhysicalQuantity("Максимальная высота", "H", hMax, "м"),
+                PhysicalQuantity("Время полёта", "t", tFull, "с")
+            )
+        )
+
+        return steps
     }
 }

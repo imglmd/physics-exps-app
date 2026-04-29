@@ -35,7 +35,7 @@ fun SeeAllCard(
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable { onClick() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -121,7 +121,7 @@ private fun InputsSection(inputs: Map<String, Double>) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                    .background(MaterialTheme.colorScheme.primaryContainer)
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             ) {
                 Text(

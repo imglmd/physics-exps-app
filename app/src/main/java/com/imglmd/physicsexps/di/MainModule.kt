@@ -27,6 +27,7 @@ import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewMode
 import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
+import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -62,6 +63,9 @@ val mainModule = module {
     }
     viewModel {
         HistoryViewModel(get(), get(), get(), get(), get(),get())
+    }
+    viewModel {
+        SolutionViewModel(get(), get())
     }
 
     single {

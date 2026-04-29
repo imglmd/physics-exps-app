@@ -71,8 +71,8 @@ private fun BackButton(
         onClick = onClick,
         colors = IconButtonDefaults.iconButtonColors(
             //containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.22f),
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
     ) {
         Icon(

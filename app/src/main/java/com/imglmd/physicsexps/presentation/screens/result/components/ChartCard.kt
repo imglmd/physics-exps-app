@@ -118,7 +118,7 @@ fun ChartCard(
                 IconButton(
                     onClick = { resetKey++ },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = colors.primary.copy(alpha = 0.1f)
+                        containerColor = colors.primaryContainer
                     ),
                     modifier = Modifier.size(36.dp)
                 ) {
@@ -133,7 +133,7 @@ fun ChartCard(
                 IconButton(
                     onClick = onChartClick,
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = colors.primary.copy(alpha = 0.1f)
+                        containerColor = colors.primaryContainer
                     ),
                     modifier = Modifier.size(36.dp)
                 ) {

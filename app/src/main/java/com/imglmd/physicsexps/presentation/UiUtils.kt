@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 
 fun Double.round4(): Double {
     return kotlin.math.round(this * 10_000) / 10_000
@@ -61,5 +62,14 @@ fun rememberShimmerBrush(): Brush {
         colors = colors,
         start = Offset(translateAnim.value - 300f, 0f),
         end = Offset(translateAnim.value, 0f)
+    )
+}
+
+fun Color.blendWith(background: Color, ratio: Float): Color {
+    return Color(
+        red = red * ratio + background.red * (1 - ratio),
+        green = green * ratio + background.green * (1 - ratio),
+        blue = blue * ratio + background.blue * (1 - ratio),
+        alpha = 1f
     )
 }
