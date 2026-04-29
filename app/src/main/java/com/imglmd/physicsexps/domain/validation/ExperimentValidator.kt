@@ -12,7 +12,9 @@ class ExperimentValidator {
         val parsedInputs = mutableMapOf<String, Double>()
         val errors = mutableListOf<ValidationError>()
 
-        for (field in experiment.inputFields) {
+        val allFields = experiment.inputFields + experiment.additionalInputFields
+
+        for (field in allFields) {
 
             val rawValue = rawInputs[field.key]
 
