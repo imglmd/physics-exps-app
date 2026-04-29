@@ -48,7 +48,7 @@ val navigationModule = module {
             navigateBack = { get<Navigator>().goBack() },
             navigateHome = { get<Navigator>().goHome() },
             navigateExperiment = { expId, inputs, replaceRunId ->
-                get<Navigator>().navigateBackTo(Screen.Experiment(expId, inputs, replaceRunId))
+                get<Navigator>().replaceTo(Screen.Experiment(expId, inputs, replaceRunId))
             },
             navigateChart = { runId ->
                 get<Navigator>().navigateTo(Screen.FullScreenChart(runId))
