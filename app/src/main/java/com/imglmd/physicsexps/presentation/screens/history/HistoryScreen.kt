@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,9 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,13 +39,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -59,6 +68,7 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    var showDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.actionFlow.collect { effect ->
@@ -126,25 +136,102 @@ fun HistoryScreen(
 
             is HistoryContract.State.Success -> Content(
                 state = s,
-                onItemClick = {
-                    viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it))
-                },
+                onItemClick = { viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
                 padding = innerPadding,
                 isLoading = s.isLoading,
-                onIntent = viewModel::onIntent
+                onIntent = viewModel::onIntent,
+                onDateChipClick = { showDatePicker = true }
+            )
+        }
+    }
+
+    if (showDatePicker) {
+        val successState = state as? HistoryContract.State.Success
+        val pickerState = rememberDateRangePickerState(
+            initialSelectedStartDateMillis = successState?.filter?.dateFrom,
+            initialSelectedEndDateMillis = successState?.filter?.dateTo
+        )
+
+        DatePickerDialog(
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onIntent(
+                            HistoryContract.Intent.SetDateRange(
+                                from = pickerState.selectedStartDateMillis,
+                                to = pickerState.selectedEndDateMillis
+                            )
+                        )
+                        showDatePicker = false
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    ),
+                    enabled = pickerState.selectedStartDateMillis != null
+                ) {
+                    Text("Применить")
+                }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(
+                        onClick = {
+                            viewModel.onIntent(
+                                HistoryContract.Intent.SetDateRange(null, null)
+                            )
+                            showDatePicker = false
+                        },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Text("Сбросить")
+                    }
+                    TextButton(
+                        onClick = { showDatePicker = false },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Text("Отмена")
+                    }
+                }
+            }
+        ) {
+            DateRangePicker(
+                state = pickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    headlineContentColor = MaterialTheme.colorScheme.onSurface,
+                    dividerColor = MaterialTheme.colorScheme.outline,
+                    dayInSelectionRangeContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    dayInSelectionRangeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                ),
+                title = {
+
+                },
+                headline = {
+                    Text(
+                        text = "Выберите период",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(start = 24.dp)
+                    )
+                }
             )
         }
     }
 
     if (state is HistoryContract.State.Success && (state as HistoryContract.State.Success).showDeleteDialog) {
         AlertDialog(
-            onDismissRequest = {
-                viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog)
-            },
-
+            onDismissRequest = { viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog) },
             containerColor = MaterialTheme.colorScheme.surface,
             shape = RoundedCornerShape(24.dp),
-
             icon = {
                 Box(
                     modifier = Modifier
@@ -160,14 +247,9 @@ fun HistoryScreen(
                     )
                 }
             },
-
             title = {
-                Text(
-                    text = "Удалить историю?",
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Text("Удалить историю?", style = MaterialTheme.typography.titleMedium)
             },
-
             text = {
                 Text(
                     text = "Все эксперименты будут удалены без возможности восстановления.",
@@ -176,36 +258,24 @@ fun HistoryScreen(
                     textAlign = TextAlign.Center
                 )
             },
-
             confirmButton = {
                 TextButton(
-                    onClick = {
-                        viewModel.onIntent(HistoryContract.Intent.DeleteAll)
-                    },
+                    onClick = { viewModel.onIntent(HistoryContract.Intent.DeleteAll) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text(
-                        "Удалить",
-                        color = MaterialTheme.colorScheme.error
-                    )
+                    Text("Удалить", color = MaterialTheme.colorScheme.error)
                 }
             },
-
             dismissButton = {
                 TextButton(
-                    onClick = {
-                        viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog)
-                    },
+                    onClick = { viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                     )
                 ) {
-                    Text(
-                        "Отмена",
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    Text("Отмена", color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
@@ -218,13 +288,16 @@ private fun Content(
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
     onIntent: (HistoryContract.Intent) -> Unit,
+    onDateChipClick: () -> Unit,
     padding: PaddingValues = PaddingValues()
 ) {
     Box(Modifier.fillMaxSize()) {
-
         Column(Modifier.fillMaxSize().padding(top = padding.calculateTopPadding() + 4.dp)) {
-            FilterChipsRow(state, onIntent)
-
+            FilterChipsRow(
+                state = state,
+                onIntent = onIntent,
+                onDateChipClick = onDateChipClick
+            )
 
             if (state.history.isEmpty() && !isLoading) {
                 EmptyHistory(
@@ -234,8 +307,7 @@ private fun Content(
             } else {
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(150.dp),
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     verticalItemSpacing = 12.dp,
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(
@@ -245,15 +317,13 @@ private fun Content(
                         end = 24.dp
                     )
                 ) {
-                    items(
-                        items = state.history,
-                        key = { it.id }
-                    ) { item ->
+                    items(items = state.history, key = { it.id }) { item ->
                         HistoryCard(item, onClick = { onItemClick(item.id) })
                     }
                 }
             }
         }
+
         if (isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier
