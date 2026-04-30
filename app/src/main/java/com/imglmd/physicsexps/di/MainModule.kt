@@ -24,6 +24,7 @@ import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
+import com.imglmd.physicsexps.presentation.screens.compare.CompareViewModel
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -72,6 +73,8 @@ val mainModule = module {
     viewModel {
         SolutionViewModel(get(), get())
     }
+    viewModel { params ->
+        CompareViewModel(params.get(), get(), get(), get()) }
 
     single {
         Room.databaseBuilder(

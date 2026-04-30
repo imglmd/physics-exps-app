@@ -25,6 +25,9 @@ sealed interface Screen {
     ) : Screen
     @Serializable
     data object Solution : Screen
+
+    @Serializable
+    data class Compare(val runIds: List<Int>) : Screen
 }
 
 

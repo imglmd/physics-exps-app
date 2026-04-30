@@ -5,6 +5,7 @@ package com.imglmd.physicsexps.di
 import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
+import com.imglmd.physicsexps.presentation.screens.compare.CompareScreen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
 import com.imglmd.physicsexps.presentation.screens.history.HistoryScreen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
@@ -68,8 +69,8 @@ val navigationModule = module {
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))
             },
-            onSelectRuns = {
-                TODO()
+            onSelectRuns = { ids ->
+                get<Navigator>().navigateTo(Screen.Compare(ids))
             }
         )
     }
@@ -81,6 +82,12 @@ val navigationModule = module {
     }
     navigation<Screen.Solution> {
         SolutionScreen(
+            navigateBack = { get<Navigator>().goBack() }
+        )
+    }
+    navigation<Screen.Compare> { route ->
+        CompareScreen(
+            runIds = route.runIds,
             navigateBack = { get<Navigator>().goBack() }
         )
     }
