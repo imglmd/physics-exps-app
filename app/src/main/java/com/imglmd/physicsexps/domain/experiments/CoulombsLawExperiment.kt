@@ -68,7 +68,6 @@ class CoulombsLawExperiment: Experiment {
                     potentialEnergy, "нДж")
             ),
             points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

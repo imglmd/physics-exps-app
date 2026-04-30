@@ -168,7 +168,7 @@ class ExampleExperiment : Experiment {
         )
 
         steps += SolutionStep.Formula(
-            description = "Вычислим циклическую частоту - число колебаний за 2 \\pi секунд.",
+            description = "Вычислим циклическую частоту - число колебаний за 2 π секунд.",
             expression = "\\omega = \\sqrt{\\frac{g}{l}}"
         )
 
