@@ -15,7 +15,8 @@ interface HistoryContract {
             val availableExperiments: List<Experiment> = emptyList(),
             val isFilterOpen: Boolean = false,
             val isLoading: Boolean = false,
-            val showDeleteDialog: Boolean = false
+            val showDeleteDialog: Boolean = false,
+            val selectedIds: Set<Int> = emptySet()
         ): State
         data class Error(val message: String): State
     }
@@ -29,13 +30,17 @@ interface HistoryContract {
         data object ClearFilters: Intent
         data object ToggleFilterSheet: Intent
 
-        data object ShowDeleteDialog : Intent
-        data object HideDeleteDialog : Intent
+        data object ShowDeleteDialog: Intent
+        data object HideDeleteDialog: Intent
         data object DeleteAll: Intent
+
+        data class ToggleSelection(val id: Int): Intent
+        data object ConfirmSelection: Intent
     }
 
     sealed interface Action {
         data class NavigateToResult(val resultId: Int): Action
         data object NavigateBack: Action
+        data class ReturnSelection(val ids: List<Int>): Action
     }
 }

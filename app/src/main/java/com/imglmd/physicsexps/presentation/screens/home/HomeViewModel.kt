@@ -112,6 +112,7 @@ class HomeViewModel(
 
                         HistoryItemUi(
                             id = run.id,
+                            experimentId = experiment?.id ?: "unknown",
                             experimentName = experiment?.name ?: run.experimentId,
                             category = experiment?.category ?: "",
                             date = run.date,

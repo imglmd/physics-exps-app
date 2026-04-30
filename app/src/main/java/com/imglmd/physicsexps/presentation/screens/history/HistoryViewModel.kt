@@ -53,7 +53,7 @@ class HistoryViewModel(
             _filter.collect { filter ->
                 _state.update {
                     (it as? HistoryContract.State.Success)?.copy(
-                        filter = filter
+                        filter = filter,
                     ) ?: it
                 }
             }
@@ -79,6 +79,54 @@ class HistoryViewModel(
             HistoryContract.Intent.ToggleFilterSheet -> _state.update {
                 (it as? HistoryContract.State.Success)?.copy(isFilterOpen = !it.isFilterOpen) ?: it
             }
+
+            HistoryContract.Intent.ConfirmSelection -> {
+                val st = _state.value as? HistoryContract.State.Success ?: return
+                viewModelScope.launch {
+                    _actionFlow.emit(
+                        HistoryContract.Action.ReturnSelection(st.selectedIds.toList())
+                    )
+                }
+            }
+            is HistoryContract.Intent.ToggleSelection -> handleToggleSelection(intent.id)
+        }
+    }
+    private fun handleToggleSelection(id: Int) {
+        _state.update { s ->
+            val st = s as? HistoryContract.State.Success ?: return@update s
+
+            val newSet = st.selectedIds.toMutableSet()
+            val clickedItem = st.history.find { it.id == id } ?: return@update st
+
+            if (newSet.contains(id)) {
+                newSet.remove(id)
+
+                if (newSet.isEmpty()) {
+                    _filter.update { it.copy(experimentId = null) }
+                }
+
+                return@update st.copy(selectedIds = newSet)
+            }
+
+            if (newSet.size >= 2) return@update st
+
+            if (newSet.isEmpty()) {
+                _filter.update {
+                    it.copy(experimentId = clickedItem.experimentId)
+                }
+            }
+
+            val selectedItems = st.history.filter { newSet.contains(it.id) }
+
+            val isSameExperiment = selectedItems.all {
+                it.experimentId == clickedItem.experimentId
+            }
+
+            if (!isSameExperiment) return@update st
+
+            newSet.add(id)
+
+            st.copy(selectedIds = newSet)
         }
     }
 
@@ -107,11 +155,14 @@ class HistoryViewModel(
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
 
+                    val prev = _state.value as? HistoryContract.State.Success
+
                     _state.value = HistoryContract.State.Success(
                         history = emptyList(),
                         isLoading = true,
                         availableExperiments = experiments,
-                        filter = _filter.value
+                        filter = _filter.value,
+                        selectedIds = prev?.selectedIds ?: emptySet()
                     )
 
                     val chunkSize = 5
@@ -125,11 +176,14 @@ class HistoryViewModel(
 
                         resultList += processed
 
+                        val prev = _state.value as? HistoryContract.State.Success
+
                         _state.value = HistoryContract.State.Success(
                             history = resultList.toList(),
                             isLoading = true,
                             availableExperiments = experiments,
-                            filter = _filter.value
+                            filter = _filter.value,
+                            selectedIds = prev?.selectedIds ?: emptySet()
                         )
                     }
 
@@ -137,7 +191,8 @@ class HistoryViewModel(
                         history = resultList,
                         isLoading = false,
                         availableExperiments = experiments,
-                        filter = _filter.value
+                        filter = _filter.value,
+                        selectedIds = prev?.selectedIds ?: emptySet()
                     )
                 }
         }
@@ -154,6 +209,7 @@ class HistoryViewModel(
 
         return HistoryItemUi(
             id = run.id,
+            experimentId = run.experimentId,
             experimentName = experiment?.name ?: run.experimentId,
             category = experiment?.category ?: "",
             date = run.date,

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,21 +49,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
+import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.screens.history.components.FilterChipsRow
 import com.imglmd.physicsexps.presentation.screens.history.components.HistoryCard
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HistoryScreen(
+    mode: HistoryMode = HistoryMode.NORMAL,
     navigateBack: () -> Unit,
     navigateToResult: (runId: Int) -> Unit,
+    onSelectRuns: (ids: List<Int>) -> Unit,
     viewModel: HistoryViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -75,6 +77,7 @@ fun HistoryScreen(
             when (effect) {
                 HistoryContract.Action.NavigateBack -> navigateBack()
                 is HistoryContract.Action.NavigateToResult -> navigateToResult(effect.resultId)
+                is HistoryContract.Action.ReturnSelection -> onSelectRuns(effect.ids)
             }
         }
     }
@@ -84,7 +87,7 @@ fun HistoryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "История",
+                        text = if (mode == HistoryMode.SELECTION) "Выберите эксперименты" else "История",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -135,8 +138,11 @@ fun HistoryScreen(
             }
 
             is HistoryContract.State.Success -> Content(
+                mode = mode,
                 state = s,
-                onItemClick = { viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
+                onItemClick = {
+                    if (mode == HistoryMode.SELECTION) viewModel.onIntent(HistoryContract.Intent.ToggleSelection(it))
+                    else viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
                 padding = innerPadding,
                 isLoading = s.isLoading,
                 onIntent = viewModel::onIntent,
@@ -275,6 +281,7 @@ fun HistoryScreen(
 
 @Composable
 private fun Content(
+    mode: HistoryMode,
     state: HistoryContract.State.Success,
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
@@ -309,7 +316,7 @@ private fun Content(
                     )
                 ) {
                     items(items = state.history, key = { it.id }) { item ->
-                        HistoryCard(item, onClick = { onItemClick(item.id) })
+                        HistoryCard(item, onClick = { onItemClick(item.id) }, isSelected = state.selectedIds.contains(item.id))
                     }
                 }
             }
@@ -323,6 +330,14 @@ private fun Content(
                     .padding(top = padding.calculateTopPadding()),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surface
+            )
+        }
+        if (mode == HistoryMode.SELECTION){
+            PrimaryButton(
+                enabled = state.selectedIds.size >= 2,
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
+                text = "Сравнить (${state.selectedIds.size})",
+                onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
             )
         }
     }

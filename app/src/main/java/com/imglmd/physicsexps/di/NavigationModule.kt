@@ -25,7 +25,7 @@ val navigationModule = module {
                 get<Navigator>().navigateTo(Screen.Result(runId))
             },
             navigateToHistory = {
-                get<Navigator>().navigateTo(Screen.History)
+                get<Navigator>().navigateTo(Screen.History())
             }
         )
     }
@@ -61,6 +61,9 @@ val navigationModule = module {
             navigateBack = { get<Navigator>().goBack() },
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))
+            },
+            onSelectRuns = {
+                TODO()
             }
         )
     }
