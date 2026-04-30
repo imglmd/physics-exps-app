@@ -62,7 +62,7 @@ fun FullScreenChartScreen(
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(state) {
-        if (state !is ResultContract.State.Success) {
+        if (state is ResultContract.State.Error) {
             navigateBack()
         }
     }
