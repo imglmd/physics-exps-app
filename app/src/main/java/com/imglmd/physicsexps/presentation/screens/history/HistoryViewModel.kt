@@ -36,7 +36,7 @@ class HistoryViewModel(
     private val getExperimentsUseCase: GetAllExperimentsUseCase
 ) : ViewModel() {
 
-    private val initialSelectedIds = preselectedIds.toSet() // 👈 фикс
+    private val initialSelectedIds = preselectedIds.toSet()
 
     private val _state = MutableStateFlow<HistoryContract.State>(
         HistoryContract.State.Loading
@@ -49,7 +49,19 @@ class HistoryViewModel(
     val actionFlow = _actionFlow.asSharedFlow()
 
     init {
-        loadHistory()
+        if (preselectedIds.isNotEmpty()) {
+            viewModelScope.launch {
+                val firstRun = getRunUseCase(preselectedIds.first())
+
+                _filter.value = _filter.value.copy(
+                    experimentId = firstRun.experimentId
+                )
+
+                loadHistory()
+            }
+        } else {
+            loadHistory()
+        }
     }
 
     fun onIntent(intent: HistoryContract.Intent) {
@@ -145,7 +157,7 @@ class HistoryViewModel(
 
                     val prev = _state.value as? HistoryContract.State.Success
 
-                    val selected = prev?.selectedIds ?: initialSelectedIds // 👈 ключевой фикс
+                    val selected = prev?.selectedIds ?: initialSelectedIds
 
                     _state.value = HistoryContract.State.Success(
                         history = emptyList(),
