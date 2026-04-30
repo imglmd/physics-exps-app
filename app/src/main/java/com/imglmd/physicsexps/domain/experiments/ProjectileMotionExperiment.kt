@@ -6,9 +6,13 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.atan
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class ProjectileMotionExperiment : Experiment {
     override val id = "projectile_motion"
@@ -113,7 +117,6 @@ class ProjectileMotionExperiment : Experiment {
                 PhysicalQuantity("Угол при ударе", "β", impactAngle, "°"),
             ),
             points = getPoints(pointInputs),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

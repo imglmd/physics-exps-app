@@ -19,7 +19,7 @@ class SaveRunUseCase(
         val runId = runsRepository.insert(
             ExperimentRun(
                 experimentId = result.experimentId,
-                date = result.date,
+                date = System.currentTimeMillis(),
                 inputData = json.encodeToString(inputs),
             )
         )

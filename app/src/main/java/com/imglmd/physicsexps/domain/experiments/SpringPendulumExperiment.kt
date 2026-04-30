@@ -5,8 +5,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.PI
 import kotlin.math.sqrt
 
@@ -72,7 +70,6 @@ class SpringPendulumExperiment: Experiment {
                 PhysicalQuantity("Циклическая частота", "w₀", angularFrequency, "рад/с")
             ),
             points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

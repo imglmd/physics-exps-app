@@ -4,10 +4,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import kotlin.math.roundToInt
-import kotlin.math.sin
 
 class DopplerEffectExperiment: Experiment {
     override val id = "doppler_effect"
@@ -68,8 +64,7 @@ class DopplerEffectExperiment: Experiment {
             ),
             points = getPoints(map),
             xLabel = xLabel,
-            yLabel = yLabel,
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
+            yLabel = yLabel
         )
     }
 

@@ -5,8 +5,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -67,7 +65,6 @@ class CoulombsLawExperiment: Experiment {
                     potentialEnergy, "нДж")
             ),
             points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )
