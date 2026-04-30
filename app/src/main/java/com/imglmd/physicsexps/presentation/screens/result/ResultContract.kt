@@ -9,7 +9,9 @@ object ResultContract {
         data object Loading: State
         data class Success(
             val result: ExperimentResult,
-            val comments: List<Comment> = emptyList()
+            val comments: List<Comment> = emptyList(),
+            val isSaved: Boolean = true,
+            val isSaving: Boolean = false
         ): State
         data class Error(val message: String): State
     }
@@ -30,7 +32,11 @@ object ResultContract {
     sealed interface Effect {
         data object NavigateBack: Effect
         data object NavigateHome: Effect
-        data class NavigateExperiment(val id: String, val inputs: Map<String, String>): Effect
+        data class NavigateExperiment(
+            val id: String,
+            val inputs: Map<String, String>,
+            val replaceRunId: Int? = null
+        ): Effect
 
         data class NavigateChart(val runId: Int): Effect
         data object NavigateSolution: Effect

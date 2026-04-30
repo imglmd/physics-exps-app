@@ -1,14 +1,11 @@
 package com.imglmd.physicsexps.domain.experiments
 
-import android.util.Log
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow
@@ -119,7 +116,6 @@ class ExampleExperiment : Experiment {
                 }
             },
             points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

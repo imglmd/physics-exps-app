@@ -1,12 +1,9 @@
 package com.imglmd.physicsexps.domain.experiments
 
-import androidx.compose.ui.unit.Velocity
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.pow
 
 class JouleLenzExperiment: Experiment {
@@ -97,9 +94,7 @@ class JouleLenzExperiment: Experiment {
             ),
             points = getPoints(map),
             xLabel = xLabel,
-            yLabel = yLabel,
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
-
+            yLabel = yLabel
         )
     }
 

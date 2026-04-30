@@ -9,5 +9,4 @@ data class ExperimentResult(
     val points: List<Pair<Double, Double>>, // точки для графиков
     val xLabel: String,
     val yLabel: String,
-    val date: Long,
 )

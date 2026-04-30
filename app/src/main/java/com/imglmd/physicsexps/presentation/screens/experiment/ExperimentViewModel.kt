@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 class ExperimentViewModel(
     private val id: String,
     private val inputs: Map<String, String>?,
+    private val replaceRunId: Int?,
     private val getExperiment: GetExperimentByIdUseCase,
     private val calculate: CalculateExperimentUseCase,
     private val resultRepository: InMemoryResultRepository
@@ -24,7 +25,11 @@ class ExperimentViewModel(
     private val experiment = getExperiment(id)
 
     private val _state = MutableStateFlow(
-        ExperimentContract.State(experiment, inputs?: emptyMap())
+        ExperimentContract.State(
+            experiment = experiment,
+            inputs = inputs?: emptyMap(),
+            isAdvancedMode = hasAdvancedInputs(inputs)
+        )
     )
     val state = _state.asStateFlow()
 
@@ -46,7 +51,7 @@ class ExperimentViewModel(
         when (val result = calculate(id, state.value.inputs)) {
 
             is CalculateExperimentUseCase.Result.Success -> {
-                resultRepository.save(result.result, result.inputs)
+                resultRepository.save(result.result, result.inputs, replaceRunId)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
             }
 
@@ -68,6 +73,15 @@ class ExperimentViewModel(
         _state.update { it.copy(isLoading = false) }
     }
 
+    private fun hasAdvancedInputs(inputs: Map<String, String>?): Boolean {
+        if (inputs.isNullOrEmpty()) return false
+
+        val additionalKeys = experiment.additionalInputFields.map { it.key }
+
+        return inputs.any { (key, value) ->
+            key in additionalKeys && value.toDoubleOrNull() != null
+        }
+    }
     private fun changeValue(key: String, newValue: String) {
         _state.update { current ->
 

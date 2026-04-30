@@ -2,6 +2,7 @@
 
 package com.imglmd.physicsexps.presentation.screens.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.presentation.blendWith
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
@@ -53,7 +53,7 @@ fun ResultScreen(
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
     navigateChart: (Int) -> Unit,
-    navigateExperiment: (String, Map<String, String>) -> Unit,
+    navigateExperiment: (String, Map<String, String>, Int?) -> Unit,
     navigateSolution: () -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
 ) {
@@ -66,7 +66,7 @@ fun ResultScreen(
                 ResultContract.Effect.NavigateBack -> navigateBack()
                 ResultContract.Effect.NavigateHome -> navigateHome()
                 is ResultContract.Effect.NavigateExperiment ->
-                    navigateExperiment(effect.id, effect.inputs)
+                    navigateExperiment(effect.id, effect.inputs, effect.replaceRunId)
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
                 ResultContract.Effect.NavigateSolution -> navigateSolution()
@@ -117,6 +117,8 @@ private fun Content(
 
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
+
+    BackHandler { onIntent(ResultContract.Intent.Back) }
 
     Scaffold(
         topBar = {
@@ -207,10 +209,10 @@ private fun BottomActions(
                 icon = Icons.Outlined.Delete,
                 onClick = onDelete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary.blendWith(
-                        MaterialTheme.colorScheme.background, 0.1f),
-                    contentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
                 ),
+                borderColor = MaterialTheme.colorScheme.error,
                 modifier = Modifier.weight(1.5f),
             )
 

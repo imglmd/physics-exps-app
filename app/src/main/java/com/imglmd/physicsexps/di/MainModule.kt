@@ -18,6 +18,7 @@ import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
+import com.imglmd.physicsexps.domain.usecase.run.GetFilteredRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -50,19 +51,21 @@ val mainModule = module {
     factory { GetExperimentByIdUseCase(get()) }
     factory { CalculateExperimentUseCase(get(),get()) }
     factory { GetLastRunsUseCase(get()) }
+    factory { GetFilteredRunsUseCase(get(), get()) }
     viewModel {
         HomeViewModel(get(), get(), get(), get(), get(), get())
     }
     viewModel { params ->
         val inputs: Map<String, String>? = params.getOrNull()
-        ExperimentViewModel(params.get(), inputs, get(), get(), get())
+        val replaceRunId: Int? = params.getOrNull()
+        ExperimentViewModel(params.get(), inputs, replaceRunId, get(), get(), get())
     }
     viewModel { params ->
         val runId: Int? = params.getOrNull()
-        ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get())
+        ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
-        HistoryViewModel(get(), get(), get(), get(), get(),get())
+        HistoryViewModel(get(), get(), get(), get(), get(),get(),get())
     }
     viewModel {
         SolutionViewModel(get(), get())

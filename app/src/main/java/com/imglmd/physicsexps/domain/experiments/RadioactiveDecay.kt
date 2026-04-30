@@ -4,8 +4,6 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -63,7 +61,6 @@ class RadioactiveDecay: Experiment {
                 PhysicalQuantity("Среднее время жизни", "τ", srTime, "с")
             ),
             points = getPoints(map),
-            date = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli(),
             xLabel = xLabel,
             yLabel = yLabel
         )

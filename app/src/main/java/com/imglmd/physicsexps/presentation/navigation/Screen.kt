@@ -7,7 +7,11 @@ sealed interface Screen {
     @Serializable
     data object Home : Screen
     @Serializable
-    data class Experiment(val id: String, val inputs: Map<String, String>? = null) : Screen
+    data class Experiment(
+        val id: String,
+        val inputs: Map<String, String>? = null,
+        val replaceRunId: Int? = null
+    ) : Screen
     @Serializable
     data class Result(val runId: Int? = null) : Screen
     @Serializable
