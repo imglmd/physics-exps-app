@@ -97,7 +97,7 @@ class RadioactiveDecay: Experiment {
 
         steps += SolutionStep.Formula(
             description = "Найдём количество оставшихся ядер, используя закон радиоактивного распада.",
-            expression = "N = N_0 2^-t/T"
+            expression = "N = N_0 2^\\frac{-t}{T}"
         )
 
         steps += SolutionStep.Formula(
@@ -130,7 +130,7 @@ class RadioactiveDecay: Experiment {
 
         steps += SolutionStep.Substitution(
             description = "Найдём количество оставшихся ядер",
-            expression = "N = $N0 2^-$t/$T",
+            expression = "N = $N0 \\times 2^\\frac{-$t}{$T})",
             result = "N = ${fmt(N)}"
         )
 
