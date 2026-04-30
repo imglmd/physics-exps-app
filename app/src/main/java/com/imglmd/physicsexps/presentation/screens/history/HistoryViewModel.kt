@@ -49,17 +49,14 @@ class HistoryViewModel(
     val actionFlow = _actionFlow.asSharedFlow()
 
     init {
-        if (preselectedIds.isNotEmpty()) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (preselectedIds.isNotEmpty()) {
                 val firstRun = getRunUseCase(preselectedIds.first())
-
                 _filter.value = _filter.value.copy(
                     experimentId = firstRun.experimentId
                 )
-
-                loadHistory()
             }
-        } else {
+
             loadHistory()
         }
     }
