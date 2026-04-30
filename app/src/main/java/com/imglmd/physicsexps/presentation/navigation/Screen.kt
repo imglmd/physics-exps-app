@@ -15,7 +15,10 @@ sealed interface Screen {
     @Serializable
     data class Result(val runId: Int? = null) : Screen
     @Serializable
-    data class History(val mode: HistoryMode = HistoryMode.NORMAL) : Screen
+    data class History(
+        val mode: HistoryMode = HistoryMode.NORMAL,
+        val preselectedIds: List<Int> = emptyList()
+    ) : Screen
     @Serializable
     data class FullScreenChart(
         val runId: Int

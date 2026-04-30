@@ -2,6 +2,7 @@
 
 package com.imglmd.physicsexps.di
 
+import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
@@ -53,11 +54,16 @@ val navigationModule = module {
             navigateChart = { runId ->
                 get<Navigator>().navigateTo(Screen.FullScreenChart(runId))
             },
-            navigateSolution = { get<Navigator>().navigateTo(Screen.Solution) }
+            navigateSolution = { get<Navigator>().navigateTo(Screen.Solution) },
+            navigateCompare = {  id ->
+                get<Navigator>().navigateTo(Screen.History(mode = HistoryMode.SELECTION, listOf(id)))
+            }
         )
     }
-    navigation<Screen.History>{
+    navigation<Screen.History>{ route ->
         HistoryScreen(
+            mode = route.mode,
+            preselectedIds = route.preselectedIds,
             navigateBack = { get<Navigator>().goBack() },
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))

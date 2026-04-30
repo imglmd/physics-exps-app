@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class HistoryViewModel(
+    preselectedIds: List<Int>,
     private val registry: ExperimentRegistry,
     private val getResultUseCase: GetResultUseCase,
     private val getRunUseCase: GetRunUseCase,
@@ -34,6 +35,8 @@ class HistoryViewModel(
     private val getFilteredRunsUseCase: GetFilteredRunsUseCase,
     private val getExperimentsUseCase: GetAllExperimentsUseCase
 ) : ViewModel() {
+
+    private val initialSelectedIds = preselectedIds.toSet() // 👈 фикс
 
     private val _state = MutableStateFlow<HistoryContract.State>(
         HistoryContract.State.Loading
@@ -45,39 +48,38 @@ class HistoryViewModel(
     private val _actionFlow = MutableSharedFlow<HistoryContract.Action>()
     val actionFlow = _actionFlow.asSharedFlow()
 
-
     init {
         loadHistory()
-
-        viewModelScope.launch {
-            _filter.collect { filter ->
-                _state.update {
-                    (it as? HistoryContract.State.Success)?.copy(
-                        filter = filter,
-                    ) ?: it
-                }
-            }
-        }
     }
 
-    fun onIntent(intent: HistoryContract.Intent){
+    fun onIntent(intent: HistoryContract.Intent) {
         when (intent) {
             is HistoryContract.Intent.NavigateToResult -> navigateToResult(intent.resultId)
 
-            HistoryContract.Intent.ShowDeleteDialog -> _state.update {
-                (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = true) ?: it
+            HistoryContract.Intent.ShowDeleteDialog -> updateState {
+                it.copy(showDeleteDialog = true)
             }
-            HistoryContract.Intent.HideDeleteDialog -> _state.update {
-                (it as? HistoryContract.State.Success)?.copy(showDeleteDialog = false) ?: it
+
+            HistoryContract.Intent.HideDeleteDialog -> updateState {
+                it.copy(showDeleteDialog = false)
             }
+
             HistoryContract.Intent.DeleteAll -> deleteAllHistory()
 
-            is HistoryContract.Intent.SetDateRange -> _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
-            is HistoryContract.Intent.SetExperimentFilter -> _filter.update { it.copy(experimentId = intent.experimentId) }
-            is HistoryContract.Intent.SetSortOrder -> _filter.update { it.copy(sortOrder = intent.order) }
-            HistoryContract.Intent.ClearFilters -> _filter.value = HistoryFilter()
-            HistoryContract.Intent.ToggleFilterSheet -> _state.update {
-                (it as? HistoryContract.State.Success)?.copy(isFilterOpen = !it.isFilterOpen) ?: it
+            is HistoryContract.Intent.SetDateRange ->
+                _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
+
+            is HistoryContract.Intent.SetExperimentFilter ->
+                _filter.update { it.copy(experimentId = intent.experimentId) }
+
+            is HistoryContract.Intent.SetSortOrder ->
+                _filter.update { it.copy(sortOrder = intent.order) }
+
+            HistoryContract.Intent.ClearFilters ->
+                _filter.value = HistoryFilter()
+
+            HistoryContract.Intent.ToggleFilterSheet -> updateState {
+                it.copy(isFilterOpen = !it.isFilterOpen)
             }
 
             HistoryContract.Intent.ConfirmSelection -> {
@@ -88,15 +90,17 @@ class HistoryViewModel(
                     )
                 }
             }
-            is HistoryContract.Intent.ToggleSelection -> handleToggleSelection(intent.id)
+
+            is HistoryContract.Intent.ToggleSelection ->
+                handleToggleSelection(intent.id)
         }
     }
+
     private fun handleToggleSelection(id: Int) {
-        _state.update { s ->
-            val st = s as? HistoryContract.State.Success ?: return@update s
+        updateState { st ->
 
             val newSet = st.selectedIds.toMutableSet()
-            val clickedItem = st.history.find { it.id == id } ?: return@update st
+            val clickedItem = st.history.find { it.id == id } ?: return@updateState st
 
             if (newSet.contains(id)) {
                 newSet.remove(id)
@@ -105,10 +109,10 @@ class HistoryViewModel(
                     _filter.update { it.copy(experimentId = null) }
                 }
 
-                return@update st.copy(selectedIds = newSet)
+                return@updateState st.copy(selectedIds = newSet)
             }
 
-            if (newSet.size >= 2) return@update st
+            if (newSet.size >= 2) return@updateState st
 
             if (newSet.isEmpty()) {
                 _filter.update {
@@ -122,7 +126,7 @@ class HistoryViewModel(
                 it.experimentId == clickedItem.experimentId
             }
 
-            if (!isSameExperiment) return@update st
+            if (!isSameExperiment) return@updateState st
 
             newSet.add(id)
 
@@ -130,22 +134,6 @@ class HistoryViewModel(
         }
     }
 
-    private fun navigateToResult(id: Int){
-        viewModelScope.launch {
-            val run = getRunUseCase(id) ?: return@launch
-
-            val inputs: Map<String, Double> =
-                runCatching {
-                    Json.decodeFromString<Map<String, Double>>(run.inputData)
-                }.getOrDefault(emptyMap())
-
-            val result = getResultUseCase(id) ?: return@launch
-
-            resultRepository.save(result, inputs)
-
-            _actionFlow.emit(HistoryContract.Action.NavigateToResult(id))
-        }
-    }
     private fun loadHistory() {
         viewModelScope.launch {
 
@@ -157,18 +145,19 @@ class HistoryViewModel(
 
                     val prev = _state.value as? HistoryContract.State.Success
 
+                    val selected = prev?.selectedIds ?: initialSelectedIds // 👈 ключевой фикс
+
                     _state.value = HistoryContract.State.Success(
                         history = emptyList(),
                         isLoading = true,
                         availableExperiments = experiments,
                         filter = _filter.value,
-                        selectedIds = prev?.selectedIds ?: emptySet()
+                        selectedIds = selected
                     )
 
-                    val chunkSize = 5
                     val resultList = mutableListOf<HistoryItemUi>()
 
-                    runs.chunked(chunkSize).forEach { chunk ->
+                    runs.chunked(5).forEach { chunk ->
 
                         val processed = chunk.mapNotNull { run ->
                             runCatching { processRun(run) }.getOrNull()
@@ -176,14 +165,12 @@ class HistoryViewModel(
 
                         resultList += processed
 
-                        val prev = _state.value as? HistoryContract.State.Success
-
                         _state.value = HistoryContract.State.Success(
                             history = resultList.toList(),
                             isLoading = true,
                             availableExperiments = experiments,
                             filter = _filter.value,
-                            selectedIds = prev?.selectedIds ?: emptySet()
+                            selectedIds = selected
                         )
                     }
 
@@ -192,19 +179,43 @@ class HistoryViewModel(
                         isLoading = false,
                         availableExperiments = experiments,
                         filter = _filter.value,
-                        selectedIds = prev?.selectedIds ?: emptySet()
+                        selectedIds = selected
                     )
                 }
         }
     }
 
+    private fun updateState(block: (HistoryContract.State.Success) -> HistoryContract.State.Success) {
+        _state.update {
+            (it as? HistoryContract.State.Success)?.let(block) ?: it
+        }
+    }
+
+    private fun navigateToResult(id: Int) {
+        viewModelScope.launch {
+            val run = getRunUseCase(id) ?: return@launch
+
+            val inputs = runCatching {
+                Json.decodeFromString<Map<String, Double>>(run.inputData)
+            }.getOrDefault(emptyMap())
+
+            val result = getResultUseCase(id) ?: return@launch
+
+            resultRepository.save(result, inputs)
+
+            _actionFlow.emit(HistoryContract.Action.NavigateToResult(id))
+        }
+    }
 
     private suspend fun processRun(run: ExperimentRun): HistoryItemUi {
-        val inputs: Map<String, Double> = runCatching {
+        val inputs = runCatching {
             Json.decodeFromString<Map<String, Double>>(run.inputData)
         }.getOrDefault(emptyMap())
 
-        val experiment = runCatching { registry.getById(run.experimentId) }.getOrNull()
+        val experiment = runCatching {
+            registry.getById(run.experimentId)
+        }.getOrNull()
+
         val result = getResultUseCase(run.id)
 
         return HistoryItemUi(
@@ -214,19 +225,21 @@ class HistoryViewModel(
             category = experiment?.category ?: "",
             date = run.date,
             inputs = inputs,
-            points = normalizePoints(downsamplePoints(result?.points ?: emptyList(), 30)),
+            points = normalizePoints(
+                downsamplePoints(result?.points ?: emptyList(), 30)
+            ),
             quantities = result?.quantities ?: emptyList()
         )
     }
 
-    private fun deleteAllHistory(){
+    private fun deleteAllHistory() {
         viewModelScope.launch {
             deleteAllRunsUseCase()
-            _state.update {
-                (it as? HistoryContract.State.Success)?.copy(
+            updateState {
+                it.copy(
                     showDeleteDialog = false,
                     history = emptyList()
-                ) ?: it
+                )
             }
         }
     }

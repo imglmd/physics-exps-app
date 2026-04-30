@@ -60,14 +60,16 @@ import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.screens.history.components.FilterChipsRow
 import com.imglmd.physicsexps.presentation.screens.history.components.HistoryCard
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun HistoryScreen(
     mode: HistoryMode = HistoryMode.NORMAL,
+    preselectedIds: List<Int>,
     navigateBack: () -> Unit,
     navigateToResult: (runId: Int) -> Unit,
     onSelectRuns: (ids: List<Int>) -> Unit,
-    viewModel: HistoryViewModel = koinViewModel()
+    viewModel: HistoryViewModel = koinViewModel{ parametersOf(preselectedIds) }
 ) {
     val state by viewModel.state.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }

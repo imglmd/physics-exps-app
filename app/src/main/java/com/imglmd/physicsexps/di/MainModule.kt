@@ -31,6 +31,7 @@ import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
 import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val mainModule = module {
@@ -64,8 +65,9 @@ val mainModule = module {
         val runId: Int? = params.getOrNull()
         ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get(), get())
     }
-    viewModel {
-        HistoryViewModel(get(), get(), get(), get(), get(),get(),get())
+    viewModel { params ->
+
+        HistoryViewModel(params.get(), get(), get(), get(), get(),get(),get(), get())
     }
     viewModel {
         SolutionViewModel(get(), get())
