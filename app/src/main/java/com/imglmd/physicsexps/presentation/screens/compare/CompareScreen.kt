@@ -3,8 +3,10 @@ package com.imglmd.physicsexps.presentation.screens.compare
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
+import com.imglmd.physicsexps.presentation.screens.compare.components.CompareRunCard
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import org.koin.compose.viewmodel.koinViewModel
@@ -117,8 +120,8 @@ private fun CompareContent(items: List<CompareItem>) {
     val run1 = items[0]
     val run2 = items[1]
 
-    val lineColor1 = MaterialTheme.colorScheme.primary
-    val lineColor2 = MaterialTheme.colorScheme.secondary
+    val color1 = MaterialTheme.colorScheme.primary
+    val color2 = MaterialTheme.colorScheme.secondary
 
     val modelProducer = remember { CartesianChartModelProducer() }
 
@@ -144,13 +147,31 @@ private fun CompareContent(items: List<CompareItem>) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            CompareRunCard(
+                item = run1,
+                label = "Запуск 1",
+                accentColor = color1,
+                modifier = Modifier.weight(1f)
+            )
+            CompareRunCard(
+                item = run2,
+                label = "Запуск 2",
+                accentColor = color2,
+                modifier = Modifier.weight(1f)
+            )
+        }
+
 
         CompareChartCard(
             xLabel = run1.result.xLabel,
             yLabel = run1.result.yLabel,
             modelProducer = modelProducer,
-            color1 = lineColor1,
-            color2 = lineColor2
+            color1 = color1,
+            color2 = color2
         )
 
         Spacer(Modifier.height(8.dp))
