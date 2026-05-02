@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.domain.experiments.CoulombsLawExperiment
 import com.imglmd.physicsexps.domain.experiments.DopplerEffectExperiment
 import com.imglmd.physicsexps.domain.experiments.ExampleExperiment
 import com.imglmd.physicsexps.domain.experiments.FreeFallExperiment
+import com.imglmd.physicsexps.domain.experiments.HarmonicVibrationsExperiment
 import com.imglmd.physicsexps.domain.experiments.JouleLenzExperiment
 import com.imglmd.physicsexps.domain.experiments.PhysicalPendulum
 import com.imglmd.physicsexps.domain.experiments.ProjectileMotionExperiment
@@ -26,7 +27,8 @@ val experimentsModule = module {
             SpringPendulumExperiment(),
             DopplerEffectExperiment(),
             JouleLenzExperiment(),
-            PhysicalPendulum()
+            PhysicalPendulum(),
+            HarmonicVibrationsExperiment()
         )
     }
 
