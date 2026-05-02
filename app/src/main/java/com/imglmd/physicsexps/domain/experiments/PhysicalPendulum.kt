@@ -134,7 +134,7 @@ class PhysicalPendulum: Experiment {
 
         steps += SolutionStep.Formula(
             description = "Найдём период колебаний физического маятника.",
-            expression = "T = 2\\pi\\sqrt{\\frac{I}{mgd}}"
+            expression = "T = 2\\pi\\sqrt{\\frac{I}{m g d}}"
         )
 
         steps += SolutionStep.Formula(
@@ -144,7 +144,7 @@ class PhysicalPendulum: Experiment {
 
         steps += SolutionStep.Formula(
             description = "Вычислим циклическую частоту - число колебаний за 2π секунд.",
-            expression = "\\omega = \\sqrt{\\frac{mgd}{I}}"
+            expression = "\\omega = \\sqrt{\\frac{m g d}{I}}"
         )
 
         steps += SolutionStep.Formula(
@@ -154,7 +154,7 @@ class PhysicalPendulum: Experiment {
 
         steps += SolutionStep.Formula(
             description = "Найдём угловое ускорение - ускорение в момент времени, когда маятник отклонен на угол α.",
-            expression = "\\beta = \\frac{mgd\\sin(\\alpha)}{I}"
+            expression = "\\beta = \\frac{m g d \\sin(\\alpha)}{I}"
         )
 
         steps += SolutionStep.Formula(
@@ -169,7 +169,7 @@ class PhysicalPendulum: Experiment {
 
         steps += SolutionStep.Formula(
             description = "Найдём максимальную угловую скорость, достигается в момент прохождения положения равновесия.",
-            expression = "\\omega_max = \\sqrt{frac{2mgd(1 - \\cos(\\alpha))}{I}}"
+            expression = "\\omega_max = \\sqrt{\\frac{2 m g d (1 - \\cos(\\alpha))}{I}}"
         )
 
         if (inputs == null) return steps
@@ -242,7 +242,7 @@ class PhysicalPendulum: Experiment {
 
             steps += SolutionStep.Substitution(
                 description = "Найдём максимальную угловую скорость",
-                expression = "\\omega_max = \\sqrt{frac{2$m \\times $g \\times $d(1 - \\cos($a))}{$i}}",
+                expression = "\\omega_max = \\sqrt{\\frac{2$m \\times $g \\times $d(1 - \\cos($a))}{$i}}",
                 result = "\\omega_max = ${fmt(w)} \\text{рад/с}"
             )
             steps += SolutionStep.Result(
