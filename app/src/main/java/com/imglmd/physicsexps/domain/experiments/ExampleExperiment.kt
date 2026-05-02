@@ -27,6 +27,9 @@ class ExampleExperiment : Experiment {
         InputField("length", "Длина нити", "L", "м", min = 0.0),
         InputField("period", "Период колебаний", "T", "с", min = 0.0),
         InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0),
+    )
+
+    override val additionalInputFields = listOf(
         InputField(
             key = "angle",
             label = "Угол отклонения",
@@ -52,9 +55,9 @@ class ExampleExperiment : Experiment {
         val gravity: Double
         val frequency: Double
         val angularFrequency: Double
-        var amplitude: Double? = null
-        var maxSpeed: Double? = null
-        var maxHeight: Double? = null
+        var amplitude: Double?
+        var maxSpeed: Double?
+        var maxHeight: Double?
         val map = mutableMapOf<String, Double>()
 
         when {
@@ -95,6 +98,10 @@ class ExampleExperiment : Experiment {
             amplitude = length * sin(rad)
             maxSpeed = sqrt(2*gravity*length*(1 - cos(rad)))
             maxHeight = length*(1 - cos(rad))
+        } else {
+            amplitude = null
+            maxSpeed = null
+            maxHeight = null
         }
 
         return ExperimentResult(
@@ -103,8 +110,11 @@ class ExampleExperiment : Experiment {
                 add(PhysicalQuantity("Длина нити", "L", length, "м"))
                 add(PhysicalQuantity("Период", "T", period, "с"))
                 add(PhysicalQuantity("Ускорение", "g", gravity, "м/с²"))
-                add(PhysicalQuantity("Частота колебаний", "V", frequency, "Гц"))
+                add(PhysicalQuantity("Частота колебаний", "ν", frequency, "Гц"))
                 add(PhysicalQuantity("Циклическая частота", "w₀", angularFrequency, "рад/с"))
+                if (a != null) {
+                    add(PhysicalQuantity("Угол отклонения", "α", a, "°"))
+                }
                 if (amplitude != null) {
                     add(PhysicalQuantity("Амплитуда", "A", amplitude, "м"))
                 }
@@ -149,7 +159,7 @@ class ExampleExperiment : Experiment {
 
         steps += SolutionStep.Formula(
             description = "Зная длину нити и ускорение свободного падения, найдём период колебаний.",
-            expression = "T = 2\\pi\\sqrt{\\frac{l}{g}} "
+            expression = "T = 2\\pi\\sqrt{\\frac{l}{g}}"
         )
 
         steps += SolutionStep.Formula(
@@ -168,7 +178,7 @@ class ExampleExperiment : Experiment {
         )
 
         steps += SolutionStep.Formula(
-            description = "Вычислим циклическую частоту - число колебаний за 2 π секунд.",
+            description = "Вычислим циклическую частоту - число колебаний за 2π секунд.",
             expression = "\\omega = \\sqrt{\\frac{g}{l}}"
         )
 
@@ -251,19 +261,19 @@ class ExampleExperiment : Experiment {
             mH = l*(1 - cos(rad))
             steps += SolutionStep.Substitution(
                 description = "Найдём амплитуду колебаний математического маятника",
-                expression = "A = ${fmt(l)} \\sin(${fmt(rad)})",
+                expression = "A = ${fmt(l)} \\sin(${fmt(a)})",
                 result = "A = ${fmt(A)} \\text{м}"
             )
 
             steps += SolutionStep.Substitution(
                 description = "Найдём максимальную скорость математического маятника",
-                expression = "v_max = \\sqrt{2 \\times ${fmt(g)} \\times ${fmt(l)} \\times (1 - \\cos(${fmt(rad)}))}",
+                expression = "v_max = \\sqrt{2 \\times ${fmt(g)} \\times ${fmt(l)} \\times (1 - \\cos(${fmt(a)}))}",
                 result = "v_max = ${fmt(mV)} \\text{\\frac{м}{с}}"
             )
 
             steps += SolutionStep.Substitution(
                 description = "Найдём максимальную высоту подъёма математического маятника",
-                expression = "h_max = $l (1 - \\cos(${rad}))",
+                expression = "h_max = $l (1 - \\cos(${fmt(a)}))",
                 result = "h_max = ${fmt(mH)} \\text{м}"
             )
             steps += SolutionStep.Result (
