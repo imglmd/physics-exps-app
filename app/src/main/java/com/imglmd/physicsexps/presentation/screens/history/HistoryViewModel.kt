@@ -35,11 +35,11 @@ class HistoryViewModel(
     private val getFilteredRunsUseCase: GetFilteredRunsUseCase,
     private val getExperimentsUseCase: GetAllExperimentsUseCase
 ) : ViewModel() {
-
-    private val initialSelectedIds = preselectedIds.toSet()
-
-    private val _state = MutableStateFlow<HistoryContract.State>(
-        HistoryContract.State.Loading
+    private val _state = MutableStateFlow(
+        HistoryContract.State(
+            isLoading = true,
+            selectedIds = preselectedIds
+        )
     )
     val state = _state.asStateFlow()
 
@@ -65,81 +65,57 @@ class HistoryViewModel(
         when (intent) {
             is HistoryContract.Intent.NavigateToResult -> navigateToResult(intent.resultId)
 
-            HistoryContract.Intent.ShowDeleteDialog -> updateState {
-                it.copy(showDeleteDialog = true)
-            }
-
-            HistoryContract.Intent.HideDeleteDialog -> updateState {
-                it.copy(showDeleteDialog = false)
-            }
-
+            HistoryContract.Intent.ShowDeleteDialog -> _state.update { it.copy(showDeleteDialog = true) }
+            HistoryContract.Intent.HideDeleteDialog -> _state.update { it.copy(showDeleteDialog = false) }
             HistoryContract.Intent.DeleteAll -> deleteAllHistory()
 
-            is HistoryContract.Intent.SetDateRange ->
-                _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
+            is HistoryContract.Intent.SetDateRange -> _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
+            is HistoryContract.Intent.SetExperimentFilter -> _filter.update { it.copy(experimentId = intent.experimentId) }
+            is HistoryContract.Intent.SetSortOrder -> _filter.update { it.copy(sortOrder = intent.order) }
+            HistoryContract.Intent.ClearFilters -> _filter.value = HistoryFilter()
 
-            is HistoryContract.Intent.SetExperimentFilter ->
-                _filter.update { it.copy(experimentId = intent.experimentId) }
-
-            is HistoryContract.Intent.SetSortOrder ->
-                _filter.update { it.copy(sortOrder = intent.order) }
-
-            HistoryContract.Intent.ClearFilters ->
-                _filter.value = HistoryFilter()
-
-            HistoryContract.Intent.ToggleFilterSheet -> updateState {
-                it.copy(isFilterOpen = !it.isFilterOpen)
+            HistoryContract.Intent.ConfirmSelection -> viewModelScope.launch {
+                _actionFlow.emit(HistoryContract.Action.ReturnSelection(_state.value.selectedIds))
             }
-
-            HistoryContract.Intent.ConfirmSelection -> {
-                val st = _state.value as? HistoryContract.State.Success ?: return
-                viewModelScope.launch {
-                    _actionFlow.emit(
-                        HistoryContract.Action.ReturnSelection(st.selectedIds.toList())
-                    )
-                }
-            }
-
-            is HistoryContract.Intent.ToggleSelection ->
-                handleToggleSelection(intent.id)
+            is HistoryContract.Intent.ToggleSelection -> handleToggleSelection(intent.id)
         }
     }
 
     private fun handleToggleSelection(id: Int) {
-        updateState { st ->
+        _state.update { st ->
 
-            val newSet = st.selectedIds.toMutableSet()
-            val clickedItem = st.history.find { it.id == id } ?: return@updateState st
+            val newList = st.selectedIds.toMutableList()
+            val clickedItem = st.history.find { it.id == id } ?: return@update st
 
-            if (newSet.contains(id)) {
-                newSet.remove(id)
+            if (newList.contains(id)) {
+                newList.remove(id)
 
-                if (newSet.isEmpty()) {
+                if (newList.isEmpty()) {
                     _filter.update { it.copy(experimentId = null) }
                 }
 
-                return@updateState st.copy(selectedIds = newSet)
+                return@update st.copy(selectedIds = newList)
             }
 
-            if (newSet.size >= 2) return@updateState st
+            if (newList.size >= 2) return@update st
 
-            if (newSet.isEmpty()) {
+            if (newList.isEmpty()) {
                 _filter.update {
                     it.copy(experimentId = clickedItem.experimentId)
                 }
             }
 
-            val selectedItems = st.history.filter { newSet.contains(it.id) }
+            val selectedItems = st.history.filter { newList.contains(it.id) }
 
             val isSameExperiment = selectedItems.all {
                 it.experimentId == clickedItem.experimentId
             }
 
-            if (!isSameExperiment) return@updateState st
+            if (!isSameExperiment) return@update st
 
-            newSet.add(id)
+            newList.add(id)
 
-            st.copy(selectedIds = newSet)
+            st.copy(selectedIds = newList)
         }
     }
 
@@ -152,17 +128,14 @@ class HistoryViewModel(
                 .flowOn(Dispatchers.IO)
                 .collectLatest { runs ->
 
-                    val prev = _state.value as? HistoryContract.State.Success
-
-                    val selected = prev?.selectedIds ?: initialSelectedIds
-
-                    _state.value = HistoryContract.State.Success(
-                        history = emptyList(),
-                        isLoading = true,
-                        availableExperiments = experiments,
-                        filter = _filter.value,
-                        selectedIds = selected
-                    )
+                    _state.update {
+                        it.copy(
+                            history = emptyList(),
+                            isLoading = true,
+                            availableExperiments = experiments,
+                            filter = _filter.value,
+                        )
+                    }
 
                     val resultList = mutableListOf<HistoryItemUi>()
 
@@ -174,35 +147,26 @@ class HistoryViewModel(
 
                         resultList += processed
 
-                        _state.value = HistoryContract.State.Success(
-                            history = resultList.toList(),
-                            isLoading = true,
-                            availableExperiments = experiments,
-                            filter = _filter.value,
-                            selectedIds = selected
-                        )
+                        _state.update {
+                            it.copy(
+                                history = resultList.toList(),
+                                isLoading = true
+                            )
+                        }
                     }
 
-                    _state.value = HistoryContract.State.Success(
-                        history = resultList,
-                        isLoading = false,
-                        availableExperiments = experiments,
-                        filter = _filter.value,
-                        selectedIds = selected
-                    )
+                    _state.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                 }
-        }
-    }
-
-    private fun updateState(block: (HistoryContract.State.Success) -> HistoryContract.State.Success) {
-        _state.update {
-            (it as? HistoryContract.State.Success)?.let(block) ?: it
         }
     }
 
     private fun navigateToResult(id: Int) {
         viewModelScope.launch {
-            val run = getRunUseCase(id) ?: return@launch
+            val run = getRunUseCase(id)
 
             val inputs = runCatching {
                 Json.decodeFromString<Map<String, Double>>(run.inputData)
@@ -244,10 +208,11 @@ class HistoryViewModel(
     private fun deleteAllHistory() {
         viewModelScope.launch {
             deleteAllRunsUseCase()
-            updateState {
+            _state.update {
                 it.copy(
                     showDeleteDialog = false,
-                    history = emptyList()
+                    history = emptyList(),
+                    isLoading = false
                 )
             }
         }

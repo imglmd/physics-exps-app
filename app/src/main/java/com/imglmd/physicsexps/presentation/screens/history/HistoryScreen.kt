@@ -129,41 +129,29 @@ fun HistoryScreen(
             )
         }
     ) { innerPadding ->
-        when (val s = state) {
-            is HistoryContract.State.Error -> Text(s.message)
-
-            HistoryContract.State.Loading -> Box(
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+        Content(
+            mode = mode,
+            state = state,
+            onItemClick = {
+                if (mode == HistoryMode.SELECTION) viewModel.onIntent(HistoryContract.Intent.ToggleSelection(it))
+                else viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
+            padding = innerPadding,
+            isLoading = state.isLoading,
+            onIntent = viewModel::onIntent,
+            onDateChipClick = {
+                if (state.filter.dateFrom != null || state.filter.dateTo != null) {
+                    viewModel.onIntent(
+                        HistoryContract.Intent.SetDateRange(null, null)
+                    )
+                } else showDatePicker = true
             }
-
-            is HistoryContract.State.Success -> Content(
-                mode = mode,
-                state = s,
-                onItemClick = {
-                    if (mode == HistoryMode.SELECTION) viewModel.onIntent(HistoryContract.Intent.ToggleSelection(it))
-                    else viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
-                padding = innerPadding,
-                isLoading = s.isLoading,
-                onIntent = viewModel::onIntent,
-                onDateChipClick = {
-                    if (s.filter.dateFrom != null || s.filter.dateTo != null) {
-                        viewModel.onIntent(
-                            HistoryContract.Intent.SetDateRange(null, null)
-                        )
-                    } else showDatePicker = true
-                }
-            )
-        }
+        )
     }
 
     if (showDatePicker) {
-        val successState = state as? HistoryContract.State.Success
         val pickerState = rememberDateRangePickerState(
-            initialSelectedStartDateMillis = successState?.filter?.dateFrom,
-            initialSelectedEndDateMillis = successState?.filter?.dateTo
+            initialSelectedStartDateMillis = state.filter.dateFrom,
+            initialSelectedEndDateMillis = state.filter.dateTo
         )
 
         DatePickerDialog(
@@ -226,7 +214,7 @@ fun HistoryScreen(
         }
     }
 
-    if (state is HistoryContract.State.Success && (state as HistoryContract.State.Success).showDeleteDialog) {
+    if (state.showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog) },
             containerColor = MaterialTheme.colorScheme.surface,
@@ -284,7 +272,7 @@ fun HistoryScreen(
 @Composable
 private fun Content(
     mode: HistoryMode,
-    state: HistoryContract.State.Success,
+    state: HistoryContract.State,
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
     onIntent: (HistoryContract.Intent) -> Unit,

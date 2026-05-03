@@ -42,7 +42,7 @@ private fun formatDateRange(from: Long?, to: Long?): String {
 
 @Composable
 fun FilterChipsRow(
-    state: HistoryContract.State.Success,
+    state: HistoryContract.State,
     onIntent: (HistoryContract.Intent) -> Unit,
     onDateChipClick: () -> Unit
 ) {
