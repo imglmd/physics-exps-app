@@ -5,8 +5,10 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.presentation.navigation.Screen
 import kotlin.math.PI
 import kotlin.math.asin
+import kotlin.math.exp
 import kotlin.math.sin
 
 class HarmonicVibrationsExperiment: Experiment {
@@ -78,6 +80,67 @@ class HarmonicVibrationsExperiment: Experiment {
 
     override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
         val steps = mutableListOf<SolutionStep>()
+        steps += SolutionStep.Theory(
+            title = "Идея решения",
+            body = "Уравнение гармонических колебаний описывает осциллирующее движение физической величины по гармоническому закону, чтобы перейти к " +
+                    "гармоническим колебаниям, нам нужно описать величины, которые помогут нам" +
+                    " эти колебания охарактеризовать. Любое колебательное движение можно" +
+                    " описать величинами: период, частота, амплитуда, фаза колебаний."
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём циклическую частоту - физическая величина, равная числу полных колебаний, совершаемых за 2π секунд",
+            expression = "\\omega = \\frac{2\\pi}{T}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём начальную фазу колебаний - физическая величина, которая показывает отклонение точки от положения равновесия.",
+            expression = "\\phi = arcsin(\\frac{x_0}{A})"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Запишем уравнение гармонических колебаний.",
+            expression = "x(t) = A \\sin(\\omega t + \\phi)\\\\ x(t) = A \\cos(\\omega t + \\phi)"
+        )
+
+        if (inputs == null) return steps
+
+        val A = inputs.getValue("amplitude")
+        val T = inputs.getValue("period")
+        val x_0 = inputs.getValue("start_position")
+        val t = inputs.getValue("time")
+
+        val angularFrequency = (2 * PI)/T
+        val phase = asin(x_0/A)
+
+        val fmt = { d: Double -> "%.2f".format(d) }
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём циклическую частоту",
+            expression = "\\omega = \\frac{2\\pi}{$T}",
+            result = "\\omega = ${fmt(angularFrequency)} \\text{рад/с}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём начальную фазу колебаний",
+            expression = "\\phi = arcsin(\\frac{$x_0}{$A})",
+            result = "\\phi = ${fmt(phase)}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Запишем уравнение гармонических колебаний",
+            expression = "x(t) = A \\sin(${fmt(angularFrequency)} \\times t + ${fmt(phase)})\\\\ " +
+                    "x(t) = A \\cos(${fmt(angularFrequency)} \\times t + ${fmt(phase)})",
+            result = ""
+        )
+
+        steps += SolutionStep.Result(
+            listOf(
+                PhysicalQuantity("Циклическая частота", "ω", angularFrequency, "рад/с"),
+                PhysicalQuantity("Начальная фаза", "φ", phase, "рад"),
+                PhysicalQuantity("Продолжительность колебаний", "t", t, "с")
+            )
+        )
         return steps
     }
 }
