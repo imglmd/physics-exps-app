@@ -306,7 +306,9 @@ private fun Content(
                     )
                 ) {
                     items(items = state.history, key = { it.id }) { item ->
-                        HistoryCard(item, onClick = { onItemClick(item.id) }, isSelected = state.selectedIds.contains(item.id))
+                        val index = state.selectedIds.indexOf(item.id)
+                            .takeIf { it != -1 }
+                        HistoryCard(item, onClick = { onItemClick(item.id) }, selectionIndex = index)
                     }
                 }
             }

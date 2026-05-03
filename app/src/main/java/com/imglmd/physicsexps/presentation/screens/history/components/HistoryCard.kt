@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -41,20 +42,30 @@ import java.util.Date
 import java.util.Locale
 import kotlin.collections.take
 import kotlin.text.uppercase
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun HistoryCard(
     item: HistoryItemUi,
-    isSelected: Boolean,
+    selectionIndex: Int?,
     onClick: () -> Unit
 ) {
     val scale by animateFloatAsState(
-        targetValue = if (isSelected) 1.02f else 0.99f,
+        targetValue = if (selectionIndex != null) 1.02f else 0.99f,
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
         label = "history_scale"
     )
-
-    Column(
+    val borderColor = when (selectionIndex) {
+        0 -> MaterialTheme.colorScheme.primary
+        1 -> MaterialTheme.colorScheme.secondary
+        else -> MaterialTheme.colorScheme.outlineVariant
+    }
+    val badgeColor = when (selectionIndex){
+        0 -> MaterialTheme.colorScheme.primary.copy(0.2f)
+        1 -> MaterialTheme.colorScheme.secondary.copy(0.2f)
+        else -> MaterialTheme.colorScheme.surfaceVariant
+    }
+    Box(
         modifier = Modifier
             .width(160.dp)
             .graphicsLayer {
@@ -62,75 +73,97 @@ fun HistoryCard(
                 scaleY = scale
                 transformOrigin = TransformOrigin(0.5f, 0f)
             }
-            .border(
-                width = 1.dp,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .clip(RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable { onClick() }
     ) {
-        if (isSystemInDarkTheme()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(MaterialTheme.colorScheme.primary)
-            )
+        Column(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .clickable { onClick() }
+        ) {
+            /*if (isSystemInDarkTheme()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(4.dp)
+                        .background(MaterialTheme.colorScheme.primary)
+                )
+            }*/
+
+            Column(
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = item.category.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = item.experimentName,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                if (item.quantities.isNotEmpty()) {
+                    Spacer(Modifier.height(2.dp))
+                    QuantitiesSection(item.quantities)
+                }
+
+                if (item.points.isNotEmpty()) {
+
+                    Spacer(Modifier.height(6.dp))
+
+                    HistoryChartCard(
+                        points = item.points,
+                    )
+                }
+
+                Spacer(Modifier.height(4.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Text(
+                        text = SimpleDateFormat("dd MMM HH:mm", LocalLocale.current.platformLocale)
+                            .format(Date(item.date)),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
         }
 
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = item.category.uppercase(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = item.experimentName,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            if (item.quantities.isNotEmpty()) {
-                Spacer(Modifier.height(2.dp))
-                QuantitiesSection(item.quantities)
-            }
-
-            if (item.points.isNotEmpty()) {
-
-                Spacer(Modifier.height(6.dp))
-
-                HistoryChartCard(
-                    points = item.points,
-                )
-            }
-
-            Spacer(Modifier.height(4.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+        if (selectionIndex != null) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(6.dp)
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .background(badgeColor),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(12.dp)
-                )
                 Text(
-                    text = SimpleDateFormat("dd MMM HH:mm", Locale.getDefault())
-                        .format(Date(item.date)),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "${selectionIndex + 1}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = borderColor
                 )
             }
         }
