@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -54,6 +55,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.navigation.HistoryMode
@@ -308,7 +310,14 @@ private fun Content(
                     items(items = state.history, key = { it.id }) { item ->
                         val index = state.selectedIds.indexOf(item.id)
                             .takeIf { it != -1 }
-                        HistoryCard(item, onClick = { onItemClick(item.id) }, selectionIndex = index)
+                        val isActive = when {
+                            mode != HistoryMode.SELECTION -> true
+                            state.selectedIds.size < 2 -> true
+                            index != null -> true
+                            else -> false
+                        }
+
+                        HistoryCard(item, onClick = { onItemClick(item.id) }, selectionIndex = index, isActive = isActive)
                     }
                 }
             }
@@ -329,6 +338,8 @@ private fun Content(
                 enabled = state.selectedIds.size >= 2,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
                 text = "Сравнить (${state.selectedIds.size})",
+                icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                iconPosition = IconPosition.EdgeEnd,
                 onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
             )
         }

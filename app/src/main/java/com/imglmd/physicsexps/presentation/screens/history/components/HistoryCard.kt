@@ -48,8 +48,15 @@ import androidx.compose.ui.platform.LocalLocale
 fun HistoryCard(
     item: HistoryItemUi,
     selectionIndex: Int?,
+    isActive: Boolean,
     onClick: () -> Unit
 ) {
+    val contentAlpha by animateFloatAsState(
+        targetValue = if (isActive) 1f else 0.45f,
+        animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec(),
+        label = "history_alpha"
+    )
+
     val scale by animateFloatAsState(
         targetValue = if (selectionIndex != null) 1.02f else 0.99f,
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
@@ -69,6 +76,7 @@ fun HistoryCard(
         modifier = Modifier
             .width(160.dp)
             .graphicsLayer {
+                alpha = contentAlpha
                 scaleX = scale
                 scaleY = scale
                 transformOrigin = TransformOrigin(0.5f, 0f)
@@ -83,7 +91,7 @@ fun HistoryCard(
                 )
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.surface)
-                .clickable { onClick() }
+                .clickable(isActive) { onClick() }
         ) {
             /*if (isSystemInDarkTheme()) {
                 Box(
@@ -154,7 +162,7 @@ fun HistoryCard(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(6.dp)
+                    .padding(8.dp)
                     .size(20.dp)
                     .clip(CircleShape)
                     .background(badgeColor),
