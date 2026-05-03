@@ -136,6 +136,7 @@ class ProjectileMotionExperiment : Experiment {
 
         val vx = v0 * cos(alpha)
         val vy0 = v0 * sin(alpha)
+        val range = vx*tFull
 
         val points = mutableListOf<Pair<Double, Double>>()
         val step = tFull / ExpConstants.DEFAULT_POINTS_COUNT
@@ -148,7 +149,7 @@ class ProjectileMotionExperiment : Experiment {
             points.add(x to y)
             t += step
         }
-
+        points.add(range to 0.0)
         return points
     }
 

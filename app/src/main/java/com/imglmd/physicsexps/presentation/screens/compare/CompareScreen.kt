@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.imglmd.physicsexps.presentation.alignSeries
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareResultsCard
@@ -129,14 +130,17 @@ private fun CompareContent(items: List<CompareItem>) {
     val normalized1 = remember(run1.result.points) { normalizePoints(run1.result.points) }
     val normalized2 = remember(run2.result.points) { normalizePoints(run2.result.points) }
 
-    LaunchedEffect(normalized1, normalized2) {
-        if (normalized1.isEmpty() && normalized2.isEmpty()) return@LaunchedEffect
+    val (aligned1, aligned2) = remember(normalized1, normalized2) {
+        alignSeries(normalized1, normalized2)
+    }
+
+    LaunchedEffect(aligned1, aligned2) {
+        if (aligned1.isEmpty() && aligned2.isEmpty()) return@LaunchedEffect
+
         modelProducer.runTransaction {
             lineSeries {
-                if (normalized1.isNotEmpty())
-                    series(normalized1.map { it.first }, normalized1.map { it.second })
-                if (normalized2.isNotEmpty())
-                    series(normalized2.map { it.first }, normalized2.map { it.second })
+                if (aligned1.isNotEmpty()) series(aligned1.map { it.first }, aligned1.map { it.second })
+                if (aligned2.isNotEmpty()) series(aligned2.map { it.first }, aligned2.map { it.second })
             }
         }
     }

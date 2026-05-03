@@ -37,6 +37,44 @@ fun downsamplePoints(
     }
 }
 
+// хз как работает, нейронка писала. нужно чтоб на графике сравнения точки по x совпадали
+fun alignSeries(
+    s1: List<Pair<Double, Double>>,
+    s2: List<Pair<Double, Double>>
+): Pair<List<Pair<Double, Double>>, List<Pair<Double, Double>>> {
+
+    val xs = (s1.map { it.first } + s2.map { it.first })
+        .distinct()
+        .sorted()
+
+    fun interpolate(series: List<Pair<Double, Double>>, x: Double): Double? {
+        val sorted = series.sortedBy { it.first }
+
+        val exact = sorted.find { it.first == x }
+        if (exact != null) return exact.second
+
+        val left = sorted.lastOrNull { it.first < x }
+        val right = sorted.firstOrNull { it.first > x }
+
+        if (left != null && right != null) {
+            val t = (x - left.first) / (right.first - left.first)
+            return left.second + t * (right.second - left.second)
+        }
+
+        return null
+    }
+
+    val aligned1 = xs.mapNotNull { x ->
+        interpolate(s1, x)?.let { x to it }
+    }
+
+    val aligned2 = xs.mapNotNull { x ->
+        interpolate(s2, x)?.let { x to it }
+    }
+
+    return aligned1 to aligned2
+}
+
 
 @Composable
 fun rememberShimmerBrush(): Brush {
