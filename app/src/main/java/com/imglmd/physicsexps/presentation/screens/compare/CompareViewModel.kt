@@ -48,7 +48,9 @@ class CompareViewModel(
 
                     val inputMap = parseInputs(run.inputData)
 
-                    val inputs = experiment.inputFields.map { field ->
+                    val allFields = experiment.inputFields + experiment.additionalInputFields
+
+                    val inputs = allFields.map { field ->
                         InputItem(
                             label = field.label,
                             symbol = field.symbol,

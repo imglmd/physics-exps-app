@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
+import com.imglmd.physicsexps.presentation.screens.compare.components.CompareResultsCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareRunCard
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
@@ -164,7 +165,12 @@ private fun CompareContent(items: List<CompareItem>) {
                 modifier = Modifier.weight(1f)
             )
         }
-
+        CompareResultsCard(
+            quantities1 = run1.result.quantities,
+            quantities2 = run2.result.quantities,
+            color1 = color1,
+            color2 = color2
+        )
 
         CompareChartCard(
             xLabel = run1.result.xLabel,
