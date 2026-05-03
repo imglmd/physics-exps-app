@@ -45,41 +45,32 @@ fun CompareResultsCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, colors.outlineVariant, RoundedCornerShape(24.dp))
-            .clip(RoundedCornerShape(24.dp))
-            .background(colors.surface)
+            .clip(RoundedCornerShape(24.dp)),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+                .clip(RoundedCornerShape(6.dp))
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ){
             Text(
                 text = "Результаты",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = colors.onSurface
-            )
+                color = colors.onSurface)
         }
-
-        HorizontalDivider(color = colors.outline)
-
-        Column(
-            modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            allSymbols.forEach { symbol ->
-                val q1 = map1[symbol]
-                val q2 = map2[symbol]
-                QuantityCompareRow(
-                    q1 = q1,
-                    q2 = q2,
-                    symbol = symbol,
-                    color1 = color1,
-                    color2 = color2
-                )
-            }
+        allSymbols.forEach { symbol ->
+            val q1 = map1[symbol]
+            val q2 = map2[symbol]
+            QuantityCompareRow(
+                q1 = q1,
+                q2 = q2,
+                symbol = symbol,
+                color1 = color1,
+                color2 = color2
+            )
         }
     }
 }
@@ -101,9 +92,8 @@ private fun QuantityCompareRow(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(6.dp))
             .background(colors.surface)
-            .border(1.dp, colors.outline, RoundedCornerShape(16.dp))
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
