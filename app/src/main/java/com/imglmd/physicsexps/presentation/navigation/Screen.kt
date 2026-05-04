@@ -15,11 +15,24 @@ sealed interface Screen {
     @Serializable
     data class Result(val runId: Int? = null) : Screen
     @Serializable
-    data object History : Screen
+    data class History(
+        val mode: HistoryMode = HistoryMode.NORMAL,
+        val preselectedIds: List<Int> = emptyList()
+    ) : Screen
     @Serializable
     data class FullScreenChart(
         val runId: Int
     ) : Screen
     @Serializable
     data object Solution : Screen
+
+    @Serializable
+    data class Compare(val runIds: List<Int>) : Screen
+}
+
+
+@Serializable
+enum class HistoryMode {
+    NORMAL,
+    SELECTION
 }

@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 
 data class HistoryItemUi(
     val id: Int,
+    val experimentId: String,
     val experimentName: String,
     val category: String,
     val date: Long,

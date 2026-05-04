@@ -25,3 +25,12 @@ val ErrorContainerLight = Color(0xFFFDECEF)
 val ErrorContainerDark = Color(0xFF3A0F18)
 val OnErrorContainerLight = Color(0xFF5A0F1F)
 val OnErrorContainerDark = Color(0xFFFFD9E0)
+
+
+val Plum = Color(0xFF6A4C93)
+val PlumLight = Color(0xFFE6DDF2)
+val PlumDark = Color(0xFF3E2A5E)
+
+val OnPlum = Color(0xFFFFFFFF)
+val OnPlumContainerLight = Color(0xFF2B1E42)
+val OnPlumContainerDark = Color(0xFFEADDFF)

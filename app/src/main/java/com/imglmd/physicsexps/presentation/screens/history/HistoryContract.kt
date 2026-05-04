@@ -7,18 +7,14 @@ import com.imglmd.physicsexps.presentation.model.SortOrder
 
 interface HistoryContract {
 
-    sealed interface State {
-        data object Loading: State
-        data class Success(
-            val history: List<HistoryItemUi> = emptyList(),
-            val filter: HistoryFilter = HistoryFilter(),
-            val availableExperiments: List<Experiment> = emptyList(),
-            val isFilterOpen: Boolean = false,
-            val isLoading: Boolean = false,
-            val showDeleteDialog: Boolean = false
-        ): State
-        data class Error(val message: String): State
-    }
+    data class State (
+        val history: List<HistoryItemUi> = emptyList(),
+        val filter: HistoryFilter = HistoryFilter(),
+        val availableExperiments: List<Experiment> = emptyList(),
+        val isLoading: Boolean = false,
+        val showDeleteDialog: Boolean = false,
+        val selectedIds: List<Int> = emptyList()
+    )
 
     sealed interface Intent {
         data class NavigateToResult(val resultId: Int): Intent
@@ -27,15 +23,18 @@ interface HistoryContract {
         data class SetDateRange(val from: Long?, val to: Long?): Intent
         data class SetSortOrder(val order: SortOrder): Intent
         data object ClearFilters: Intent
-        data object ToggleFilterSheet: Intent
 
-        data object ShowDeleteDialog : Intent
-        data object HideDeleteDialog : Intent
+        data object ShowDeleteDialog: Intent
+        data object HideDeleteDialog: Intent
         data object DeleteAll: Intent
+
+        data class ToggleSelection(val id: Int): Intent
+        data object ConfirmSelection: Intent
     }
 
     sealed interface Action {
         data class NavigateToResult(val resultId: Int): Action
         data object NavigateBack: Action
+        data class ReturnSelection(val ids: List<Int>): Action
     }
 }

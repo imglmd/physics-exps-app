@@ -94,6 +94,7 @@ class ResultViewModel(
         ResultContract.Intent.OpenSolution -> emit(NavigateSolution)
         is ResultContract.Intent.AddComment -> addComment(intent.text)
         is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
+        ResultContract.Intent.Compare -> emit(NavigateCompare(savedRunId?: 0))
     }
 
 

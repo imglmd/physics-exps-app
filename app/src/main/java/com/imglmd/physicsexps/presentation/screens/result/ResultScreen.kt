@@ -3,10 +3,13 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,15 +18,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
@@ -53,6 +66,7 @@ fun ResultScreen(
     navigateBack: () -> Unit,
     navigateHome: () -> Unit,
     navigateChart: (Int) -> Unit,
+    navigateCompare: (Int) -> Unit,
     navigateExperiment: (String, Map<String, String>, Int?) -> Unit,
     navigateSolution: () -> Unit,
     viewModel: ResultViewModel = koinViewModel { parametersOf(runId) }
@@ -70,6 +84,7 @@ fun ResultScreen(
                 is ResultContract.Effect.NavigateChart ->
                     navigateChart(effect.runId)
                 ResultContract.Effect.NavigateSolution -> navigateSolution()
+                is ResultContract.Effect.NavigateCompare -> navigateCompare(effect.runId)
             }
         }
     }
@@ -131,7 +146,8 @@ private fun Content(
         bottomBar = {
             BottomActions(
                 onDelete = { onIntent(ResultContract.Intent.Delete) },
-                onSave = { onIntent(ResultContract.Intent.Save) }
+                onSave = { onIntent(ResultContract.Intent.Save) },
+                onCompare = { onIntent(ResultContract.Intent.Compare) }
             )
         }
     ) { padding ->
@@ -181,6 +197,7 @@ private fun Content(
 private fun BottomActions(
     onDelete: () -> Unit,
     onSave: () -> Unit,
+    onCompare: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -190,41 +207,88 @@ private fun BottomActions(
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.background.copy(alpha = 0f),
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.6f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
                         MaterialTheme.colorScheme.background
                     )
                 )
-            )
+            ),
+        contentAlignment = Alignment.BottomCenter
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                .navigationBarsPadding()
+                .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .navigationBarsPadding(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
-            PrimaryButton(
-                text = "Удалить",
-                icon = Icons.Outlined.Delete,
+            FilledIconButton(
                 onClick = onDelete,
-                colors = ButtonDefaults.buttonColors(
+                modifier = Modifier.size(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = "Удалить",
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            OutlinedButton(
+                onClick = onCompare,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(
+                    1.5.dp,
+                    MaterialTheme.colorScheme.outline
                 ),
-                borderColor = MaterialTheme.colorScheme.error,
-                modifier = Modifier.weight(1.5f),
-            )
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                contentPadding = PaddingValues(horizontal = 12.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Send,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    text = "Сравнить",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
 
-            Spacer(Modifier.width(10.dp))
-
-            PrimaryButton(
-                text = "Сохранить",
-                icon = Icons.Outlined.Done,
+            Button(
                 onClick = onSave,
-                iconPosition = IconPosition.End,
-                modifier = Modifier.weight(2f)
-            )
+                modifier = Modifier
+                    .weight(1.4f)
+                    .height(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Сохранить",
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Spacer(Modifier.width(6.dp))
+                Icon(
+                    imageVector = Icons.Outlined.Done,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
         }
     }
+
 }

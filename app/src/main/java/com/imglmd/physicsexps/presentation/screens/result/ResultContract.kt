@@ -21,7 +21,7 @@ object ResultContract {
         data object Save : Intent
         data object Delete: Intent
         data object Change: Intent
-
+        data object Compare: Intent
         data object OpenChart: Intent
         data object OpenSolution: Intent
 
@@ -37,7 +37,7 @@ object ResultContract {
             val inputs: Map<String, String>,
             val replaceRunId: Int? = null
         ): Effect
-
+        data class NavigateCompare(val runId: Int): Effect
         data class NavigateChart(val runId: Int): Effect
         data object NavigateSolution: Effect
     }

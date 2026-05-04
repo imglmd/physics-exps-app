@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -50,22 +50,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.components.IconPosition
+import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
+import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.screens.history.components.FilterChipsRow
 import com.imglmd.physicsexps.presentation.screens.history.components.HistoryCard
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun HistoryScreen(
+    mode: HistoryMode = HistoryMode.NORMAL,
+    preselectedIds: List<Int>,
     navigateBack: () -> Unit,
     navigateToResult: (runId: Int) -> Unit,
-    viewModel: HistoryViewModel = koinViewModel()
+    onSelectRuns: (ids: List<Int>) -> Unit,
+    viewModel: HistoryViewModel = koinViewModel{ parametersOf(preselectedIds) }
 ) {
     val state by viewModel.state.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
@@ -75,6 +81,7 @@ fun HistoryScreen(
             when (effect) {
                 HistoryContract.Action.NavigateBack -> navigateBack()
                 is HistoryContract.Action.NavigateToResult -> navigateToResult(effect.resultId)
+                is HistoryContract.Action.ReturnSelection -> onSelectRuns(effect.ids)
             }
         }
     }
@@ -84,7 +91,7 @@ fun HistoryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "История",
+                        text = if (mode == HistoryMode.SELECTION) "Выберите эксперименты" else "История",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -124,38 +131,29 @@ fun HistoryScreen(
             )
         }
     ) { innerPadding ->
-        when (val s = state) {
-            is HistoryContract.State.Error -> Text(s.message)
-
-            HistoryContract.State.Loading -> Box(
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+        Content(
+            mode = mode,
+            state = state,
+            onItemClick = {
+                if (mode == HistoryMode.SELECTION) viewModel.onIntent(HistoryContract.Intent.ToggleSelection(it))
+                else viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
+            padding = innerPadding,
+            isLoading = state.isLoading,
+            onIntent = viewModel::onIntent,
+            onDateChipClick = {
+                if (state.filter.dateFrom != null || state.filter.dateTo != null) {
+                    viewModel.onIntent(
+                        HistoryContract.Intent.SetDateRange(null, null)
+                    )
+                } else showDatePicker = true
             }
-
-            is HistoryContract.State.Success -> Content(
-                state = s,
-                onItemClick = { viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
-                padding = innerPadding,
-                isLoading = s.isLoading,
-                onIntent = viewModel::onIntent,
-                onDateChipClick = {
-                    if (s.filter.dateFrom != null || s.filter.dateTo != null) {
-                        viewModel.onIntent(
-                            HistoryContract.Intent.SetDateRange(null, null)
-                        )
-                    } else showDatePicker = true
-                }
-            )
-        }
+        )
     }
 
     if (showDatePicker) {
-        val successState = state as? HistoryContract.State.Success
         val pickerState = rememberDateRangePickerState(
-            initialSelectedStartDateMillis = successState?.filter?.dateFrom,
-            initialSelectedEndDateMillis = successState?.filter?.dateTo
+            initialSelectedStartDateMillis = state.filter.dateFrom,
+            initialSelectedEndDateMillis = state.filter.dateTo
         )
 
         DatePickerDialog(
@@ -218,7 +216,7 @@ fun HistoryScreen(
         }
     }
 
-    if (state is HistoryContract.State.Success && (state as HistoryContract.State.Success).showDeleteDialog) {
+    if (state.showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { viewModel.onIntent(HistoryContract.Intent.HideDeleteDialog) },
             containerColor = MaterialTheme.colorScheme.surface,
@@ -275,7 +273,8 @@ fun HistoryScreen(
 
 @Composable
 private fun Content(
-    state: HistoryContract.State.Success,
+    mode: HistoryMode,
+    state: HistoryContract.State,
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
     onIntent: (HistoryContract.Intent) -> Unit,
@@ -309,7 +308,16 @@ private fun Content(
                     )
                 ) {
                     items(items = state.history, key = { it.id }) { item ->
-                        HistoryCard(item, onClick = { onItemClick(item.id) })
+                        val index = state.selectedIds.indexOf(item.id)
+                            .takeIf { it != -1 }
+                        val isActive = when {
+                            mode != HistoryMode.SELECTION -> true
+                            state.selectedIds.size < 2 -> true
+                            index != null -> true
+                            else -> false
+                        }
+
+                        HistoryCard(item, onClick = { onItemClick(item.id) }, selectionIndex = index, isActive = isActive)
                     }
                 }
             }
@@ -323,6 +331,16 @@ private fun Content(
                     .padding(top = padding.calculateTopPadding()),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surface
+            )
+        }
+        if (mode == HistoryMode.SELECTION){
+            PrimaryButton(
+                enabled = state.selectedIds.size >= 2,
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
+                text = "Сравнить (${state.selectedIds.size})",
+                icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                iconPosition = IconPosition.EdgeEnd,
+                onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
             )
         }
     }

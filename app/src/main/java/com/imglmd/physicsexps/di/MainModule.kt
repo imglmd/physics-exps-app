@@ -24,6 +24,7 @@ import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
+import com.imglmd.physicsexps.presentation.screens.compare.CompareViewModel
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -31,6 +32,7 @@ import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
 import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
 val mainModule = module {
@@ -64,12 +66,15 @@ val mainModule = module {
         val runId: Int? = params.getOrNull()
         ResultViewModel(runId, get(), get(), get(), get(), get(), get(), get(), get())
     }
-    viewModel {
-        HistoryViewModel(get(), get(), get(), get(), get(),get(),get())
+    viewModel { params ->
+
+        HistoryViewModel(params.get(), get(), get(), get(), get(),get(),get(), get())
     }
     viewModel {
         SolutionViewModel(get(), get())
     }
+    viewModel { params ->
+        CompareViewModel(params.get(), get(), get(), get()) }
 
     single {
         Room.databaseBuilder(
