@@ -5,6 +5,9 @@ import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import com.imglmd.physicsexps.domain.model.SolutionStep
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -88,5 +91,86 @@ class CoulombsLawExperiment: Experiment {
         }
 
         return list
+    }
+
+    override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
+        val steps = mutableListOf<SolutionStep>()
+
+        steps += SolutionStep.Theory(
+            title = "Идея рещения",
+            body = "Два неподвижных точечных электрических заряда в вакууме взаимодействуют " +
+                    "с силой, прямо пропорциональной произведению модулей этих " +
+                    "зарядов и обратно пропорциональной квадрату расстояния между ними."
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём электрическую силу, используя закон Кулона.",
+            expression = "F = k \\frac{|q_1||q_2|}{r^2}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём напряжённость 1-го заряда - векторная физическая величина, характеризующая силу воздействия поля на заряженные частицы в данной точке пространства.",
+            expression = "E_1 = k \\frac{|q_1|}{r^2}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём напряжённость 2-го заряда - векторная физическая величина, характеризующая силу воздействия поля на заряженные частицы в данной точке пространства.",
+            expression = "E_2 = k \\frac{|q_2|}{r^2}"
+        )
+
+        steps += SolutionStep.Formula(
+            description = "Найдём потенциальную энергию взаимодействия зарядов.",
+            expression = "W = k \\frac{q_1 q_2}{r}"
+        )
+
+        if (inputs == null) return steps
+
+        val q1 = inputs.getValue("q1")
+        val q2 = inputs.getValue("q2")
+        val r = inputs.getValue("distance")
+        val k = ExpConstants.COULOMB_CONSTANT
+
+        val F = k*(q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
+        val E1 = k * q1 * ExpConstants.NANO / r.pow(2)
+        val E2 = k * q2 * ExpConstants.NANO / r.pow(2)
+        val W = k * (q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
+
+        val fmt = { d: Double -> "%.2f".format(d) }
+        val fmt2 = { d: Double -> "%.4f".format(d) }
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём электрическую силу",
+            expression = "F = 9 \\times 10^9 \\frac{|${fmt(q1)}||${fmt(q2)}|}{$r^2}",
+            result = "F = ${fmt(F)} \\text{нН}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём напряжённость 1-го заряда",
+            expression = "E_1 = 9 \\times 10^9 \\frac{|${fmt(q1)}|{$r^2}",
+            result = "E_1 = ${fmt2(E1)} \\text{В/м}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём напряжённость 2-го заряда",
+            expression = "E_2 = 9 \\times 10^9 \\frac{|${fmt(q2)}|}{r^2}",
+            result = "E2 = ${fmt2(E2)} \\text{В/м}"
+        )
+
+        steps += SolutionStep.Substitution(
+            description = "Найдём потенциальную энергию взаимодействия зарядов",
+            expression = "W = 9 \\times 10^9 \\frac{${fmt(q1)} ${fmt(q2)}}{r}",
+            result ="W = ${fmt(W)} \\text{нДж}"
+        )
+
+        steps += SolutionStep.Result(
+            quantities = listOf(
+                PhysicalQuantity("Электрическая сила", "F", F, "нН"),
+                PhysicalQuantity("Напряжённость 1-го заряда", "E1", E1, "В/м"),
+                PhysicalQuantity("Напряжённость 2-го заряда", "E2", E2, "В/м"),
+                PhysicalQuantity("Потенциальная энергия взаимодействия", "W",
+                    W, "нДж")
+            )
+        )
+        return steps
     }
 }

@@ -166,12 +166,12 @@ class ProjectileMotionExperiment : Experiment {
 
         steps += SolutionStep.Formula(
             description = "Разложим начальную скорость на оси",
-            expression = "v_x = v_0 \\cos(\\alpha), \\quad v_{y0} = v_0 \\sin(\\alpha)"
+            expression = "v_x = v_0 \\cos(\\alpha) \\\\ \\quad v_{y0} = v_0 \\sin(\\alpha)"
         )
 
         steps += SolutionStep.Formula(
             description = "Запишем уравнения движения",
-            expression = "x(t) = v_x t \\\\ y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
+            expression = "x(t) = v_x t \\\\y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
         )
 
         steps += SolutionStep.Formula(
