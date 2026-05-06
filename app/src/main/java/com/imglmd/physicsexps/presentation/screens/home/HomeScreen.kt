@@ -78,12 +78,12 @@ fun HomeScreen(
         }
     }
 
-    Scaffold() { innerPadding ->
+    Scaffold(
+        modifier = Modifier.imePadding(),
+    ) { innerPadding ->
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding(),
+            modifier = Modifier.fillMaxSize(),
             //verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             contentPadding = PaddingValues(
