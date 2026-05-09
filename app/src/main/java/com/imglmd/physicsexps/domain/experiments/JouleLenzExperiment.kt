@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -21,6 +22,7 @@ class JouleLenzExperiment: Experiment {
     )
 
     override val minRequiredInputs = 3
+    override val imageRes = R.drawable.joulelenz
     override val xLabel = "Сила тока"
     override val yLabel = "Количество теплоты, выделяемое проводником"
 

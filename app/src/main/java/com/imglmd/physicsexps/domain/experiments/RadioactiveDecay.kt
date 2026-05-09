@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -21,6 +22,8 @@ class RadioactiveDecay: Experiment {
         InputField("time", "Время от начала распада", "t", "с", required = true, min = 0.0)
     )
     override val minRequiredInputs = 3
+
+    override val imageRes = R.drawable.radioactive_decay
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val N0 = inputs["start_count"]

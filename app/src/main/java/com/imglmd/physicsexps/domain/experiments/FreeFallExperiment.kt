@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -16,6 +17,7 @@ class FreeFallExperiment: Experiment {
         InputField("start_speed", "Начальная скорость", "v₀", "м/c", required = true),
         InputField("duration", "Продолжительность движения тела", "t", "с", required = true)
     )
+    override val imageRes = R.drawable.freefall
     override val xLabel =  "Время, с"
     override val yLabel = "у"
 

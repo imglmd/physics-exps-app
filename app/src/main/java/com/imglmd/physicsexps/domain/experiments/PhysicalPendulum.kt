@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -25,6 +26,7 @@ class PhysicalPendulum: Experiment {
         InputField("distance", "Расстояние от оси вращения до центра масс", "d",
             "м", required = true, min = 0.0)
     )
+    override val imageRes = R.drawable.physicalpendulum
 
     override val additionalInputFields = listOf(
         InputField("angle", "Угол отклонения", "α", "°", min = 0.0,

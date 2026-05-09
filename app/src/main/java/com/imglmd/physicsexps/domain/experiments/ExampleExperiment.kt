@@ -19,7 +19,7 @@ class ExampleExperiment : Experiment {
     override val category = "Механика"
     override val description =
         """Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести.""".trimIndent()
-    override val imageRes = R.drawable.pendulum
+    override val imageRes = R.drawable.mathpendulum
 
     override val xLabel =  "Длина нити, м"
     override val yLabel = "Период, с"
