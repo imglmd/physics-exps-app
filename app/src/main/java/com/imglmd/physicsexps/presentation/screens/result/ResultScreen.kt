@@ -3,13 +3,15 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,15 +23,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Done
-import androidx.compose.material.icons.outlined.Send
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
@@ -37,8 +35,8 @@ import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,12 +46,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
-import com.imglmd.physicsexps.presentation.components.IconPosition
-import com.imglmd.physicsexps.presentation.components.PrimaryButton
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.CommentSection
 import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
@@ -206,91 +207,139 @@ private fun BottomActions(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.background.copy(alpha = 0f),
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
-                        MaterialTheme.colorScheme.background
+                Brush.verticalGradient(
+                    listOf(
+                        Color.Transparent,
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.67f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.92f)
                     )
                 )
             ),
         contentAlignment = Alignment.BottomCenter
     ) {
-        Row(
+
+        HorizontalFloatingToolbar(
+            expanded = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .padding(16.dp)
                 .navigationBarsPadding(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            FilledIconButton(
-                onClick = onDelete,
-                modifier = Modifier.size(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FilledIconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.size(52.dp),
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    shapes = IconButtonDefaults.shapes(
+                        shape = CircleShape,
+                        pressedShape = RoundedCornerShape(40)
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = "удалить"
+                    )
+                }
+
+                ToolbarButton(
+                    text = "Сравнить",
+                    icon = ImageVector.vectorResource(R.drawable.compare_arrows),
+                    onClick = onCompare,
+                    modifier = Modifier.weight(1f),
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Delete,
-                    contentDescription = "Удалить",
-                    modifier = Modifier.size(20.dp)
+
+                ToolbarButton(
+                    text = "Сохранить",
+                    icon = ImageVector.vectorResource(R.drawable.save),
+                    onClick = onSave,
+                    modifier = Modifier.weight(1.15f),
+                    iconPosition = ToolbarIconPosition.RIGHT,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             }
+        }
+    }
+}
 
-            OutlinedButton(
-                onClick = onCompare,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(
-                    1.5.dp,
-                    MaterialTheme.colorScheme.outline
-                ),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                ),
-                contentPadding = PaddingValues(horizontal = 12.dp)
-            ) {
+private enum class ToolbarIconPosition{ LEFT, RIGHT }
+@Composable
+private fun ToolbarButton(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    containerColor: Color,
+    contentColor: Color,
+    modifier: Modifier = Modifier,
+    iconPosition: ToolbarIconPosition = ToolbarIconPosition.LEFT
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    val pressed by interactionSource.collectIsPressedAsState()
+
+    val animatedShape by animateDpAsState(
+        targetValue = if (pressed) 22.dp else 50.dp,
+        animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+        label = "shape"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 1.03f else 1f,
+        animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+        label = "scale"
+    )
+
+    Surface(
+        onClick = onClick,
+        interactionSource = interactionSource,
+        modifier = modifier
+            .height(52.dp)
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale },
+        shape = RoundedCornerShape(animatedShape),
+        color = containerColor,
+        contentColor = contentColor
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (iconPosition == ToolbarIconPosition.LEFT){
                 Icon(
-                    imageVector = Icons.Outlined.Send,
+                    imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = "Сравнить",
-                    style = MaterialTheme.typography.labelLarge
-                )
+
+                Spacer(Modifier.width(8.dp))
             }
 
-            Button(
-                onClick = onSave,
-                modifier = Modifier
-                    .weight(1.4f)
-                    .height(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = "Сохранить",
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Spacer(Modifier.width(6.dp))
+            Text(
+                text = text,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                softWrap = false,
+                style = MaterialTheme.typography.labelLarge
+            )
+
+            if (iconPosition == ToolbarIconPosition.RIGHT){
+                Spacer(Modifier.width(8.dp))
+
                 Icon(
-                    imageVector = Icons.Outlined.Done,
+                    imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
             }
         }
     }
-
 }
