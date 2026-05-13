@@ -147,8 +147,6 @@ fun ChartCard(
             }
         }
 
-        HorizontalDivider(color = colors.outline)
-
         CartesianChartHost(
             chart = chart,
             modelProducer = modelProducer,
@@ -157,7 +155,10 @@ fun ChartCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp)
-                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 12.dp)
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(16.dp)
+                )
         )
     }
 }
