@@ -42,14 +42,14 @@ fun HomeHistoryPlaceholder(
 
             Box(
                 modifier = Modifier
-                    .height(32.dp)
+                    .height(36.dp)
                     .width(60.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(shimmerBrush)
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(18.dp))
 
         LazyRow(
             modifier = Modifier

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -148,8 +147,6 @@ fun CompareChartCard(
             }
         }
 
-        HorizontalDivider(color = colors.outline)
-
         CartesianChartHost(
             chart = chart,
             modelProducer = modelProducer,
@@ -158,7 +155,7 @@ fun CompareChartCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp)
-                .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 12.dp)
+                .padding(start = 8.dp, end = 8.dp, bottom = 12.dp)
         )
     }
 }
