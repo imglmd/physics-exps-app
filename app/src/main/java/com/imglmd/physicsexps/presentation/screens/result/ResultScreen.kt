@@ -225,28 +225,22 @@ private fun BottomActions(
                 .padding(16.dp)
                 .navigationBarsPadding(),
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                FilledIconButton(
-                    onClick = onDelete,
-                    modifier = Modifier.size(52.dp),
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    shapes = IconButtonDefaults.shapes(
-                        shape = CircleShape,
-                        pressedShape = RoundedCornerShape(40)
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = "удалить"
-                    )
-                }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
 
                 ToolbarButton(
-                    text = "Сравнить",
+                    icon = Icons.Outlined.Delete,
+                    contentDescription = "Удалить",
+                    onClick = onDelete,
+                    modifier = Modifier.weight(1f),
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+
+                ToolbarButton(
                     icon = ImageVector.vectorResource(R.drawable.compare_arrows),
+                    contentDescription = "Сравнить",
                     onClick = onCompare,
                     modifier = Modifier.weight(1f),
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -256,8 +250,9 @@ private fun BottomActions(
                 ToolbarButton(
                     text = "Сохранить",
                     icon = ImageVector.vectorResource(R.drawable.save),
+                    contentDescription = "Сохранить",
                     onClick = onSave,
-                    modifier = Modifier.weight(1.15f),
+                    modifier = Modifier.weight(2f),
                     iconPosition = ToolbarIconPosition.RIGHT,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -270,22 +265,24 @@ private fun BottomActions(
 private enum class ToolbarIconPosition{ LEFT, RIGHT }
 @Composable
 private fun ToolbarButton(
-    text: String,
     icon: ImageVector,
+    contentDescription: String?,
     onClick: () -> Unit,
     containerColor: Color,
     contentColor: Color,
     modifier: Modifier = Modifier,
+    text: String? = null,
     iconPosition: ToolbarIconPosition = ToolbarIconPosition.LEFT
 ) {
+
     val interactionSource = remember { MutableInteractionSource() }
 
     val pressed by interactionSource.collectIsPressedAsState()
 
-    val animatedShape by animateDpAsState(
+    val animatedCorner by animateDpAsState(
         targetValue = if (pressed) 22.dp else 50.dp,
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
-        label = "shape"
+        label = "corner"
     )
 
     val scale by animateFloatAsState(
@@ -293,6 +290,9 @@ private fun ToolbarButton(
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
         label = "scale"
     )
+
+    val hasText = !text.isNullOrBlank()
+    val iconSize = if(hasText) 20.dp else 24.dp
 
     Surface(
         onClick = onClick,
@@ -302,42 +302,45 @@ private fun ToolbarButton(
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale },
-        shape = RoundedCornerShape(animatedShape),
+        shape = RoundedCornerShape(animatedCorner),
         color = containerColor,
         contentColor = contentColor
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 14.dp),
+            modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (iconPosition == ToolbarIconPosition.LEFT){
+
+            if (iconPosition == ToolbarIconPosition.LEFT) {
+
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
+                    contentDescription = contentDescription,
+                    modifier = Modifier.size(iconSize)
                 )
 
-                Spacer(Modifier.width(8.dp))
+                if (hasText) Spacer(Modifier.width(8.dp))
             }
 
-            Text(
-                text = text,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                softWrap = false,
-                style = MaterialTheme.typography.labelLarge
-            )
+            if (hasText) {
+                Text(
+                    text = text,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    softWrap = false,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
 
-            if (iconPosition == ToolbarIconPosition.RIGHT){
-                Spacer(Modifier.width(8.dp))
+            if (iconPosition == ToolbarIconPosition.RIGHT) {
+
+                if (hasText) Spacer(Modifier.width(8.dp))
 
                 Icon(
                     imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
+                    contentDescription = contentDescription,
+                    modifier = Modifier.size(iconSize)
                 )
             }
         }

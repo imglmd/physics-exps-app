@@ -21,5 +21,12 @@ val Typography = Typography(
         fontSize = 24.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.5.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp
     )
 )
