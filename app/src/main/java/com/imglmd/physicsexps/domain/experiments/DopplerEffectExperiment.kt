@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -22,6 +23,7 @@ class DopplerEffectExperiment: Experiment {
     override val minRequiredInputs = 3
     override val xLabel = "Скорость источника, м/с"
     override val yLabel = "Частота при удалении, Гц"
+    override val imageRes = R.drawable.doppler
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val vO = inputs["v_obs"]

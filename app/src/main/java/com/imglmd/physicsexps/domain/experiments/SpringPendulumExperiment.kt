@@ -15,7 +15,7 @@ class SpringPendulumExperiment: Experiment {
     override val name = "Пружинный маятник"
     override val category = "Механика"
     override val description = "Пружинный маятник — это механическая колебательная система, состоящая из груза определённой массы , прикрепленного к упругой пружине с коэффицентом упругости, другой конец которой жестко закреплен. Он совершает колебания под действием силы упругости около положения равновесия."
-    override val imageRes = R.drawable.spring_pendulum
+    override val imageRes = R.drawable.springpendulum
 
     override val inputFields = listOf(
         InputField("weight", "Масса", "m", "кг", min = 0.0),

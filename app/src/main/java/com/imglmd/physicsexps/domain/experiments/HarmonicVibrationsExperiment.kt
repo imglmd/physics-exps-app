@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.domain.experiments
 
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
@@ -27,6 +28,7 @@ class HarmonicVibrationsExperiment: Experiment {
         InputField("time", "Продолжительность колебаний", "t", "с", min = 0.0, required = true)
     )
     override val minRequiredInputs = 2
+    override val imageRes = R.drawable.harmonical
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val A = inputs.getValue("amplitude")
