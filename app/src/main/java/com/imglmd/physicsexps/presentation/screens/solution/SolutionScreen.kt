@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.solution
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -34,7 +35,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -87,16 +91,38 @@ fun SolutionScreen(
         }
     }
 
-    val width by animateDpAsState(
-        targetValue = if (isAtBottom) 360.dp else 56.dp,
-        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
-        label = "fab_width"
-    )
+    val expandProgress by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val lastItem = layoutInfo.visibleItemsInfo
+                .firstOrNull { it.index == steps.lastIndex } ?: return@derivedStateOf 0f
+
+            val viewportEnd = layoutInfo.viewportEndOffset
+
+            val itemBottom = lastItem.offset + lastItem.size
+
+            val overlap = (viewportEnd - itemBottom).coerceAtLeast(0)
+            val maxExpandPx = 220f
+
+            (overlap / maxExpandPx).coerceIn(0f, 1f)
+        }
+    }
+
+    val width = lerp(56.dp, 360.dp, expandProgress)
 
     val corner by animateDpAsState(
-        targetValue = if (isAtBottom) 16.dp else 28.dp,
-        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
+        targetValue = lerp(
+            start = 28.dp,
+            stop = 16.dp,
+            fraction = expandProgress
+        ),
+        animationSpec = tween(120),
         label = "fab_corner"
+    )
+    val textAlpha by animateFloatAsState(
+        targetValue = expandProgress,
+        animationSpec = tween(120),
+        label = "text_alpha"
     )
 
     Scaffold { padding ->
@@ -107,7 +133,7 @@ fun SolutionScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(
                     top = padding.calculateTopPadding() + 16.dp,
-                    bottom = padding.calculateBottomPadding() + 80.dp,
+                    bottom = padding.calculateBottomPadding() + 60.dp,
                     start = 16.dp,
                     end = 16.dp
                 )
@@ -143,7 +169,7 @@ fun SolutionScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = if (isAtBottom) 16.dp else 0.dp),
+                        .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -152,20 +178,14 @@ fun SolutionScreen(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
-                    AnimatedVisibility(
-                        visible = isAtBottom,
-                        enter = fadeIn(tween(200)) + slideInHorizontally(tween(200)) { it / 2 },
-                        exit = fadeOut(tween(100))
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                "Вернуться назад",
-                                maxLines = 1,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.alpha(textAlpha)) {
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Вернуться назад",
+                            maxLines = 1,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
                 }
             }
