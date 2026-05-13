@@ -11,7 +11,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt
 
-class PhysicalPendulum: Experiment {
+class PhysicalPendulumExperiment: Experiment {
     override val id = "physical_pendulum"
     override val name = "Физический маятник"
     override val category = "Механика"

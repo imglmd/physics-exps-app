@@ -12,7 +12,7 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class ExampleExperiment : Experiment {
+class PendulumExperiment : Experiment {
 
     override val id = "pendulum"
     override val name = "Математический маятник"

@@ -9,7 +9,7 @@ import com.imglmd.physicsexps.domain.model.SolutionStep
 import kotlin.math.ln
 import kotlin.math.pow
 
-class RadioactiveDecay: Experiment {
+class RadioactiveDecayExperiment: Experiment {
     override val id = "radioactive_decay"
     override val name = "Радиоактивный распад"
     override val category = "Ядерная физика"
