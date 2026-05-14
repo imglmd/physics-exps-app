@@ -70,7 +70,9 @@ fun FilterChipsRow(
                         SortOrder.DATE_DESC  -> "Сначала новые"
                         SortOrder.DATE_ASC   -> "Сначала старые"
                         SortOrder.EXPERIMENT -> "По эксперименту"
-                    })
+                    },
+                        style = MaterialTheme.typography.labelMedium
+                    )
                 },
                 border = BorderStroke(
                     width = 1.dp,
@@ -96,7 +98,8 @@ fun FilterChipsRow(
                 label = {
                     Text(
                         if (hasDateFilter) formatDateRange(state.filter.dateFrom, state.filter.dateTo)
-                        else "Период"
+                        else "Период",
+                        style = MaterialTheme.typography.labelMedium
                     )
                 },
                 border = BorderStroke(
@@ -140,7 +143,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(experiment.name) },
+                label = { Text(experiment.name, style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant
@@ -152,7 +155,7 @@ fun FilterChipsRow(
             item {
                 AssistChip(
                     onClick = { onIntent(HistoryContract.Intent.ClearFilters) },
-                    label = { Text("Сбросить") },
+                    label = { Text("Сбросить", style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = {
                         Icon(Icons.Default.Close, null, Modifier.size(16.dp))
                     }

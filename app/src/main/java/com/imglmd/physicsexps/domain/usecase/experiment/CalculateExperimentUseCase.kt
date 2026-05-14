@@ -4,6 +4,8 @@ import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.domain.validation.ValidationResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CalculateExperimentUseCase(
     private val registry: ExperimentRegistry,
@@ -19,14 +21,14 @@ class CalculateExperimentUseCase(
         data class Failure(val message: String): Result()
     }
 
-    operator fun invoke(
+    suspend operator fun invoke(
         experimentId: String,
         rawInputs: Map<String, String>
-    ): Result {
+    ): Result = withContext(Dispatchers.Default){
 
         val experiment = registry.getById(experimentId)
 
-        return when (val validation = validator.validate(experiment, rawInputs)) {
+        return@withContext when (val validation = validator.validate(experiment, rawInputs)) {
 
             is ValidationResult.Error -> {
                 Result.ValidationError(validation.errors)
