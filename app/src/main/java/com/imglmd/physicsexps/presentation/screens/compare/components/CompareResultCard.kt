@@ -44,14 +44,12 @@ fun CompareResultsCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp)),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(colors.surface).padding(vertical = 4.dp),
     ) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(6.dp))
-                .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ){
             Text(
@@ -91,8 +89,9 @@ private fun QuantityCompareRow(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(6.dp))
-            .background(colors.surface)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(colors.surfaceVariant)
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
