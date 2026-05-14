@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.abs
@@ -20,11 +22,23 @@ class CoulombsLawExperiment: Experiment {
     override val inputFields = listOf(
         InputField("q1", "Первый заряд × 10⁻⁹", "q1", "Кл"),
         InputField("q2", "Второй заряд × 10⁻⁹", "q2", "Кл"),
-        InputField("distance", "Расстояние между зарядами", "r", "м")
+        InputField("distance", "Расстояние между зарядами", "r", "м", min = 1e-9)
     )
     override val xLabel = "Расстояние, м"
     override val yLabel = "Электрическая сила, нН"
 
+    override fun validateInputs(inputs: Map<String, Double>): ValidationResult {
+        val q1 = inputs["q1"]
+        val q2 = inputs["q2"]
+        val distance = inputs["distance"]
+
+        if (q1 == null || q2 == null || distance == null) {
+            return ValidationResult.Error(
+                listOf(ValidationError.NotEnoughInputs)
+            )
+        }
+        return ValidationResult.Success(inputs)
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val q1 = inputs["q1"]
@@ -51,7 +65,7 @@ class CoulombsLawExperiment: Experiment {
                 map.put("distance", r)
             }
 
-            else -> throw IllegalArgumentException("Нужно ввести любые три величины")
+            else -> error("")
         }
 
         return ExperimentResult(

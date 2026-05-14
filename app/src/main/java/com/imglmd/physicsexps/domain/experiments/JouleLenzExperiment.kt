@@ -6,7 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
-import com.imglmd.physicsexps.presentation.navigation.Screen
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.pow
 
 class JouleLenzExperiment: Experiment {
@@ -24,6 +25,50 @@ class JouleLenzExperiment: Experiment {
     override val imageRes = R.drawable.joulelenz
     override val xLabel = "Сила тока"
     override val yLabel = "Количество теплоты, выделяемое проводником"
+
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val t = inputs["time"]
+        val I = inputs["amperage"]
+        val U = inputs["voltage"]
+        val R = inputs["resistance"]
+
+        if (t == null) {
+            return ValidationResult.Error(
+                listOf(ValidationError.NotEnoughInputs)
+            )
+        }
+
+        val count = listOf(I, U, R).count { it != null }
+
+        if (count < 2) {
+            return ValidationResult.Error(
+                listOf(ValidationError.NotEnoughInputs)
+            )
+        }
+
+        if (count > 2) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
+        }
+
+        if (R != null && R == 0.0) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
+        }
+
+        if (U != null && I != null && I == 0.0) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
+        }
+
+        return ValidationResult.Success(inputs)
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val t = inputs["time"]

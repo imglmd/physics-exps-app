@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.pow
 
 class FreeFallExperiment: Experiment {
@@ -14,33 +16,46 @@ class FreeFallExperiment: Experiment {
     override val category = "Кинематика"
     override val description = "Свободным падением тел называют движение, которое совершается под действием только силы тяжести."
     override val inputFields = listOf(
-        InputField("start_speed", "Начальная скорость", "v₀", "м/c", required = true),
-        InputField("duration", "Продолжительность движения тела", "t", "с", required = true)
+        InputField("start_speed", "Начальная скорость", "v₀", "м/c", required = false),
+        InputField("duration", "Продолжительность движения тела", "t", "с", required = true, min = 0.0)
     )
     override val imageRes = R.drawable.freefall
     override val xLabel =  "Время, с"
     override val yLabel = "у"
 
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
 
-    override fun calculate(inputs: Map<String, Double>): ExperimentResult {
-        val v0 = inputs["start_speed"]
-        val t = inputs["duration"]
-        val g = ExpConstants.GRAVITY
-        val v: Double
-        val h: Double
-        val map = mutableMapOf<String, Double>()
+        val time = inputs["duration"] ?: return ValidationResult.Error(
+            listOf(ValidationError.NotEnoughInputs)
+        )
 
-        when {
-            v0 != null && t != null -> {
-                v = v0 + g*t
-                h = v0*t + (g * t.pow(2)) / 2
-                map.put("start_speed", v0)
-                map.put("duration", t)
-            }
-            else -> {
-                throw IllegalArgumentException("Нужно ввести две величины")
-            }
+        if (time == 0.0) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
         }
+
+        return ValidationResult.Success(inputs)
+    }
+
+    override fun calculate(
+        inputs: Map<String, Double>
+    ): ExperimentResult {
+
+        val v0 = inputs["start_speed"] ?: 0.0
+        val t = inputs.getValue("duration")
+
+        val g = ExpConstants.GRAVITY
+
+        val v = v0 + g * t
+        val h = v0 * t + (g * t.pow(2)) / 2
+
+        val map = mapOf(
+            "start_speed" to v0,
+            "duration" to t
+        )
 
         return ExperimentResult(
             experimentId = this.id,
@@ -48,12 +63,16 @@ class FreeFallExperiment: Experiment {
                 PhysicalQuantity("Начальная скорость", "v₀",v0, "м/с"),
                 PhysicalQuantity("Продолжительность движения тела", "t", t, "с"),
                 PhysicalQuantity(
-                    label = "Скорость в момент времени, указанный пользователем",
-                    symbol = "v", v, "м/с"
+                    label = "Скорость в момент времени",
+                    symbol = "v",
+                    value = v,
+                    unit = "м/с"
                 ),
                 PhysicalQuantity(
-                    label = "Расстояние, которое проходит тело",
-                    symbol = "h", h, "м"
+                    label = "Пройденное расстояние",
+                    symbol = "h",
+                    value = h,
+                    unit = "м"
                 )
             ),
             points = getPoints(map),

@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -25,6 +27,38 @@ class SpringPendulumExperiment: Experiment {
     override val xLabel = "Масса груза, кг"
     override val yLabel = "Период, с"
 
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val weight = inputs["weight"]
+        val coeff = inputs["coeff"]
+        val period = inputs["period"]
+
+        val errors = mutableListOf<ValidationError>()
+        val count = listOf(weight, coeff, period).count { it != null }
+
+        when {
+            count < 2 -> {
+                errors += ValidationError.NotEnoughInputs
+            }
+
+            count > 2 -> {
+                errors += ValidationError.InvalidCombination
+            }
+        }
+
+        if (weight != null && weight <= 0.0) errors += ValidationError.OutOfRange("weight", min = 0.01)
+        if (coeff != null && coeff <= 0.0) errors += ValidationError.OutOfRange("coeff", min = 0.01)
+        if (period != null && period <= 0.0) errors += ValidationError.OutOfRange("period", min = 0.01)
+
+
+        return if (errors.isEmpty()) {
+            ValidationResult.Success(inputs)
+        } else {
+            ValidationResult.Error(errors)
+        }
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val m = inputs["weight"]

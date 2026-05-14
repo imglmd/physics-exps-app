@@ -68,21 +68,46 @@ class ProjectileMotionExperiment : Experiment {
 
         val speed = inputs["start_speed"]
         val angle = inputs["angle"]
-        val height = inputs["initial_height"] ?: 0.0
+        val height = inputs["initial_height"]
 
-        if (speed == null || angle == null) {
-            return ValidationResult.Error(
-                listOf(ValidationError.NotEnoughInputs)
+        val errors = mutableListOf<ValidationError>()
+
+        if (speed == null) errors += ValidationError.RequiredField("start_speed")
+        if (angle == null) errors += ValidationError.RequiredField("angle")
+
+        if (speed != null && (speed <= 0.0 || speed > 1000.0)) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "start_speed",
+                min = 0.01,
+                max = 1000.0
             )
         }
 
-        if (angle == 0.0 && height == 0.0) {
-            return ValidationResult.Error(
-                listOf(ValidationError.InvalidCombination)
+        if (angle != null && (angle !in 0.0..90.0)) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "angle",
+                min = 0.0,
+                max = 90.0
             )
         }
 
-        return ValidationResult.Success(inputs)
+        if (height != null && (height !in 0.0..10_000.0)) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "initial_height",
+                min = 0.0,
+                max = 10_000.0
+            )
+        }
+
+        if (speed != null && angle != null && angle == 0.0 && (height ?: 0.0) == 0.0) {
+            errors += ValidationError.InvalidCombination
+        }
+
+        return if (errors.isEmpty()) {
+            ValidationResult.Success(inputs)
+        } else {
+            ValidationResult.Error(errors)
+        }
     }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {

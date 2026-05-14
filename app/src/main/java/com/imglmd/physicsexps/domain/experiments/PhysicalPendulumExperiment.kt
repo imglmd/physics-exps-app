@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import java.lang.Math.sin
 import kotlin.math.PI
 import kotlin.math.cos
@@ -35,6 +37,34 @@ class PhysicalPendulumExperiment: Experiment {
 
     override val xLabel = "Расстояние от оси вращения до центра масс, м"
     override val yLabel = "Период колебаний, с"
+
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val moment = inputs["moment"]
+        val weight = inputs["weight"]
+        val distance = inputs["distance"]
+        val angle = inputs["angle"]
+
+        val errors = mutableListOf<ValidationError>()
+
+        if (moment == null) errors += ValidationError.RequiredField("moment")
+        if (weight == null) errors += ValidationError.RequiredField("weight")
+        if (distance == null) errors += ValidationError.RequiredField("distance")
+
+        if (moment != null && moment <= 0.0) errors += ValidationError.OutOfRange("moment", min = 0.01)
+        if (weight != null && weight <= 0.0) errors += ValidationError.OutOfRange("weight",min = 0.01)
+        if (distance != null && distance <= 0.0) { errors += ValidationError.OutOfRange("distance", min = 0.01) }
+
+        if (angle != null && (angle !in 0.0..90.0)) { errors += ValidationError.OutOfRange("angle", min = 0.0, max = 90.0) }
+
+        return if (errors.isEmpty()) {
+            ValidationResult.Success(inputs)
+        } else {
+            ValidationResult.Error(errors)
+        }
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val i = inputs.getValue("moment")

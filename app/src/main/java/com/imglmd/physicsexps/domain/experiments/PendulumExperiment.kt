@@ -47,29 +47,57 @@ class PendulumExperiment : Experiment {
         inputs: Map<String, Double>
     ): ValidationResult {
 
-        val hasLength = inputs["length"] != null
-        val hasPeriod = inputs["period"] != null
-        val hasGravity = inputs["gravity"] != null
+        val length = inputs["length"]
+        val period = inputs["period"]
+        val gravity = inputs["gravity"]
+        val angle = inputs["angle"]
 
-        val isValid = when {
+        val errors = mutableListOf<ValidationError>()
 
-            hasLength && hasPeriod && !hasGravity -> true
+        val count = listOf(length, period, gravity).count { it != null }
 
-            hasLength && hasGravity && !hasPeriod -> true
-
-            hasPeriod && hasGravity && !hasLength -> true
-
-            else -> false
+        when {
+            count < 2 -> {
+                errors += ValidationError.NotEnoughInputs
+            }
+            count > 2 -> {
+                errors += ValidationError.InvalidCombination
+            }
         }
 
-        return if (isValid) {
+        if (length != null && length <= 0.0) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "length",
+                min = 0.01
+            )
+        }
+
+        if (period != null && period <= 0.0) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "period",
+                min = 0.01
+            )
+        }
+
+        if (gravity != null && gravity <= 0.0) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "gravity",
+                min = 0.01
+            )
+        }
+
+        if (angle != null && (angle !in 0.0..90.0)) {
+            errors += ValidationError.OutOfRange(
+                fieldKey = "angle",
+                min = 0.0,
+                max = 90.0
+            )
+        }
+
+        return if (errors.isEmpty()) {
             ValidationResult.Success(inputs)
         } else {
-            ValidationResult.Error(
-                listOf(
-                    ValidationError.InvalidCombination
-                )
-            )
+            ValidationResult.Error(errors)
         }
     }
 

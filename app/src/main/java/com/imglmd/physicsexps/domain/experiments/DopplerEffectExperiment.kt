@@ -6,6 +6,9 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
+import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {
     override val id = "doppler_effect"
@@ -24,36 +27,50 @@ class DopplerEffectExperiment: Experiment {
     override val yLabel = "Частота при удалении, Гц"
     override val imageRes = R.drawable.doppler
 
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+        val vObs = inputs["v_obs"]
+        val vSource = inputs["v_source"]
+        val frequency = inputs["frequency"]
+
+        if (vObs == null || vSource == null || frequency == null) {
+            return ValidationResult.Error(
+                listOf(ValidationError.NotEnoughInputs)
+            )
+        }
+
+        val soundSpeed = ExpConstants.SPEED_OF_SOUND_IN_AIR
+
+        if (vSource >= soundSpeed || abs(vObs) >= soundSpeed) {
+            return ValidationResult.Error(
+                listOf(
+                    ValidationError.InvalidCombination
+                )
+            )
+        }
+
+        return ValidationResult.Success(inputs)
+    }
+
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
-        val vO = inputs["v_obs"]
-        val vS = inputs["v_source"]
-        val fS = inputs["frequency"]
+        val vO = inputs.getValue("v_obs")
+        val vS = inputs.getValue("v_source")
+        val fS = inputs.getValue("frequency")
         val map = mutableMapOf<String, Double>()
         val v = ExpConstants.SPEED_OF_SOUND_IN_AIR
 
-        val fSep: Double // отдаление
-        val fApr: Double // сближение
-        val shiftSep: Double
-        val shiftApr: Double
-        val lengthWaveSep: Double
-        val lengthWaveApr: Double
+        val fApr = fS * ((v + vO)/(v - vS))
+        val fSep = fS * ((v - vO)/(v + vS))
+        val shiftSep = fSep - fS
+        val shiftApr = fApr - fS
+        val lengthWaveApr = (v - vS) / fS
+        val lengthWaveSep = (v + vS) / fS
 
-        when {
-            vO != null && vS != null && fS != null -> {
-                fApr = fS * ((v + vO)/(v - vS))
-                fSep = fS * ((v - vO)/(v + vS))
-                shiftSep = fSep - fS
-                shiftApr = fApr - fS
-                lengthWaveApr = (v - vS) / fS
-                lengthWaveSep = (v + vS) / fS
-
-                map.put("v_source", vS)
-                map.put("v_obs", vO)
-                map.put("frequency", fS)
-                map.put("v", v)
-            }
-            else -> throw IllegalArgumentException("Нужно ввести любые три величины")
-        }
+        map["v_source"] = vS
+        map["v_obs"] = vO
+        map["frequency"] = fS
+        map["v"] = v
 
         return ExperimentResult(
             experimentId = this.id,
