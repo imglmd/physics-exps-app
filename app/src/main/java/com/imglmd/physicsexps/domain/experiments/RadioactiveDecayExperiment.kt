@@ -21,7 +21,6 @@ class RadioactiveDecayExperiment: Experiment {
         InputField("period", "Период полураспада", "T", "с", required = true, min = 0.0),
         InputField("time", "Время от начала распада", "t", "с", required = true, min = 0.0)
     )
-    override val minRequiredInputs = 3
 
     override val imageRes = R.drawable.radioactive_decay
 

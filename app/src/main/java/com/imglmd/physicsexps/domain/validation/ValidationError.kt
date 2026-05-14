@@ -2,6 +2,8 @@ package com.imglmd.physicsexps.domain.validation
 
 sealed class ValidationError {
 
+    object InvalidCombination: ValidationError()
+
     object NotEnoughInputs: ValidationError()
 
     data class InvalidNumber(val fieldKey: String): ValidationError()

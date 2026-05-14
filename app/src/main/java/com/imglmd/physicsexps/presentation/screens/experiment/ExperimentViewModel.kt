@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -19,16 +21,22 @@ class ExperimentViewModel(
     private val replaceRunId: Int?,
     private val getExperiment: GetExperimentByIdUseCase,
     private val calculate: CalculateExperimentUseCase,
-    private val resultRepository: InMemoryResultRepository
+    private val resultRepository: InMemoryResultRepository,
+    private val validator: ExperimentValidator
 ) : ViewModel() {
 
     private val experiment = getExperiment(id)
 
+    private val initialInputs = inputs ?: emptyMap()
+
+    private val initialValidation = validator.validate(experiment, initialInputs)
+
     private val _state = MutableStateFlow(
         ExperimentContract.State(
             experiment = experiment,
-            inputs = inputs?: emptyMap(),
-            isAdvancedMode = hasAdvancedInputs(inputs)
+            inputs = initialInputs,
+            isAdvancedMode = hasAdvancedInputs(initialInputs),
+            isButtonActive = initialValidation is ValidationResult.Success
         )
     )
     val state = _state.asStateFlow()
@@ -83,36 +91,30 @@ class ExperimentViewModel(
         }
     }
     private fun changeValue(key: String, newValue: String) {
+
         _state.update { current ->
 
             val newInputs = current.inputs + (key to newValue)
-            val allFields = current.experiment.inputFields + current.experiment.additionalInputFields
 
-            val allRequiredFilled = allFields
-                .filter { it.required }
-                .all { field ->
-                    newInputs[field.key]?.toDoubleOrNull() != null
-                }
-
-            val validCount = newInputs.values.count { it.toDoubleOrNull() != null }
-
-            val isEnoughInputs = validCount >= experiment.minRequiredInputs
+            val validation = validator.validate(
+                experiment = current.experiment,
+                rawInputs = newInputs
+            )
 
             current.copy(
                 inputs = newInputs,
                 error = null,
-                isButtonActive = allRequiredFilled && isEnoughInputs
+                isButtonActive = validation is ValidationResult.Success
             )
         }
     }
     private fun mapValidationErrors(errors: List<ValidationError>): String {
+        return when (errors.firstOrNull()) {
+            ValidationError.NotEnoughInputs ->
+                "Недостаточно данных"
 
-        val first = errors.firstOrNull() ?: return "Ошибка ввода"
-
-        return when (first) {
-
-            is ValidationError.NotEnoughInputs ->
-                "Введите минимум ${experiment.minRequiredInputs} значения"
+            ValidationError.InvalidCombination ->
+                "Некорректная комбинация значений"
 
             is ValidationError.InvalidNumber ->
                 "Некорректное число"
@@ -122,6 +124,9 @@ class ExperimentViewModel(
 
             is ValidationError.RequiredField ->
                 "Заполните обязательные поля"
+
+            null ->
+                "Ошибка ввода"
         }
     }
 }

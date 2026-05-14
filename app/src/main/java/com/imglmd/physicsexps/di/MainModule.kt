@@ -60,7 +60,7 @@ val mainModule = module {
     viewModel { params ->
         val inputs: Map<String, String>? = params.getOrNull()
         val replaceRunId: Int? = params.getOrNull()
-        ExperimentViewModel(params.get(), inputs, replaceRunId, get(), get(), get())
+        ExperimentViewModel(params.get(), inputs, replaceRunId, get(), get(), get(), get())
     }
     viewModel { params ->
         val runId: Int? = params.getOrNull()

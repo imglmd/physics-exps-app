@@ -20,7 +20,6 @@ class DopplerEffectExperiment: Experiment {
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
         InputField("frequency", "Исходная частота", "fₛ", "Гц", required = true, min = 20.0, max = 20000.0),
     )
-    override val minRequiredInputs = 3
     override val xLabel = "Скорость источника, м/с"
     override val yLabel = "Частота при удалении, Гц"
     override val imageRes = R.drawable.doppler

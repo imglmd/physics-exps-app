@@ -27,7 +27,6 @@ class HarmonicVibrationsExperiment: Experiment {
         InputField("start_position", "Началтная координата", "x₀", "м",required = true),
         InputField("time", "Продолжительность колебаний", "t", "с", min = 0.0, required = true)
     )
-    override val minRequiredInputs = 2
     override val imageRes = R.drawable.harmonical
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {

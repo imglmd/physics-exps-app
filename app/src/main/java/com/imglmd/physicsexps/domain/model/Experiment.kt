@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.domain.model
 
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 
 interface Experiment {
     val id: String
@@ -10,7 +11,6 @@ interface Experiment {
     val imageRes: Int get() = R.drawable.placeholder  //TODO: брать картинку с сервера
 
     val inputFields: List<InputField>
-    val minRequiredInputs: Int
     val additionalInputFields: List<InputField> get() = emptyList()
 
     val xLabel: String
@@ -18,6 +18,14 @@ interface Experiment {
 
     fun calculate(inputs: Map<String, Double>): ExperimentResult
     fun getPoints(inputs: Map<String, Double>): List<Pair<Double, Double>>
+
+    /**
+     * эксперимент сам решает,
+     * подходит ли набор данных
+     */
+    fun validateInputs(inputs: Map<String, Double>): ValidationResult {
+        return ValidationResult.Success(inputs)
+    }
 
     /**
      * пустой список - режим обучения недоступен для этого эксперимента

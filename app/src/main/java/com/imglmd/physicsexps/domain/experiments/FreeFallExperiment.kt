@@ -21,7 +21,6 @@ class FreeFallExperiment: Experiment {
     override val xLabel =  "Время, с"
     override val yLabel = "у"
 
-    override val minRequiredInputs = 2
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val v0 = inputs["start_speed"]

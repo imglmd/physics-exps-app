@@ -21,7 +21,6 @@ class JouleLenzExperiment: Experiment {
         InputField("resistance", "Сопротивление", "R", "Ом", min = 0.0)
     )
 
-    override val minRequiredInputs = 3
     override val imageRes = R.drawable.joulelenz
     override val xLabel = "Сила тока"
     override val yLabel = "Количество теплоты, выделяемое проводником"

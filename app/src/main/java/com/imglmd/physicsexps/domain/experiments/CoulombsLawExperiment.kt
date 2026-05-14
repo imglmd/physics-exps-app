@@ -25,7 +25,6 @@ class CoulombsLawExperiment: Experiment {
     override val xLabel = "Расстояние, м"
     override val yLabel = "Электрическая сила, нН"
 
-    override val minRequiredInputs = 3
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val q1 = inputs["q1"]

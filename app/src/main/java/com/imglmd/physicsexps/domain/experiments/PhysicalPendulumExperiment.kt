@@ -33,7 +33,6 @@ class PhysicalPendulumExperiment: Experiment {
             required = false)
     )
 
-    override val minRequiredInputs = 4
     override val xLabel = "Расстояние от оси вращения до центра масс, м"
     override val yLabel = "Период колебаний, с"
 

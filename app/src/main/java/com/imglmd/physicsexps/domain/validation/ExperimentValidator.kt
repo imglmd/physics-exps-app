@@ -18,7 +18,6 @@ class ExperimentValidator {
 
             val rawValue = rawInputs[field.key]
 
-            // обязательное поле
             if (field.required && rawValue.isNullOrBlank()) {
                 errors += ValidationError.RequiredField(field.key)
                 continue
@@ -46,14 +45,12 @@ class ExperimentValidator {
             parsedInputs[field.key] = number
         }
 
-        if (parsedInputs.size < experiment.minRequiredInputs) {
-            errors += ValidationError.NotEnoughInputs
+        // ошибки базовой валидации
+        if (errors.isNotEmpty()) {
+            return ValidationResult.Error(errors)
         }
 
-        return if (errors.isEmpty()) {
-            ValidationResult.Success(parsedInputs)
-        } else {
-            ValidationResult.Error(errors)
-        }
+        // дальше эксперимент сам решает
+        return experiment.validateInputs(parsedInputs)
     }
 }

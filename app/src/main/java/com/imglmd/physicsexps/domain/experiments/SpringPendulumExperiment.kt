@@ -25,7 +25,6 @@ class SpringPendulumExperiment: Experiment {
     override val xLabel = "Масса груза, кг"
     override val yLabel = "Период, с"
 
-    override val minRequiredInputs = 2
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val m = inputs["weight"]

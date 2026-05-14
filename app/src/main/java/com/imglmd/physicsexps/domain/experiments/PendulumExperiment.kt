@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow
@@ -26,10 +28,10 @@ class PendulumExperiment : Experiment {
     override val inputFields = listOf(
         InputField("length", "Длина нити", "L", "м", min = 0.0),
         InputField("period", "Период колебаний", "T", "с", min = 0.0),
-        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0),
     )
 
     override val additionalInputFields = listOf(
+        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0),
         InputField(
             key = "angle",
             label = "Угол отклонения",
@@ -41,7 +43,35 @@ class PendulumExperiment : Experiment {
         )
     )
 
-    override val minRequiredInputs = 2
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val hasLength = inputs["length"] != null
+        val hasPeriod = inputs["period"] != null
+        val hasGravity = inputs["gravity"] != null
+
+        val isValid = when {
+
+            hasLength && hasPeriod && !hasGravity -> true
+
+            hasLength && hasGravity && !hasPeriod -> true
+
+            hasPeriod && hasGravity && !hasLength -> true
+
+            else -> false
+        }
+
+        return if (isValid) {
+            ValidationResult.Success(inputs)
+        } else {
+            ValidationResult.Error(
+                listOf(
+                    ValidationError.InvalidCombination
+                )
+            )
+        }
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
 
@@ -87,9 +117,7 @@ class PendulumExperiment : Experiment {
                 map.put("length", length)
                 map.put("gravity", gravity)
             }
-            else -> {
-                throw IllegalArgumentException("Нужно ввести две величины")
-            }
+            else -> error("")
         }
         frequency = 1 / period
         angularFrequency = sqrt(gravity/length)

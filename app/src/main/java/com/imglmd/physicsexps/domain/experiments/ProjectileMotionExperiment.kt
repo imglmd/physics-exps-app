@@ -6,6 +6,8 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan
@@ -59,16 +61,34 @@ class ProjectileMotionExperiment : Experiment {
 
     override val xLabel = "x, м"
     override val yLabel = "y, м"
-    override val minRequiredInputs = 2
+
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val speed = inputs["start_speed"]
+        val angle = inputs["angle"]
+        val height = inputs["initial_height"] ?: 0.0
+
+        if (speed == null || angle == null) {
+            return ValidationResult.Error(
+                listOf(ValidationError.NotEnoughInputs)
+            )
+        }
+
+        if (angle == 0.0 && height == 0.0) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
+        }
+
+        return ValidationResult.Success(inputs)
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val v0 = inputs.getValue("start_speed")
         val angleDeg = inputs.getValue("angle")
         val h0 = inputs["initial_height"] ?: 0.0
-
-        if (angleDeg == 0.0 && h0 == 0.0) {
-            throw IllegalArgumentException("Угол 0° и высота 0: движение невозможно")
-        }
 
         val alpha = Math.toRadians(angleDeg)
         val g = ExpConstants.GRAVITY
