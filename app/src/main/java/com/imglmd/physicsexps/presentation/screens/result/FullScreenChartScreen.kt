@@ -76,7 +76,7 @@ fun FullScreenChartScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = state.result.experimentId,
+                        text = getExperimentName(state.result.experimentId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -269,3 +269,17 @@ private fun rememberChart(
 
     marker = marker
 )
+
+fun getExperimentName(expId: String): String = when(expId) {
+    "pendulum" -> "Математический маятник"
+    "coulombs_law" -> "Закон Кулона"
+    "doppler_effect" -> "Эффект Доплера"
+    "free_fall" -> "Свободное падение тел"
+    "harmonic_vibrations" -> "Гармонические колебания"
+    "joule_lenz" -> "Закон Джоуля-Ленца"
+    "physical_pendulum" -> "Физический маятник"
+    "projectile_motion" -> "Движение тела, брошенного под углом к горизонту"
+    "radioactive_decay" -> "Радиоактивный распад"
+    "spring_pendulum" -> "Пружинный маятник"
+    else -> ""
+}
