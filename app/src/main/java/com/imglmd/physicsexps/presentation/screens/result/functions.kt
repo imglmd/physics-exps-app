@@ -46,7 +46,8 @@ fun saveResultAsPdf(
 
     // разделитель
     paint.color = android.graphics.Color.rgb(169, 7, 53)
-    canvas.drawLine(20f, 210f, canvas.width.toFloat() - 20, 220f, paint)
+    paint.strokeWidth = 3f
+    canvas.drawLine(20f, 220f, canvas.width.toFloat() - 20, 220f, paint)
 
     //результаты
     paint.textAlign = Paint.Align.LEFT
