@@ -2,16 +2,20 @@ package com.imglmd.physicsexps.presentation.screens.result
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.compose.ui.text.font.Typeface
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.imglmd.physicsexps.R
 import androidx.core.graphics.scale
+import androidx.core.graphics.createBitmap
 
 
 fun saveResultAsPdf(
@@ -26,22 +30,27 @@ fun saveResultAsPdf(
     val canvas = page.canvas
     val paint = Paint()
 
-    val logo = ContextCompat.getDrawable(context, R.drawable.app)?.toBitmap(100, 100)
+    val logo = ContextCompat.getDrawable(context, R.drawable.app)?.toBitmap(90, 90, Bitmap.Config.ARGB_8888)
     if (logo != null) {
-        val scaleLogo = logo.scale(100, 100, true)
-        canvas.drawBitmap(scaleLogo, (canvas.width / 2 - 50).toFloat(), 20f, paint)
+        canvas.drawBitmap(logo, (canvas.width / 2 - 50).toFloat(), 20f, paint)
     }
 
     //заголовок
     paint.textAlign = Paint.Align.CENTER
     paint.textSize = 20f
-    paint.isFakeBoldText = true
+    paint.isFakeBoldText = false
+    paint.apply {
+        typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
+    }
     canvas.drawText("Отчёт по эксперименту", (canvas.width/2).toFloat(), 150f, paint)
 
     //описание, ну тип там название и категория
     paint.textAlign = Paint.Align.CENTER
-    paint.textSize = 14f
+    paint.textSize = 16f
     paint.isFakeBoldText = false
+    paint.apply {
+        typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.ITALIC)
+    }
     canvas.drawText("$nameSection: $nameExp", (canvas.width/2).toFloat(), 190f, paint)
 
     // разделитель
@@ -54,6 +63,9 @@ fun saveResultAsPdf(
     paint.color = android.graphics.Color.BLACK
     paint.textSize = 14f
     paint.isFakeBoldText = false
+    paint.apply {
+        typeface = android.graphics.Typeface.DEFAULT
+    }
 
     var yDist = 250f
     val step = 30f
@@ -61,6 +73,11 @@ fun saveResultAsPdf(
         canvas.drawText("$name: $value", 50f, yDist, paint)
         yDist += step
     }
+
+    // разделитель нижний
+    paint.color = android.graphics.Color.rgb(169, 7, 53)
+    paint.strokeWidth = 3f
+    canvas.drawLine(20f, canvas.height - 50f, canvas.width.toFloat() - 20, canvas.height - 50f, paint)
 
     pdfDoc.finishPage(page)
 
