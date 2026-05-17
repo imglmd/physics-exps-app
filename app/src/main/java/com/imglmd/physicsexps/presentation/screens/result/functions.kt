@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.result
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.imglmd.physicsexps.R
 import androidx.core.graphics.scale
+import androidx.core.graphics.createBitmap
 
 
 fun saveResultAsPdf(
@@ -26,10 +28,9 @@ fun saveResultAsPdf(
     val canvas = page.canvas
     val paint = Paint()
 
-    val logo = ContextCompat.getDrawable(context, R.drawable.app)?.toBitmap(100, 100)
+    val logo = ContextCompat.getDrawable(context, R.drawable.app)?.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
     if (logo != null) {
-        val scaleLogo = logo.scale(100, 100, true)
-        canvas.drawBitmap(scaleLogo, (canvas.width / 2 - 50).toFloat(), 20f, paint)
+        canvas.drawBitmap(logo, (canvas.width / 2 - 50).toFloat(), 20f, paint)
     }
 
     //заголовок
