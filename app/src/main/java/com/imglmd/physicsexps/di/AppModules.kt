@@ -6,5 +6,6 @@ val appModules = listOf(
     useCaseModule,
     viewModelModule,
     experimentsModule,
-    navigationModule
+    navigationModule,
+    remoteModule
 )
