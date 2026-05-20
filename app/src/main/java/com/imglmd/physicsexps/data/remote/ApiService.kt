@@ -19,7 +19,7 @@ interface ApiService {
     suspend fun uploadMedia(
         @Part media: MultipartBody.Part,
         @Path("run_id") runId: String,
-        @Query("filename") fileName: String
+        @Query("fileName") fileName: String
     ): MediaDto
 
     @DELETE("/api/experiment_runs/{run_id}/media/{media_id}")
