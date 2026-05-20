@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.repository
+package com.imglmd.physicsexps.data.database.repository
 
 import com.imglmd.physicsexps.data.database.ExperimentRunsDao
 import com.imglmd.physicsexps.data.mapper.toModel

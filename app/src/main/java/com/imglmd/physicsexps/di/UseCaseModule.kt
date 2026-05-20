@@ -6,6 +6,9 @@ import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.media.DeleteMediaUseCase
+import com.imglmd.physicsexps.domain.usecase.media.GetMediaUseCase
+import com.imglmd.physicsexps.domain.usecase.media.UploadMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetAllRunsUseCase
@@ -45,4 +48,8 @@ val useCaseModule = module {
     factory { DeleteCommentUseCase(get()) }
 
     factory { GetCommentsUseCase(get()) }
+
+    factory { UploadMediaUseCase(get()) }
+    factory { GetMediaUseCase(get()) }
+    factory { DeleteMediaUseCase(get()) }
 }
