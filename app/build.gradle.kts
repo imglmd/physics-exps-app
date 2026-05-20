@@ -48,51 +48,55 @@ android {
     }
 }
 
-dependencies {
+    dependencies {
 
-    // Core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+        // Core
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.lifecycle.runtime.ktx)
+        implementation(libs.androidx.activity.compose)
 
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
+        // Compose
+        implementation(platform(libs.androidx.compose.bom))
+        implementation(libs.androidx.compose.ui)
+        implementation(libs.androidx.compose.ui.graphics)
+        implementation(libs.androidx.compose.ui.tooling.preview)
+        implementation(libs.androidx.compose.material3)
 
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+        debugImplementation(libs.androidx.compose.ui.tooling)
+        debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    // Icons
-    implementation(libs.androidx.compose.material.icons.core)
+        // Icons
+        implementation(libs.androidx.compose.material.icons.core)
 
-    // Splash
-    implementation(libs.androidx.core.splashscreen)
+        // Splash
+        implementation(libs.androidx.core.splashscreen)
 
-    // Navigation + DI
-    implementation(libs.bundles.nav3)
-    implementation(libs.bundles.koin)
+        // Navigation + DI
+        implementation(libs.bundles.nav3)
+        implementation(libs.bundles.koin)
 
-    // Serialization
-    implementation(libs.kotlinx.serialization)
+        // Serialization
+        implementation(libs.kotlinx.serialization)
 
-    // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+        // Room
+        implementation(libs.room.runtime)
+        implementation(libs.room.ktx)
+        ksp(libs.room.compiler)
 
-    // Charts (Vico)
-    implementation(libs.vico.compose.m3)
+        // Charts (Vico)
+        implementation(libs.vico.compose.m3)
 
-    // Latex
-    implementation(libs.latex.renderer)
+        // Latex
+        implementation(libs.latex.renderer)
 
-    // Tests
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-}
+        //Retrofit
+        implementation(libs.retrofit)
+        implementation(libs.converter.kotlinx.serialization)
+
+        // Tests
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
+        androidTestImplementation(platform(libs.androidx.compose.bom))
+        androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    }

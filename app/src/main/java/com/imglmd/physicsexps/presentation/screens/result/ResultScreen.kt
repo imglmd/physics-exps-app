@@ -2,6 +2,7 @@
 
 package com.imglmd.physicsexps.presentation.screens.result
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -130,6 +132,7 @@ private fun Content(
             .isNotEmpty()
     }
 
+    val context = LocalContext.current
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
 
@@ -147,7 +150,11 @@ private fun Content(
             BottomActions(
                 onDelete = { onIntent(ResultContract.Intent.Delete) },
                 onSave = { onIntent(ResultContract.Intent.Save) },
-                onCompare = { onIntent(ResultContract.Intent.Compare) }
+                onCompare = { onIntent(ResultContract.Intent.Compare) },
+                context = context,
+                state = state,
+                expName = getExperimentName(state.result.experimentId),
+                catName = getCategoryName(state.result.experimentId)
             )
         }
     ) { padding ->
@@ -170,7 +177,6 @@ private fun Content(
 
             if (state.result.points.isNotEmpty()) {
                 Spacer(Modifier.height(16.dp))
-
                 ChartCard(
                     points = state.result.points,
                     xLabel = state.result.xLabel,
@@ -198,8 +204,13 @@ private fun BottomActions(
     onDelete: () -> Unit,
     onSave: () -> Unit,
     onCompare: () -> Unit,
+    context: Context,
+    state: ResultContract.State.Success,
+    expName: String,
+    catName: String,
     modifier: Modifier = Modifier
 ) {
+    val fmt = { d: Double -> "%.3f".format(d) }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -245,15 +256,35 @@ private fun BottomActions(
                 )
 
                 ToolbarButton(
-                    text = "Сохранить",
+                    icon = ImageVector.vectorResource(R.drawable.pdf),
+                    contentDescription = "pdf",
+                    onClick = {
+                        val data: Map<String, String> = state.result.quantities.associate { it ->
+                            it.label to "${fmt(it.value)} ${it.unit}"
+                        }
+
+                        saveResultAsPdf(
+                            context = context,
+                            nameExp = expName,
+                            nameSection = catName,
+                            data = data
+                        )
+                    },
+                    modifier = Modifier.weight(1f),
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+
+                ToolbarButton(
                     icon = ImageVector.vectorResource(R.drawable.save),
                     contentDescription = "Сохранить",
                     onClick = onSave,
-                    modifier = Modifier.weight(2f),
+                    modifier = Modifier.weight(1f),
                     iconPosition = ToolbarIconPosition.RIGHT,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
+
             }
         }
     }

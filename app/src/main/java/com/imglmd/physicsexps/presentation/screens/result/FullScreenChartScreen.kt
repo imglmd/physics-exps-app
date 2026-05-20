@@ -76,7 +76,7 @@ fun FullScreenChartScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = state.result.experimentId,
+                        text = getExperimentName(state.result.experimentId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
