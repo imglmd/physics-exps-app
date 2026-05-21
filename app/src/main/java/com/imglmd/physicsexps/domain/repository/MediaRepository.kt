@@ -8,6 +8,5 @@ import okhttp3.RequestBody
 interface MediaRepository {
     suspend fun getMedias(runId: String): MediaList
     suspend fun uploadMedia(runId: String, body: MultipartBody.Part, fileName: String): Media
-
     suspend fun delete(runId: String, id: String)
 }

@@ -10,11 +10,9 @@ data class MediaDto(
     val mediaId: String,
     val filename: String,
     val url: String,
-    val size: Int = 0,
+    val size: Int,
     @SerialName("created_at")
-    val createdAt: Long = System.currentTimeMillis(),
-    @SerialName("experiment_id")
-    val experimentId: Int? = null
+    val createdAt: String
 )
 
 @Serializable

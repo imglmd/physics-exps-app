@@ -6,13 +6,11 @@ import com.imglmd.physicsexps.domain.model.Media
 import com.imglmd.physicsexps.domain.model.MediaList
 
 fun Media.toDto(): MediaDto {
-    return MediaDto(mediaId = mediaId, filename = filename, url = url, size = size, createdAt = createdAt,
-        experimentId = experimentId)
+    return MediaDto(mediaId = mediaId, filename = filename, url = url, size = size, createdAt = createdAt)
 }
 
 fun MediaDto.toUi(): Media {
-    return Media(mediaId = mediaId, filename = filename, url = url, size = size, createdAt = createdAt,
-        experimentId = experimentId)
+    return Media(mediaId = mediaId, filename = filename, url = url, size = size, createdAt = createdAt)
 }
 
 fun MediaListDto.toUi(): MediaList {
