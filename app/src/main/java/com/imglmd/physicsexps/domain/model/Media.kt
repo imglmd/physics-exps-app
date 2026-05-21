@@ -7,6 +7,5 @@ data class Media(
     val filename: String,
     val url: String,
     val size: Int,
-    val createdAt: Long,
-    val experimentId: Int?
+    val createdAt: String
 )
