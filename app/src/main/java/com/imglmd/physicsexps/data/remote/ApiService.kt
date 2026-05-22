@@ -10,6 +10,14 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
+    @GET("/api/experiments")
+    suspend fun getExperiments(): List<ExperimentPreviewDto>
+
+    @GET("/api/experiments/{experiment_id}/images")
+    suspend fun getExperimentImages(
+        @Path("experiment_id") experimentId: String
+    ): ExperimentImagesDto
+
     @GET("/api/experiment_runs/{run_id}/media")
     suspend fun getMedia(@Path("run_id") runId: String): MediaListDto
 

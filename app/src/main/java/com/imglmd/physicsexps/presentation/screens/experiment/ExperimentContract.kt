@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.domain.model.Experiment
 interface ExperimentContract {
     data class State (
         val experiment: Experiment,
+        val imageUrls: List<String> = emptyList(),
         val inputs: Map<String, String> = emptyMap(),
         val error: String? = null,
         val isLoading: Boolean = false,

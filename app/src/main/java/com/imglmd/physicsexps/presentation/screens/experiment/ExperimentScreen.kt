@@ -61,11 +61,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.AdvancedToggle
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
@@ -189,8 +189,10 @@ fun ExperimentScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                item {
-                    CarouselSection(state)
+                if (state.imageUrls.isNotEmpty()) {
+                    item {
+                        CarouselSection(state.imageUrls)
+                    }
                 }
                 if (state.experiment.description.isNotEmpty()){
                 item {
@@ -313,10 +315,10 @@ fun ExperimentScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CarouselSection(
-    state: ExperimentContract.State,
+    imageUrls: List<String>,
     modifier: Modifier = Modifier
 ) {
-    val imageCount = 4
+    val imageCount = imageUrls.size
     val carouselState = rememberCarouselState { imageCount }
 
     Column(
@@ -331,14 +333,16 @@ private fun CarouselSection(
                 .clip(RoundedCornerShape(20.dp)),
             preferredItemWidth = 200.dp,
             itemSpacing = 8.dp
-        ) {
-            Image(
-                painter = painterResource(R.drawable.placeholder),
+        ) { index ->
+            AsyncImage(
+                model = imageUrls[index],
                 contentDescription = null,
                 modifier = Modifier
                     .height(160.dp)
                     .maskClip(RoundedCornerShape(20.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                error = null,
+                fallback = null
             )
         }
 

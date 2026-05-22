@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCase
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.domain.validation.ValidationError
 import com.imglmd.physicsexps.domain.validation.ValidationResult
@@ -22,7 +23,8 @@ class ExperimentViewModel(
     private val getExperiment: GetExperimentByIdUseCase,
     private val calculate: CalculateExperimentUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val validator: ExperimentValidator
+    private val validator: ExperimentValidator,
+    private val getExperimentImagesUseCase: GetExperimentImagesUseCase
 ) : ViewModel() {
 
     private val experiment = getExperiment(id)
@@ -43,6 +45,10 @@ class ExperimentViewModel(
 
     private val _actionFlow = MutableSharedFlow<ExperimentContract.Action>()
     val actionFlow = _actionFlow.asSharedFlow()
+
+    init {
+        loadImages()
+    }
 
     fun onIntent(intent: ExperimentContract.Intent) {
         when (intent) {
@@ -127,6 +133,18 @@ class ExperimentViewModel(
 
             null ->
                 "Ошибка ввода"
+        }
+    }
+
+    private fun loadImages() {
+        viewModelScope.launch {
+            getExperimentImagesUseCase(id)
+                .onSuccess { imageUrls ->
+                    _state.update { it.copy(imageUrls = imageUrls) }
+                }
+                .onFailure {
+                    _state.update { it.copy(imageUrls = emptyList()) }
+                }
         }
     }
 }

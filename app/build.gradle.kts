@@ -130,6 +130,7 @@ android {
         //Retrofit
         implementation(libs.retrofit)
         implementation(libs.converter.kotlinx.serialization)
+        implementation(libs.coil.compose)
 
         // Tests
         testImplementation(libs.junit)

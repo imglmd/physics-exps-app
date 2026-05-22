@@ -21,6 +21,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -34,6 +35,7 @@ val viewModelModule = module {
             id = params.get(),
             inputs = inputs,
             replaceRunId = replaceRunId,
+            get(),
             get(),
             get(),
             get(),
