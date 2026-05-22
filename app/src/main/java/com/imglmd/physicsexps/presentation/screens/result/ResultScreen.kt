@@ -3,6 +3,8 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -56,6 +58,7 @@ import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.CommentSection
+import com.imglmd.physicsexps.presentation.screens.result.components.MediaSection
 import com.imglmd.physicsexps.presentation.screens.result.components.ResultCard
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import org.koin.compose.koinInject
@@ -188,6 +191,19 @@ private fun Content(
 
             Spacer(Modifier.height(20.dp))
 
+            MediaSection(
+                media = state.media,
+                isLoading = state.isMediaLoading,
+                isUploading = state.isMediaUploading,
+                errorMessage = state.mediaErrorMessage,
+                onUpload = { onIntent(ResultContract.Intent.UploadMedia(it)) },
+                onDelete = { onIntent(ResultContract.Intent.DeleteMedia(it)) },
+                onRefresh = { onIntent(ResultContract.Intent.RefreshMedia) },
+                onOpen = { url -> openMedia(context, url) }
+            )
+
+            Spacer(Modifier.height(20.dp))
+
             CommentSection(
                 comments = state.comments,
                 onAddComment = { onIntent(ResultContract.Intent.AddComment(it)) },
@@ -287,6 +303,15 @@ private fun BottomActions(
 
             }
         }
+    }
+}
+
+private fun openMedia(context: Context, url: String) {
+    runCatching {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
     }
 }
 

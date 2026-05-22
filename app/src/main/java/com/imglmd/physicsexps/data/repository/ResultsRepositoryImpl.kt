@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.database.repository
+package com.imglmd.physicsexps.data.repository
 
 import com.imglmd.physicsexps.data.database.ResultsDao
 import com.imglmd.physicsexps.data.database.models.ResultEntity

@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -7,6 +8,40 @@ plugins {
     alias(libs.plugins.serialization)
     id("com.google.devtools.ksp")
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use(::load)
+    }
+}
+
+fun propertyOrDefault(propertyName: String, envName: String, defaultValue: String): String {
+    return localProperties.getProperty(propertyName)
+        ?.trim()
+        ?.takeIf(String::isNotEmpty)
+        ?: providers.gradleProperty(propertyName).orNull
+            ?.trim()
+            ?.takeIf(String::isNotEmpty)
+        ?: System.getenv(envName)
+            ?.trim()
+            ?.takeIf(String::isNotEmpty)
+        ?: defaultValue
+}
+
+fun String.asBuildConfigValue(): String = "\"${replace("\\", "\\\\").replace("\"", "\\\"")}\""
+
+val backendBaseUrl = propertyOrDefault(
+    propertyName = "backend.baseUrl",
+    envName = "BACKEND_BASE_URL",
+    defaultValue = "http://10.0.2.2:8002/"
+)
+
+val backendApiKey = propertyOrDefault(
+    propertyName = "backend.apiKey",
+    envName = "BACKEND_API_KEY",
+    defaultValue = "supersecretapikey123"
+)
 
 kotlin {
     compilerOptions {
@@ -28,6 +63,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BACKEND_BASE_URL", backendBaseUrl.asBuildConfigValue())
+        buildConfigField("String", "BACKEND_API_KEY", backendApiKey.asBuildConfigValue())
     }
 
     buildTypes {
@@ -45,6 +82,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

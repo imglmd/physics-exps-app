@@ -1,10 +1,10 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.data.InMemoryResultRepository
-import com.imglmd.physicsexps.data.database.repository.ExperimentRunsRepositoryImpl
-import com.imglmd.physicsexps.data.database.repository.ResultsRepositoryImpl
-import com.imglmd.physicsexps.data.remote.MediaRepositoryImpl
-import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
+import com.imglmd.physicsexps.data.repository.CommentRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ExperimentRunsRepositoryImpl
+import com.imglmd.physicsexps.data.repository.MediaRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ResultsRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.MediaRepository
@@ -28,6 +28,6 @@ val repositoryModule = module {
     }
 
     single<MediaRepository> {
-        MediaRepositoryImpl(get())
+        MediaRepositoryImpl(get(), get())
     }
 }
