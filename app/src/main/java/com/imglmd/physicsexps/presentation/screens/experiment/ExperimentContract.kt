@@ -6,6 +6,7 @@ interface ExperimentContract {
     data class State (
         val experiment: Experiment,
         val imageUrls: List<String> = emptyList(),
+        val isImagesLoading: Boolean = true,
         val inputs: Map<String, String> = emptyMap(),
         val error: String? = null,
         val isLoading: Boolean = false,

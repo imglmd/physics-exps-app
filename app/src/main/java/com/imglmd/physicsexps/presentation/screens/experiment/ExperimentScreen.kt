@@ -1,17 +1,14 @@
 package com.imglmd.physicsexps.presentation.screens.experiment
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,11 +26,8 @@ import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
@@ -44,8 +38,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,18 +51,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.components.AdvancedToggle
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
+import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentCarousel
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -189,10 +180,11 @@ fun ExperimentScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (state.imageUrls.isNotEmpty()) {
-                    item {
-                        CarouselSection(state.imageUrls)
-                    }
+                item {
+                    ExperimentCarousel(
+                        images = state.imageUrls,
+                        isLoading = state.isImagesLoading
+                    )
                 }
                 if (state.experiment.description.isNotEmpty()){
                 item {
@@ -305,78 +297,6 @@ fun ExperimentScreen(
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .navigationBarsPadding()
                         .imePadding()
-                )
-            }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CarouselSection(
-    imageUrls: List<String>,
-    modifier: Modifier = Modifier
-) {
-    val imageCount = imageUrls.size
-    val carouselState = rememberCarouselState { imageCount }
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        HorizontalMultiBrowseCarousel(
-            state = carouselState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clip(RoundedCornerShape(20.dp)),
-            preferredItemWidth = 200.dp,
-            itemSpacing = 8.dp
-        ) { index ->
-            AsyncImage(
-                model = imageUrls[index],
-                contentDescription = null,
-                modifier = Modifier
-                    .height(160.dp)
-                    .maskClip(RoundedCornerShape(20.dp)),
-                contentScale = ContentScale.Crop,
-                error = null,
-                fallback = null
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            repeat(imageCount) { index ->
-                val selected = carouselState.currentItem == index
-
-                val dotWidth by animateDpAsState(
-                    targetValue = if (selected) 20.dp else 6.dp,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    ),
-                    label = "dotWidth_$index"
-                )
-                val dotColor by animateColorAsState(
-                    targetValue = if (selected)
-                        MaterialTheme.colorScheme.primary
-                    else
-                        MaterialTheme.colorScheme.outline,
-                    label = "dotColor_$index"
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 3.dp)
-                        .width(dotWidth)
-                        .height(6.dp)
-                        .clip(CircleShape)
-                        .background(dotColor)
                 )
             }
         }

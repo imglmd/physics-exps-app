@@ -140,10 +140,20 @@ class ExperimentViewModel(
         viewModelScope.launch {
             getExperimentImagesUseCase(id)
                 .onSuccess { imageUrls ->
-                    _state.update { it.copy(imageUrls = imageUrls) }
+                    _state.update {
+                        it.copy(
+                            imageUrls = imageUrls,
+                            isImagesLoading = false
+                        )
+                    }
                 }
                 .onFailure {
-                    _state.update { it.copy(imageUrls = emptyList()) }
+                    _state.update {
+                        it.copy(
+                            imageUrls = emptyList(),
+                            isImagesLoading = false
+                        )
+                    }
                 }
         }
     }
