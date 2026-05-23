@@ -3,6 +3,10 @@ package com.imglmd.physicsexps.presentation.screens.result.components
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +30,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,8 +76,7 @@ fun MediaSection(
     }
 
     Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier.fillMaxWidth().animateContentSize(),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -128,13 +133,36 @@ fun MediaSection(
                     )
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.save),
+                        imageVector = ImageVector.vectorResource(R.drawable.cloud_upload),
                         contentDescription = "Добавить файл"
                     )
                 }
             }
         }
 
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(3.dp)
+            )
+
+            this@Column.AnimatedVisibility(
+                visible = isLoading || isUploading,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(3.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surface
+                )
+            }
+        }
+        Spacer(Modifier.height(4.dp))
         if (errorMessage != null) {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -146,21 +174,6 @@ fun MediaSection(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer
-                )
-            }
-        }
-
-        if (isLoading || isUploading) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-                Text(
-                    text = if (isUploading) "Загрузка файла..." else "Загрузка вложений...",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -183,6 +196,7 @@ fun MediaSection(
             }
         } else {
             FlowRow(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -263,8 +277,7 @@ private fun ImageCard(
     val shimmerBrush = rememberShimmerBrush()
 
     Surface(
-        modifier = modifier.width(170.dp).clickable(onClick = onOpen),
-        shape = RoundedCornerShape(22.dp),
+        modifier = modifier.width(170.dp).clip(RoundedCornerShape(22.dp)).clickable(onClick = onOpen),
         color = MaterialTheme.colorScheme.surfaceContainer
     ) {
 
@@ -275,9 +288,7 @@ private fun ImageCard(
                     .fillMaxWidth()
                     .height(150.dp)
                     .clip(RoundedCornerShape(22.dp))
-                    .background(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
-                    )
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
             ) {
 
                 SubcomposeAsyncImage(
@@ -290,7 +301,6 @@ private fun ImageCard(
                     when (painter.state) {
 
                         is AsyncImagePainter.State.Loading -> {
-
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -299,7 +309,6 @@ private fun ImageCard(
                         }
 
                         is AsyncImagePainter.State.Error -> {
-
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center

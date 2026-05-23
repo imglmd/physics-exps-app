@@ -64,6 +64,7 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProdu
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import androidx.core.net.toUri
 
 @Composable
 fun ResultScreen(
@@ -154,10 +155,6 @@ private fun Content(
                 onDelete = { onIntent(ResultContract.Intent.Delete) },
                 onSave = { onIntent(ResultContract.Intent.Save) },
                 onCompare = { onIntent(ResultContract.Intent.Compare) },
-                context = context,
-                state = state,
-                expName = getExperimentName(state.result.experimentId),
-                catName = getCategoryName(state.result.experimentId)
             )
         }
     ) { padding ->
@@ -175,7 +172,20 @@ private fun Content(
                 state = state,
                 hasSolution = hasSolution,
                 navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
-                onChangeClick = { onIntent(ResultContract.Intent.Change) }
+                onChangeClick = { onIntent(ResultContract.Intent.Change) },
+                onPdfClick = {
+                    val data: Map<String, String> =
+                        state.result.quantities.associate {
+                            it.label to "${"%.3f".format(it.value)} ${it.unit}"
+                        }
+
+                    saveResultAsPdf(
+                        context = context,
+                        nameExp = getExperimentName(state.result.experimentId),
+                        nameSection = getCategoryName(state.result.experimentId),
+                        data = data
+                    )
+                }
             )
 
             if (state.result.points.isNotEmpty()) {
@@ -220,13 +230,8 @@ private fun BottomActions(
     onDelete: () -> Unit,
     onSave: () -> Unit,
     onCompare: () -> Unit,
-    context: Context,
-    state: ResultContract.State.Success,
-    expName: String,
-    catName: String,
     modifier: Modifier = Modifier
 ) {
-    val fmt = { d: Double -> "%.3f".format(d) }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -272,30 +277,10 @@ private fun BottomActions(
                 )
 
                 ToolbarButton(
-                    icon = ImageVector.vectorResource(R.drawable.pdf),
-                    contentDescription = "pdf",
-                    onClick = {
-                        val data: Map<String, String> = state.result.quantities.associate { it ->
-                            it.label to "${fmt(it.value)} ${it.unit}"
-                        }
-
-                        saveResultAsPdf(
-                            context = context,
-                            nameExp = expName,
-                            nameSection = catName,
-                            data = data
-                        )
-                    },
-                    modifier = Modifier.weight(1f),
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
-
-                ToolbarButton(
                     icon = ImageVector.vectorResource(R.drawable.save),
                     contentDescription = "Сохранить",
                     onClick = onSave,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(2f),
                     iconPosition = ToolbarIconPosition.RIGHT,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -308,7 +293,7 @@ private fun BottomActions(
 
 private fun openMedia(context: Context, url: String) {
     runCatching {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(intent)
