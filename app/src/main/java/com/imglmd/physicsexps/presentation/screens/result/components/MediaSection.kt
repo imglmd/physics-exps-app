@@ -4,13 +4,18 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,13 +33,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Media
+import com.imglmd.physicsexps.presentation.rememberShimmerBrush
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -69,6 +79,7 @@ fun MediaSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
+                modifier = Modifier.padding(start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -162,13 +173,19 @@ fun MediaSection(
             ) {
                 Text(
                     text = "Файлы пока не добавлены",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 20.dp
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         } else {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 media.forEach { item ->
                     MediaItem(
                         media = item,
@@ -188,35 +205,177 @@ private fun MediaItem(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isImage = remember(media.filename, media.url) {
+        isImageAttachment(media.filename, media.url)
+    }
+
     val date = remember(media.createdAt) {
+
         if (media.createdAt <= 0L) {
             null
         } else {
-            SimpleDateFormat("dd MMM HH:mm", Locale.getDefault()).format(Date(media.createdAt))
+            SimpleDateFormat(
+                "dd MMM HH:mm",
+                Locale.getDefault()
+            ).format(Date(media.createdAt))
         }
     }
+
     val meta = remember(media.size, date) {
+
         listOfNotNull(
             media.size.takeIf { it > 0 }?.let(::formatFileSize),
             date
         ).joinToString(" • ")
     }
 
+    if (isImage) {
+
+        ImageCard(
+            media = media,
+            meta = meta,
+            onOpen = onOpen,
+            onDelete = onDelete,
+            modifier = modifier
+        )
+
+    } else {
+
+        FileCard(
+            media = media,
+            meta = meta,
+            onOpen = onOpen,
+            onDelete = onDelete,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun ImageCard(
+    media: Media,
+    meta: String,
+    onOpen: () -> Unit,
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    val shimmerBrush = rememberShimmerBrush()
+
+    Surface(
+        modifier = modifier.width(170.dp).clickable(onClick = onOpen),
+        shape = RoundedCornerShape(22.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer
+    ) {
+
+        Column {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                    )
+            ) {
+
+                SubcomposeAsyncImage(
+                    model = media.url,
+                    contentDescription = media.filename,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                ) {
+
+                    when (painter.state) {
+
+                        is AsyncImagePainter.State.Loading -> {
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(shimmerBrush)
+                            )
+                        }
+
+                        is AsyncImagePainter.State.Error -> {
+
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.save),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+
+                        else -> SubcomposeAsyncImageContent()
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = meta,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = onDelete,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = "Удалить"
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FileCard(
+    media: Media,
+    meta: String,
+    onOpen: () -> Unit,
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 14.dp, top = 10.dp, bottom = 10.dp, end = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(36.dp)
+                    .size(42.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
@@ -229,8 +388,7 @@ private fun MediaItem(
             }
 
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = media.filename,
@@ -272,6 +430,20 @@ private fun MediaItem(
             }
         }
     }
+}
+
+private fun isImageAttachment(
+    filename: String,
+    url: String
+): Boolean {
+
+    val lower = (filename.ifBlank { url }).lowercase(Locale.US)
+
+    return lower.endsWith(".jpg") ||
+            lower.endsWith(".jpeg") ||
+            lower.endsWith(".png") ||
+            lower.endsWith(".gif") ||
+            lower.endsWith(".webp")
 }
 
 private fun formatFileSize(bytes: Int): String {

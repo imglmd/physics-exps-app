@@ -34,7 +34,7 @@ fun String.asBuildConfigValue(): String = "\"${replace("\\", "\\\\").replace("\"
 val backendBaseUrl = propertyOrDefault(
     propertyName = "backend.baseUrl",
     envName = "BACKEND_BASE_URL",
-    defaultValue = "http://10.0.2.2:8002/"
+    defaultValue = "http://94.183.187.242:8001/"
 )
 
 val backendApiKey = propertyOrDefault(
