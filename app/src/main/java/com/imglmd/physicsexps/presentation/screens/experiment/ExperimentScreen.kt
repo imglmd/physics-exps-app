@@ -239,7 +239,7 @@ fun ExperimentScreen(
                     item {
                         AdvancedToggle(
                             title = "Расширенный режим",
-                            subtitle = if (state.isAdvancedMode) "Дополнительные параметры включены" else "Только основные параметры",
+                            subtitle = if (state.isAdvancedMode) "Доп. параметры включены" else "Только основные параметры",
                             icon = ImageVector.vectorResource(R.drawable.rocket),
                             enabled = state.isAdvancedMode,
                             onToggle = {

@@ -37,34 +37,27 @@ fun AdvancedToggle(
 ) {
     val containerColor by animateColorAsState(
         targetValue = if (enabled)
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+            MaterialTheme.colorScheme.surfaceVariant
         else
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            MaterialTheme.colorScheme.surface,
         label = "toggle_bg"
     )
 
-    val borderColor by animateColorAsState(
-        targetValue = if (enabled)
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-        else
-            MaterialTheme.colorScheme.outlineVariant,
-        label = "toggle_border"
-    )
 
-    val labelColor by animateColorAsState(
+    val iconColor by animateColorAsState(
         targetValue = if (enabled)
             MaterialTheme.colorScheme.primary
         else
             MaterialTheme.colorScheme.onSurface,
-        label = "toggle_label"
+        label = "toggle_icon"
     )
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(20.dp))
             .background(containerColor)
-            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
             .clickable { onToggle() }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -83,14 +76,14 @@ fun AdvancedToggle(
                         if (enabled)
                             MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                         else
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = labelColor,
+                    tint = iconColor,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -100,7 +93,7 @@ fun AdvancedToggle(
                     text = title,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = labelColor
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = subtitle,

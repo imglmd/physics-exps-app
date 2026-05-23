@@ -1,6 +1,11 @@
 package com.imglmd.physicsexps.presentation.screens.experiment.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,35 +26,41 @@ fun ExperimentCarousel(
     modifier: Modifier = Modifier
 ) {
     val imageCount = if (isLoading) 2 else images.size
-
-    if (!isLoading && images.isEmpty()) return
-
     val carouselState = rememberCarouselState {
         imageCount
     }
 
-    Column(
-        modifier = modifier.animateContentSize(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+    AnimatedVisibility(
+        visible = isLoading || images.isNotEmpty(),
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
     ) {
-        HorizontalMultiBrowseCarousel(
-            state = carouselState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            preferredItemWidth = 220.dp,
-            itemSpacing = 8.dp
-        ) { index ->
-            ExperimentCarouselItem(
-                imageUrl = images.getOrNull(index),
-                isLoading = isLoading,
-                modifier = Modifier.maskClip(RoundedCornerShape(20.dp))
+
+        Column(
+            modifier = modifier.animateContentSize(),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            HorizontalMultiBrowseCarousel(
+                state = carouselState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                preferredItemWidth = 220.dp,
+                itemSpacing = 8.dp
+            ) { index ->
+                ExperimentCarouselItem(
+                    imageUrl = images.getOrNull(index),
+                    isLoading = isLoading,
+                    modifier = Modifier.maskClip(
+                        RoundedCornerShape(20.dp)
+                    )
+                )
+            }
+
+            CarouselIndicators(
+                count = imageCount,
+                current = carouselState.currentItem
             )
         }
-
-        CarouselIndicators(
-            count = imageCount,
-            current = carouselState.currentItem
-        )
     }
 }
