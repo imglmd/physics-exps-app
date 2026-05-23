@@ -4,7 +4,6 @@ package com.imglmd.physicsexps.presentation.screens.result
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
