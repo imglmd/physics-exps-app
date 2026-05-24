@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.domain.validation
 
 import com.imglmd.physicsexps.domain.model.Experiment
+import kotlin.math.abs
 
 class ExperimentValidator {
 
@@ -54,7 +55,7 @@ class ExperimentValidator {
             val amp = parsedInputs["amplitude"]!!
             val start = parsedInputs["start_position"]!!
 
-            if (start > amp) {
+            if (abs(start) > amp) {
                 errors += ValidationError.InvalidNumber("start_position")
             }
         }
