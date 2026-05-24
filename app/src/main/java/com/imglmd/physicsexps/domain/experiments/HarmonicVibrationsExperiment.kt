@@ -7,6 +7,7 @@ import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
 import com.imglmd.physicsexps.presentation.navigation.Screen
+import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlin.math.PI
 import kotlin.math.asin
 import kotlin.math.exp
@@ -23,7 +24,7 @@ class HarmonicVibrationsExperiment: Experiment {
     override val yLabel = "Смещение, м"
     override val inputFields = listOf(
         InputField("period", "Период колебаний","T", "с", min = 0.0, required = true ),
-        InputField("amplitude", "Амплитуда", "A", "м", required = true, min = 0.0),
+        InputField("amplitude", "Амплитуда", "A", "м", required = true, min = Double.MIN_VALUE),
         InputField("start_position", "Началтная координата", "x₀", "м",required = true),
         InputField("time", "Продолжительность колебаний", "t", "с", min = 0.0, required = true)
     )

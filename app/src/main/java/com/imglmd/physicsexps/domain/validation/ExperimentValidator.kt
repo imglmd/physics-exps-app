@@ -50,6 +50,19 @@ class ExperimentValidator {
             return ValidationResult.Error(errors)
         }
 
+        if (experiment.id == "harmonic_vibrations") {
+            val amp = parsedInputs["amplitude"]!!
+            val start = parsedInputs["start_position"]!!
+
+            if (start > amp) {
+                errors += ValidationError.InvalidNumber("start_position")
+            }
+        }
+
+        if (errors.isNotEmpty()) {
+            return ValidationResult.Error(errors)
+        }
+
         // дальше эксперимент сам решает
         return experiment.validateInputs(parsedInputs)
     }
