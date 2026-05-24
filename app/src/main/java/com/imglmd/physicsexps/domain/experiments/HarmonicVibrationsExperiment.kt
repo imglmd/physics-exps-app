@@ -17,7 +17,7 @@ class HarmonicVibrationsExperiment: Experiment {
     override val id = "harmonic_vibrations"
     override val name = "Гармонические колебания"
     override val category = "Механика"
-    override val description = " колебания, при которых " +
+    override val description = "Гармонические колебания - колебания, при которых " +
             "некоторая физическая величина изменяется с " +
             "течением времени по гармоническому (синусоидальному, косинусоидальному) закону."
     override val xLabel = "Время, с"
