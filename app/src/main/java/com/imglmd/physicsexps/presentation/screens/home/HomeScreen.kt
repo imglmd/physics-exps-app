@@ -121,6 +121,7 @@ fun HomeScreen(
                             if (isLoaded && state.history.isNotEmpty()) {
                                 HistorySection(
                                     history = state.history,
+                                    authState = state.authState,
                                     hasMore = state.hasMoreHistory,
                                     onSeeAllClick = { viewModel.onIntent(HomeIntent.NavigateToHistory) },
                                     onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }

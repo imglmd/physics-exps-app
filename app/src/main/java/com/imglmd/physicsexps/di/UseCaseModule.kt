@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
+import com.imglmd.physicsexps.domain.usecase.auth.PingUseCase
 import com.imglmd.physicsexps.domain.usecase.auth.RegisterUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
@@ -25,6 +26,7 @@ import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
+    factory { PingUseCase(get()) }
 
     factory { SaveRunUseCase(get(), get()) }
 
@@ -59,7 +61,7 @@ val useCaseModule = module {
     factory { GetCommentsUseCase(get()) }
 
     factory { RegisterUseCase(get()) }
-    factory { EnsureAuthorizedUseCase(get(),get()) }
+    factory { EnsureAuthorizedUseCase(get(),get(), get()) }
 
     factory { UploadMediaUseCase(get()) }
     factory { GetMediaUseCase(get(), get()) }

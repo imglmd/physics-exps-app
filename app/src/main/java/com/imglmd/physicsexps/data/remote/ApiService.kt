@@ -49,4 +49,7 @@ interface ApiService {
 
     @DELETE("/api/experiment_runs/{run_id}/media/{media_id}")
     suspend fun deleteMedia(@Path("run_id") runId: String, @Path("media_id") id: String)
+
+    @GET("health")
+    suspend fun health()
 }
