@@ -26,10 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import kotlin.math.round
 
@@ -39,7 +42,8 @@ fun ResultCard(
     state: ResultContract.State.Success,
     hasSolution: Boolean,
     navigateSolution: () -> Unit,
-    onChangeClick: () -> Unit
+    onChangeClick: () -> Unit,
+    onPdfClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -77,6 +81,20 @@ fun ResultCard(
                     imageVector = Icons.Outlined.Edit,
                     contentDescription = "Изменить",
                     tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+            IconButton(
+                onClick = onPdfClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.pdf),
+                    contentDescription = "PDF",
                     modifier = Modifier.size(18.dp)
                 )
             }

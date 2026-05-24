@@ -1,11 +1,13 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.data.InMemoryResultRepository
-import com.imglmd.physicsexps.data.database.repository.ExperimentRunsRepositoryImpl
-import com.imglmd.physicsexps.data.database.repository.ResultsRepositoryImpl
-import com.imglmd.physicsexps.data.remote.MediaRepositoryImpl
-import com.imglmd.physicsexps.data.repositoryImpl.CommentRepositoryImpl
+import com.imglmd.physicsexps.data.repository.CommentRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ExperimentMediaRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ExperimentRunsRepositoryImpl
+import com.imglmd.physicsexps.data.repository.MediaRepositoryImpl
+import com.imglmd.physicsexps.data.repository.ResultsRepositoryImpl
 import com.imglmd.physicsexps.domain.repository.CommentRepository
+import com.imglmd.physicsexps.domain.repository.ExperimentMediaRepository
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.MediaRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
@@ -23,11 +25,15 @@ val repositoryModule = module {
         ExperimentRunsRepositoryImpl(get())
     }
 
+    single<ExperimentMediaRepository> {
+        ExperimentMediaRepositoryImpl(get(), get())
+    }
+
     single<CommentRepository> {
         CommentRepositoryImpl(get())
     }
 
     single<MediaRepository> {
-        MediaRepositoryImpl(get())
+        MediaRepositoryImpl(get(), get())
     }
 }

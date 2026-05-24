@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
+import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentPreviewsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -26,7 +27,8 @@ class HomeViewModel(
     private val getResultUseCase: GetResultUseCase,
     private val registry: ExperimentRegistry,
     private val getRunUseCase: GetRunUseCase,
-    private val resultRepository: InMemoryResultRepository
+    private val resultRepository: InMemoryResultRepository,
+    private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase
 ) : ViewModel() {
 
     private val allExperiments = getAllExperimentsUseCase()
@@ -42,6 +44,7 @@ class HomeViewModel(
     init {
         updateExperiments("")
         loadHistory()
+        loadPreviewImages()
     }
 
     fun onIntent(intent: HomeIntent) {
@@ -131,6 +134,14 @@ class HomeViewModel(
         }
     }
 
+    private fun loadPreviewImages() {
+        viewModelScope.launch {
+            getExperimentPreviewsUseCase()
+                .onSuccess { previews ->
+                    _state.update { it.copy(previewUrlsByExperimentId = previews) }
+                }
+        }
+    }
 
     private fun navigateToHistory() {
         viewModelScope.launch {

@@ -21,6 +21,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -37,6 +38,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -47,6 +49,10 @@ val viewModelModule = module {
 
         ResultViewModel(
             runId,
+            get(),
+            get(),
+            get(),
+            get(),
             get(),
             get(),
             get(),

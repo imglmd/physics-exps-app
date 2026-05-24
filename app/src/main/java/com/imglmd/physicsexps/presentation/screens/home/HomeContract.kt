@@ -6,6 +6,7 @@ import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 
 data class HomeState(
     val experimentsByCategory: Map<String, List<Experiment>> = emptyMap(),
+    val previewUrlsByExperimentId: Map<String, String> = emptyMap(),
     val history: List<HistoryItemUi> = emptyList(),
     val hasMoreHistory: Boolean = false,
     val searchText: String = "",

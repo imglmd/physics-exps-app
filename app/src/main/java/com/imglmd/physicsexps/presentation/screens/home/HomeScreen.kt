@@ -54,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
@@ -151,7 +152,8 @@ fun HomeScreen(
                     Column {
                         ExperimentItem(
                             name = experiment.name,
-                            imageRes = experiment.imageRes,
+                            previewUrl = state.previewUrlsByExperimentId[experiment.id],
+                            placeholder = experiment.imageRes,
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
                         )
                         Spacer(Modifier.height(10.dp))
@@ -165,7 +167,8 @@ fun HomeScreen(
 @Composable
 private fun ExperimentItem(
     name: String,
-    imageRes: Int,
+    placeholder: Int,
+    previewUrl: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -175,12 +178,24 @@ private fun ExperimentItem(
             .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick)
     ) {
-        Image(
-            painter = painterResource(imageRes),
-            contentDescription = name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
+        if (previewUrl != null) {
+            AsyncImage(
+                model = previewUrl,
+                contentDescription = name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+                placeholder = painterResource(placeholder),
+                error = painterResource(placeholder),
+                fallback = painterResource(placeholder)
+            )
+        } else {
+            Image(
+                painter = painterResource(placeholder),
+                contentDescription = name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         // затемнение картинки
         Box(

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.repositoryImpl
+package com.imglmd.physicsexps.data.repository
 
 import com.imglmd.physicsexps.data.database.CommentsDao
 import com.imglmd.physicsexps.data.mapper.toModel

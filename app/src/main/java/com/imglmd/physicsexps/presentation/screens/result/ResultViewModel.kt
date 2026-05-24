@@ -1,5 +1,7 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,11 +11,19 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
+import com.imglmd.physicsexps.domain.usecase.media.DeleteMediaUseCase
+import com.imglmd.physicsexps.domain.usecase.media.GetMediaUseCase
+import com.imglmd.physicsexps.domain.usecase.media.UploadMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
-import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.*
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateBack
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateChart
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateCompare
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateExperiment
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateHome
+import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateSolution
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +35,7 @@ import kotlinx.serialization.json.Json
 
 class ResultViewModel(
     private val runId: Int?,
+    private val appContext: Context,
     private val resultRepository: InMemoryResultRepository,
     private val saveRunUseCase: SaveRunUseCase,
     private val deleteRunUseCase: DeleteRunUseCase,
@@ -32,7 +43,10 @@ class ResultViewModel(
     private val getResultUseCase: GetResultUseCase,
     private val getCommentsUseCase: GetCommentsUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase,
-    private val addCommentUseCase: AddCommentUseCase
+    private val addCommentUseCase: AddCommentUseCase,
+    private val getMediaUseCase: GetMediaUseCase,
+    private val uploadMediaUseCase: UploadMediaUseCase,
+    private val deleteMediaUseCase: DeleteMediaUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
@@ -47,17 +61,20 @@ class ResultViewModel(
     private val json = Json
 
     init {
-        if (isNewRun) initNewRun()
-        else loadExistingRun(runId!!)
+        if (isNewRun) {
+            initNewRun()
+        } else {
+            loadExistingRun(runId!!)
+        }
     }
 
-    // инициализация
     private fun initNewRun() {
         val bundle = resultRepository.get()
         if (bundle == null) {
             _state.value = ResultContract.State.Error("Результат не найден")
             return
         }
+
         _state.value = ResultContract.State.Success(
             result = bundle.result,
             isSaved = false,
@@ -73,6 +90,7 @@ class ResultViewModel(
                     if (result != null) {
                         _state.value = ResultContract.State.Success(result)
                         loadComments()
+                        loadMedia()
                     } else {
                         _state.value = ResultContract.State.Error("Результат не найден в базе")
                     }
@@ -83,20 +101,20 @@ class ResultViewModel(
         }
     }
 
-    // интенты
     fun onIntent(intent: ResultContract.Intent) = when (intent) {
         ResultContract.Intent.Back -> handleBack()
         ResultContract.Intent.Save -> emit(NavigateHome)
         ResultContract.Intent.Delete -> deleteRunThen { emit(NavigateHome) }
         ResultContract.Intent.Change -> handleChange()
-
-        ResultContract.Intent.OpenChart -> savedRunId?.let { emit(NavigateChart(savedRunId!!)) }
+        ResultContract.Intent.Compare -> emit(NavigateCompare(savedRunId ?: 0))
+        ResultContract.Intent.OpenChart -> savedRunId?.let { emit(NavigateChart(it)) }
         ResultContract.Intent.OpenSolution -> emit(NavigateSolution)
+        ResultContract.Intent.RefreshMedia -> loadMedia()
         is ResultContract.Intent.AddComment -> addComment(intent.text)
         is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
-        ResultContract.Intent.Compare -> emit(NavigateCompare(savedRunId?: 0))
+        is ResultContract.Intent.UploadMedia -> uploadMedia(intent.uri)
+        is ResultContract.Intent.DeleteMedia -> deleteMedia(intent.mediaId)
     }
-
 
     private fun handleBack() {
         if (isNewRun) {
@@ -106,9 +124,6 @@ class ResultViewModel(
         }
     }
 
-
-    // change: передаём inputs + replaceRunId на экран эксперимента
-    // старый run удаляется только после успешного сохранения нового (в следующем initNewRun)
     private fun handleChange() {
         val id = savedRunId ?: return
         viewModelScope.launch {
@@ -137,23 +152,30 @@ class ResultViewModel(
                 .onSuccess { newId ->
                     savedRunId = newId
 
-                    // удаление старого run только после успешного сохранения нового
                     if (replaceRunId != null) {
+                        deleteRemoteMediaForRun(replaceRunId)
                         runCatching { deleteRunUseCase(replaceRunId) }
                             .onFailure { Log.e(TAG, "Ошибка удаления заменяемого run", it) }
                     }
 
-                    _state.update { s ->
-                        if (s is ResultContract.State.Success)
-                            s.copy(isSaved = true, isSaving = false)
-                        else s
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isSaved = true, isSaving = false)
+                        } else {
+                            state
+                        }
                     }
                     loadComments()
+                    loadMedia()
                 }
                 .onFailure {
                     Log.e(TAG, "Ошибка сохранения", it)
-                    _state.update { s ->
-                        if (s is ResultContract.State.Success) s.copy(isSaving = false) else s
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isSaving = false)
+                        } else {
+                            state
+                        }
                     }
                 }
         }
@@ -163,23 +185,26 @@ class ResultViewModel(
         viewModelScope.launch {
             val id = savedRunId
             if (id != null) {
+                deleteRemoteMediaForRun(id)
                 runCatching { deleteRunUseCase(id) }
                     .onSuccess { onSuccess() }
                     .onFailure { Log.e(TAG, "Ошибка удаления run", it) }
             } else {
-                // run ещё не сохранен или уже удален
                 onSuccess()
             }
         }
     }
 
-    // комментарии
     private fun loadComments() {
         val id = savedRunId ?: return
         viewModelScope.launch(Dispatchers.IO) {
             val comments = getCommentsUseCase(id)
-            _state.update { s ->
-                if (s is ResultContract.State.Success) s.copy(comments = comments) else s
+            _state.update { state ->
+                if (state is ResultContract.State.Success) {
+                    state.copy(comments = comments)
+                } else {
+                    state
+                }
             }
         }
     }
@@ -199,7 +224,120 @@ class ResultViewModel(
         }
     }
 
+    private fun loadMedia(showLoading: Boolean = true) {
+        val id = savedRunId ?: return
+        if (showLoading) {
+            _state.update { state ->
+                if (state is ResultContract.State.Success) {
+                    state.copy(isMediaLoading = true, mediaErrorMessage = null)
+                } else {
+                    state
+                }
+            }
+        }
 
+        viewModelScope.launch {
+            getMediaUseCase(id.toString())
+                .onSuccess { mediaList ->
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                media = mediaList.media,
+                                isMediaLoading = false,
+                                mediaErrorMessage = null
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+                .onFailure { throwable ->
+                    Log.e(TAG, "Ошибка загрузки медиа", throwable)
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                isMediaLoading = false,
+                                mediaErrorMessage = throwable.userMessage("Не удалось загрузить вложения")
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun uploadMedia(uri: Uri) {
+        val id = savedRunId ?: return
+        _state.update { state ->
+            if (state is ResultContract.State.Success) {
+                state.copy(isMediaUploading = true, mediaErrorMessage = null)
+            } else {
+                state
+            }
+        }
+
+        viewModelScope.launch {
+            uploadMediaUseCase(appContext, uri, id.toString())
+                .onSuccess {
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isMediaUploading = false)
+                        } else {
+                            state
+                        }
+                    }
+                    loadMedia(showLoading = false)
+                }
+                .onFailure { throwable ->
+                    Log.e(TAG, "Ошибка загрузки файла", throwable)
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                isMediaUploading = false,
+                                mediaErrorMessage = throwable.userMessage("Не удалось загрузить файл")
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun deleteMedia(mediaId: String) {
+        val id = savedRunId ?: return
+        viewModelScope.launch {
+            deleteMediaUseCase(id.toString(), mediaId)
+                .onSuccess {
+                    loadMedia(showLoading = false)
+                }
+                .onFailure { throwable ->
+                    Log.e(TAG, "Ошибка удаления файла", throwable)
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                mediaErrorMessage = throwable.userMessage("Не удалось удалить файл")
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private suspend fun deleteRemoteMediaForRun(runId: Int) {
+        val media = getMediaUseCase(runId.toString()).getOrNull()?.media.orEmpty()
+        media.forEach { item ->
+            deleteMediaUseCase(runId.toString(), item.mediaId)
+        }
+    }
+
+    private fun Throwable.userMessage(defaultMessage: String): String {
+        val message = message?.trim().orEmpty()
+        return if (message.isEmpty()) defaultMessage else message
+    }
 
     private fun emit(effect: ResultContract.Effect) {
         viewModelScope.launch { _effect.send(effect) }
