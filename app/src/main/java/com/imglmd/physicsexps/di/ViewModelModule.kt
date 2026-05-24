@@ -7,6 +7,7 @@ import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
 import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,6 +17,8 @@ val viewModelModule = module {
 
     viewModel {
         HomeViewModel(
+            application = androidApplication(),
+            get(),
             get(),
             get(),
             get(),

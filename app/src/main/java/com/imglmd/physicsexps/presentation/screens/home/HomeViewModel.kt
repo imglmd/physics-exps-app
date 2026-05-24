@@ -1,9 +1,15 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
-import androidx.lifecycle.ViewModel
+import android.annotation.SuppressLint
+import android.app.Application
+import android.os.Build
+import android.provider.Settings
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
+import com.imglmd.physicsexps.domain.usecase.auth.AuthState
+import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentPreviewsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
@@ -22,14 +28,16 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class HomeViewModel(
+    application: Application, // для контекста
     getAllExperimentsUseCase: GetAllExperimentsUseCase,
     private val getLastRunsUseCase: GetLastRunsUseCase,
     private val getResultUseCase: GetResultUseCase,
     private val registry: ExperimentRegistry,
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase
-) : ViewModel() {
+    private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
+    private val ensureAuthorizedUseCase: EnsureAuthorizedUseCase
+): AndroidViewModel(application) {
 
     private val allExperiments = getAllExperimentsUseCase()
 
@@ -41,10 +49,17 @@ class HomeViewModel(
 
     private val json = Json
 
-    init {
-        updateExperiments("")
-        loadHistory()
-        loadPreviewImages()
+    init { onInit() }
+    private fun onInit(){
+        viewModelScope.launch {
+            updateExperiments("")
+            loadHistory()
+
+            val authState = ensureAuthorization()
+            if (authState == AuthState.Authorized) {
+                loadPreviewImages()
+            }
+        }
     }
 
     fun onIntent(intent: HomeIntent) {
@@ -141,6 +156,28 @@ class HomeViewModel(
                     _state.update { it.copy(previewUrlsByExperimentId = previews) }
                 }
         }
+    }
+
+    @SuppressLint("HardwareIds")
+    private suspend fun ensureAuthorization(): AuthState {
+
+        _state.update {
+            it.copy(authState = AuthState.Authorizing)
+        }
+
+        val result = ensureAuthorizedUseCase(
+            deviceId = Settings.Secure.getString(
+                getApplication<Application>().contentResolver,
+                Settings.Secure.ANDROID_ID
+            ),
+            deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
+        )
+
+        _state.update {
+            it.copy(authState = result)
+        }
+
+        return result
     }
 
     private fun navigateToHistory() {

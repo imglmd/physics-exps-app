@@ -1,5 +1,7 @@
-package com.imglmd.physicsexps.data.remote
+package com.imglmd.physicsexps.data.remote.dto
 
+import com.imglmd.physicsexps.data.remote.EpochMillisSerializer
+import com.imglmd.physicsexps.data.remote.StringLikeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

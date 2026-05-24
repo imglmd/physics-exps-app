@@ -2,7 +2,6 @@ package com.imglmd.physicsexps.data.remote
 
 class RemoteConfig(
     baseUrl: String,
-    val apiKey: String
 ) {
     val baseUrl: String = normalizeBaseUrl(baseUrl)
 
