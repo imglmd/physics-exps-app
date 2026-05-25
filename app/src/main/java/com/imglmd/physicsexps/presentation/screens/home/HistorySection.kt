@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.domain.usecase.auth.AuthState
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.imglmd.physicsexps.presentation.screens.home.components.AuthIndicator
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryCard
 import com.imglmd.physicsexps.presentation.screens.home.components.SeeAllCard
 
@@ -27,6 +30,7 @@ import com.imglmd.physicsexps.presentation.screens.home.components.SeeAllCard
 fun HistorySection(
     history: List<HistoryItemUi>,
     hasMore: Boolean,
+    authState: AuthState,
     onSeeAllClick: () -> Unit,
     onItemClick: (id: Int) -> Unit,
     modifier: Modifier = Modifier
@@ -41,16 +45,28 @@ fun HistorySection(
                 text = "Последнее",
                 style = MaterialTheme.typography.titleLarge
             )
-            TextButton(onClick = onSeeAllClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Все",
-                    style = MaterialTheme.typography.bodyMedium,
+
+                AuthIndicator(
+                    state = authState
                 )
+
+                Spacer(Modifier.width(6.dp))
+
+                TextButton(
+                    onClick = onSeeAllClick,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                ) {
+                    Text(
+                        text = "Все",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
             }
         }
         Spacer(Modifier.height(8.dp))

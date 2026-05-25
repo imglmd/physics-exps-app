@@ -15,6 +15,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -28,6 +32,10 @@ fun ExperimentCarousel(
     val imageCount = if (isLoading) 2 else images.size
     val carouselState = rememberCarouselState {
         imageCount
+    }
+
+    var selectedIndex by remember {
+        mutableStateOf<Int?>(null)
     }
 
     AnimatedVisibility(
@@ -53,7 +61,8 @@ fun ExperimentCarousel(
                     isLoading = isLoading,
                     modifier = Modifier.maskClip(
                         RoundedCornerShape(20.dp)
-                    )
+                    ),
+                    onClick = { selectedIndex = index }
                 )
             }
 
@@ -62,5 +71,12 @@ fun ExperimentCarousel(
                 current = carouselState.currentItem
             )
         }
+    }
+    selectedIndex?.let { index ->
+        ImageViewer(
+            images = images,
+            startIndex = index,
+            onDismiss = { selectedIndex = null }
+        )
     }
 }

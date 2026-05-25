@@ -37,11 +37,6 @@ val backendBaseUrl = propertyOrDefault(
     defaultValue = "http://94.183.187.242:8001/"
 )
 
-val backendApiKey = propertyOrDefault(
-    propertyName = "backend.apiKey",
-    envName = "BACKEND_API_KEY",
-    defaultValue = "supersecretapikey123"
-)
 
 kotlin {
     compilerOptions {
@@ -64,7 +59,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BACKEND_BASE_URL", backendBaseUrl.asBuildConfigValue())
-        buildConfigField("String", "BACKEND_API_KEY", backendApiKey.asBuildConfigValue())
     }
 
     buildTypes {

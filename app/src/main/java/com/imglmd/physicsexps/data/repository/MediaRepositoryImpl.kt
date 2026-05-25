@@ -12,17 +12,16 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 class MediaRepositoryImpl(
     private val apiService: ApiService,
-    private val remoteConfig: RemoteConfig
 ) : MediaRepository {
     override suspend fun getMedias(runId: String): MediaList {
-        return apiService.getMedia(runId).toUi(remoteConfig)
+        return apiService.getMedia(runId).toUi()
     }
 
     override suspend fun uploadMedia(
         runId: String, body: MultipartBody.Part, fileName: String
     ): Media {
         val fileNamePart = fileName.toRequestBody("text/plain".toMediaType())
-        return apiService.uploadMedia(body, runId, fileNamePart).toUi(remoteConfig)
+        return apiService.uploadMedia(body, runId, fileNamePart).toUi()
     }
 
     override suspend fun delete(runId: String, id: String) {

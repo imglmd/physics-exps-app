@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +27,8 @@ import com.imglmd.physicsexps.presentation.rememberShimmerBrush
 fun ExperimentCarouselItem(
     imageUrl: String?,
     isLoading: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     var imageLoading by remember(imageUrl) {
         mutableStateOf(imageUrl != null)
@@ -57,6 +59,7 @@ fun ExperimentCarouselItem(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
+                    .clickable(onClick = onClick)
                     .graphicsLayer { alpha = imageAlpha },
                 contentScale = ContentScale.Crop,
                 onLoading = { imageLoading = true },

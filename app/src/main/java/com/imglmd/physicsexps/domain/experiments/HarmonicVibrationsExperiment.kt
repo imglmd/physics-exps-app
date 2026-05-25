@@ -6,11 +6,11 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
-import com.imglmd.physicsexps.presentation.navigation.Screen
-import kotlinx.serialization.descriptors.PrimitiveKind
+import com.imglmd.physicsexps.domain.validation.ValidationError
+import com.imglmd.physicsexps.domain.validation.ValidationResult
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.asin
-import kotlin.math.exp
 import kotlin.math.sin
 
 class HarmonicVibrationsExperiment: Experiment {
@@ -23,12 +23,27 @@ class HarmonicVibrationsExperiment: Experiment {
     override val xLabel = "Время, с"
     override val yLabel = "Смещение, м"
     override val inputFields = listOf(
-        InputField("period", "Период колебаний","T", "с", min = 0.0, required = true ),
-        InputField("amplitude", "Амплитуда", "A", "м", required = true, min = Double.MIN_VALUE),
+        InputField("period", "Период колебаний","T", "с", min = 0.00001, required = true ),
+        InputField("amplitude", "Амплитуда", "A", "м", required = true, min = 0.00001),
         InputField("start_position", "Началтная координата", "x₀", "м",required = true),
         InputField("time", "Продолжительность колебаний", "t", "с", min = 0.0, required = true)
     )
     override val imageRes = R.drawable.harmonical
+
+    override fun validateInputs(
+        inputs: Map<String, Double>
+    ): ValidationResult {
+
+        val amplitude = inputs["amplitude"]!!
+        val startPosition = inputs["start_position"]!!
+
+        if (abs(startPosition) > amplitude) {
+            return ValidationResult.Error(
+                listOf(ValidationError.InvalidCombination)
+            )
+        }
+        return ValidationResult.Success(inputs)
+    }
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val A = inputs.getValue("amplitude")
