@@ -2,7 +2,6 @@ package com.imglmd.physicsexps.presentation.screens.result
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
@@ -58,6 +57,7 @@ class ResultViewModel(
 
     private val isNewRun: Boolean = runId == null
     private var savedRunId: Int? = runId
+    private var savedRemoteRunId: String? = null
 
     private val json = Json
 
@@ -86,7 +86,13 @@ class ResultViewModel(
 
     private fun loadExistingRun(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching { getResultUseCase(id) }
+
+            runCatching {
+                val run = getRunUseCase(id)
+                savedRemoteRunId = run.remoteId
+
+                getResultUseCase(id)
+            }
                 .onSuccess { result ->
                     if (result != null) {
                         _state.value = ResultContract.State.Success(result)
@@ -139,7 +145,6 @@ class ResultViewModel(
                         )
                     )
                 }
-                .onFailure { Log.e(TAG, "Ошибка получения run для Change", it) }
         }
     }
 
@@ -153,10 +158,12 @@ class ResultViewModel(
                 .onSuccess { newId ->
                     savedRunId = newId
 
+                    val run = getRunUseCase(newId)
+                    savedRemoteRunId = run.remoteId
+
                     if (replaceRunId != null) {
                         deleteRemoteMediaForRun(replaceRunId)
                         runCatching { deleteRunUseCase(replaceRunId) }
-                            .onFailure { Log.e(TAG, "Ошибка удаления заменяемого run", it) }
                     }
 
                     _state.update { state ->
@@ -170,7 +177,6 @@ class ResultViewModel(
                     loadMedia()
                 }
                 .onFailure {
-                    Log.e(TAG, "Ошибка сохранения", it)
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
                             state.copy(isSaving = false)
@@ -189,7 +195,6 @@ class ResultViewModel(
                 deleteRemoteMediaForRun(id)
                 runCatching { deleteRunUseCase(id) }
                     .onSuccess { onSuccess() }
-                    .onFailure { Log.e(TAG, "Ошибка удаления run", it) }
             } else {
                 onSuccess()
             }
@@ -226,11 +231,16 @@ class ResultViewModel(
     }
 
     private fun loadMedia(showLoading: Boolean = true) {
-        val id = savedRunId ?: return
+
+        val remoteId = savedRemoteRunId ?: return
+
         if (showLoading) {
             _state.update { state ->
                 if (state is ResultContract.State.Success) {
-                    state.copy(isMediaLoading = true, mediaErrorMessage = null)
+                    state.copy(
+                        isMediaLoading = true,
+                        mediaErrorMessage = null
+                    )
                 } else {
                     state
                 }
@@ -238,7 +248,7 @@ class ResultViewModel(
         }
 
         viewModelScope.launch {
-            getMediaUseCase(id.toString())
+            getMediaUseCase(remoteId)
                 .onSuccess { mediaList ->
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
@@ -253,12 +263,13 @@ class ResultViewModel(
                     }
                 }
                 .onFailure { throwable ->
-                    Log.e(TAG, "Ошибка загрузки медиа", throwable)
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
                             state.copy(
                                 isMediaLoading = false,
-                                mediaErrorMessage = throwable.userMessage("Не удалось загрузить вложения")
+                                mediaErrorMessage = throwable.userMessage(
+                                    "Не удалось загрузить вложения"
+                                )
                             )
                         } else {
                             state
@@ -269,17 +280,22 @@ class ResultViewModel(
     }
 
     private fun uploadMedia(uri: Uri) {
-        val id = savedRunId ?: return
+
+        val remoteId = savedRemoteRunId ?: return
+
         _state.update { state ->
             if (state is ResultContract.State.Success) {
-                state.copy(isMediaUploading = true, mediaErrorMessage = null)
+                state.copy(
+                    isMediaUploading = true,
+                    mediaErrorMessage = null
+                )
             } else {
                 state
             }
         }
 
         viewModelScope.launch {
-            uploadMediaUseCase(appContext, uri, id.toString())
+            uploadMediaUseCase(appContext, uri, remoteId)
                 .onSuccess {
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
@@ -290,13 +306,14 @@ class ResultViewModel(
                     }
                     loadMedia(showLoading = false)
                 }
-                .onFailure { throwable ->
-                    Log.e(TAG, "Ошибка загрузки файла", throwable)
+                .onFailure { e ->
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
                             state.copy(
                                 isMediaUploading = false,
-                                mediaErrorMessage = throwable.userMessage("Не удалось загрузить файл")
+                                mediaErrorMessage = e.userMessage(
+                                    "Не удалось загрузить файл"
+                                )
                             )
                         } else {
                             state
@@ -307,18 +324,20 @@ class ResultViewModel(
     }
 
     private fun deleteMedia(mediaId: String) {
-        val id = savedRunId ?: return
+        val remoteId = savedRemoteRunId ?: return
+
         viewModelScope.launch {
-            deleteMediaUseCase(id.toString(), mediaId)
+            deleteMediaUseCase(remoteId, mediaId)
                 .onSuccess {
                     loadMedia(showLoading = false)
                 }
                 .onFailure { throwable ->
-                    Log.e(TAG, "Ошибка удаления файла", throwable)
                     _state.update { state ->
                         if (state is ResultContract.State.Success) {
                             state.copy(
-                                mediaErrorMessage = throwable.userMessage("Не удалось удалить файл")
+                                mediaErrorMessage = throwable.userMessage(
+                                    "Не удалось удалить файл"
+                                )
                             )
                         } else {
                             state
@@ -329,10 +348,12 @@ class ResultViewModel(
     }
 
     private suspend fun deleteRemoteMediaForRun(runId: Int) {
-        val media = getMediaUseCase(runId.toString()).getOrNull()?.media.orEmpty()
-        media.forEach { item ->
-            deleteMediaUseCase(runId.toString(), item.mediaId)
-        }
+        val run = getRunUseCase(runId)
+        val remoteId = run.remoteId
+
+        val media = getMediaUseCase(remoteId).getOrNull()?.media.orEmpty()
+
+        media.forEach { item -> deleteMediaUseCase(remoteId, item.mediaId) }
     }
 
     private fun Throwable.userMessage(defaultMessage: String): String {
@@ -342,9 +363,5 @@ class ResultViewModel(
 
     private fun emit(effect: ResultContract.Effect) {
         viewModelScope.launch { _effect.send(effect) }
-    }
-
-    companion object {
-        private const val TAG = "ResultViewModel"
     }
 }

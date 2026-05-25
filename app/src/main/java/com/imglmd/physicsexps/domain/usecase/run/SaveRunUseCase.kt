@@ -5,25 +5,31 @@ import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
 class SaveRunUseCase(
     private val runsRepository: ExperimentRunsRepository,
     private val resultsRepository: ResultsRepository
 ) {
+
     private val json = Json
 
     suspend operator fun invoke(
         result: ExperimentResult,
         inputs: Map<String, Double>
     ): Int {
+
         val runId = runsRepository.insert(
             ExperimentRun(
+                remoteId = UUID.randomUUID().toString(),
                 experimentId = result.experimentId,
                 date = System.currentTimeMillis(),
                 inputData = json.encodeToString(inputs),
             )
         )
+
         resultsRepository.insert(runId, result)
+
         return runId
     }
 }
