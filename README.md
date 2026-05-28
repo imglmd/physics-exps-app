@@ -5,6 +5,9 @@
 
 ### Android-приложение для расчета и изучения физических экспериментов.
 
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0-blue)
+![Platform](https://img.shields.io/badge/Platform-Android-green)
+![UI](https://img.shields.io/badge/UI-Compose-orange)
 </div>
 
 ## Возможности
@@ -24,7 +27,7 @@
 - Автоматическая регистрация устройства для авторизации в API.
 
 ## Скриншоты
-
+<div align="center">
 <table>
   <tr>
     <td><img src="assets/1.jpg" width="250"/></td>
@@ -42,6 +45,7 @@
     <td><img src="assets/9.jpg" width="250"/></td>
   </tr>
 </table>
+</div>
 
 ## Поддерживаемые эксперименты
 
