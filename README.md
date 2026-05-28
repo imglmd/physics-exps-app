@@ -1,11 +1,9 @@
 # PhysicsExps
 
-Android-приложение для расчета и изучения физических экспериментов.
-
 <div align="center">
 <img width="" src="assets/icon.png"  width=160 height=160  align="center">
+## Android-приложение для расчета и изучения физических экспериментов.
 </div>
-
 
 ## Возможности
 
