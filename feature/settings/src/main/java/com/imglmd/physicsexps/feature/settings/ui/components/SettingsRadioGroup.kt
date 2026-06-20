@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -34,8 +35,8 @@ fun <T> SettingsRadioGroup(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        modifier = modifier.clip(RoundedCornerShape(24.dp)),
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
 
         options.forEach { option ->
@@ -44,11 +45,11 @@ fun <T> SettingsRadioGroup(
 
             Surface(
                 onClick = { onSelected(option.value) },
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(6.dp),
                 color = if (isSelected) {
-                    MaterialTheme.colorScheme.primaryContainer
+                    MaterialTheme.colorScheme.surfaceVariant
                 } else {
-                    Color.Transparent
+                    MaterialTheme.colorScheme.surfaceContainer
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -69,6 +70,7 @@ fun <T> SettingsRadioGroup(
 
                         Text(
                             text = option.title,
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleMedium
                         )
 

@@ -35,10 +35,8 @@ fun SettingsGroup(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+                .clip(RoundedCornerShape(24.dp)),
+            verticalArrangement = Arrangement.spacedBy(3.dp),
             content = content
         )
     }
