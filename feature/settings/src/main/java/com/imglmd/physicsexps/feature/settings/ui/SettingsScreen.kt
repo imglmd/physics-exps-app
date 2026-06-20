@@ -37,6 +37,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsScreen(
+    versionName: String,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -103,11 +104,23 @@ fun SettingsScreen(
             item {
                 SettingsGroup("О приложении") {
                     SettingsButton(
-                        title = "Версия 1.6.7", // TODO: поменять на норм версию
+                        title = "GitHub",
                         onClick = {
-                              context.openUrl("https://github.com/imglmd/physics-exps-app")
+                            context.openUrl("https://github.com/imglmd/physics-exps-app")
                         },
                         showIcon = true,
+                    )
+                    SettingsButton(
+                        title = "Последний релиз",
+                        onClick = {
+                            context.openUrl("https://github.com/imglmd/physics-exps-app/releases/latest")
+                        },
+                        showIcon = true
+                    )
+                    SettingsButton(
+                        title = "Текущая версия: $versionName",
+                        onClick = null,
+                        showIcon = false,
                     )
                 }
             }

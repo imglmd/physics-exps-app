@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.imglmd.physicsexps.BuildConfig
 import com.imglmd.physicsexps.feature.settings.ui.SettingsScreen
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
@@ -92,7 +93,7 @@ fun TabHostScreen(
                     navigateToResult = navigateToResult,
                     navigateToHistory = navigateToHistory,
                 )
-                Screen.Tab.Settings -> SettingsScreen()
+                Screen.Tab.Settings -> SettingsScreen(versionName = BuildConfig.VERSION_NAME)
             }
         }
 
