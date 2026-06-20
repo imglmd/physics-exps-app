@@ -72,7 +72,7 @@ fun TabHostScreen(
     val currentTab by navigator.currentTab.collectAsStateWithLifecycle()
     val homeGridState = rememberLazyGridState()
 
-    BackHandler(enabled = currentTab != Screen.Tab.Home) {
+    BackHandler {
         navigator.switchTab(Screen.Tab.Home)
     }
 
