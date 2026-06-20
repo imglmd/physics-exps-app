@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
             }
             PhysicsExpsTheme(
                 darkTheme = darkTheme,
-                amoledTheme = settings.amoledTheme
+                amoledTheme = settings.amoledTheme,
+                dynamicColor = settings.dynamicColors
             ) {
                 AppRoot()
             }

@@ -5,5 +5,6 @@ enum class AppTheme { LIGHT, DARK, SYSTEM }
 
 data class AppSettings(
     val theme: AppTheme = AppTheme.SYSTEM,
-    val amoledTheme: Boolean = false
+    val amoledTheme: Boolean = false,
+    val dynamicColors: Boolean = false
 )

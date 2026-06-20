@@ -8,4 +8,5 @@ interface SettingsRepository {
     val settings: Flow<AppSettings>
     suspend fun updateTheme(theme: AppTheme)
     suspend fun updateAmoledTheme(enabled: Boolean)
+    suspend fun updateDynamicColors(enabled: Boolean)
 }

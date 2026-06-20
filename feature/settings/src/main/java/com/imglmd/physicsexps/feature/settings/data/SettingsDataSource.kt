@@ -19,6 +19,7 @@ class SettingsDataSource(private val context: Context){
     private object Keys {
         val THEME = stringPreferencesKey("theme")
         val AMOLED_THEME = booleanPreferencesKey("amoled_theme")
+        val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data
@@ -31,7 +32,8 @@ class SettingsDataSource(private val context: Context){
                 theme = prefs[Keys.THEME]
                     ?.let { runCatching { AppTheme.valueOf(it) }.getOrDefault(AppTheme.SYSTEM) }
                     ?: AppTheme.SYSTEM,
-                amoledTheme = prefs[Keys.AMOLED_THEME] ?: false
+                amoledTheme = prefs[Keys.AMOLED_THEME] ?: false,
+                dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false
             )
         }
 
@@ -41,6 +43,11 @@ class SettingsDataSource(private val context: Context){
     suspend fun updateAmoledTheme(enabled: Boolean) {
         context.dataStore.edit {
             it[Keys.AMOLED_THEME] = enabled
+        }
+    }
+    suspend fun updateDynamicColors(enabled: Boolean){
+        context.dataStore.edit {
+            it[Keys.DYNAMIC_COLORS] = enabled
         }
     }
 }

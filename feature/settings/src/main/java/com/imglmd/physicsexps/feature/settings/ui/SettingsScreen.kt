@@ -118,6 +118,18 @@ fun SettingsScreen(
                             }
                         )
                     }
+                    if (!isDarkTheme){
+                        SettingsSwitch(
+                            title = "Динамические цвета",
+                            subtitle = "Подстраивает цвета приложения под обои устройства",
+                            checked = state.settings.dynamicColors,
+                            onCheckedChange = {
+                                viewModel.onIntent(
+                                    SettingsIntent.DynamicColorsChanged(it)
+                                )
+                            }
+                        )
+                    }
                 }
             }
             item {

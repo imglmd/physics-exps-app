@@ -11,4 +11,5 @@ data class SettingsState(
 sealed interface SettingsIntent  {
     data class ThemeChanged(val theme: AppTheme): SettingsIntent
     data class AmoledThemeChanged(val enabled: Boolean): SettingsIntent
+    data class DynamicColorsChanged(val enabled: Boolean): SettingsIntent
 }

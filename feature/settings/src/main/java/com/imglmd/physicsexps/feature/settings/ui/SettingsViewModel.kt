@@ -30,6 +30,7 @@ class SettingsViewModel(
             when (intent) {
                 is SettingsIntent.ThemeChanged -> updateSettings.setTheme(intent.theme)
                 is SettingsIntent.AmoledThemeChanged -> updateSettings.setAmoledTheme(intent.enabled)
+                is SettingsIntent.DynamicColorsChanged -> updateSettings.setDynamicColors(intent.enabled)
             }
         }
     }

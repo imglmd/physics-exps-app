@@ -16,4 +16,7 @@ class SettingsRepositoryImpl(
     override suspend fun updateAmoledTheme(enabled: Boolean) {
         dataSource.updateAmoledTheme(enabled)
     }
+    override suspend fun updateDynamicColors(enabled: Boolean) {
+        dataSource.updateDynamicColors(enabled)
+    }
 }

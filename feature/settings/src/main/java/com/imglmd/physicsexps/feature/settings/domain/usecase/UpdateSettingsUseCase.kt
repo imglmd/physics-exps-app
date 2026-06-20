@@ -10,4 +10,7 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
 
     suspend fun setAmoledTheme(enabled: Boolean) =
         repository.updateAmoledTheme(enabled)
+
+    suspend fun setDynamicColors(enabled: Boolean) =
+        repository.updateDynamicColors(enabled)
 }
