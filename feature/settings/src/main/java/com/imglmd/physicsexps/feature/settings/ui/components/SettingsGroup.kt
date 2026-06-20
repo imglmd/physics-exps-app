@@ -1,10 +1,12 @@
 package com.imglmd.physicsexps.feature.settings.ui.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ fun SettingsGroup(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
+        modifier = Modifier.animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 

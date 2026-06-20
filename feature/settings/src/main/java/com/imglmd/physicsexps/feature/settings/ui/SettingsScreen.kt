@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.feature.settings.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,12 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val isDarkTheme = when (state.settings.theme) {
+        AppTheme.DARK -> true
+        AppTheme.LIGHT -> false
+        AppTheme.SYSTEM -> isSystemInDarkTheme()
+    }
 
     if (state.isLoading) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -99,6 +106,18 @@ fun SettingsScreen(
                             )
                         }
                     )
+                    if (isDarkTheme) {
+                        SettingsSwitch(
+                            title = "Экстра тёмная тема",
+                            subtitle = "Полностью чёрный интерфейс для OLED и AMOLED экранов",
+                            checked = state.settings.amoledTheme,
+                            onCheckedChange = {
+                                viewModel.onIntent(
+                                    SettingsIntent.AmoledThemeChanged(it)
+                                )
+                            }
+                        )
+                    }
                 }
             }
             item {

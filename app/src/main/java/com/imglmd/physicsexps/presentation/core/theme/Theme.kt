@@ -39,6 +39,25 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = OnPlum,
     onSecondaryContainer = OnPlumContainerDark,
 )
+private val AmoledColorScheme = DarkColorScheme.copy(
+    primary = CherryRose,
+
+    background = Color.Black,
+    surface = Color(0xFF0C0C0C),
+
+    surfaceContainer = Color(0xFF080808),
+    surfaceVariant = NightBlack,
+
+    onBackground = Parchment,
+    onSurface = Parchment,
+    onSurfaceVariant = Silver,
+
+    primaryContainer = CherryRose.copy(alpha = 0.12f),
+    onPrimaryContainer = Parchment,
+
+    tertiary = DimSilver,
+    outline = Color(0xFF2A2A2A)
+)
 private val LightColorScheme = lightColorScheme(
     primary = CherryRose,
     tertiary = AlabasterGrey,
@@ -68,14 +87,17 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun PhysicsExpsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    amoledTheme: Boolean = false,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
         }
+        darkTheme && amoledTheme -> AmoledColorScheme
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

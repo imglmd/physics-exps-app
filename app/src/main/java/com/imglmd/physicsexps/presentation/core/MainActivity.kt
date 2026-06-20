@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
                 AppTheme.LIGHT  -> false
                 AppTheme.SYSTEM -> isSystemInDarkTheme()
             }
-            PhysicsExpsTheme(darkTheme = darkTheme) {
+            PhysicsExpsTheme(
+                darkTheme = darkTheme,
+                amoledTheme = settings.amoledTheme
+            ) {
                 AppRoot()
             }
         }

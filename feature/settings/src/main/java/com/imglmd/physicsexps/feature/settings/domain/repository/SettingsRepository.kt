@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsRepository {
     val settings: Flow<AppSettings>
     suspend fun updateTheme(theme: AppTheme)
+    suspend fun updateAmoledTheme(enabled: Boolean)
 }

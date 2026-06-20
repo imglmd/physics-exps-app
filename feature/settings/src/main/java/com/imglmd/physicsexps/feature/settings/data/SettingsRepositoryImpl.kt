@@ -13,5 +13,7 @@ class SettingsRepositoryImpl(
     override suspend fun updateTheme(theme: AppTheme) {
         dataSource.updateTheme(theme)
     }
-
+    override suspend fun updateAmoledTheme(enabled: Boolean) {
+        dataSource.updateAmoledTheme(enabled)
+    }
 }

@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.feature.settings.data
 
 import android.content.Context
 import androidx.datastore.core.IOException
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -17,6 +18,7 @@ class SettingsDataSource(private val context: Context){
 
     private object Keys {
         val THEME = stringPreferencesKey("theme")
+        val AMOLED_THEME = booleanPreferencesKey("amoled_theme")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data
@@ -28,11 +30,17 @@ class SettingsDataSource(private val context: Context){
             AppSettings(
                 theme = prefs[Keys.THEME]
                     ?.let { runCatching { AppTheme.valueOf(it) }.getOrDefault(AppTheme.SYSTEM) }
-                    ?: AppTheme.SYSTEM
+                    ?: AppTheme.SYSTEM,
+                amoledTheme = prefs[Keys.AMOLED_THEME] ?: false
             )
         }
 
     suspend fun updateTheme(theme: AppTheme) {
         context.dataStore.edit { it[Keys.THEME] = theme.name }
+    }
+    suspend fun updateAmoledTheme(enabled: Boolean) {
+        context.dataStore.edit {
+            it[Keys.AMOLED_THEME] = enabled
+        }
     }
 }

@@ -7,4 +7,7 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
 
     suspend fun setTheme(theme: AppTheme) =
         repository.updateTheme(theme)
+
+    suspend fun setAmoledTheme(enabled: Boolean) =
+        repository.updateAmoledTheme(enabled)
 }
