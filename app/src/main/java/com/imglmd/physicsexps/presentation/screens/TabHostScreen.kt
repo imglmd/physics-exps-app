@@ -1,10 +1,15 @@
 package com.imglmd.physicsexps.presentation.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,6 +25,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -64,6 +70,7 @@ fun TabHostScreen(
 ) {
     val navigator = koinInject<Navigator>()
     val currentTab by navigator.currentTab.collectAsStateWithLifecycle()
+    val homeGridState = rememberLazyGridState()
 
     BackHandler(enabled = currentTab != Screen.Tab.Home) {
         navigator.switchTab(Screen.Tab.Home)
@@ -74,6 +81,13 @@ fun TabHostScreen(
         initialPage = currentTab.ordinal,
         pageCount = { tabs.size },
     )
+
+    val bottomBarVisible by remember {
+        derivedStateOf {
+            if (currentTab != Screen.Tab.Home)  true
+            else homeGridState.firstVisibleItemIndex == 0 && homeGridState.firstVisibleItemScrollOffset < 20
+        }
+    }
 
     LaunchedEffect(pagerState.settledPage) {
         val swipedTab = tabs[pagerState.settledPage]
@@ -97,17 +111,24 @@ fun TabHostScreen(
                     navigateToExperiment = navigateToExperiment,
                     navigateToResult = navigateToResult,
                     navigateToHistory = navigateToHistory,
+                    gridState = homeGridState
                 )
                 Screen.Tab.Settings -> SettingsScreen(versionName = BuildConfig.VERSION_NAME)
             }
         }
 
-        TabHostBottomBar(
-            pagerState = pagerState,
-            currentTab = currentTab,
-            onTabChange = { navigator.switchTab(it) },
+        AnimatedVisibility(
+            visible = bottomBarVisible,
             modifier = Modifier.align(Alignment.BottomCenter),
-        )
+            enter = slideInVertically { it } + fadeIn(),
+            exit = slideOutVertically { it } + fadeOut()
+        ) {
+            TabHostBottomBar(
+                pagerState = pagerState,
+                currentTab = currentTab,
+                onTabChange = { navigator.switchTab(it) }
+            )
+        }
     }
 }
 
@@ -125,8 +146,8 @@ private fun TabHostBottomBar(
                 Brush.verticalGradient(
                     listOf(
                         Color.Transparent,
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.42f),
                         MaterialTheme.colorScheme.background.copy(alpha = 0.67f),
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.92f),
                     )
                 )
             ),
