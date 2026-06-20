@@ -60,11 +60,11 @@ fun SettingsScreen(
         containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+            contentPadding = PaddingValues(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding() + 110.dp,
+                start = 16.dp, end = 16.dp
+            ),
         ) {
             item {
                 Column(
@@ -130,6 +130,24 @@ fun SettingsScreen(
                             }
                         )
                     }
+                }
+            }
+            item {
+                SettingsGroup("История") {
+                    SettingsRadioGroup(
+                        options = listOf(
+                            RadioOption(50, "50 записей"),
+                            RadioOption(100, "100 записей"),
+                            RadioOption(200, "200 записей"),
+                            RadioOption(null, "Без ограничений"),
+                        ),
+                        selected = state.settings.maxHistoryEntries,
+                        onSelected = {
+                            viewModel.onIntent(
+                                SettingsIntent.MaxHistoryChanged(it)
+                            )
+                        }
+                    )
                 }
             }
             item {

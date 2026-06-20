@@ -4,12 +4,15 @@ import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.repository.ExperimentRunsRepository
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
 class SaveRunUseCase(
     private val runsRepository: ExperimentRunsRepository,
-    private val resultsRepository: ResultsRepository
+    private val resultsRepository: ResultsRepository,
+    private val settingsRepository: SettingsRepository
 ) {
 
     private val json = Json
@@ -30,6 +33,14 @@ class SaveRunUseCase(
 
         resultsRepository.insert(runId, result)
 
+        val limit = settingsRepository.settings.first().maxHistoryEntries
+
+        if (limit != null){
+            val count = runsRepository.count()
+            if (count > limit) {
+                runsRepository.deleteOldest(count - limit)
+            }
+        }
         return runId
     }
 }

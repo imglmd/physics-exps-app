@@ -19,4 +19,8 @@ class SettingsRepositoryImpl(
     override suspend fun updateDynamicColors(enabled: Boolean) {
         dataSource.updateDynamicColors(enabled)
     }
+
+    override suspend fun updateMaxHistory(value: Int?) {
+        dataSource.updateMaxHistory(value)
+    }
 }

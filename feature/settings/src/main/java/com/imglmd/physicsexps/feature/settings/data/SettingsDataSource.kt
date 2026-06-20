@@ -5,6 +5,7 @@ import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
@@ -20,6 +21,8 @@ class SettingsDataSource(private val context: Context){
         val THEME = stringPreferencesKey("theme")
         val AMOLED_THEME = booleanPreferencesKey("amoled_theme")
         val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
+
+        val MAX_HISTORY = intPreferencesKey("max_history")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data
@@ -33,7 +36,8 @@ class SettingsDataSource(private val context: Context){
                     ?.let { runCatching { AppTheme.valueOf(it) }.getOrDefault(AppTheme.SYSTEM) }
                     ?: AppTheme.SYSTEM,
                 amoledTheme = prefs[Keys.AMOLED_THEME] ?: false,
-                dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false
+                dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false,
+                maxHistoryEntries = prefs[Keys.MAX_HISTORY]
             )
         }
 
@@ -48,6 +52,13 @@ class SettingsDataSource(private val context: Context){
     suspend fun updateDynamicColors(enabled: Boolean){
         context.dataStore.edit {
             it[Keys.DYNAMIC_COLORS] = enabled
+        }
+    }
+
+    suspend fun updateMaxHistory(value: Int?) {
+        context.dataStore.edit {
+            if (value == null)  it.remove(Keys.MAX_HISTORY)
+            else  it[Keys.MAX_HISTORY] = value
         }
     }
 }

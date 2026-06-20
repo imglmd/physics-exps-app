@@ -26,6 +26,8 @@ class ExperimentRunsRepositoryImpl(
     override suspend fun insert(experimentRun: ExperimentRun): Int =
         experimentRunsDao.insertExp(experimentRun.toModel()).toInt()
 
+    override suspend fun count(): Int =
+        experimentRunsDao.count()
 
     override suspend fun delete(experimentRun: ExperimentRun) {
         experimentRunsDao.deleteExp(experimentRun.toModel())
@@ -33,5 +35,9 @@ class ExperimentRunsRepositoryImpl(
 
     override suspend fun deleteAll() {
         experimentRunsDao.deleteAll()
+    }
+
+    override suspend fun deleteOldest(count: Int) {
+        experimentRunsDao.deleteOldest(count)
     }
 }

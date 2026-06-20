@@ -31,6 +31,8 @@ class SettingsViewModel(
                 is SettingsIntent.ThemeChanged -> updateSettings.setTheme(intent.theme)
                 is SettingsIntent.AmoledThemeChanged -> updateSettings.setAmoledTheme(intent.enabled)
                 is SettingsIntent.DynamicColorsChanged -> updateSettings.setDynamicColors(intent.enabled)
+
+                is SettingsIntent.MaxHistoryChanged -> updateSettings.setMaxHistory(intent.value)
             }
         }
     }

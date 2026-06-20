@@ -28,7 +28,7 @@ import org.koin.dsl.module
 val useCaseModule = module {
     factory { PingUseCase(get()) }
 
-    factory { SaveRunUseCase(get(), get()) }
+    factory { SaveRunUseCase(get(), get(), get()) }
 
     factory { DeleteRunUseCase(get()) }
 

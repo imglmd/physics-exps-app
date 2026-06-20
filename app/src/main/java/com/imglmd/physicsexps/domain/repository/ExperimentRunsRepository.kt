@@ -11,7 +11,9 @@ interface ExperimentRunsRepository {
 
     suspend fun insert(experimentRun: ExperimentRun): Int
 
-    suspend fun delete(experimentRun: ExperimentRun)
+    suspend fun count(): Int
 
+    suspend fun delete(experimentRun: ExperimentRun)
     suspend fun deleteAll()
+    suspend fun deleteOldest(count: Int)
 }
