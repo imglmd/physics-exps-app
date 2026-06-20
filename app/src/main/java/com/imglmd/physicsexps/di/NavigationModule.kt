@@ -2,9 +2,11 @@
 
 package com.imglmd.physicsexps.di
 
+import com.imglmd.physicsexps.feature.settings.ui.SettingsScreen
 import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
+import com.imglmd.physicsexps.presentation.screens.TabHostScreen
 import com.imglmd.physicsexps.presentation.screens.compare.CompareScreen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
 import com.imglmd.physicsexps.presentation.screens.history.HistoryScreen
@@ -17,9 +19,9 @@ import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
 
 val navigationModule = module {
-    single { Navigator(startDestination = Screen.Home) }
-    navigation<Screen.Home> {
-        HomeScreen(
+    single { Navigator(startDestination = Screen.TabHost) }
+    navigation<Screen.TabHost> { route ->
+        TabHostScreen(
             navigateToExperiment = { id ->
                 get<Navigator>().navigateTo(Screen.Experiment(id))
             },

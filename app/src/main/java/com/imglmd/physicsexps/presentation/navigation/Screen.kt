@@ -1,11 +1,31 @@
 package com.imglmd.physicsexps.presentation.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Screen {
     @Serializable
-    data object Home : Screen
+    data object TabHost : Screen
+
+    @Serializable
+    enum class Tab {
+        Home, Settings;
+        val selectedIcon: ImageVector get() = when (this) {
+            Home -> Icons.Filled.Home
+            Settings -> Icons.Filled.Settings
+        }
+        val unselectedIcon: ImageVector get() = when (this) {
+            Home -> Icons.Outlined.Home
+            Settings -> Icons.Outlined.Settings
+        }
+    }
+
     @Serializable
     data class Experiment(
         val id: String,

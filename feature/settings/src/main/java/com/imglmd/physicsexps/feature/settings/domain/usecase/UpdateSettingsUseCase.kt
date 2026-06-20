@@ -1,0 +1,10 @@
+package com.imglmd.physicsexps.feature.settings.domain.usecase
+
+import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
+
+class UpdateSettingsUseCase(private val repository: SettingsRepository) {
+
+    suspend fun setTheme(theme: AppTheme) =
+        repository.updateTheme(theme)
+}

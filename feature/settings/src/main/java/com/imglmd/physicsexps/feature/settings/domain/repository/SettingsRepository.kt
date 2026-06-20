@@ -1,0 +1,10 @@
+package com.imglmd.physicsexps.feature.settings.domain.repository
+
+import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
+import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import kotlinx.coroutines.flow.Flow
+
+interface SettingsRepository {
+    val settings: Flow<AppSettings>
+    suspend fun updateTheme(theme: AppTheme)
+}

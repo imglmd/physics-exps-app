@@ -1,0 +1,13 @@
+package com.imglmd.physicsexps.feature.settings.ui
+
+import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
+import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+
+data class SettingsState(
+    val settings: AppSettings = AppSettings(),
+    val isLoading: Boolean = true,
+)
+
+sealed interface SettingsIntent  {
+    data class ThemeChanged(val theme: AppTheme): SettingsIntent
+}

@@ -3,7 +3,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.serialization)
     id("com.google.devtools.ksp")
@@ -47,13 +46,13 @@ kotlin {
 android {
     namespace = "com.imglmd.physicsexps"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "com.imglmd.physicsexps"
         minSdk = 29
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -81,6 +80,7 @@ android {
 }
 
     dependencies {
+        implementation(project(":feature:settings"))
 
         // Core
         implementation(libs.androidx.core.ktx)

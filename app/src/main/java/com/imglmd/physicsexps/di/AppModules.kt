@@ -1,5 +1,7 @@
 package com.imglmd.physicsexps.di
 
+import com.imglmd.physicsexps.feature.settings.di.settingsModule
+
 val appModules = listOf(
     databaseModule,
     repositoryModule,
@@ -7,5 +9,6 @@ val appModules = listOf(
     viewModelModule,
     experimentsModule,
     navigationModule,
-    remoteModule
+    remoteModule,
+    settingsModule
 )
