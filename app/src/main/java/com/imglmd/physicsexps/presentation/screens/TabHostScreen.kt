@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -63,6 +64,10 @@ fun TabHostScreen(
 ) {
     val navigator = koinInject<Navigator>()
     val currentTab by navigator.currentTab.collectAsStateWithLifecycle()
+
+    BackHandler(enabled = currentTab != Screen.Tab.Home) {
+        navigator.switchTab(Screen.Tab.Home)
+    }
 
     val tabs = Screen.Tab.entries
     val pagerState = rememberPagerState(
