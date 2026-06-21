@@ -34,6 +34,7 @@ import com.imglmd.physicsexps.feature.settings.ui.components.RadioOption
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsButton
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsGroup
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsRadioGroup
+import com.imglmd.physicsexps.feature.settings.ui.components.SettingsSlider
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsSwitch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -100,22 +101,14 @@ fun SettingsScreen(
                             )
                         ),
                         selected = state.settings.theme,
-                        onSelected = {
-                            viewModel.onIntent(
-                                SettingsIntent.ThemeChanged(it)
-                            )
-                        }
+                        onSelected = { viewModel.onIntent(SettingsIntent.ThemeChanged(it)) }
                     )
                     if (isDarkTheme) {
                         SettingsSwitch(
                             title = "Экстра тёмная тема",
                             subtitle = "Полностью чёрный интерфейс для OLED и AMOLED экранов",
                             checked = state.settings.amoledTheme,
-                            onCheckedChange = {
-                                viewModel.onIntent(
-                                    SettingsIntent.AmoledThemeChanged(it)
-                                )
-                            }
+                            onCheckedChange = { viewModel.onIntent(SettingsIntent.AmoledThemeChanged(it)) }
                         )
                     }
                     if (!isDarkTheme){
@@ -134,19 +127,13 @@ fun SettingsScreen(
             }
             item {
                 SettingsGroup("История") {
-                    SettingsRadioGroup(
-                        options = listOf(
-                            RadioOption(50, "50 записей"),
-                            RadioOption(100, "100 записей"),
-                            RadioOption(200, "200 записей"),
-                            RadioOption(null, "Без ограничений"),
-                        ),
-                        selected = state.settings.maxHistoryEntries,
-                        onSelected = {
-                            viewModel.onIntent(
-                                SettingsIntent.MaxHistoryChanged(it)
-                            )
-                        }
+                    SettingsSlider(
+                        title = "Максимум записей",
+                        subtitle = "Старые записи будут удаляться автоматически",
+                        value = state.settings.maxHistoryEntries,
+                        values = listOf(50, 100, 200, null),
+                        valueLabel = { it?.toString() ?: "∞ " },
+                        onValueChange = { viewModel.onIntent(SettingsIntent.MaxHistoryChanged(it))}
                     )
                 }
             }
@@ -156,9 +143,7 @@ fun SettingsScreen(
                         title = "Виброотклик",
                         subtitle = "Лёгкая вибрация при нажатии кнопок и переключателей",
                         checked = state.settings.hapticFeedback,
-                        onCheckedChange = {
-                            viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it))
-                        }
+                        onCheckedChange = { viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it)) }
                     )
                 }
             }

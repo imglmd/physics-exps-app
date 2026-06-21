@@ -29,7 +29,7 @@ fun SettingsGroup(
         Text(
             modifier = Modifier.padding(start = 10.dp),
             text = title,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleSmall
         )
 
         Column(
