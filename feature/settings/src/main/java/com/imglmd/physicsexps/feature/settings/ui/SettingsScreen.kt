@@ -126,6 +126,16 @@ fun SettingsScreen(
                 }
             }
             item {
+                SettingsGroup("Эксперименты") {
+                    SettingsSwitch(
+                        title = "Показывать все параметры",
+                        subtitle = "Дополнительные параметры будут открыты сразу",
+                        checked = state.settings.advancedMode,
+                        onCheckedChange = { viewModel.onIntent(SettingsIntent.AdvancedModeChanged(it)) }
+                    )
+                }
+            }
+            item {
                 SettingsGroup("История") {
                     SettingsSlider(
                         title = "Максимум записей",

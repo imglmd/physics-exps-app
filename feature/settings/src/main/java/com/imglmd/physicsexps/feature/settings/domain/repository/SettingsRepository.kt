@@ -11,5 +11,6 @@ interface SettingsRepository {
     suspend fun updateDynamicColors(enabled: Boolean)
     suspend fun updateHapticFeedback(enabled: Boolean)
 
+    suspend fun updateAdvancedMode(enabled: Boolean)
     suspend fun updateMaxHistory(value: Int?)
 }

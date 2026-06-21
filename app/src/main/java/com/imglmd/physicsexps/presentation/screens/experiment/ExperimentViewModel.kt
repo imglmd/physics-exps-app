@@ -9,10 +9,12 @@ import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCa
 import com.imglmd.physicsexps.domain.validation.ExperimentValidator
 import com.imglmd.physicsexps.domain.validation.ValidationError
 import com.imglmd.physicsexps.domain.validation.ValidationResult
+import com.imglmd.physicsexps.feature.settings.domain.usecase.GetSettingsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,7 +26,8 @@ class ExperimentViewModel(
     private val calculate: CalculateExperimentUseCase,
     private val resultRepository: InMemoryResultRepository,
     private val validator: ExperimentValidator,
-    private val getExperimentImagesUseCase: GetExperimentImagesUseCase
+    private val getExperimentImagesUseCase: GetExperimentImagesUseCase,
+    private val getSettingsUseCase: GetSettingsUseCase
 ) : ViewModel() {
 
     private val experiment = getExperiment(id)
@@ -47,6 +50,10 @@ class ExperimentViewModel(
     val actionFlow = _actionFlow.asSharedFlow()
 
     init {
+        viewModelScope.launch {
+            val isAdvanced = getSettingsUseCase().first().advancedMode
+            _state.update { it.copy(isAdvancedMode = isAdvanced) }
+        }
         loadImages()
     }
 

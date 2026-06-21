@@ -17,6 +17,8 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
     suspend fun setHapticFeedback(enabled: Boolean) =
         repository.updateHapticFeedback(enabled)
 
+    suspend fun setAdvancedMode(enabled: Boolean) =
+        repository.updateAdvancedMode(enabled)
     suspend fun setMaxHistory(value: Int?) =
         repository.updateMaxHistory(value)
 }

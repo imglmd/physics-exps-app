@@ -33,6 +33,7 @@ class SettingsViewModel(
                 is SettingsIntent.DynamicColorsChanged -> updateSettings.setDynamicColors(intent.enabled)
                 is SettingsIntent.HapticFeedbackChanged -> updateSettings.setHapticFeedback(intent.enabled)
 
+                is SettingsIntent.AdvancedModeChanged -> updateSettings.setAdvancedMode(intent.enabled)
                 is SettingsIntent.MaxHistoryChanged -> updateSettings.setMaxHistory(intent.value)
             }
         }

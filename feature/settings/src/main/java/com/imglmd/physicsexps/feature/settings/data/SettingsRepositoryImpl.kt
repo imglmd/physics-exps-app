@@ -24,6 +24,10 @@ class SettingsRepositoryImpl(
         dataSource.updateHapticFeedback(enabled)
     }
 
+    override suspend fun updateAdvancedMode(enabled: Boolean){
+        dataSource.updateAdvancedMode(enabled)
+    }
+
     override suspend fun updateMaxHistory(value: Int?) {
         dataSource.updateMaxHistory(value)
     }
