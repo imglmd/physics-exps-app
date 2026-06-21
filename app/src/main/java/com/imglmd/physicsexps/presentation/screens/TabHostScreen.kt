@@ -116,6 +116,22 @@ fun TabHostScreen(
                 Screen.Tab.Settings -> SettingsScreen(versionName = BuildConfig.VERSION_NAME)
             }
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .align(Alignment.TopCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.background.copy(alpha = 0.92f),
+                            MaterialTheme.colorScheme.background.copy(alpha = 0.67f),
+                            MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
+                            Color.Transparent,
+                        )
+                    )
+                )
+        )
 
         AnimatedVisibility(
             visible = bottomBarVisible,

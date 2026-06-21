@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.feature.settings.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -64,8 +67,11 @@ fun SettingsScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding() + 110.dp,
-                start = 16.dp, end = 16.dp
+            contentPadding = PaddingValues(
+                top = innerPadding.calculateTopPadding(),
+                bottom = innerPadding.calculateBottomPadding() + 110.dp,
+                start = 16.dp,
+                end = 16.dp
             ),
         ) {
             item {
@@ -108,7 +114,13 @@ fun SettingsScreen(
                             title = "Экстра тёмная тема",
                             subtitle = "Полностью чёрный интерфейс для OLED и AMOLED экранов",
                             checked = state.settings.amoledTheme,
-                            onCheckedChange = { viewModel.onIntent(SettingsIntent.AmoledThemeChanged(it)) }
+                            onCheckedChange = {
+                                viewModel.onIntent(
+                                    SettingsIntent.AmoledThemeChanged(
+                                        it
+                                    )
+                                )
+                            }
                         )
                     }
                     if (!isDarkTheme){
@@ -131,7 +143,13 @@ fun SettingsScreen(
                         title = "Показывать все параметры",
                         subtitle = "Дополнительные параметры будут открыты сразу",
                         checked = state.settings.advancedMode,
-                        onCheckedChange = { viewModel.onIntent(SettingsIntent.AdvancedModeChanged(it)) }
+                        onCheckedChange = {
+                            viewModel.onIntent(
+                                SettingsIntent.AdvancedModeChanged(
+                                    it
+                                )
+                            )
+                        }
                     )
                 }
             }
@@ -153,7 +171,13 @@ fun SettingsScreen(
                         title = "Виброотклик",
                         subtitle = "Лёгкая вибрация при нажатии кнопок и переключателей",
                         checked = state.settings.hapticFeedback,
-                        onCheckedChange = { viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it)) }
+                        onCheckedChange = {
+                            viewModel.onIntent(
+                                SettingsIntent.HapticFeedbackChanged(
+                                    it
+                                )
+                            )
+                        }
                     )
                 }
             }
