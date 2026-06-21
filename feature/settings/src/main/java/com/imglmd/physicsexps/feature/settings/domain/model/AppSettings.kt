@@ -7,6 +7,7 @@ data class AppSettings(
     val theme: AppTheme = AppTheme.SYSTEM,
     val amoledTheme: Boolean = false,
     val dynamicColors: Boolean = false,
+    val hapticFeedback: Boolean = true,
 
     val maxHistoryEntries: Int? = null
 )

@@ -14,6 +14,9 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
     suspend fun setDynamicColors(enabled: Boolean) =
         repository.updateDynamicColors(enabled)
 
+    suspend fun setHapticFeedback(enabled: Boolean) =
+        repository.updateHapticFeedback(enabled)
+
     suspend fun setMaxHistory(value: Int?) =
         repository.updateMaxHistory(value)
 }

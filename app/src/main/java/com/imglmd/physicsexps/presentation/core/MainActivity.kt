@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 amoledTheme = settings.amoledTheme,
                 dynamicColor = settings.dynamicColors
             ) {
-                AppRoot()
+                AppRoot(settings)
             }
         }
     }

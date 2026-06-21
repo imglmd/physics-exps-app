@@ -151,6 +151,18 @@ fun SettingsScreen(
                 }
             }
             item {
+                SettingsGroup("Дополнительные фичи") {
+                    SettingsSwitch(
+                        title = "Виброотклик",
+                        subtitle = "Лёгкая вибрация при нажатии кнопок и переключателей",
+                        checked = state.settings.hapticFeedback,
+                        onCheckedChange = {
+                            viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it))
+                        }
+                    )
+                }
+            }
+            item {
                 SettingsGroup("О приложении") {
                     SettingsButton(
                         title = "GitHub",

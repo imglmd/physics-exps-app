@@ -9,6 +9,7 @@ interface SettingsRepository {
     suspend fun updateTheme(theme: AppTheme)
     suspend fun updateAmoledTheme(enabled: Boolean)
     suspend fun updateDynamicColors(enabled: Boolean)
+    suspend fun updateHapticFeedback(enabled: Boolean)
 
     suspend fun updateMaxHistory(value: Int?)
 }

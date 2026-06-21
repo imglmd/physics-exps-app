@@ -20,6 +20,10 @@ class SettingsRepositoryImpl(
         dataSource.updateDynamicColors(enabled)
     }
 
+    override suspend fun updateHapticFeedback(enabled: Boolean){
+        dataSource.updateHapticFeedback(enabled)
+    }
+
     override suspend fun updateMaxHistory(value: Int?) {
         dataSource.updateMaxHistory(value)
     }

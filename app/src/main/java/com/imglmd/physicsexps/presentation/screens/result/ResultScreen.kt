@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,6 +65,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.core.net.toUri
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
 @Composable
 fun ResultScreen(
@@ -314,22 +316,30 @@ private fun ToolbarButton(
 
     val interactionSource = remember { MutableInteractionSource() }
 
-    val pressed by interactionSource.collectIsPressedAsState()
+    val haptic = LocalHapticManager.current
+
+    val isPressed by interactionSource.collectIsPressedAsState()
 
     val animatedCorner by animateDpAsState(
-        targetValue = if (pressed) 22.dp else 50.dp,
+        targetValue = if (isPressed) 22.dp else 50.dp,
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
         label = "corner"
     )
 
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 1.03f else 1f,
+        targetValue = if (isPressed) 1.03f else 1f,
         animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
         label = "scale"
     )
 
     val hasText = !text.isNullOrBlank()
     val iconSize = if(hasText) 20.dp else 24.dp
+
+    LaunchedEffect(isPressed) {
+        if (isPressed) {
+            haptic.perform(HapticFeedbackType.Confirm)
+        }
+    }
 
     Surface(
         onClick = onClick,

@@ -32,8 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -119,6 +121,14 @@ fun SolutionScreen(
         animationSpec = tween(120),
         label = "text_alpha"
     )
+
+    val haptic = LocalHapticManager.current
+
+    LaunchedEffect(isAtBottom) {
+        if (isAtBottom) {
+            haptic.perform(HapticFeedbackType.Confirm)
+        }
+    }
 
     Scaffold { padding ->
         Box(modifier = Modifier.fillMaxSize()) {

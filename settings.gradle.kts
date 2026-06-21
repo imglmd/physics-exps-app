@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "PhysicsExps"
 include(":app")
 include(":feature:settings")
+include(":core:ui")

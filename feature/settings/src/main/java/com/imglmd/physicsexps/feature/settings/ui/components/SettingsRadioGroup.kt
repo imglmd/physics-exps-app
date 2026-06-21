@@ -19,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
 data class RadioOption<T>(
     val value: T,
@@ -34,6 +36,8 @@ fun <T> SettingsRadioGroup(
     onSelected: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val haptic = LocalHapticManager.current
+
     Column(
         modifier = modifier.clip(RoundedCornerShape(24.dp)),
         verticalArrangement = Arrangement.spacedBy(3.dp)
@@ -44,7 +48,10 @@ fun <T> SettingsRadioGroup(
             val isSelected = option.value == selected
 
             Surface(
-                onClick = { onSelected(option.value) },
+                onClick = {
+                    if (!isSelected) haptic.perform(HapticFeedbackType.SegmentTick)
+                    onSelected(option.value)
+                          },
                 shape = RoundedCornerShape(6.dp),
                 color = if (isSelected) {
                     MaterialTheme.colorScheme.surfaceVariant

@@ -21,6 +21,7 @@ class SettingsDataSource(private val context: Context){
         val THEME = stringPreferencesKey("theme")
         val AMOLED_THEME = booleanPreferencesKey("amoled_theme")
         val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
+        val HAPTIC_FEEDBACK = booleanPreferencesKey("haptic_feedback")
 
         val MAX_HISTORY = intPreferencesKey("max_history")
     }
@@ -37,23 +38,23 @@ class SettingsDataSource(private val context: Context){
                     ?: AppTheme.SYSTEM,
                 amoledTheme = prefs[Keys.AMOLED_THEME] ?: false,
                 dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false,
+                hapticFeedback = prefs[Keys.HAPTIC_FEEDBACK] ?: false,
                 maxHistoryEntries = prefs[Keys.MAX_HISTORY]
             )
         }
 
-    suspend fun updateTheme(theme: AppTheme) {
+    suspend fun updateTheme(theme: AppTheme) =
         context.dataStore.edit { it[Keys.THEME] = theme.name }
-    }
-    suspend fun updateAmoledTheme(enabled: Boolean) {
-        context.dataStore.edit {
-            it[Keys.AMOLED_THEME] = enabled
-        }
-    }
-    suspend fun updateDynamicColors(enabled: Boolean){
-        context.dataStore.edit {
-            it[Keys.DYNAMIC_COLORS] = enabled
-        }
-    }
+
+    suspend fun updateAmoledTheme(enabled: Boolean) =
+        context.dataStore.edit { it[Keys.AMOLED_THEME] = enabled }
+
+    suspend fun updateDynamicColors(enabled: Boolean) =
+        context.dataStore.edit { it[Keys.DYNAMIC_COLORS] = enabled }
+
+    suspend fun updateHapticFeedback(enabled: Boolean) =
+        context.dataStore.edit { it[Keys.HAPTIC_FEEDBACK] = enabled }
+
 
     suspend fun updateMaxHistory(value: Int?) {
         context.dataStore.edit {

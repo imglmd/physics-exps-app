@@ -81,6 +81,7 @@ android {
 
     dependencies {
         implementation(project(":feature:settings"))
+        implementation(project(":core:ui"))
 
         // Core
         implementation(libs.androidx.core.ktx)
