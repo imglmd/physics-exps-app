@@ -160,7 +160,7 @@ fun SettingsScreen(
                 SettingsGroup("Дополнительные фичи") {
                     SettingsSwitch(
                         title = "Виброотклик",
-                        subtitle = "Лёгкая вибрация при нажатии кнопок и переключателей",
+                        subtitle = "Тактильный отклик элементов интерфейса. Работает только при включённой вибрации в системе",
                         checked = state.settings.hapticFeedback,
                         onCheckedChange = {
                             viewModel.onIntent(
