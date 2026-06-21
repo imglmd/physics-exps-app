@@ -63,7 +63,11 @@ fun SettingsSwitch(
                 uncheckedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant
             ),
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = {
+                if (checked) haptic.perform(HapticFeedbackType.ToggleOff)
+                else haptic.perform(HapticFeedbackType.ToggleOn)
+                onCheckedChange(it)
+            }
         )
     }
 }

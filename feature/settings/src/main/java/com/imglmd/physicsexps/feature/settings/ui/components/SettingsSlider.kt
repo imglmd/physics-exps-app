@@ -16,7 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
 @Composable
 fun <T> SettingsSlider(
@@ -29,6 +31,8 @@ fun <T> SettingsSlider(
     subtitle: String? = null,
 ) {
     val selectedIndex = values.indexOf(value).coerceAtLeast(0)
+
+    val haptic = LocalHapticManager.current
 
     Column(
         modifier = modifier
@@ -66,6 +70,7 @@ fun <T> SettingsSlider(
         Slider(
             value = selectedIndex.toFloat(),
             onValueChange = {
+                haptic.perform(HapticFeedbackType.SegmentTick)
                 onValueChange(values[it.toInt()])
             },
             colors = SliderDefaults.colors(
