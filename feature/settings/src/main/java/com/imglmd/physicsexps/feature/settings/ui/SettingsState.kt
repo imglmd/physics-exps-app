@@ -14,6 +14,7 @@ sealed interface SettingsIntent  {
     data class DynamicColorsChanged(val enabled: Boolean): SettingsIntent
     data class HapticFeedbackChanged(val enabled: Boolean): SettingsIntent
 
+    data class OfflineModeChanged(val enabled: Boolean): SettingsIntent
     data class AdvancedModeChanged(val enabled: Boolean): SettingsIntent
     data class MaxHistoryChanged(val value: Int?): SettingsIntent
 }

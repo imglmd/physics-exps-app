@@ -1,13 +1,11 @@
 package com.imglmd.physicsexps.feature.settings.data
 
-import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
-import kotlinx.coroutines.flow.Flow
 
 class SettingsRepositoryImpl(
     private val dataSource: SettingsDataSource
-): SettingsRepository {
+): SettingsRepository{
     override val settings = dataSource.settings
 
     override suspend fun updateTheme(theme: AppTheme) {
@@ -22,6 +20,10 @@ class SettingsRepositoryImpl(
 
     override suspend fun updateHapticFeedback(enabled: Boolean){
         dataSource.updateHapticFeedback(enabled)
+    }
+
+    override suspend fun updateOfflineMode(enabled: Boolean) {
+        dataSource.updateOfflineMode(enabled)
     }
 
     override suspend fun updateAdvancedMode(enabled: Boolean){

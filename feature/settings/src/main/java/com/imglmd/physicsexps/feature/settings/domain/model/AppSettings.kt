@@ -9,6 +9,7 @@ data class AppSettings(
     val dynamicColors: Boolean = false,
     val hapticFeedback: Boolean = true,
 
+    val offlineMode: Boolean = false,
     val advancedMode: Boolean = false,
     val maxHistoryEntries: Int? = null
 )

@@ -23,6 +23,7 @@ class SettingsDataSource(private val context: Context){
         val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
         val HAPTIC_FEEDBACK = booleanPreferencesKey("haptic_feedback")
 
+        val OFFLINE_MODE = booleanPreferencesKey("offline_mode")
         val ADVANCED_MODE = booleanPreferencesKey("advanced_mode")
         val MAX_HISTORY = intPreferencesKey("max_history")
     }
@@ -40,6 +41,7 @@ class SettingsDataSource(private val context: Context){
                 amoledTheme = prefs[Keys.AMOLED_THEME] ?: false,
                 dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false,
                 hapticFeedback = prefs[Keys.HAPTIC_FEEDBACK] ?: false,
+                offlineMode = prefs[Keys.OFFLINE_MODE]?: false,
                 advancedMode = prefs[Keys.ADVANCED_MODE] ?: false,
                 maxHistoryEntries = prefs[Keys.MAX_HISTORY]
             )
@@ -57,6 +59,8 @@ class SettingsDataSource(private val context: Context){
     suspend fun updateHapticFeedback(enabled: Boolean) =
         context.dataStore.edit { it[Keys.HAPTIC_FEEDBACK] = enabled }
 
+    suspend fun updateOfflineMode(enabled: Boolean) =
+        context.dataStore.edit { it[Keys.OFFLINE_MODE] = enabled }
     suspend fun updateAdvancedMode(enabled: Boolean) =
         context.dataStore.edit { it[Keys.ADVANCED_MODE] = enabled }
 

@@ -162,13 +162,13 @@ fun SettingsScreen(
                         title = "Виброотклик",
                         subtitle = "Тактильный отклик элементов интерфейса. Работает только при включённой вибрации в системе",
                         checked = state.settings.hapticFeedback,
-                        onCheckedChange = {
-                            viewModel.onIntent(
-                                SettingsIntent.HapticFeedbackChanged(
-                                    it
-                                )
-                            )
-                        }
+                        onCheckedChange = { viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it)) }
+                    )
+                    SettingsSwitch(
+                        title = "Офлайн-режим",
+                        subtitle = "Отключает все онлайн функции приложения",
+                        checked = state.settings.offlineMode,
+                        onCheckedChange = { viewModel.onIntent(SettingsIntent.OfflineModeChanged(it))}
                     )
                 }
             }

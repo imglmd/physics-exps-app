@@ -82,6 +82,7 @@ android {
     dependencies {
         implementation(project(":feature:settings"))
         implementation(project(":core:ui"))
+        implementation(project(":core:network"))
 
         // Core
         implementation(libs.androidx.core.ktx)

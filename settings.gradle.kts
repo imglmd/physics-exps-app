@@ -23,3 +23,4 @@ rootProject.name = "PhysicsExps"
 include(":app")
 include(":feature:settings")
 include(":core:ui")
+include(":core:network")
