@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.domain.model.Comment
 import java.text.SimpleDateFormat
 import java.util.Date

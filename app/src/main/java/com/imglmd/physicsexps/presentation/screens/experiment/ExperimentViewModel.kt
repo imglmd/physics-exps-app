@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.experiment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
@@ -27,7 +28,8 @@ class ExperimentViewModel(
     private val resultRepository: InMemoryResultRepository,
     private val validator: ExperimentValidator,
     private val getExperimentImagesUseCase: GetExperimentImagesUseCase,
-    private val getSettingsUseCase: GetSettingsUseCase
+    private val getSettingsUseCase: GetSettingsUseCase,
+    private val onlineStateManager: OnlineStateManager,
 ) : ViewModel() {
 
     private val experiment = getExperiment(id)
@@ -144,6 +146,10 @@ class ExperimentViewModel(
     }
 
     private fun loadImages() {
+        if (!onlineStateManager.state.value.canUseOnlineFeatures) {
+            _state.update { it.copy(isImagesLoading = false) }
+            return
+        }
         viewModelScope.launch {
             getExperimentImagesUseCase(id)
                 .onSuccess { imageUrls ->

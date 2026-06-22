@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.model.Comment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
@@ -46,7 +47,8 @@ class ResultViewModel(
     private val addCommentUseCase: AddCommentUseCase,
     private val getMediaUseCase: GetMediaUseCase,
     private val uploadMediaUseCase: UploadMediaUseCase,
-    private val deleteMediaUseCase: DeleteMediaUseCase
+    private val deleteMediaUseCase: DeleteMediaUseCase,
+    private val onlineStateManager: OnlineStateManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
@@ -62,6 +64,7 @@ class ResultViewModel(
     private val json = Json
 
     init {
+        observeOnlineState()
         if (isNewRun) {
             initNewRun()
         } else {
@@ -78,6 +81,7 @@ class ResultViewModel(
 
         _state.value = ResultContract.State.Success(
             result = bundle.result,
+            onlineState = onlineStateManager.state.value,
             isSaved = false,
             isSaving = true
         )
@@ -95,7 +99,7 @@ class ResultViewModel(
             }
                 .onSuccess { result ->
                     if (result != null) {
-                        _state.value = ResultContract.State.Success(result)
+                        _state.value = ResultContract.State.Success(result, onlineState = onlineStateManager.state.value)
                         loadComments()
                         loadMedia()
                     } else {
@@ -201,6 +205,20 @@ class ResultViewModel(
         }
     }
 
+    private fun observeOnlineState() {
+        viewModelScope.launch {
+            onlineStateManager.state.collect { onlineState ->
+                _state.update { state ->
+                    if (state is ResultContract.State.Success) {
+                        state.copy(onlineState = onlineState)
+                    } else {
+                        state
+                    }
+                }
+            }
+        }
+    }
+
     private fun loadComments() {
         val id = savedRunId ?: return
         viewModelScope.launch(Dispatchers.IO) {
@@ -231,6 +249,7 @@ class ResultViewModel(
     }
 
     private fun loadMedia(showLoading: Boolean = true) {
+        if (!onlineStateManager.state.value.canUseOnlineFeatures) return
 
         val remoteId = savedRemoteRunId ?: return
 
@@ -280,6 +299,7 @@ class ResultViewModel(
     }
 
     private fun uploadMedia(uri: Uri) {
+        if (!onlineStateManager.state.value.canUseOnlineFeatures) return
 
         val remoteId = savedRemoteRunId ?: return
 
@@ -324,6 +344,8 @@ class ResultViewModel(
     }
 
     private fun deleteMedia(mediaId: String) {
+        if (!onlineStateManager.state.value.canUseOnlineFeatures) return
+
         val remoteId = savedRemoteRunId ?: return
 
         viewModelScope.launch {

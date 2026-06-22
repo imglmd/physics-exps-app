@@ -200,18 +200,21 @@ private fun Content(
                 )
             }
 
-            Spacer(Modifier.height(20.dp))
+            if (!state.onlineState.offlineMode){
+                Spacer(Modifier.height(20.dp))
 
-            MediaSection(
-                media = state.media,
-                isLoading = state.isMediaLoading,
-                isUploading = state.isMediaUploading,
-                errorMessage = state.mediaErrorMessage,
-                onUpload = { onIntent(ResultContract.Intent.UploadMedia(it)) },
-                onDelete = { onIntent(ResultContract.Intent.DeleteMedia(it)) },
-                onRefresh = { onIntent(ResultContract.Intent.RefreshMedia) },
-                onOpen = { url -> openMedia(context, url) }
-            )
+                MediaSection(
+                    media = state.media,
+                    onlineState = state.onlineState,
+                    isLoading = state.isMediaLoading,
+                    isUploading = state.isMediaUploading,
+                    errorMessage = state.mediaErrorMessage,
+                    onUpload = { onIntent(ResultContract.Intent.UploadMedia(it)) },
+                    onDelete = { onIntent(ResultContract.Intent.DeleteMedia(it)) },
+                    onRefresh = { onIntent(ResultContract.Intent.RefreshMedia) },
+                    onOpen = { url -> openMedia(context, url) }
+                )
+            }
 
             Spacer(Modifier.height(20.dp))
 
