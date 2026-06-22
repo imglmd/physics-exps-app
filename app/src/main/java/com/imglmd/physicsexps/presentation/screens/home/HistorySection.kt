@@ -19,9 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.domain.usecase.auth.AuthState
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
-import com.imglmd.physicsexps.presentation.screens.home.components.AuthIndicator
+import com.imglmd.physicsexps.presentation.screens.home.components.ConnectionIndicator
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryCard
 import com.imglmd.physicsexps.presentation.screens.home.components.SeeAllCard
 
@@ -30,7 +31,7 @@ import com.imglmd.physicsexps.presentation.screens.home.components.SeeAllCard
 fun HistorySection(
     history: List<HistoryItemUi>,
     hasMore: Boolean,
-    authState: AuthState,
+    onlineState: OnlineState,
     onSeeAllClick: () -> Unit,
     onItemClick: (id: Int) -> Unit,
     modifier: Modifier = Modifier
@@ -49,9 +50,7 @@ fun HistorySection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                AuthIndicator(
-                    state = authState
-                )
+                ConnectionIndicator(state = onlineState)
 
                 Spacer(Modifier.width(6.dp))
 
@@ -62,10 +61,7 @@ fun HistorySection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
-                    Text(
-                        text = "Все",
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+                    Text("Все", style = MaterialTheme.typography.bodyMedium,)
                 }
             }
         }

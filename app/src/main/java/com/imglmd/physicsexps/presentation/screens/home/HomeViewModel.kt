@@ -6,6 +6,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.AuthState
@@ -36,7 +37,8 @@ class HomeViewModel(
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
     private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
-    private val ensureAuthorizedUseCase: EnsureAuthorizedUseCase
+    private val ensureAuthorizedUseCase: EnsureAuthorizedUseCase,
+    private val onlineStateManager: OnlineStateManager
 ): AndroidViewModel(application) {
 
     private val allExperiments = getAllExperimentsUseCase()
@@ -47,18 +49,17 @@ class HomeViewModel(
     private val _actionFlow = MutableSharedFlow<HomeAction>()
     val actionFlow = _actionFlow.asSharedFlow()
 
+    private var previewsLoaded = false
     private val json = Json
 
-    init { onInit() }
+    init {
+        observeOnlineState()
+        onInit()
+    }
     private fun onInit(){
         viewModelScope.launch {
             updateExperiments("")
             loadHistory()
-
-            val authState = ensureAuthorization()
-            if (authState == AuthState.Authorized) {
-                loadPreviewImages()
-            }
         }
     }
 
@@ -68,6 +69,20 @@ class HomeViewModel(
             is HomeIntent.NavigateToRunResult -> navigateToResult(intent.id)
             is HomeIntent.NavigateToExperiment -> navigateToExperiment(intent.id)
             HomeIntent.NavigateToHistory -> navigateToHistory()
+        }
+    }
+
+    private fun observeOnlineState() {
+        viewModelScope.launch {
+            onlineStateManager.state.collect { onlineState ->
+                _state.update { it.copy(onlineState = onlineState) }
+                if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
+                    previewsLoaded = true
+
+                    val authState = ensureAuthorization()
+                    if (authState == AuthState.Authorized) loadPreviewImages()
+                }
+            }
         }
     }
 
@@ -96,7 +111,7 @@ class HomeViewModel(
     private fun navigateToResult(id: Int){
         viewModelScope.launch {
 
-            val run = getRunUseCase(id) ?: return@launch
+            val run = getRunUseCase(id)
 
             val inputs: Map<String, Double> =
                 runCatching {
@@ -161,23 +176,13 @@ class HomeViewModel(
     @SuppressLint("HardwareIds")
     private suspend fun ensureAuthorization(): AuthState {
 
-        _state.update {
-            it.copy(authState = AuthState.Authorizing)
-        }
-
-        val result = ensureAuthorizedUseCase(
+        return ensureAuthorizedUseCase(
             deviceId = Settings.Secure.getString(
                 getApplication<Application>().contentResolver,
                 Settings.Secure.ANDROID_ID
             ),
             deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
         )
-
-        _state.update {
-            it.copy(authState = result)
-        }
-
-        return result
     }
 
     private fun navigateToHistory() {
