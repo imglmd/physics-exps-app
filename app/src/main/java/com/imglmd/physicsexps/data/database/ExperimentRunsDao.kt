@@ -24,4 +24,18 @@ interface ExperimentRunsDao {
     fun getLastRuns(limit: Int): Flow<List<ExperimentRunEntity>>
     @Query("SELECT * FROM experiment_runs WHERE id = :id")
     suspend fun getExpById(id: Int): ExperimentRunEntity
+
+    @Query("SELECT COUNT(*) FROM experiment_runs")
+    suspend fun count(): Int
+
+    @Query("""
+        DELETE FROM experiment_runs
+        WHERE id IN (
+            SELECT id
+            FROM experiment_runs
+            ORDER BY date ASC
+            LIMIT :count
+        )
+    """)
+    suspend fun deleteOldest(count: Int)
 }

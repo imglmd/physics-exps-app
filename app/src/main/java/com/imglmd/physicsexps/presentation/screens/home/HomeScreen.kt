@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,6 +66,7 @@ fun HomeScreen(
     navigateToExperiment: (String) -> Unit,
     navigateToResult: (Int) -> Unit,
     navigateToHistory: () -> Unit,
+    gridState: LazyGridState,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -83,6 +85,7 @@ fun HomeScreen(
         modifier = Modifier.imePadding(),
     ) { innerPadding ->
         LazyVerticalGrid(
+            state = gridState,
             columns = GridCells.Adaptive(150.dp),
             modifier = Modifier.fillMaxSize(),
             //verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -121,7 +124,7 @@ fun HomeScreen(
                             if (isLoaded && state.history.isNotEmpty()) {
                                 HistorySection(
                                     history = state.history,
-                                    authState = state.authState,
+                                    onlineState = state.onlineState,
                                     hasMore = state.hasMoreHistory,
                                     onSeeAllClick = { viewModel.onIntent(HomeIntent.NavigateToHistory) },
                                     onItemClick = { viewModel.onIntent(HomeIntent.NavigateToRunResult(it)) }

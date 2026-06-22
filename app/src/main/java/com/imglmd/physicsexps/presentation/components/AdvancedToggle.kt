@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
 @Composable
 fun AdvancedToggle(
@@ -35,6 +37,8 @@ fun AdvancedToggle(
     onToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val haptic = LocalHapticManager.current
+
     val containerColor by animateColorAsState(
         targetValue = if (enabled)
             MaterialTheme.colorScheme.surfaceVariant
@@ -58,7 +62,11 @@ fun AdvancedToggle(
             .clip(RoundedCornerShape(20.dp))
             .background(containerColor)
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
-            .clickable { onToggle() }
+            .clickable {
+                if (enabled) haptic.perform(HapticFeedbackType.ToggleOff)
+                else haptic.perform(HapticFeedbackType.ToggleOn)
+                onToggle()
+            }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

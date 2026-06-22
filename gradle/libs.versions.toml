@@ -1,24 +1,25 @@
 [versions]
-agp = "8.13.2"
-kotlin = "2.3.0"
+agp = "9.2.1"
+datastorePreferences = "1.2.1"
+kotlin = "2.4.0"
 
-coreKtx = "1.17.0"
-lifecycle = "2.10.0"
-activityCompose = "1.12.4"
+coreKtx = "1.19.0"
+lifecycle = "2.11.0"
+activityCompose = "1.13.0"
 
-composeBom = "2026.02.01"
-material3 = "1.5.0-alpha18"
+composeBom = "2026.06.00"
+material3 = "1.5.0-alpha22"
 materialIcons = "1.7.8"
 
-koin = "4.2.0"
-nav3 = "1.0.1"
-nav3Vm = "2.10.0"
+koin = "4.2.2"
+nav3 = "1.1.3"
+nav3Vm = "2.11.0"
 
-serialization = "1.10.0"
+serialization = "1.11.0"
 
 room = "2.8.4"
 
-vico = "3.1.0"
+vico = "3.2.2"
 
 splash = "1.2.0"
 
@@ -30,6 +31,8 @@ latex = "1.3.9"
 retrofit = "3.0.0"
 converterKotlinxSerialization = "3.0.0"
 coil = "2.7.0"
+appcompat = "1.7.1"
+material = "1.14.0"
 
 [libraries]
 
@@ -67,10 +70,11 @@ koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", ver
 # Serialization
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
-# Room
+# Data
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
 # Vico
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
@@ -82,15 +86,19 @@ latex-renderer = { module = "io.github.huarangmeng:latex-renderer", version.ref 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidJunit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
 [bundles]
 nav3 = ["navigation3-runtime", "navigation3-ui", "navigation3-viewmodel"]

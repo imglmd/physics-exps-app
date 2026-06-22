@@ -27,14 +27,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
 enum class IconPosition {
     Start,
@@ -58,21 +62,29 @@ fun PrimaryButton(
 
     val interactionSource = remember { MutableInteractionSource() }
 
-    val isPressed = interactionSource.collectIsPressedAsState()
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val haptic = LocalHapticManager.current
 
     val scale = animateFloatAsState(
-        targetValue = if (isPressed.value) 1.02f else 1f,
+        targetValue = if (isPressed) 1.02f else 1f,
         animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec(),
     )
 
+    LaunchedEffect(isPressed) {
+        if (isPressed) {
+            haptic.perform(HapticFeedbackType.Confirm)
+        }
+    }
+
     Button(
-        onClick = { if (!isLoading) onClick() },
+        onClick = { if (!isLoading) onClick()},
         interactionSource = interactionSource,
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
             .scale(scale.value),
-        enabled = enabled && !isLoading,
+        enabled = enabled,
         colors = colors,
         shapes = ButtonDefaults.shapes(
             shape = CircleShape,

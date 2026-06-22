@@ -3,7 +3,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.serialization)
     id("com.google.devtools.ksp")
@@ -47,15 +46,15 @@ kotlin {
 android {
     namespace = "com.imglmd.physicsexps"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "com.imglmd.physicsexps"
         minSdk = 29
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 37
+        versionCode = 2
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BACKEND_BASE_URL", backendBaseUrl.asBuildConfigValue())
@@ -81,6 +80,9 @@ android {
 }
 
     dependencies {
+        implementation(project(":feature:settings"))
+        implementation(project(":core:ui"))
+        implementation(project(":core:network"))
 
         // Core
         implementation(libs.androidx.core.ktx)

@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.presentation.core.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,12 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = CherryRose,
@@ -38,6 +41,25 @@ private val DarkColorScheme = darkColorScheme(
     secondaryContainer = PlumDark,
     onSecondary = OnPlum,
     onSecondaryContainer = OnPlumContainerDark,
+)
+private val AmoledColorScheme = DarkColorScheme.copy(
+    primary = CherryRose,
+
+    background = Color.Black,
+    surface = Color(0xFF0C0C0C),
+
+    surfaceContainer = Color(0xFF080808),
+    surfaceVariant = NightBlack,
+
+    onBackground = Parchment,
+    onSurface = Parchment,
+    onSurfaceVariant = Silver,
+
+    primaryContainer = CherryRose.copy(alpha = 0.12f),
+    onPrimaryContainer = Parchment,
+
+    tertiary = DimSilver,
+    outline = Color(0xFF2A2A2A)
 )
 private val LightColorScheme = lightColorScheme(
     primary = CherryRose,
@@ -68,18 +90,28 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun PhysicsExpsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    amoledTheme: Boolean = false,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor && !darkTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            dynamicLightColorScheme(context).copy(
+                surfaceVariant = LightColorScheme.surfaceVariant,
+            )
         }
+        darkTheme && amoledTheme -> AmoledColorScheme
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+    val view = LocalView.current
 
+    SideEffect {
+        val window = (view.context as Activity).window
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+    }
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

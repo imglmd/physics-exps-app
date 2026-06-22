@@ -9,12 +9,20 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
+import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
 import com.imglmd.physicsexps.presentation.core.theme.PhysicsExpsTheme
+import com.imglmd.physicsexps.presentation.navigation.AppRoot
 import com.imglmd.physicsexps.presentation.navigation.Navigator
+import org.koin.android.ext.android.inject
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -26,31 +34,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PhysicsExpsTheme {
-                val entryProvider = koinEntryProvider<Any>()
-                val navigator = koinInject<Navigator>()
+            val settingsRepo: SettingsRepository by inject()
+            val settings by settingsRepo.settings.collectAsStateWithLifecycle(AppSettings())
 
-                NavDisplay(
-                    backStack = navigator.backStack,
-                    onBack = { navigator.goBack() },
-                    entryProvider = entryProvider,
-                    transitionSpec = {
-                        slideInHorizontally { it } + fadeIn() togetherWith
-                                slideOutHorizontally { -it } + fadeOut()
-                    },
-                    popTransitionSpec = {
-                        slideInHorizontally { -it } + fadeIn() togetherWith
-                                slideOutHorizontally { it } + fadeOut()
-                    },
-                    predictivePopTransitionSpec = {
-                        slideInHorizontally { -it } + fadeIn() togetherWith
-                                slideOutHorizontally { it } + fadeOut()
-                    },
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator()
-                    )
-                )
+            val darkTheme = when (settings.theme) {
+                AppTheme.DARK   -> true
+                AppTheme.LIGHT  -> false
+                AppTheme.SYSTEM -> isSystemInDarkTheme()
+            }
+            PhysicsExpsTheme(
+                darkTheme = darkTheme,
+                amoledTheme = settings.amoledTheme,
+                dynamicColor = settings.dynamicColors
+            ) {
+                AppRoot(settings)
             }
         }
     }

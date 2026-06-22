@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +50,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.domain.model.Media
 import com.imglmd.physicsexps.presentation.rememberShimmerBrush
 import java.text.SimpleDateFormat
@@ -58,6 +60,7 @@ import java.util.Locale
 @Composable
 fun MediaSection(
     media: List<Media>,
+    onlineState: OnlineState,
     isLoading: Boolean,
     isUploading: Boolean,
     errorMessage: String?,
@@ -67,6 +70,41 @@ fun MediaSection(
     onOpen: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (onlineState.offlineMode) return
+
+    val unavailableReason = when {
+        !onlineState.hasInternet -> "Нет подключения к интернету"
+
+        !onlineState.serverAvailable -> "Сервер временно недоступен"
+
+        else -> null
+    }
+
+    if (unavailableReason != null) {
+        Column {
+            Text(
+                text = "Вложения",
+                modifier = Modifier.padding(PaddingValues(start = 16.dp, bottom = 10.dp)),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Surface(
+                modifier = modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            ) {
+                Text(
+                    text = unavailableReason,
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        return
+    }
+
     val picker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->

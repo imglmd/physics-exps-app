@@ -1,6 +1,9 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.physicsexps.BuildConfig
+import com.imglmd.physicsexps.core.OfflineModeProviderImpl
+import com.imglmd.physicsexps.core.OnlineStateManager
+import com.imglmd.physicsexps.core.network.OfflineModeProvider
 import com.imglmd.physicsexps.data.TokenStorage
 import com.imglmd.physicsexps.data.remote.ApiService
 import com.imglmd.physicsexps.data.remote.AuthInterceptor
@@ -46,5 +49,17 @@ val remoteModule = module {
             .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(ApiService::class.java)
+    }
+
+    single<OfflineModeProvider> {
+        OfflineModeProviderImpl(get())
+    }
+
+    single {
+        OnlineStateManager(
+            networkMonitor = get(),
+            offlineModeProvider = get(),
+            pingUseCase = get()
+        )
     }
 }
