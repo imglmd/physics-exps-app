@@ -78,60 +78,75 @@ android {
         buildConfig = true
     }
 }
+androidComponents {
+    onVariants { variant ->
 
-    dependencies {
-        implementation(project(":feature:settings"))
-        implementation(project(":core:ui"))
-        implementation(project(":core:network"))
+        val versionName = variant.outputs
+            .single()
+            .versionName
+            .orNull ?: "unknown"
 
-        // Core
-        implementation(libs.androidx.core.ktx)
-        implementation(libs.androidx.lifecycle.runtime.ktx)
-        implementation(libs.androidx.activity.compose)
-
-        // Compose
-        implementation(platform(libs.androidx.compose.bom))
-        implementation(libs.androidx.compose.ui)
-        implementation(libs.androidx.compose.ui.graphics)
-        implementation(libs.androidx.compose.ui.tooling.preview)
-        implementation(libs.androidx.compose.material3)
-
-        debugImplementation(libs.androidx.compose.ui.tooling)
-        debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-        // Icons
-        implementation(libs.androidx.compose.material.icons.core)
-
-        // Splash
-        implementation(libs.androidx.core.splashscreen)
-
-        // Navigation + DI
-        implementation(libs.bundles.nav3)
-        implementation(libs.bundles.koin)
-
-        // Serialization
-        implementation(libs.kotlinx.serialization)
-
-        // Room
-        implementation(libs.room.runtime)
-        implementation(libs.room.ktx)
-        ksp(libs.room.compiler)
-
-        // Charts (Vico)
-        implementation(libs.vico.compose.m3)
-
-        // Latex
-        implementation(libs.latex.renderer)
-
-        //Retrofit
-        implementation(libs.retrofit)
-        implementation(libs.converter.kotlinx.serialization)
-        implementation(libs.coil.compose)
-
-        // Tests
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.junit)
-        androidTestImplementation(libs.androidx.espresso.core)
-        androidTestImplementation(platform(libs.androidx.compose.bom))
-        androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+        variant.outputs.forEach { output ->
+            output.outputFileName.set(
+                "PhysicsExps-v$versionName.apk"
+            )
+        }
     }
+}
+
+dependencies {
+    implementation(project(":feature:settings"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:network"))
+
+    // Core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Icons
+    implementation(libs.androidx.compose.material.icons.core)
+
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // Navigation + DI
+    implementation(libs.bundles.nav3)
+    implementation(libs.bundles.koin)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Charts (Vico)
+    implementation(libs.vico.compose.m3)
+
+    // Latex
+    implementation(libs.latex.renderer)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.coil.compose)
+
+    // Tests
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+}
