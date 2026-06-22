@@ -16,6 +16,10 @@ sealed interface Screen {
     @Serializable
     enum class Tab {
         Home, Settings;
+        val label: String get() = when (this) {
+            Home -> "Главная"
+            Settings -> "Настройки"
+        }
         val selectedIcon: ImageVector get() = when (this) {
             Home -> Icons.Filled.Home
             Settings -> Icons.Filled.Settings

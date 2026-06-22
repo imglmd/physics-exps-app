@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.imglmd.physicsexps.presentation.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -15,6 +18,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,10 +32,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalFloatingToolbar
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -45,8 +51,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.BuildConfig
 import com.imglmd.physicsexps.feature.settings.ui.SettingsScreen
@@ -162,16 +170,21 @@ private fun TabHostBottomBar(
             ),
         contentAlignment = Alignment.BottomCenter,
     ) {
-        HorizontalFloatingToolbar(
-            expanded = true,
+        Row(
             modifier = Modifier
-                .padding(bottom = 16.dp)
-                .navigationBarsPadding(),
+                .padding(bottom = 20.dp)
+                .navigationBarsPadding()
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.92f))
+                .padding(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            val buttonWidth = 104.dp
-            val buttonGap = 8.dp
-            val stepPx = with(LocalDensity.current) { (buttonWidth + buttonGap).toPx() }
+            val density = LocalDensity.current
 
+            val buttonWidthDp = 86.dp
+            val gapDp = 4.dp
+            val stepPx = with(density) { (buttonWidthDp + gapDp).toPx() }
             val pillOffsetPx by remember {
                 derivedStateOf {
                     (pagerState.currentPage + pagerState.currentPageOffsetFraction) * stepPx
@@ -181,25 +194,24 @@ private fun TabHostBottomBar(
             Box {
                 Box(
                     modifier = Modifier
-                        .size(width = buttonWidth, height = 52.dp)
+                        .size(width = buttonWidthDp, height = 46.dp)
                         .graphicsLayer { translationX = pillOffsetPx }
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.18f))
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
-                            shape = CircleShape,
-                        )
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
+
                 )
 
-                Row(horizontalArrangement = Arrangement.spacedBy(buttonGap)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(gapDp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Screen.Tab.entries.forEach { tab ->
                         BottomBarButton(
                             selected = currentTab == tab,
                             selectedIcon = tab.selectedIcon,
                             unselectedIcon = tab.unselectedIcon,
-                            contentDescription = tab.name,
-                            width = buttonWidth,
+                            label = tab.label,
+                            width = buttonWidthDp,
                             onClick = { onTabChange(tab) },
                         )
                     }
@@ -214,7 +226,7 @@ private fun BottomBarButton(
     selected: Boolean,
     selectedIcon: ImageVector,
     unselectedIcon: ImageVector,
-    contentDescription: String,
+    label: String,
     width: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -229,31 +241,46 @@ private fun BottomBarButton(
     )
 
     val iconColor by animateColorAsState(
-        targetValue = if (selected) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-        animationSpec = tween(200),
+        targetValue = if (selected) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
         label = "icon_color",
+    )
+
+    val labelColor by animateColorAsState(
+        targetValue = if (selected) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
+        label = "label_color",
     )
 
     Surface(
         onClick = onClick,
         interactionSource = interactionSource,
-        modifier = modifier
-            .height(52.dp)
-            .width(width)
+        modifier = modifier.height(46.dp).width(width)
             .graphicsLayer { scaleX = scale; scaleY = scale },
         shape = CircleShape,
         color = Color.Transparent,
-        contentColor = iconColor,
     ) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Icon(
                 imageVector = if (selected) selectedIcon else unselectedIcon,
-                contentDescription = contentDescription,
-                modifier = Modifier.size(26.dp),
+                contentDescription = label,
+                tint = iconColor,
+                modifier = Modifier.size(22.dp)
+            )
+            Text(
+                text = label,
+                fontSize = 11.5.sp,
+                fontWeight = FontWeight.Bold,
+                color = labelColor,
+                letterSpacing = 0.15.sp,
+                lineHeight = 12.sp,
+                maxLines = 1
             )
         }
     }
