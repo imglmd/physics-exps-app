@@ -12,7 +12,6 @@ import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.media.DeleteMediaUseCase
-import com.imglmd.physicsexps.domain.usecase.media.GetMediaSignedUrlUseCase
 import com.imglmd.physicsexps.domain.usecase.media.GetMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.media.UploadMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
