@@ -175,7 +175,7 @@ private fun TabHostBottomBar(
                 .padding(bottom = 20.dp)
                 .navigationBarsPadding()
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.92f))
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(5.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
