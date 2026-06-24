@@ -38,6 +38,8 @@ import com.imglmd.physicsexps.presentation.screens.compare.components.CompareCha
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareResultsCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareRunCard
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.compose.cartesian.data.LineCartesianLayerModel
+import com.patrykandpatrick.vico.compose.cartesian.data.lineModel
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -140,9 +142,13 @@ private fun CompareContent(items: List<CompareItem>) {
         if (aligned1.isEmpty() && aligned2.isEmpty()) return@LaunchedEffect
 
         modelProducer.runTransaction {
-            lineSeries {
-                if (aligned1.isNotEmpty()) series(aligned1.map { it.first }, aligned1.map { it.second })
-                if (aligned2.isNotEmpty()) series(aligned2.map { it.first }, aligned2.map { it.second })
+            lineModel {
+                if (aligned1.isNotEmpty()) series(
+                    aligned1.map { it.first },
+                    aligned1.map { it.second })
+                if (aligned2.isNotEmpty()) series(
+                    aligned2.map { it.first },
+                    aligned2.map { it.second })
             }
         }
     }

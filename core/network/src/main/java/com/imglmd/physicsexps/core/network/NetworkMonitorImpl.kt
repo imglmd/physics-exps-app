@@ -18,7 +18,6 @@ class NetworkMonitorImpl(
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     override val isConnected = callbackFlow {
-
         val callback = object : ConnectivityManager.NetworkCallback() {
 
             override fun onAvailable(network: Network) {

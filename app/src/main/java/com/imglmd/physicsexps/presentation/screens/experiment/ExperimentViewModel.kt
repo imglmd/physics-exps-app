@@ -28,11 +28,13 @@ class ExperimentViewModel(
     private val resultRepository: InMemoryResultRepository,
     private val validator: ExperimentValidator,
     private val getExperimentImagesUseCase: GetExperimentImagesUseCase,
-    private val getSettingsUseCase: GetSettingsUseCase,
-    private val onlineStateManager: OnlineStateManager,
-) : ViewModel() {
+    private val getSettingsUseCase: GetSettingsUseCase
+): ViewModel() {
 
     private val experiment = getExperiment(id)
+
+
+    private val cachedSettings = getSettingsUseCase.getCached()
 
     private val initialInputs = inputs ?: emptyMap()
 
@@ -42,7 +44,8 @@ class ExperimentViewModel(
         ExperimentContract.State(
             experiment = experiment,
             inputs = initialInputs,
-            isAdvancedMode = hasAdvancedInputs(initialInputs),
+            isAdvancedMode = hasAdvancedInputs(initialInputs) || cachedSettings?.advancedMode ?: false,
+            isOfflineMode = cachedSettings?.offlineMode ?: false,
             isButtonActive = initialValidation is ValidationResult.Success
         )
     )
@@ -53,10 +56,13 @@ class ExperimentViewModel(
 
     init {
         viewModelScope.launch {
-            val isAdvanced = getSettingsUseCase().first().advancedMode
-            _state.update { it.copy(isAdvancedMode = isAdvanced) }
+            val settings = getSettingsUseCase().first()
+            _state.update { it.copy(
+                isAdvancedMode = hasAdvancedInputs(initialInputs) || settings.advancedMode,
+                isOfflineMode = settings.offlineMode
+            ) }
+            if (!settings.offlineMode) loadImages()
         }
-        loadImages()
     }
 
     fun onIntent(intent: ExperimentContract.Intent) {
@@ -146,16 +152,13 @@ class ExperimentViewModel(
     }
 
     private fun loadImages() {
-        if (!onlineStateManager.state.value.canUseOnlineFeatures) {
-            _state.update { it.copy(isImagesLoading = false) }
-            return
-        }
         viewModelScope.launch {
             getExperimentImagesUseCase(id)
                 .onSuccess { imageUrls ->
                     _state.update {
                         it.copy(
                             imageUrls = imageUrls,
+                            isImagesError = false,
                             isImagesLoading = false
                         )
                     }
@@ -164,6 +167,7 @@ class ExperimentViewModel(
                     _state.update {
                         it.copy(
                             imageUrls = emptyList(),
+                            isImagesError = true,
                             isImagesLoading = false
                         )
                     }

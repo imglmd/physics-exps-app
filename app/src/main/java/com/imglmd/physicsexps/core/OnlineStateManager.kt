@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class OnlineStateManager(
     networkMonitor: NetworkMonitor,
@@ -30,14 +31,13 @@ class OnlineStateManager(
                 }
 
                 while (true) {
-
                     serverAvailable.value =
                         runCatching {
                             pingUseCase()
                             true
                         }.getOrDefault(false)
 
-                    delay(30_000)
+                    delay(30.seconds)
                 }
             }
         }

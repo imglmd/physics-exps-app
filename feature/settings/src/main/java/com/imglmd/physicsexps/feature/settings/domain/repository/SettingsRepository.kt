@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
     val settings: Flow<AppSettings>
+    fun getCachedSettings(): AppSettings?
     suspend fun updateTheme(theme: AppTheme)
     suspend fun updateAmoledTheme(enabled: Boolean)
     suspend fun updateDynamicColors(enabled: Boolean)

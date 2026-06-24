@@ -1,13 +1,22 @@
 package com.imglmd.physicsexps.feature.settings.data
 
+import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
 import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 
 class SettingsRepositoryImpl(
     private val dataSource: SettingsDataSource
 ): SettingsRepository{
-    override val settings = dataSource.settings
+
+    private var cachedSettings: AppSettings? = null
+
+    override val settings: Flow<AppSettings> = dataSource.settings
+        .onEach { cachedSettings = it }
+
+    override fun getCachedSettings(): AppSettings? = cachedSettings
 
     override suspend fun updateTheme(theme: AppTheme) {
         dataSource.updateTheme(theme)

@@ -181,12 +181,16 @@ fun ExperimentScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                item {
-                    ExperimentCarousel(
-                        images = state.imageUrls,
-                        isLoading = state.isImagesLoading
-                    )
+                if (!state.isOfflineMode){
+                    item {
+                        ExperimentCarousel(
+                            images = state.imageUrls,
+                            isLoading = state.isImagesLoading,
+                            isError = state.isImagesError,
+                        )
+                    }
                 }
+
                 if (state.experiment.description.isNotEmpty()){
                 item {
                     ExpandableDescription(
@@ -306,15 +310,13 @@ fun ExperimentScreen(
 
 
 @Composable
-fun ExpandableDescription(
+private fun ExpandableDescription(
     text: String,
     modifier: Modifier = Modifier,
     collapsedMaxLines: Int = 3
 ) {
     var expanded by remember { mutableStateOf(false) }
     var isOverflowing by remember { mutableStateOf(false) }
-
-    val shape = RoundedCornerShape(24.dp)
 
     Box(
         modifier = modifier
@@ -325,7 +327,7 @@ fun ExpandableDescription(
                     stiffness = Spring.StiffnessLow
                 )
             )
-            .clip(shape)
+            .clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .then(
                 if (isOverflowing) {

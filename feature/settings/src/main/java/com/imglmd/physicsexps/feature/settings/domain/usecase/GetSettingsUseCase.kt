@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetSettingsUseCase(private val repository: SettingsRepository) {
     operator fun invoke(): Flow<AppSettings> = repository.settings
+    fun getCached() = repository.getCachedSettings()
 }
