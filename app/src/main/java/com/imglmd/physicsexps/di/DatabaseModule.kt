@@ -12,7 +12,7 @@ val databaseModule = module {
             androidContext(),
             ExpDb::class.java,
             "exp_db"
-        ).build()
+        ).fallbackToDestructiveMigration(true).build()
     }
 
     single { get<ExpDb>().dao() }

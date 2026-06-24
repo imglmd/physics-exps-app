@@ -8,7 +8,7 @@ import com.imglmd.physicsexps.data.database.models.ResultEntity
 
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         ExperimentRunEntity::class,
         ResultEntity::class,
