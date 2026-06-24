@@ -73,12 +73,12 @@ fun CompareChartCard(
                 LineCartesianLayer.rememberLine(
                     fill = LineCartesianLayer.LineFill.single(Fill(color1)),
                     stroke = LineCartesianLayer.LineStroke.Continuous(3.dp),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f)
+                    interpolator = LineCartesianLayer.Interpolator.cubic(0.001f)
                 ),
                 LineCartesianLayer.rememberLine(
                     fill = LineCartesianLayer.LineFill.single(Fill(color2)),
                     stroke = LineCartesianLayer.LineStroke.Continuous(3.dp),
-                    pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f)
+                    interpolator = LineCartesianLayer.Interpolator.cubic(0.001f)
                 )
             )
         ),

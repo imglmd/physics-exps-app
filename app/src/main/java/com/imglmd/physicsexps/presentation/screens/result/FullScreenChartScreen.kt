@@ -37,7 +37,7 @@ import com.patrykandpatrick.vico.compose.cartesian.Zoom
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
+import com.patrykandpatrick.vico.compose.cartesian.data.lineModel
 import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
@@ -136,7 +136,7 @@ private fun ChartContent(
 
     LaunchedEffect(normalized) {
         modelProducer.runTransaction {
-            lineSeries {
+            lineModel {
                 series(
                     normalized.map { it.first },
                     normalized.map { it.second }
@@ -233,7 +233,7 @@ private fun rememberChart(
                     Fill(MaterialTheme.colorScheme.primary)
                 ),
                 stroke = LineCartesianLayer.LineStroke.Continuous(3.dp),
-                pointConnector = LineCartesianLayer.PointConnector.cubic(0.001f)
+                interpolator = LineCartesianLayer.Interpolator.cubic(0.001f)
             )
         )
     ),
