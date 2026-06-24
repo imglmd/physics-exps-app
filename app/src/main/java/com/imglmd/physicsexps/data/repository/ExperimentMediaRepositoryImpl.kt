@@ -7,7 +7,9 @@ import com.imglmd.physicsexps.domain.repository.ExperimentMediaRepository
 class ExperimentMediaRepositoryImpl(
     private val apiService: ApiService,
     private val remoteConfig: RemoteConfig
-) : ExperimentMediaRepository {
+): ExperimentMediaRepository {
+    private val imagesCache = mutableMapOf<String, List<String>>()
+
     override suspend fun getPreviewUrls(): Map<String, String> {
         return apiService.getExperiments().associate { dto ->
             dto.id to remoteConfig.resolveUrl(dto.previewImageUrl)
@@ -15,7 +17,12 @@ class ExperimentMediaRepositoryImpl(
     }
 
     override suspend fun getImageUrls(experimentId: String): List<String> {
-        return apiService.getExperimentImages(experimentId).imageUrls
-            .map(remoteConfig::resolveUrl)
+        imagesCache[experimentId]?.let{ return it }
+        val images = apiService.getExperimentImages(experimentId)
+                .imageUrls.map(remoteConfig::resolveUrl)
+
+        imagesCache[experimentId] = images
+
+        return images
     }
 }
