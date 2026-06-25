@@ -12,9 +12,9 @@ import kotlin.math.pow
 
 class JouleLenzExperiment: Experiment {
     override val id = "joule_lenz"
-    override val name = "Закон Джоуля-Ленца"
-    override val category = "Электричество"
-    override val description = "Закон Джоуля — Ленца — физический закон, определяющий количество теплоты, выделяемой проводником при прохождении электрического тока. Устанавливает связь между тепловым действием тока и электрическими параметрами цепи."
+    override val name = "joule_lenz"
+    override val category = "electricity"
+    override val description = "joule_lenz_desc"
     override val inputFields = listOf(
         InputField("time", "Время прохождения тока", "t", "с", required = true, min = 0.0),
         InputField("amperage", "Сила тока", "I", "А", min = 0.0),

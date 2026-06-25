@@ -1,6 +1,10 @@
 package com.imglmd.physicsexps.feature.settings.data
 
+import android.app.LocaleManager
 import android.content.Context
+import android.os.Build
+import android.os.LocaleList
+import androidx.annotation.RequiresApi
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -13,9 +17,30 @@ import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 
 class SettingsDataSource(private val context: Context){
     private val Context.dataStore by preferencesDataStore(name = "settings")
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun setAppLanguage(languageTag: String) {
+        val localeManager = context.getSystemService(LocaleManager::class.java)
+        val localeList = LocaleList(Locale.forLanguageTag(languageTag))
+
+        localeManager.applicationLocales = localeList
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun getAppLanguage(): String {
+        val localeManager = context.getSystemService(LocaleManager::class.java)
+        val currentLocales = localeManager.applicationLocales
+
+        return if (!currentLocales.isEmpty) {
+            currentLocales.get(0).toLanguageTag()
+        } else {
+            Locale.getDefault().toLanguageTag()
+        }
+    }
 
     private object Keys {
         val THEME = stringPreferencesKey("theme")

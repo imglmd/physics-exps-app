@@ -17,10 +17,9 @@ import kotlin.math.sqrt
 class PendulumExperiment : Experiment {
 
     override val id = "pendulum"
-    override val name = "Математический маятник"
-    override val category = "Механика"
-    override val description =
-        """Математический маятник — это модель тела, подвешенного на невесомой нити, которое колеблется под действием силы тяжести.""".trimIndent()
+    override val name = "pendulum"
+    override val category = "mechanics"
+    override val description = "pendulum_desc"
     override val imageRes = R.drawable.mathpendulum
 
     override val xLabel =  "Длина нити, м"

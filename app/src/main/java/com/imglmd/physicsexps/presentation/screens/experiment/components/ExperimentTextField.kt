@@ -26,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun ExperimentTextField(
@@ -122,9 +124,10 @@ fun ExperimentTextField(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.CenterStart
                     ) {
+                        val context = LocalContext.current
                         if (state.text.isEmpty()) {
                             Text(
-                                text = label,
+                                text = context.getStringByKey(label),
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.titleMedium,

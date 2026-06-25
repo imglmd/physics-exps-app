@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import kotlin.math.abs
+import com.imglmd.physicsexps.R
 
 @Composable
 fun CompareResultsCard(
@@ -53,7 +55,7 @@ fun CompareResultsCard(
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ){
             Text(
-                text = "Результаты",
+                text = stringResource(R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.onSurface)
@@ -123,7 +125,7 @@ private fun QuantityCompareRow(
                 value = v1,
                 unit = unit,
                 accentColor = color1,
-                runLabel = "Запуск 1",
+                runLabel = stringResource(R.string.run_1),
                 modifier = Modifier.weight(1f)
             )
 
@@ -138,7 +140,7 @@ private fun QuantityCompareRow(
                 value = v2,
                 unit = unit,
                 accentColor = color2,
-                runLabel = "Запуск 2",
+                runLabel = stringResource(R.string.run_2),
                 modifier = Modifier.weight(1f)
             )
         }

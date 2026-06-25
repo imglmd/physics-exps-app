@@ -66,6 +66,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.core.net.toUri
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun ResultScreen(
@@ -145,9 +146,10 @@ private fun Content(
 
     Scaffold(
         topBar = {
+            val context = LocalContext.current
             ExperimentAppBar(
-                title = experiment.name,
-                subtitle = experiment.category,
+                title = context.getStringByKey(experiment.name),
+                subtitle = context.getStringByKey(experiment.category),
                 navigateBack = { onIntent(ResultContract.Intent.Back) }
             )
         },
@@ -182,8 +184,8 @@ private fun Content(
 
                     saveResultAsPdf(
                         context = context,
-                        nameExp = getExperimentName(state.result.experimentId),
-                        nameSection = getCategoryName(state.result.experimentId),
+                        nameExp = context.getStringByKey(state.result.experimentId),
+                        nameSection = context.getStringByKey(state.result.experimentId),
                         data = data
                     )
                 }

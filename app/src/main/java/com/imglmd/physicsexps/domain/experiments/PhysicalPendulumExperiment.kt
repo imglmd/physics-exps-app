@@ -15,12 +15,9 @@ import kotlin.math.sqrt
 
 class PhysicalPendulumExperiment: Experiment {
     override val id = "physical_pendulum"
-    override val name = "Физический маятник"
-    override val category = "Механика"
-    override val description = "Осциллятор, представляющий собой твёрдое тело, совершающее " +
-            "колебания в поле каких-либо сил относительно точки, не являющейся центром " +
-            "масс этого тела, или неподвижной оси, перпендикулярной направлению действия сил " +
-            "и не проходящей через центр масс этого тела."
+    override val name = "physical_pendulum"
+    override val category = "mechanics"
+    override val description = "physical_pendulum_desc"
     override val inputFields = listOf(
         InputField("moment", "Момент инерции тела относительно оси вращения",
             "I", "кг×м²", required = true),

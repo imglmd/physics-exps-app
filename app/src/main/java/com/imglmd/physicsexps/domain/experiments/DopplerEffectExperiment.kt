@@ -12,10 +12,9 @@ import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {
     override val id = "doppler_effect"
-    override val name = "Эффект Доплера"
-    override val category = "Акустика"
-    override val description = "Эффект Доплера — это изменение частоты волны (звука, света, " +
-            "радиосигнала) из-за движения источника или наблюдателя."
+    override val name = "doppler_effect"
+    override val category = "phonics"
+    override val description = "doppler_desc"
     override val inputFields = listOf(
         InputField("v_obs", "Скорость наблюдателя", "vₒ", "м/с",
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),

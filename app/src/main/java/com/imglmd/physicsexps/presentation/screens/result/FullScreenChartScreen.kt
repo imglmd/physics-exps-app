@@ -28,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
@@ -104,7 +106,7 @@ fun FullScreenChartScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Нет данных для отображения")
+                Text(stringResource(R.string.no_data))
             }
             return@Scaffold
         }
@@ -186,9 +188,9 @@ private fun PointsStatRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        StatTile(label = "Точек", value = "$count", modifier = Modifier.weight(1f))
-        StatTile(label = "Мин", value = "%.3g".format(minY), modifier = Modifier.weight(1f))
-        StatTile(label = "Макс", value = "%.3g".format(maxY), modifier = Modifier.weight(1f))
+        StatTile(label = stringResource(R.string.points), value = "$count", modifier = Modifier.weight(1f))
+        StatTile(label = stringResource(R.string.min), value = "%.3g".format(minY), modifier = Modifier.weight(1f))
+        StatTile(label = stringResource(R.string.max), value = "%.3g".format(maxY), modifier = Modifier.weight(1f))
     }
 }
 

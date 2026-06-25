@@ -18,13 +18,9 @@ import kotlin.math.sqrt
 
 class ProjectileMotionExperiment : Experiment {
     override val id = "projectile_motion"
-    override val name = "Движение тела, брошенного под углом к горизонту"
-    override val category = "Кинематика"
-    override val description = """
-        Движение тела, брошенного под углом к горизонту — это сложное движение,
-        при котором горизонтальная составляющая скорости постоянна, а вертикальная
-        изменяется под действием силы тяжести. Поддерживается бросок с высоты.
-    """.trimIndent()
+    override val name = "projectile_motion"
+    override val category = "kinematics"
+    override val description = "projectile_motion_desc"
     override val imageRes = R.drawable.projectile_motion
 
     override val inputFields = listOf(

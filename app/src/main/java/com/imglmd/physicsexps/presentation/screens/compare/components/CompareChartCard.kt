@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,7 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import com.imglmd.physicsexps.R
 
 
 @Composable
@@ -119,7 +121,7 @@ fun CompareChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "График",
+                text = stringResource(R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold
@@ -139,7 +141,7 @@ fun CompareChartCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
-                        contentDescription = "Сбросить масштаб",
+                        contentDescription = stringResource(R.string.reset_zoom),
                         tint = colors.primary,
                         modifier = Modifier.size(18.dp)
                     )
@@ -166,8 +168,8 @@ private fun ChartLegend(color1: Color, color2: Color) {
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LegendDot(color = color1, label = "Запуск 1")
-        LegendDot(color = color2, label = "Запуск 2")
+        LegendDot(color = color1, label = stringResource(R.string.run_1))
+        LegendDot(color = color2, label = stringResource(R.string.run_2))
     }
 }
 

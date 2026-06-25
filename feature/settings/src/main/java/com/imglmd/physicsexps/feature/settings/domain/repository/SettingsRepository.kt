@@ -14,4 +14,7 @@ interface SettingsRepository {
     suspend fun updateOfflineMode(enabled: Boolean)
     suspend fun updateAdvancedMode(enabled: Boolean)
     suspend fun updateMaxHistory(value: Int?)
+
+    suspend fun getAppLanguage(): String
+    suspend fun setAppLanguage(lang: String)
 }

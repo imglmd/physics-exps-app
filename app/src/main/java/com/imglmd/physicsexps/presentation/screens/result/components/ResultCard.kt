@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -63,7 +64,7 @@ fun ResultCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Результаты",
+                text = stringResource(R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
@@ -108,7 +109,7 @@ fun ResultCard(
                     )
                 ) {
                     Text(
-                        text = "Решение",
+                        text = stringResource(R.string.solution),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

@@ -15,11 +15,9 @@ import kotlin.math.sin
 
 class HarmonicVibrationsExperiment: Experiment {
     override val id = "harmonic_vibrations"
-    override val name = "Гармонические колебания"
-    override val category = "Механика"
-    override val description = "Гармонические колебания - колебания, при которых " +
-            "некоторая физическая величина изменяется с " +
-            "течением времени по гармоническому (синусоидальному, косинусоидальному) закону."
+    override val name = "harmonic_vibrations"
+    override val category = "mechanics"
+    override val description = "harmonic_vibrations_desc"
     override val xLabel = "Время, с"
     override val yLabel = "Смещение, м"
     override val inputFields = listOf(

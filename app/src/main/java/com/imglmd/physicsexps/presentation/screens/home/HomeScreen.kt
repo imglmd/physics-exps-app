@@ -49,7 +49,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,6 +59,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
 import org.koin.compose.viewmodel.koinViewModel
@@ -145,8 +148,9 @@ fun HomeScreen(
             state.experimentsByCategory.forEach { (category, experiments) ->
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
+                    val context = LocalContext.current
                     Text(
-                        text = category,
+                        text = context.getStringByKey(category),
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(top = 22.dp, bottom = 6.dp)
                     )
@@ -154,8 +158,9 @@ fun HomeScreen(
 
                 items(experiments) { experiment ->
                     Column {
+                        val context = LocalContext.current
                         ExperimentItem(
-                            name = experiment.name,
+                            name = context.getStringByKey(experiment.name),
                             previewUrl = state.previewUrlsByExperimentId[experiment.id],
                             placeholder = experiment.imageRes,
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
@@ -289,7 +294,7 @@ private fun SearchTextField(
 
                     if (state.text.isEmpty()) {
                         Text(
-                            text = "Поиск",
+                            text = stringResource(R.string.search),
                             style = textStyle,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

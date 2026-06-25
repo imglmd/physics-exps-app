@@ -6,6 +6,7 @@ import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 data class SettingsState(
     val settings: AppSettings = AppSettings(),
     val isLoading: Boolean = true,
+    val currentLanguage: String = "ru"
 )
 
 sealed interface SettingsIntent  {
@@ -17,4 +18,6 @@ sealed interface SettingsIntent  {
     data class OfflineModeChanged(val enabled: Boolean): SettingsIntent
     data class AdvancedModeChanged(val enabled: Boolean): SettingsIntent
     data class MaxHistoryChanged(val value: Int?): SettingsIntent
+
+    data class ChangeLanguage(val lang: String): SettingsIntent
 }

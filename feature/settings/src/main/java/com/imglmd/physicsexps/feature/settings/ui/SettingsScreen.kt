@@ -20,9 +20,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.imglmd.physicsexps.feature.settings.R
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.ui.components.RadioOption
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsButton
@@ -71,7 +73,7 @@ fun SettingsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "Настройки",
+                        stringResource(R.string.settings_s),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -79,22 +81,22 @@ fun SettingsScreen(
             }
             item {
                 SettingsGroup(
-                    title = "Внешний вид"
+                    title = stringResource(R.string.appearance)
                 ) {
                     SettingsRadioGroup(
                         options = listOf(
                             RadioOption(
                                 value = AppTheme.SYSTEM,
-                                title = "Системная",
-                                subtitle = "Как в настройках устройства"
+                                title = stringResource(R.string.systemic),
+                                subtitle = stringResource(R.string.device_set)
                             ),
                             RadioOption(
                                 value = AppTheme.LIGHT,
-                                title = "Светлая"
+                                title = stringResource(R.string.light)
                             ),
                             RadioOption(
                                 value = AppTheme.DARK,
-                                title = "Тёмная"
+                                title = stringResource(R.string.dark)
                             )
                         ),
                         selected = state.settings.theme,
@@ -102,8 +104,8 @@ fun SettingsScreen(
                     )
                     if (isDarkTheme) {
                         SettingsSwitch(
-                            title = "Экстра тёмная тема",
-                            subtitle = "Полностью чёрный интерфейс для OLED и AMOLED экранов",
+                            title = stringResource(R.string.extra_dark),
+                            subtitle = stringResource(R.string.dark_desc),
                             checked = state.settings.amoledTheme,
                             onCheckedChange = {
                                 viewModel.onIntent(
@@ -116,8 +118,8 @@ fun SettingsScreen(
                     }
                     if (!isDarkTheme){
                         SettingsSwitch(
-                            title = "Динамические цвета",
-                            subtitle = "Подстраивает цвета приложения под обои устройства",
+                            title = stringResource(R.string.dynamic_colors),
+                            subtitle = stringResource(R.string.adjusts),
                             checked = state.settings.dynamicColors,
                             onCheckedChange = {
                                 viewModel.onIntent(
@@ -129,10 +131,10 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup("Эксперименты") {
+                SettingsGroup(stringResource(R.string.exps)) {
                     SettingsSwitch(
-                        title = "Показывать все параметры",
-                        subtitle = "Дополнительные параметры будут открыты сразу",
+                        title = stringResource(R.string.show_all_p),
+                        subtitle = stringResource(R.string.add_params_desc),
                         checked = state.settings.advancedMode,
                         onCheckedChange = {
                             viewModel.onIntent(
@@ -145,10 +147,10 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup("История") {
+                SettingsGroup(stringResource(R.string.history_s)) {
                     SettingsSlider(
-                        title = "Максимум записей",
-                        subtitle = "Старые записи будут удаляться автоматически",
+                        title = stringResource(R.string.max_rec),
+                        subtitle = stringResource(R.string.old_rec),
                         value = state.settings.maxHistoryEntries,
                         values = listOf(50, 100, 200, null),
                         valueLabel = { it?.toString() ?: "∞ " },
@@ -156,24 +158,43 @@ fun SettingsScreen(
                     )
                 }
             }
+
             item {
-                SettingsGroup("Дополнительные фичи") {
+                SettingsGroup(stringResource(R.string.language)){
+                    SettingsRadioGroup(
+                        options = listOf(
+                            RadioOption(
+                                value = "ru",
+                                title = "Русский"
+                            ),
+                            RadioOption(
+                                value = "en",
+                                title = "English"
+                            )
+                        ),
+                        selected = state.currentLanguage,
+                        onSelected = { viewModel.onIntent(SettingsIntent.ChangeLanguage(it)) }
+                    )
+                }
+            }
+            item {
+                SettingsGroup(stringResource(R.string.additional_features)) {
                     SettingsSwitch(
-                        title = "Виброотклик",
-                        subtitle = "Тактильный отклик элементов интерфейса. Работает только при включённой вибрации в системе",
+                        title = stringResource(R.string.haptic_feedback),
+                        subtitle = stringResource(R.string.haptic_desc),
                         checked = state.settings.hapticFeedback,
                         onCheckedChange = { viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it)) }
                     )
                     SettingsSwitch(
-                        title = "Офлайн-режим",
-                        subtitle = "Отключает все онлайн функции приложения",
+                        title = stringResource(R.string.offline),
+                        subtitle = stringResource(R.string.dis_online),
                         checked = state.settings.offlineMode,
                         onCheckedChange = { viewModel.onIntent(SettingsIntent.OfflineModeChanged(it))}
                     )
                 }
             }
             item {
-                SettingsGroup("О приложении") {
+                SettingsGroup(stringResource(R.string.about_app)) {
                     SettingsButton(
                         title = "GitHub",
                         onClick = {
@@ -182,14 +203,14 @@ fun SettingsScreen(
                         showIcon = true,
                     )
                     SettingsButton(
-                        title = "Последний релиз",
+                        title = stringResource(R.string.latest),
                         onClick = {
                             context.openUrl("https://github.com/imglmd/physics-exps-app/releases/latest")
                         },
                         showIcon = true
                     )
                     SettingsButton(
-                        title = "Текущая версия: $versionName",
+                        title = stringResource(R.string.current_ver) + versionName,
                         onClick = null,
                         showIcon = false,
                     )

@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -108,7 +109,7 @@ fun ChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "График",
+                text = stringResource(R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold

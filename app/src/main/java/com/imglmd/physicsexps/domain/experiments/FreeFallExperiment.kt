@@ -12,9 +12,9 @@ import kotlin.math.pow
 
 class FreeFallExperiment: Experiment {
     override val id = "free_fall"
-    override val name = "Свободное падение тел"
-    override val category = "Кинематика"
-    override val description = "Свободным падением тел называют движение, которое совершается под действием только силы тяжести."
+    override val name = "free_fall"
+    override val category = "kinematics"
+    override val description = "free_fall_desc"
     override val inputFields = listOf(
         InputField("start_speed", "Начальная скорость", "v₀", "м/c", required = false),
         InputField("duration", "Продолжительность движения тела", "t", "с", required = true, min = 0.0)

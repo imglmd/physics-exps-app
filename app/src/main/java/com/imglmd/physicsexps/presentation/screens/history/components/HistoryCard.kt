@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
@@ -43,6 +44,7 @@ import java.util.Locale
 import kotlin.collections.take
 import kotlin.text.uppercase
 import androidx.compose.ui.platform.LocalLocale
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun HistoryCard(
@@ -106,8 +108,9 @@ fun HistoryCard(
                 modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                val context = LocalContext.current
                 Text(
-                    text = item.category.uppercase(),
+                    text = context.getStringByKey(item.category).uppercase(),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
@@ -115,7 +118,7 @@ fun HistoryCard(
                 )
 
                 Text(
-                    text = item.experimentName,
+                    text = context.getStringByKey(item.experimentName),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,

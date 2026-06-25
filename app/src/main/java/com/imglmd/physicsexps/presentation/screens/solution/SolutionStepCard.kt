@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -184,7 +185,7 @@ fun SolutionStepCard(
                 }
 
                 is SolutionStep.Result -> {
-                    StepTitle("Ответ", Icons.Default.CheckCircle, focusState)
+                    StepTitle(stringResource(R.string.answer), Icons.Default.CheckCircle, focusState)
                     Spacer(Modifier.height(8.dp))
                     Surface(shape = RoundedCornerShape(16.dp)) {
                         FlowRow(

@@ -11,13 +11,9 @@ import kotlin.math.pow
 
 class RadioactiveDecayExperiment: Experiment {
     override val id = "radioactive_decay"
-    override val name = "Радиоактивный распад"
-    override val category = "Ядерная физика"
-    override val description = """
-        Радиоактивный распад — самопроизвольное превращение нестабильных атомных ядер,
-        сопровождающееся уменьшением числа радиоактивных ядер со временем.
-        Процесс описывается экспоненциальным законом распада.
-    """.trimIndent()
+    override val name = "radioactive_decay"
+    override val category = "nuclear_physics"
+    override val description = "radioactive_decay_desc"
     override val xLabel =  "Время полураспада, с"
     override val yLabel = "Количество оставшихся радиоактивных ядер"
     override val inputFields = listOf(

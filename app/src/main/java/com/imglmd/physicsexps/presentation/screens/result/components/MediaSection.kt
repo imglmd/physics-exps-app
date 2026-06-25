@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,9 +74,9 @@ fun MediaSection(
     if (onlineState.offlineMode) return
 
     val unavailableReason = when {
-        !onlineState.hasInternet -> "Нет подключения к интернету"
+        !onlineState.hasInternet -> stringResource(R.string.no_internet)
 
-        !onlineState.serverAvailable -> "Сервер временно недоступен"
+        !onlineState.serverAvailable -> stringResource(R.string.no_server)
 
         else -> null
     }
@@ -127,7 +128,7 @@ fun MediaSection(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Вложения",
+                    text = stringResource(R.string.attachments),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -223,7 +224,7 @@ fun MediaSection(
                 color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
             ) {
                 Text(
-                    text = "Файлов пока нет",
+                    text = stringResource(R.string.no_files),
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(
                         horizontal = 16.dp,
                         vertical = 20.dp

@@ -17,8 +17,8 @@ sealed interface Screen {
     enum class Tab {
         Home, Settings;
         val label: String get() = when (this) {
-            Home -> "Главная"
-            Settings -> "Настройки"
+            Home -> "main"
+            Settings -> "settings"
         }
         val selectedIcon: ImageVector get() = when (this) {
             Home -> Icons.Filled.Home

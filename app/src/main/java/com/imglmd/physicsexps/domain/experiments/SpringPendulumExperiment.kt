@@ -14,9 +14,9 @@ import kotlin.math.sqrt
 
 class SpringPendulumExperiment: Experiment {
     override val id = "spring_pendulum"
-    override val name = "Пружинный маятник"
-    override val category = "Механика"
-    override val description = "Пружинный маятник — это механическая колебательная система, состоящая из груза определённой массы , прикрепленного к упругой пружине с коэффицентом упругости, другой конец которой жестко закреплен. Он совершает колебания под действием силы упругости около положения равновесия."
+    override val name = "spring_pendulum"
+    override val category = "mechanics"
+    override val description = "spring_pendulum_desc"
     override val imageRes = R.drawable.springpendulum
 
     override val inputFields = listOf(

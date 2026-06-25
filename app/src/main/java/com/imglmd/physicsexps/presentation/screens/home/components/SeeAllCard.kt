@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 
 @Composable
 fun SeeAllCard(
@@ -50,7 +52,7 @@ fun SeeAllCard(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "Вся история",
+            text = stringResource(R.string.all_history),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.primary
         )

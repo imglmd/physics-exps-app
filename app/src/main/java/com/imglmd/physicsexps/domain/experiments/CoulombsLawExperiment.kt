@@ -15,17 +15,17 @@ import kotlin.math.pow
 
 class CoulombsLawExperiment: Experiment {
     override val id = "coulombs_law"
-    override val name = "Закон Кулона"
-    override val category = "Электричество"
-    override val description = "Закон Кулона — это физический закон, описывающий силу, с которой электрически заряженные тела притягиваются или отталкиваются. Чем больше заряды, тем сильнее взаимодействие."
+    override val name = "coulombs_law"
+    override val category = "electricity"
+    override val description = "coulombs_law_desc"
     override val imageRes = R.drawable.coulombs_law
     override val inputFields = listOf(
-        InputField("q1", "Первый заряд × 10⁻⁹", "q1", "Кл"),
-        InputField("q2", "Второй заряд × 10⁻⁹", "q2", "Кл"),
-        InputField("distance", "Расстояние между зарядами", "r", "м", min = 1e-9)
+        InputField("q1", "q1_10_9", "q1", "Кл"),
+        InputField("q2", "q2_10_9", "q2", "Кл"),
+        InputField("distance", "col_dist", "r", "м", min = 1e-9)
     )
-    override val xLabel = "Расстояние, м"
-    override val yLabel = "Электрическая сила, нН"
+    override val xLabel = "dist"
+    override val yLabel = "nano"
 
     override fun validateInputs(inputs: Map<String, Double>): ValidationResult {
         val q1 = inputs["q1"]
