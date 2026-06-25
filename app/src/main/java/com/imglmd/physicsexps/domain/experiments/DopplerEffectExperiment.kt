@@ -120,29 +120,27 @@ class DopplerEffectExperiment: Experiment {
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём частоту звука при отдалении.",
+            description = "dop_step_3",
             expression = "f_sep = f_0 (\\frac{c - v_o}{c + v_s})"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём доплеровский сдвиг при сближении - изменение частоты волны " +
-                    "звука из-за движения источника или наблюдателя.",
+            description = "dop_step_4",
             expression = "Δf_apr = f_apr - f_0"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём доплеровский сдвиг при отдалении - изменение частоты волны " +
-                    "звука из-за движения источника или наблюдателя.",
+            description = "dop_step_5",
             expression = "Δf_sep = f_sep - f_0"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём длину звуковой волны при сближении.",
+            description = "dop_step_6",
             expression = "\\lambda_apr = \\frac{c - v_s}{f_0}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём длину звуковой волны при отдалении.",
+            description = "dop_step_7",
             expression = "\\lambda_sep = \\frac{c + v_s}{f_0}"
         )
 
@@ -165,37 +163,37 @@ class DopplerEffectExperiment: Experiment {
         steps += SolutionStep.Substitution(
             description = "dop_step_2",
             expression = "f_apr = $f0 (\\frac{$v + $vO}{$v - $vS})",
-            result = "f_apr = ${fmt(fApr)} \\text{Гц}"
+            result = "f_apr = ${fmt(fApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём частоту звука при отдалении",
+            description = "dop_step_3",
             expression = "f_sep = $f0 (\\frac{$v - $vO}{$v + $vS})",
-            result = "f_sep = ${fmt(fSep)} \\text{Гц}"
+            result = "f_sep = ${fmt(fSep)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём доплеровский сдвиг при сближении",
+            description = "dop_step_8",
             expression = "Δf_apr = ${fmt(fApr)} - $f0",
-            result = "Δf_apr = ${fmt(shiftApr)} \\text{Гц}"
+            result = "Δf_apr = ${fmt(shiftApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём доплеровский сдвиг при отдалении",
+            description = "dop_step_9",
             expression = "Δf_sep = ${fmt(fSep)} - $f0",
-            result ="Δf_sep = ${fmt(shiftSep)} \\text{Гц}"
+            result ="Δf_sep = ${fmt(shiftSep)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём длину звуковой волны при сближении",
+            description = "dop_step_6",
             expression = "\\lambda_apr = \\frac{$v - $vS}{$f0}",
-            result = "\\lambda_apr = ${fmt(lengthWaveApr)} \\text{м}"
+            result = "\\lambda_apr = ${fmt(lengthWaveApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём длину звуковой волны при отдалении",
+            description = "dop_step_7",
             expression = "\\lambda_sep = \\frac{$v + $vS}{$f0}",
-            result = "\\lambda_sep = ${fmt(lengthWaveSep)} \\text{м}"
+            result = "\\lambda_sep = ${fmt(lengthWaveSep)}"
         )
 
         steps += SolutionStep.Result(

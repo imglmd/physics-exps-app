@@ -140,7 +140,7 @@ class SpringPendulumExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
+            title = "solution_idea",
             body = "Период колебаний пружинного маятника зависит от массы груза и жёсткости пружины." +
                     " Колебания груза происходят под действием силы упругости пружины."
 

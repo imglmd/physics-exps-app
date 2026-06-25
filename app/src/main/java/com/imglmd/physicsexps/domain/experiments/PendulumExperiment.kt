@@ -22,18 +22,18 @@ class PendulumExperiment : Experiment {
     override val description = "pendulum_desc"
     override val imageRes = R.drawable.mathpendulum
 
-    override val xLabel =  "Длина нити, м"
-    override val yLabel = "Период, с"
+    override val xLabel =  "thread"
+    override val yLabel = "period_s"
     override val inputFields = listOf(
-        InputField("length", "Длина нити", "L", "м", min = 0.0),
-        InputField("period", "Период колебаний", "T", "с", min = 0.0),
+        InputField("length", "thread_length", "L", "m", min = 0.0),
+        InputField("period", "per_o", "T", "s", min = 0.0),
     )
 
     override val additionalInputFields = listOf(
-        InputField("gravity", "Ускорение свободного падения", "g", "м/с²", min = 0.0),
+        InputField("gravity", "a_gr", "g", "m_s_2", min = 0.0),
         InputField(
             key = "angle",
-            label = "Угол отклонения",
+            label = "def_ang",
             symbol = "α",
             unit = "°",
             required = false,
@@ -162,22 +162,22 @@ class PendulumExperiment : Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = buildList {
-                add(PhysicalQuantity("Длина нити", "L", length, "м"))
-                add(PhysicalQuantity("Период", "T", period, "с"))
-                add(PhysicalQuantity("Ускорение", "g", gravity, "м/с²"))
-                add(PhysicalQuantity("Частота колебаний", "ν", frequency, "Гц"))
-                add(PhysicalQuantity("Циклическая частота", "w₀", angularFrequency, "рад/с"))
+                add(PhysicalQuantity("thread_length", "L", length, "m"))
+                add(PhysicalQuantity("period", "T", period, "s"))
+                add(PhysicalQuantity("acceleration", "g", gravity, "m_s_2"))
+                add(PhysicalQuantity("osc_fr", "ν", frequency, "hz"))
+                add(PhysicalQuantity("ang_f", "w₀", angularFrequency, "rad_s"))
                 if (a != null) {
-                    add(PhysicalQuantity("Угол отклонения", "α", a, "°"))
+                    add(PhysicalQuantity("def_ang", "α", a, "°"))
                 }
                 if (amplitude != null) {
-                    add(PhysicalQuantity("Амплитуда", "A", amplitude, "м"))
+                    add(PhysicalQuantity("amp", "A", amplitude, "m"))
                 }
                 if (maxSpeed != null) {
-                    add(PhysicalQuantity("Максимальная скорость", "vₘₐₓ", maxSpeed, "м/с"))
+                    add(PhysicalQuantity("max_speed", "vₘₐₓ", maxSpeed, "m_s"))
                 }
                 if (maxHeight != null) {
-                    add(PhysicalQuantity("Максимальная высота подъёма", "hₘₐₓ", maxHeight, "м"))
+                    add(PhysicalQuantity("max_height", "hₘₐₓ", maxHeight, "m"))
                 }
             },
             points = getPoints(map),
@@ -208,50 +208,48 @@ class PendulumExperiment : Experiment {
     override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
         val steps = mutableListOf<SolutionStep>()
          steps += SolutionStep.Theory(
-             title = "Идея решения",
-             body = "Период в математическом маятнике зависит только от длины нити и ускорения свободного падения."
+             title = "solution_idea",
+             body = "math_step_1"
          )
 
         steps += SolutionStep.Formula(
-            description = "Зная длину нити и ускорение свободного падения, найдём период колебаний.",
+            description = "math_step_2",
             expression = "T = 2\\pi\\sqrt{\\frac{l}{g}}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Зная длину нити и период колебаний, найдём ускорение свободного падения.",
+            description = "math_step_3",
             expression = "g = \\frac{4\\pi l}{T^2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Зная период колебаний и ускорение свободного падения, найдём длину нити.",
+            description = "math_step_4",
             expression = "l = \\frac{g T^2}{4\\pi^2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Зная период, вычислим линейную частоту колебаний",
+            description = "math_step_5",
             expression = "\\nu = \\frac{1}{T}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Вычислим циклическую частоту - число колебаний за 2π секунд.",
+            description = "math_step_6",
             expression = "\\omega = \\sqrt{\\frac{g}{l}}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём амплитуду колебаний математического маятника.",
+            description = "math_step_7",
             expression = "A = l \\sin(\\alpha)"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём максимальную скорость математического маятника, она достигается " +
-                    "в момент прохождения положения равновесия.",
+            description = "math_step_8",
 
             expression = "v_max = \\sqrt{2 g l (1 - \\cos(\\alpha))}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём максимальную высоту подъёма математического маятника, она " +
-                    "достигается в крайних точках амплитуды колебаний, при этом скорость равна нулю",
+            description = "math_step_9",
             expression = "h_max = l (1 - \\cos(\\alpha))"
         )
 
@@ -273,23 +271,23 @@ class PendulumExperiment : Experiment {
         if (l != null && g != null) {
             T = 2 * PI * sqrt(l / g)
             steps += SolutionStep.Substitution(
-                description = "Найдём период колебаний",
+                description = "math_step_10",
                 expression = "T = 2\\pi\\sqrt{\\frac{$l}{$g}}",
-                result = "T = ${fmt(T)} \\text{с}"
+                result = "T = ${fmt(T)}"
             )
         } else if(l != null && T != null) {
             g = (4 * PI.pow(2) * l) / T.pow(2)
             steps += SolutionStep.Substitution(
-                description = "Найдём ускорение свободного падения",
+                description = "math_step_11",
                 expression = "g = \\frac{4\\pi${l}}{${T}^2}",
-                result = "g = ${fmt(g)} \\text{\\frac{м}{с^2}}"
+                result = "g = ${fmt(g)}"
             )
         } else if(T != null && g != null) {
             l = (g * T.pow(2)) / (4 * PI.pow(2))
             steps += SolutionStep.Substitution(
-                description = "Найдём длину нити",
+                description = "math_step_12",
                 expression = "l = \\frac{${g}${T}^2}{4\\pi^2}",
-                result = "l = ${fmt(l)} \\text{м}"
+                result = "l = ${fmt(l)}"
             )
         }
 
@@ -298,15 +296,15 @@ class PendulumExperiment : Experiment {
 
 
         steps += SolutionStep.Substitution(
-            description = "Найдём линейную частоту колебаний",
+            description = "math_step_13",
             expression = "\\nu = \\frac{1}{${fmt(T)}}",
-            result = "\\nu = ${fmt(f)} \\text{Гц}"
+            result = "\\nu = ${fmt(f)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Наёдём циклическую частоту",
+            description = "math_step_14",
             expression = "\\omega = \\sqrt{\\frac{${fmt(g)}}{${fmt(l)}}}",
-            result = "\\omega = ${fmt(aF)} \\frac{рад}{с}"
+            result = "\\omega = ${fmt(aF)}"
         )
 
         if (a != null) {
@@ -315,42 +313,42 @@ class PendulumExperiment : Experiment {
             mV = sqrt(2*g*l*(1 - cos(rad)))
             mH = l*(1 - cos(rad))
             steps += SolutionStep.Substitution(
-                description = "Найдём амплитуду колебаний математического маятника",
+                description = "math_step_15",
                 expression = "A = ${fmt(l)} \\sin(${fmt(a)})",
-                result = "A = ${fmt(A)} \\text{м}"
+                result = "A = ${fmt(A)}"
             )
 
             steps += SolutionStep.Substitution(
-                description = "Найдём максимальную скорость математического маятника",
+                description = "math_step_16",
                 expression = "v_max = \\sqrt{2 \\times ${fmt(g)} \\times ${fmt(l)} \\times (1 - \\cos(${fmt(a)}))}",
-                result = "v_max = ${fmt(mV)} \\text{\\frac{м}{с}}"
+                result = "v_max = ${fmt(mV)}"
             )
 
             steps += SolutionStep.Substitution(
-                description = "Найдём максимальную высоту подъёма математического маятника",
+                description = "math_step_17",
                 expression = "h_max = $l (1 - \\cos(${fmt(a)}))",
-                result = "h_max = ${fmt(mH)} \\text{м}"
+                result = "h_max = ${fmt(mH)}"
             )
             steps += SolutionStep.Result (
                 listOf(
-                    PhysicalQuantity("Длина нити", "L", l, "м"),
-                    PhysicalQuantity("Период", "T", T, "с"),
-                    PhysicalQuantity("Ускорение", "g", g, "м/с²"),
-                    PhysicalQuantity("Частота колебаний", "V", f, "Гц"),
-                    PhysicalQuantity("Циклическая частота", "w₀", aF, "рад/с"),
-                    PhysicalQuantity("Амплитуда", "A", A, "м"),
-                    PhysicalQuantity("Максимальная скорость", "vₘₐₓ", mV, "м/с"),
-                    PhysicalQuantity("Максимальная высота подъёма", "hₘₐₓ", mH, "м")
+                    PhysicalQuantity("thread_length", "L", l, "m"),
+                    PhysicalQuantity("period", "T", T, "s"),
+                    PhysicalQuantity("acceleration", "g", g, "m_s_2"),
+                    PhysicalQuantity("osc_fr", "V", f, "hz"),
+                    PhysicalQuantity("ang_f", "w₀", aF, "rad_s"),
+                    PhysicalQuantity("amp", "A", A, "м"),
+                    PhysicalQuantity("max_speed", "vₘₐₓ", mV, "m_s"),
+                    PhysicalQuantity("max_height", "hₘₐₓ", mH, "m")
                 )
             )
         } else {
             steps += SolutionStep.Result (
                 listOf(
-                    PhysicalQuantity("Длина нити", "L", l, "м"),
-                    PhysicalQuantity("Период", "T", T, "с"),
-                    PhysicalQuantity("Ускорение", "g", g, "м/с²"),
-                    PhysicalQuantity("Частота колебаний", "V", f, "Гц"),
-                    PhysicalQuantity("Циклическая частота", "w₀", aF, "рад/с"),
+                    PhysicalQuantity("thread_length", "L", l, "m"),
+                    PhysicalQuantity("period", "T", T, "s"),
+                    PhysicalQuantity("acceleration", "g", g, "m_s_2"),
+                    PhysicalQuantity("osc_fr", "V", f, "hz"),
+                    PhysicalQuantity("ang_f", "w₀", aF, "rad_s"),
                 )
             )
         }

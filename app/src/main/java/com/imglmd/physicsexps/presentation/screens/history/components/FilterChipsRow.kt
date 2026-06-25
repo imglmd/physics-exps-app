@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -30,14 +31,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
-private fun formatDateRange(from: Long?, to: Long?): String {
+private fun formatDateRange(period: String, from: Long?, to: Long?): String {
     val fmt = SimpleDateFormat("d MMM", Locale.getDefault())
     return when {
         from != null && to != null -> "${fmt.format(Date(from))} — ${fmt.format(Date(to))}"
-        from != null -> "c ${fmt.format(Date(from))}"
-        to != null -> "по ${fmt.format(Date(to))}"
-        else -> "Период"
+        from != null -> "${fmt.format(Date(from))} - "
+        to != null -> "${fmt.format(Date(to))}"
+        else -> period
     }
 }
 
@@ -49,6 +51,7 @@ fun FilterChipsRow(
 ) {
     val colors = MaterialTheme.colorScheme
     val hasDateFilter = state.filter.dateFrom != null || state.filter.dateTo != null
+    val context = LocalContext.current
 
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
@@ -98,7 +101,7 @@ fun FilterChipsRow(
                 onClick = onDateChipClick,
                 label = {
                     Text(
-                        if (hasDateFilter) formatDateRange(state.filter.dateFrom, state.filter.dateTo)
+                        if (hasDateFilter) formatDateRange(context.getStringByKey("per"), state.filter.dateFrom, state.filter.dateTo)
                         else stringResource(R.string.period),
                         style = MaterialTheme.typography.labelMedium
                     )
@@ -144,7 +147,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(experiment.name, style = MaterialTheme.typography.labelMedium) },
+                label = { Text(context.getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant

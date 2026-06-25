@@ -200,7 +200,7 @@ class ProjectileMotionExperiment : Experiment {
         val g = ExpConstants.GRAVITY
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
+            title = "solution_idea",
             body = "Движение раскладывается на два независимых: " +
                     "по горизонтали — равномерное, по вертикали — равноускоренное с ускорением g."
         )

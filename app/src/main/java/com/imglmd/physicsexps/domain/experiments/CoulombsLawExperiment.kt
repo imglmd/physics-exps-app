@@ -152,25 +152,25 @@ class CoulombsLawExperiment: Experiment {
         steps += SolutionStep.Substitution(
             description = "col_step_5",
             expression = "F = 9 \\times 10^9 \\frac{|${fmt(q1)}||${fmt(q2)}|}{$r^2}",
-            result = "F = ${fmt(F)} \\text{нН}"
+            result = "F = ${fmt(F)}"
         )
 
         steps += SolutionStep.Substitution(
             description = "col_step_6",
             expression = "E_1 = 9 \\times 10^9 \\frac{|${fmt(q1)}|}{$r^2}",
-            result = "E_1 = ${fmt2(E1)} \\text{В/м}"
+            result = "E_1 = ${fmt2(E1)}"
         )
 
         steps += SolutionStep.Substitution(
             description = "col_step_7",
             expression = "E_2 = 9 \\times 10^9 \\frac{|${fmt(q2)}|}{$r^2}",
-            result = "E2 = ${fmt2(E2)} \\text{В/м}"
+            result = "E2 = ${fmt2(E2)}"
         )
 
         steps += SolutionStep.Substitution(
             description = "col_step_4",
             expression = "W = 9 \\times 10^9 \\frac{${fmt(q1)} ${fmt(q2)}}{$r}",
-            result ="W = ${fmt(W)} \\text{нДж}"
+            result ="W = ${fmt(W)}"
         )
 
         steps += SolutionStep.Result(

@@ -91,7 +91,7 @@ class RadioactiveDecayExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
+            title = "solution_idea",
             body = "Использование закона радиоактивного распада, описывающего зависимость " +
                     "интенсивности радиоактивного распада от времени и от количества радиоактивных " +
                     "атомов в образце."
