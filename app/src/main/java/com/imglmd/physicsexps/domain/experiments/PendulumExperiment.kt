@@ -35,7 +35,7 @@ class PendulumExperiment : Experiment {
             key = "angle",
             label = "def_ang",
             symbol = "α",
-            unit = "°",
+            unit = "ang",
             required = false,
             min = 0.0,
             max = 90.0
@@ -168,7 +168,7 @@ class PendulumExperiment : Experiment {
                 add(PhysicalQuantity("osc_fr", "ν", frequency, "hz"))
                 add(PhysicalQuantity("ang_f", "w₀", angularFrequency, "rad_s"))
                 if (a != null) {
-                    add(PhysicalQuantity("def_ang", "α", a, "°"))
+                    add(PhysicalQuantity("def_ang", "α", a, "ang"))
                 }
                 if (amplitude != null) {
                     add(PhysicalQuantity("amp", "A", amplitude, "m"))

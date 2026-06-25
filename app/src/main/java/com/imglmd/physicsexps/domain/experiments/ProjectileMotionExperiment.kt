@@ -26,18 +26,18 @@ class ProjectileMotionExperiment : Experiment {
     override val inputFields = listOf(
         InputField(
             key = "start_speed",
-            label = "Начальная скорость",
+            label = "initial_velocity",
             symbol = "v₀",
-            unit = "м/с",
+            unit = "m_s",
             required = true,
             min = 0.01,
             max = 1000.0
         ),
         InputField(
             key = "angle",
-            label = "Угол броска",
+            label = "launch_angle",
             symbol = "α",
-            unit = "°",
+            unit = "ang",
             required = true,
             min = 0.0,
             max = 90.0
@@ -46,17 +46,17 @@ class ProjectileMotionExperiment : Experiment {
     override val additionalInputFields = listOf(
         InputField(
             key = "initial_height",
-            label = "Начальная высота",
+            label = "initial_height",
             symbol = "h₀",
-            unit = "м",
+            unit = "m",
             required = false,
             min = 0.0,
             max = 10_000.0
         )
     )
 
-    override val xLabel = "x, м"
-    override val yLabel = "y, м"
+    override val xLabel = "x_m"
+    override val yLabel = "y_m"
 
     override fun validateInputs(
         inputs: Map<String, Double>
@@ -148,14 +148,14 @@ class ProjectileMotionExperiment : Experiment {
         return ExperimentResult(
             experimentId = id,
             quantities = listOf(
-                PhysicalQuantity("Дальность броска", "L", range, "м"),
-                PhysicalQuantity("Максимальная высота", "H", hMax, "м"),
-                PhysicalQuantity("Время полёта", "t", tFull, "с"),
-                PhysicalQuantity("Время подъёма", "t↑", tRise, "с"),
-                PhysicalQuantity("Горизонтальная скорость", "vₓ", vx, "м/с"),
-                PhysicalQuantity("Начальная верт. скорость", "vy₀", vy0, "м/с"),
-                PhysicalQuantity("Скорость при ударе", "v", vImpact, "м/с"),
-                PhysicalQuantity("Угол при ударе", "β", impactAngle, "°"),
+                PhysicalQuantity("th_r", "L", range, "m"),
+                PhysicalQuantity("max_h", "H", hMax, "m"),
+                PhysicalQuantity("f_time", "t", tFull, "s"),
+                PhysicalQuantity("r_time", "t↑", tRise, "s"),
+                PhysicalQuantity("h_vel", "vₓ", vx, "m_s"),
+                PhysicalQuantity("in_ver_vel", "vy₀", vy0, "m_s"),
+                PhysicalQuantity("impact_velocity", "v", vImpact, "m_s"),
+                PhysicalQuantity("impact_angle", "β", impactAngle, "ang"),
             ),
             points = getPoints(pointInputs),
             xLabel = xLabel,
@@ -201,27 +201,26 @@ class ProjectileMotionExperiment : Experiment {
 
         steps += SolutionStep.Theory(
             title = "solution_idea",
-            body = "Движение раскладывается на два независимых: " +
-                    "по горизонтали — равномерное, по вертикали — равноускоренное с ускорением g."
+            body = "pr_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Разложим начальную скорость на оси",
+            description = "pr_step_2",
             expression = "v_x = v_0 \\cos(\\alpha) \\\\ \\quad v_{y0} = v_0 \\sin(\\alpha)"
         )
 
         steps += SolutionStep.Formula(
-            description = "Запишем уравнения движения",
+            description = "pr_step_3",
             expression = "x(t) = v_x t \\\\y(t) = h_0 + v_{y0} t - \\frac{g t^2}{2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "В момент падения высота равна нулю",
+            description = "pr_step_4",
             expression = "0 = h_0 + v_{y0} t - \\frac{g t^2}{2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Решаем квадратное уравнение",
+            description = "pr_step_5",
             expression = "t = \\frac{v_{y0} + \\sqrt{v_{y0}^2 + 2 g h_0}}{g}"
         )
 
@@ -249,55 +248,55 @@ class ProjectileMotionExperiment : Experiment {
         val fmt = { d: Double -> "%.2f".format(d) }
 
         steps += SolutionStep.Substitution(
-            description = "Найдём горизонтальную скорость",
+            description = "pr_step_6",
             expression = "v_x = ${fmt(v0)} \\cdot \\cos(${fmt(angleDeg)}^\\circ)",
-            result = "v_x = ${fmt(vx)} \\text{м/с}"
+            result = "v_x = ${fmt(vx)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём вертикальную скорость",
+            description = "pr_step_7",
             expression = "v_{y0} = ${fmt(v0)} \\cdot \\sin(${fmt(angleDeg)}^\\circ)",
-            result = "v_{y0} = ${fmt(vy0)} \\text{м/с}"
+            result = "v_{y0} = ${fmt(vy0)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Вычислим время полёта",
+            description = "pr_step_8",
             expression = "t = \\frac{${fmt(vy0)} + \\sqrt{${fmt(vy0)}^2 + 2 \\cdot ${g} \\cdot ${
                 fmt(
                     h0
                 )
             }}}{${g}}",
-            result = "t = ${fmt(tFull)} \\text{с}"
+            result = "t = ${fmt(tFull)}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Дальность полёта",
+            description = "th_r",
             expression = "L = v_x t"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Подставим значения",
+            description = "pr_step_9",
             expression = "L = ${fmt(vx)} \\cdot ${fmt(tFull)}",
-            result = "L = ${fmt(range)} \\text{м}"
+            result = "L = ${fmt(range)}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Максимальная высота",
+            description = "max_h",
             expression = "H = h_0 + \\frac{v_{y0}^2}{2g}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Подставим значения",
+            description = "pr_step_9",
             expression = "H = ${fmt(h0)} + \\frac{${fmt(vy0)}^2}{2 \\cdot ${g}}",
-            result = "H = ${fmt(hMax)} \\text{м}"
+            result = "H = ${fmt(hMax)}"
         )
 
         // результаты
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Дальность броска", "L", range, "м"),
-                PhysicalQuantity("Максимальная высота", "H", hMax, "м"),
-                PhysicalQuantity("Время полёта", "t", tFull, "с")
+                PhysicalQuantity("th_r", "L", range, "m"),
+                PhysicalQuantity("max_h", "H", hMax, "m"),
+                PhysicalQuantity("f_time", "t", tFull, "s")
             )
         )
 
