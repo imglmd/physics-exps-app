@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,7 @@ import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 
 @Composable
@@ -59,6 +61,7 @@ fun CompareChartCard(
     color1: Color,
     color2: Color
 ) {
+    val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
     var resetKey by remember { mutableIntStateOf(0) }
@@ -85,7 +88,7 @@ fun CompareChartCard(
             )
         ),
         startAxis = VerticalAxis.rememberStart(
-            title = { yLabel },
+            title = { context.getStringByKey(yLabel) },
             label = rememberTextComponent(TextStyle(color = colors.onSurfaceVariant)),
             titleComponent = rememberTextComponent(TextStyle(color = colors.primary)),
             guideline = rememberLineComponent(
@@ -94,7 +97,7 @@ fun CompareChartCard(
             )
         ),
         bottomAxis = HorizontalAxis.rememberBottom(
-            title = { xLabel },
+            title = { context.getStringByKey(xLabel) },
             label = rememberTextComponent(TextStyle(color = colors.onSurfaceVariant)),
             titleComponent = rememberTextComponent(TextStyle(color = colors.primary)),
             guideline = rememberLineComponent(
