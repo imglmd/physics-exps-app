@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import kotlin.math.round
 
@@ -147,6 +149,7 @@ private fun ResultTile(
     modifier: Modifier = Modifier
 ) {
     val formattedValue = formatValue(value)
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -176,14 +179,14 @@ private fun ResultTile(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = unit,
+                text = context.getStringByKey(unit),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 3.dp)
             )
         }
         Text(
-            text = label,
+            text = context.getStringByKey(label),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,

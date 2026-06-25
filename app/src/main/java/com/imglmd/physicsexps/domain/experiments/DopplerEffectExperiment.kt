@@ -16,14 +16,14 @@ class DopplerEffectExperiment: Experiment {
     override val category = "phonics"
     override val description = "doppler_desc"
     override val inputFields = listOf(
-        InputField("v_obs", "Скорость наблюдателя", "vₒ", "м/с",
+        InputField("v_obs", "obs_v", "vₒ", "m_s",
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("v_source", "Скорость источника", "vₛ", "м/с",
+        InputField("v_source", "sor_v", "vₛ", "m_s",
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("frequency", "Исходная частота", "fₛ", "Гц", required = true, min = 20.0, max = 20000.0),
+        InputField("frequency", "initial_frequency", "fₛ", "hz", required = true, min = 20.0, max = 20000.0),
     )
-    override val xLabel = "Скорость источника, м/с"
-    override val yLabel = "Частота при удалении, Гц"
+    override val xLabel = "sv"
+    override val yLabel = "rm"
     override val imageRes = R.drawable.doppler
 
     override fun validateInputs(
@@ -74,12 +74,12 @@ class DopplerEffectExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
-                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при сближении", "Δf_apr", shiftApr, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при отдалении", "Δf_sep", shiftSep, "Гц"),
-                PhysicalQuantity("Длина волны при сближении", "λ_apr", lengthWaveApr, "м"),
-                PhysicalQuantity("Длина волны при отдалении", "λ_sep", lengthWaveSep, "м")
+                PhysicalQuantity("sor_f_apr", "f_apr", fApr, "hz"),
+                PhysicalQuantity("s_f_a", "f_sep", fSep, "hz"),
+                PhysicalQuantity("dop_sh_apr", "Δf_apr", shiftApr, "hz"),
+                PhysicalQuantity("dop_sh_r", "Δf_sep", shiftSep, "hz"),
+                PhysicalQuantity("w_l_apr", "λ_apr", lengthWaveApr, "m"),
+                PhysicalQuantity("w_l_rec", "λ_sep", lengthWaveSep, "m")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -110,13 +110,12 @@ class DopplerEffectExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "Частота повышается при сближении (звуковые волны сжимаются) и понижается при" +
-                    " удалении (звуковые волны растягиваются)."
+            title = "solution_idea",
+            body = "dop_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём частоту звука при сближении.",
+            description = "dop_step_2",
             expression = "f_apr = f_0 (\\frac{c + v_o}{c - v_s})"
         )
 
@@ -164,7 +163,7 @@ class DopplerEffectExperiment: Experiment {
         val fmt = {d: Double -> "%.2f".format(d)}
 
         steps += SolutionStep.Substitution(
-            description = "Найдём частоту звука при сближении",
+            description = "dop_step_2",
             expression = "f_apr = $f0 (\\frac{$v + $vO}{$v - $vS})",
             result = "f_apr = ${fmt(fApr)} \\text{Гц}"
         )
@@ -201,12 +200,12 @@ class DopplerEffectExperiment: Experiment {
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
-                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при сближении", "Δf_apr", shiftApr, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при отдалении", "Δf_sep", shiftSep, "Гц"),
-                PhysicalQuantity("Длина волны при сближении", "λ_apr", lengthWaveApr, "м"),
-                PhysicalQuantity("Длина волны при отдалении", "λ_sep", lengthWaveSep, "м")
+                PhysicalQuantity("sor_f_apr", "f_apr", fApr, "hz"),
+                PhysicalQuantity("s_f_a", "f_sep", fSep, "hz"),
+                PhysicalQuantity("dop_sh_apr", "Δf_apr", shiftApr, "hz"),
+                PhysicalQuantity("dop_sh_r", "Δf_sep", shiftSep, "hz"),
+                PhysicalQuantity("w_l_apr", "λ_apr", lengthWaveApr, "m"),
+                PhysicalQuantity("w_l_rec", "λ_sep", lengthWaveSep, "m")
             )
         )
         return steps

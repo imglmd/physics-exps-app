@@ -28,11 +28,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
@@ -73,12 +75,14 @@ fun FullScreenChartScreen(
 
     val result = successState.result
 
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = getExperimentName(state.result.experimentId),
+                        text = context.getStringByKey(state.result.experimentId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -113,8 +117,8 @@ fun FullScreenChartScreen(
 
         ChartContent(
             points = points,
-            xLabel = result.xLabel,
-            yLabel = result.yLabel,
+            xLabel = context.getStringByKey(result.xLabel),
+            yLabel = context.getStringByKey(result.yLabel),
             padding = padding
         )
     }

@@ -9,6 +9,7 @@ import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -99,27 +100,4 @@ fun saveResultAsPdf(
     }
 
     pdfDoc.close()
-}
-
-fun getExperimentName(expId: String): String = when(expId) {
-    "pendulum" -> "Математический маятник"
-    "coulombs_law" -> "Закон Кулона"
-    "doppler_effect" -> "Эффект Доплера"
-    "free_fall" -> "Свободное падение тел"
-    "harmonic_vibrations" -> "Гармонические колебания"
-    "joule_lenz" -> "Закон Джоуля-Ленца"
-    "physical_pendulum" -> "Физический маятник"
-    "projectile_motion" -> "Движение тела, брошенного под углом к горизонту"
-    "radioactive_decay" -> "Радиоактивный распад"
-    "spring_pendulum" -> "Пружинный маятник"
-    else -> ""
-}
-
-fun getCategoryName(expId: String): String = when(expId) {
-    "pendulum", "harmonic_vibrations", "physical_pendulum", "spring_pendulum" -> "Механика"
-    "coulombs_law", "joule_lenz" -> "Электричество"
-    "doppler_effect" -> "Акустика"
-    "free_fall", "projectile_motion" -> "Кинематика"
-    "radioactive_decay" -> "Ядерная физика"
-    else -> ""
 }

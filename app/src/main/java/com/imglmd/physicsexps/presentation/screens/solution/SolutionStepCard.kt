@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun SolutionStepCard(
@@ -140,26 +142,27 @@ fun SolutionStepCard(
                 )
                 .padding(16.dp)
         ) {
+            val context = LocalContext.current
             when (step) {
 
                 is SolutionStep.Theory -> {
-                    StepTitle(step.title, Icons.Default.Info, focusState)
+                    StepTitle(context.getStringByKey(step.title), Icons.Default.Info, focusState)
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        step.body,
+                        context.getStringByKey(step.body),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 is SolutionStep.Formula -> {
-                    StepTitle(step.description, ImageVector.vectorResource(R.drawable.science), focusState)
+                    StepTitle(context.getStringByKey(step.description), ImageVector.vectorResource(R.drawable.science), focusState)
                     Spacer(Modifier.height(12.dp))
                     FormulaBox(step.expression)
                 }
 
                 is SolutionStep.Substitution -> {
-                    StepTitle(step.description, ImageVector.vectorResource(R.drawable.bolt), focusState)
+                    StepTitle(context.getStringByKey(step.description), ImageVector.vectorResource(R.drawable.bolt), focusState)
                     Spacer(Modifier.height(8.dp))
                     FormulaBox(step.expression)
                     Spacer(Modifier.height(8.dp))
@@ -205,13 +208,13 @@ fun SolutionStepCard(
                                         .padding(horizontal = 12.dp, vertical = 10.dp)
                                 ) {
                                     Text(
-                                        q.label,
+                                        context.getStringByKey(q.label),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurface
                                     )
                                     Spacer(Modifier.height(4.dp))
                                     Latex(
-                                        latex = "${q.symbol} = ${"%.3g".format(q.value)} \\text{${q.unit}}",
+                                        latex = "${q.symbol} = ${"%.3g".format(q.value)} \\text{${context.getStringByKey(q.unit)}}",
                                         config = LatexConfig(
                                             fontSize = 18.sp,
                                             color = MaterialTheme.colorScheme.onSurface,

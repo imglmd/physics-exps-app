@@ -45,6 +45,7 @@ fun ExperimentTextField(
     isRequired: Boolean = false
 ) {
     val colors = MaterialTheme.colorScheme
+    val context = LocalContext.current
 
     Box(
         modifier = modifier
@@ -124,7 +125,6 @@ fun ExperimentTextField(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        val context = LocalContext.current
                         if (state.text.isEmpty()) {
                             Text(
                                 text = context.getStringByKey(label),
@@ -140,7 +140,7 @@ fun ExperimentTextField(
             )
 
             Text(
-                text = unit,
+                text = context.getStringByKey(unit),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier.padding(end = 12.dp, start = 4.dp)
