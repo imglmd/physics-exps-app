@@ -51,7 +51,6 @@ fun FilterChipsRow(
 ) {
     val colors = MaterialTheme.colorScheme
     val hasDateFilter = state.filter.dateFrom != null || state.filter.dateTo != null
-    val context = LocalContext.current
 
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
@@ -101,7 +100,7 @@ fun FilterChipsRow(
                 onClick = onDateChipClick,
                 label = {
                     Text(
-                        if (hasDateFilter) formatDateRange(context.getStringByKey("per"), state.filter.dateFrom, state.filter.dateTo)
+                        if (hasDateFilter) formatDateRange(getStringByKey("per"), state.filter.dateFrom, state.filter.dateTo)
                         else stringResource(R.string.period),
                         style = MaterialTheme.typography.labelMedium
                     )
@@ -147,7 +146,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(context.getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
+                label = { Text(getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant

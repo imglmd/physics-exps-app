@@ -61,7 +61,6 @@ fun CompareChartCard(
     color1: Color,
     color2: Color
 ) {
-    val context = LocalContext.current
     val colors = MaterialTheme.colorScheme
     val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
     var resetKey by remember { mutableIntStateOf(0) }
@@ -71,6 +70,9 @@ fun CompareChartCard(
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(TextStyle(color = colors.onSurface))
     )
+
+    val xStringLabel = getStringByKey(xLabel)
+    val yStringLabel = getStringByKey(yLabel)
 
     val chart = rememberCartesianChart(
         rememberLineCartesianLayer(
@@ -88,7 +90,7 @@ fun CompareChartCard(
             )
         ),
         startAxis = VerticalAxis.rememberStart(
-            title = { context.getStringByKey(yLabel) },
+            title = { yStringLabel },
             label = rememberTextComponent(TextStyle(color = colors.onSurfaceVariant)),
             titleComponent = rememberTextComponent(TextStyle(color = colors.primary)),
             guideline = rememberLineComponent(
@@ -97,7 +99,7 @@ fun CompareChartCard(
             )
         ),
         bottomAxis = HorizontalAxis.rememberBottom(
-            title = { context.getStringByKey(xLabel) },
+            title = { xStringLabel},
             label = rememberTextComponent(TextStyle(color = colors.onSurfaceVariant)),
             titleComponent = rememberTextComponent(TextStyle(color = colors.primary)),
             guideline = rememberLineComponent(

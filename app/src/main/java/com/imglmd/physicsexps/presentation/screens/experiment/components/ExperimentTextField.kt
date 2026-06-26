@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -45,7 +44,6 @@ fun ExperimentTextField(
     isRequired: Boolean = false
 ) {
     val colors = MaterialTheme.colorScheme
-    val context = LocalContext.current
 
     Box(
         modifier = modifier
@@ -127,7 +125,7 @@ fun ExperimentTextField(
                     ) {
                         if (state.text.isEmpty()) {
                             Text(
-                                text = context.getStringByKey(label),
+                                text = getStringByKey(label),
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.titleMedium,
@@ -140,7 +138,7 @@ fun ExperimentTextField(
             )
 
             Text(
-                text = context.getStringByKey(unit),
+                text = getStringByKey(unit),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier.padding(end = 12.dp, start = 4.dp)

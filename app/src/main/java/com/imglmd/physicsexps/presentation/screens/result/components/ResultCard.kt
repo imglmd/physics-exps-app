@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
@@ -149,7 +148,6 @@ private fun ResultTile(
     modifier: Modifier = Modifier
 ) {
     val formattedValue = formatValue(value)
-    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -179,14 +177,14 @@ private fun ResultTile(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = context.getStringByKey(unit),
+                text = getStringByKey(unit),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 3.dp)
             )
         }
         Text(
-            text = context.getStringByKey(label),
+            text = getStringByKey(label),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,

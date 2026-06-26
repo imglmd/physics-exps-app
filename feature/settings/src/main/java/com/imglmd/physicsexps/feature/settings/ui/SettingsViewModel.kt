@@ -19,6 +19,9 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
+            _state.update {
+                it.copy(currentLanguage = updateSettings.getAppLang())
+            }
             getSettings().collect { settings ->
                 _state.update { it.copy(settings = settings, isLoading = false) }
             }

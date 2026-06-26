@@ -17,7 +17,7 @@ class JouleLenzExperiment: Experiment {
     override val description = "joule_lenz_desc"
     override val inputFields = listOf(
         InputField("time", "c_f_d", "t", "s", required = true, min = 0.0),
-        InputField("amperage", "amperage", "I", "А", min = 0.0),
+        InputField("amperage", "amperage", "I", "a", min = 0.0),
         InputField("voltage", "voltage", "U", "v", min = 0.0),
         InputField("resistance", "resistance", "R", "ohm", min = 0.0)
     )
@@ -133,7 +133,7 @@ class JouleLenzExperiment: Experiment {
             quantities = listOf(
                 PhysicalQuantity("c_f_d", "t", t, "s"),
                 PhysicalQuantity("q_h", "Q", heat, "j"),
-                PhysicalQuantity("amperage", "I", amperage, "А"),
+                PhysicalQuantity("amperage", "I", amperage, "a"),
                 PhysicalQuantity("voltage", "U", voltage, "v"),
                 PhysicalQuantity("resistance", "R", resistance, "ohm"),
                 PhysicalQuantity("power", "P", power, "w"),
@@ -282,7 +282,7 @@ class JouleLenzExperiment: Experiment {
         steps += SolutionStep.Result(
             listOf(
                 PhysicalQuantity("q_h", "Q", heat, "j"),
-                PhysicalQuantity("amperage", "I", I, "А"),
+                PhysicalQuantity("amperage", "I", I, "a"),
                 PhysicalQuantity("voltage", "U", U, "v"),
                 PhysicalQuantity("resistance", "R", R!!, "ohm"),
                 PhysicalQuantity("power", "P", power, "w"),

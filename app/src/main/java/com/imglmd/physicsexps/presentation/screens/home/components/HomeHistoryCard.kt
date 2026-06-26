@@ -67,9 +67,8 @@ fun HomeHistoryCard(
             modifier = Modifier.padding(12.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            val context = LocalContext.current
             Text(
-                text = context.getStringByKey(item.category).uppercase(),
+                text = getStringByKey(item.category).uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
@@ -77,7 +76,7 @@ fun HomeHistoryCard(
             )
 
             Text(
-                text = context.getStringByKey(item.experimentName),
+                text = getStringByKey(item.experimentName),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,

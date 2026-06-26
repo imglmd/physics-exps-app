@@ -26,7 +26,7 @@ class PendulumExperiment : Experiment {
     override val yLabel = "period_s"
     override val inputFields = listOf(
         InputField("length", "thread_length", "L", "m", min = 0.0),
-        InputField("period", "per_o", "T", "s", min = 0.0),
+        InputField("period", "period_o", "T", "s", min = 0.0),
     )
 
     override val additionalInputFields = listOf(
@@ -163,7 +163,7 @@ class PendulumExperiment : Experiment {
             experimentId = this.id,
             quantities = buildList {
                 add(PhysicalQuantity("thread_length", "L", length, "m"))
-                add(PhysicalQuantity("period", "T", period, "s"))
+                add(PhysicalQuantity("period_o", "T", period, "s"))
                 add(PhysicalQuantity("acceleration", "g", gravity, "m_s_2"))
                 add(PhysicalQuantity("osc_fr", "ν", frequency, "hz"))
                 add(PhysicalQuantity("ang_f", "w₀", angularFrequency, "rad_s"))
@@ -332,7 +332,7 @@ class PendulumExperiment : Experiment {
             steps += SolutionStep.Result (
                 listOf(
                     PhysicalQuantity("thread_length", "L", l, "m"),
-                    PhysicalQuantity("period", "T", T, "s"),
+                    PhysicalQuantity("period_o", "T", T, "s"),
                     PhysicalQuantity("acceleration", "g", g, "m_s_2"),
                     PhysicalQuantity("osc_fr", "V", f, "hz"),
                     PhysicalQuantity("ang_f", "w₀", aF, "rad_s"),
@@ -345,7 +345,7 @@ class PendulumExperiment : Experiment {
             steps += SolutionStep.Result (
                 listOf(
                     PhysicalQuantity("thread_length", "L", l, "m"),
-                    PhysicalQuantity("period", "T", T, "s"),
+                    PhysicalQuantity("period_o", "T", T, "s"),
                     PhysicalQuantity("acceleration", "g", g, "m_s_2"),
                     PhysicalQuantity("osc_fr", "V", f, "hz"),
                     PhysicalQuantity("ang_f", "w₀", aF, "rad_s"),

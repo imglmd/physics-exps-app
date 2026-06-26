@@ -50,7 +50,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -156,10 +155,9 @@ fun ExperimentScreen(
 
     Scaffold(
         topBar = {
-            val context = LocalContext.current
             ExperimentAppBar(
-                title = context.getStringByKey(state.experiment.name),
-                subtitle = context.getStringByKey(state.experiment.category),
+                title = getStringByKey(state.experiment.name),
+                subtitle = getStringByKey(state.experiment.category),
                 navigateBack = navigateBack
             )
         }
@@ -191,9 +189,8 @@ fun ExperimentScreen(
                 }
                 if (state.experiment.description.isNotEmpty()){
                 item {
-                    val context = LocalContext.current
                     ExpandableDescription(
-                        text = context.getStringByKey(state.experiment.description)
+                        text = getStringByKey(state.experiment.description)
                     )
                 }
                     }

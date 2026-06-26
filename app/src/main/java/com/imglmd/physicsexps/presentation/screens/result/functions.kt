@@ -1,15 +1,19 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -17,6 +21,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.imglmd.physicsexps.R
 import androidx.core.graphics.scale
 import androidx.core.graphics.createBitmap
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 
 fun saveResultAsPdf(
@@ -43,7 +48,7 @@ fun saveResultAsPdf(
     paint.apply {
         typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
     }
-    canvas.drawText("Отчёт по эксперименту", (canvas.width/2).toFloat(), 150f, paint)
+    canvas.drawText(context.getString(R.string.exp_rep), (canvas.width/2).toFloat(), 150f, paint)
 
     //описание, ну тип там название и категория
     paint.textAlign = Paint.Align.CENTER
@@ -55,13 +60,13 @@ fun saveResultAsPdf(
     canvas.drawText("$nameSection: $nameExp", (canvas.width/2).toFloat(), 190f, paint)
 
     // разделитель
-    paint.color = android.graphics.Color.rgb(169, 7, 53)
+    paint.color = Color.rgb(169, 7, 53)
     paint.strokeWidth = 3f
     canvas.drawLine(20f, 220f, canvas.width.toFloat() - 20, 220f, paint)
 
     //результаты
     paint.textAlign = Paint.Align.LEFT
-    paint.color = android.graphics.Color.BLACK
+    paint.color = Color.BLACK
     paint.textSize = 14f
     paint.isFakeBoldText = false
     paint.apply {
@@ -76,7 +81,7 @@ fun saveResultAsPdf(
     }
 
     // разделитель нижний
-    paint.color = android.graphics.Color.rgb(169, 7, 53)
+    paint.color = Color.rgb(169, 7, 53)
     paint.strokeWidth = 3f
     canvas.drawLine(20f, canvas.height - 50f, canvas.width.toFloat() - 20, canvas.height - 50f, paint)
 
@@ -95,7 +100,7 @@ fun saveResultAsPdf(
     if (pdfUri != null) {
         resolver.openOutputStream(pdfUri).use {
             pdfDoc.writeTo(it)
-            Toast.makeText(context, "PDF сохранён как $pdfFileName", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "${context.getString(R.string.pdf)} $pdfFileName", Toast.LENGTH_LONG).show()
         }
     }
 

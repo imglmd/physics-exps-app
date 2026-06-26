@@ -69,12 +69,13 @@ fun ChartCard(
 ) {
     val colors = MaterialTheme.colorScheme
     val normalized = remember(points) { normalizePoints(points) }
+    val xString = getStringByKey(xLabel)
+    val yString = getStringByKey(yLabel)
 
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(TextStyle(color = colors.onSurface))
     )
-    val context = LocalContext.current
-    val chart = rememberChart(xLabel, yLabel, marker, context)
+    val chart = rememberChart(xString, yString, marker)
     val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
     var resetKey by remember { mutableIntStateOf(0) }
 
@@ -171,7 +172,6 @@ private fun rememberChart(
     xLabel: String,
     yLabel: String,
     marker: CartesianMarker,
-    context: Context
 ) = rememberCartesianChart(
     rememberLineCartesianLayer(
         lineProvider = LineCartesianLayer.LineProvider.series(
@@ -186,7 +186,7 @@ private fun rememberChart(
     ),
 
     startAxis = VerticalAxis.rememberStart(
-        title = { context.getStringByKey(yLabel) },
+        title = { yLabel },
         label = rememberTextComponent(
             TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)
         ),
@@ -200,7 +200,7 @@ private fun rememberChart(
     ),
 
     bottomAxis = HorizontalAxis.rememberBottom(
-        title = { context.getStringByKey(xLabel) },
+        title = { xLabel },
         label = rememberTextComponent(
             TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant)
         ),

@@ -141,15 +141,16 @@ private fun Content(
     val context = LocalContext.current
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
+    val expName = getStringByKey(state.result.experimentId)
+    val section = getStringByKey(state.result.experimentId)
 
     BackHandler { onIntent(ResultContract.Intent.Back) }
 
     Scaffold(
         topBar = {
-            val context = LocalContext.current
             ExperimentAppBar(
-                title = context.getStringByKey(experiment.name),
-                subtitle = context.getStringByKey(experiment.category),
+                title = getStringByKey(experiment.name),
+                subtitle = getStringByKey(experiment.category),
                 navigateBack = { onIntent(ResultContract.Intent.Back) }
             )
         },
@@ -170,6 +171,9 @@ private fun Content(
                 .imePadding()
         ) {
             Spacer(Modifier.height(16.dp))
+            val data: Map<String, String> =
+                state.result.quantities.associate { getStringByKey(it.label) to "${"%.3f".format(it.value)} ${getStringByKey(it.unit)}"
+                }
 
             ResultCard(
                 state = state,
@@ -177,15 +181,10 @@ private fun Content(
                 navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
                 onChangeClick = { onIntent(ResultContract.Intent.Change) },
                 onPdfClick = {
-                    val data: Map<String, String> =
-                        state.result.quantities.associate {
-                            it.label to "${"%.3f".format(it.value)} ${it.unit}"
-                        }
-
                     saveResultAsPdf(
                         context = context,
-                        nameExp = context.getStringByKey(state.result.experimentId),
-                        nameSection = context.getStringByKey(state.result.experimentId),
+                        nameExp = expName,
+                        nameSection = section,
                         data = data
                     )
                 }

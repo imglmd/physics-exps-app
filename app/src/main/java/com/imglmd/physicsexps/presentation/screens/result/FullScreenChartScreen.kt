@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -75,14 +74,12 @@ fun FullScreenChartScreen(
 
     val result = successState.result
 
-    val context = LocalContext.current
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = context.getStringByKey(state.result.experimentId),
+                        text = getStringByKey(state.result.experimentId),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -117,8 +114,8 @@ fun FullScreenChartScreen(
 
         ChartContent(
             points = points,
-            xLabel = context.getStringByKey(result.xLabel),
-            yLabel = context.getStringByKey(result.yLabel),
+            xLabel = getStringByKey(result.xLabel),
+            yLabel = getStringByKey(result.yLabel),
             padding = padding
         )
     }

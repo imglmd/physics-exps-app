@@ -49,7 +49,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -148,9 +147,8 @@ fun HomeScreen(
             state.experimentsByCategory.forEach { (category, experiments) ->
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
-                    val context = LocalContext.current
                     Text(
-                        text = context.getStringByKey(category),
+                        text = getStringByKey(category),
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(top = 22.dp, bottom = 6.dp)
                     )
@@ -158,9 +156,8 @@ fun HomeScreen(
 
                 items(experiments) { experiment ->
                     Column {
-                        val context = LocalContext.current
                         ExperimentItem(
-                            name = context.getStringByKey(experiment.name),
+                            name = getStringByKey(experiment.name),
                             previewUrl = state.previewUrlsByExperimentId[experiment.id],
                             placeholder = experiment.imageRes,
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }

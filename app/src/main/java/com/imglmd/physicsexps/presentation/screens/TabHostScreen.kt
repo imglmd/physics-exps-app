@@ -46,9 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -203,13 +201,12 @@ private fun TabHostBottomBar(
                     horizontalArrangement = Arrangement.spacedBy(gapDp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val context = LocalContext.current
                     Screen.Tab.entries.forEach { tab ->
                         BottomBarButton(
                             selected = currentTab == tab,
                             selectedIcon = tab.selectedIcon,
                             unselectedIcon = tab.unselectedIcon,
-                            label = context.getStringByKey(tab.label),
+                            label = getStringByKey(tab.label),
                             width = buttonWidthDp,
                             onClick = { onTabChange(tab) },
                         )

@@ -42,7 +42,6 @@ fun CompareRunCard(
     accentColor: Color,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     Column(
         modifier = modifier
             .width(160.dp)
@@ -76,7 +75,7 @@ fun CompareRunCard(
             )
 
             Text(
-                text = context.getStringByKey(item.experimentName),
+                text = getStringByKey(item.experimentName),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,

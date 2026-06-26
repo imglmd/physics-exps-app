@@ -148,7 +148,7 @@ class HarmonicVibrationsExperiment: Experiment {
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("", "ω", angularFrequency, "rad_s"),
+                PhysicalQuantity("ang_f", "ω", angularFrequency, "rad_s"),
                 PhysicalQuantity("in_ph", "φ", phase, "rad"),
                 PhysicalQuantity("dur_o", "t", t, "s")
             )
