@@ -58,6 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
@@ -72,6 +73,27 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    val finalFiltered = mutableListOf<Pair<String, List<Experiment>>>()
+    state.experimentsByCategory.forEach { (string, experiments) ->
+        val category= getStringByKey(key = string)
+        val expsShow = mutableListOf<Experiment>()
+        experiments.forEach {
+            val name = getStringByKey(it.name)
+            val description = getStringByKey(it.description)
+            val search = state.searchText.trim()
+            val isShow = name.contains(search, ignoreCase = true) ||
+                    category.contains(search, ignoreCase = true) ||
+                    description.contains(search, ignoreCase = true)
+
+            if(isShow) {
+                expsShow.add(it)
+            }
+        }
+        if (expsShow.isNotEmpty()) {
+            finalFiltered.add(Pair(category, expsShow))
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.actionFlow.collect { effect ->
@@ -144,11 +166,11 @@ fun HomeScreen(
                     )
                 }
             }
-            state.experimentsByCategory.forEach { (category, experiments) ->
+            finalFiltered.forEach { (category, experiments) ->
 
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(
-                        text = getStringByKey(category),
+                        text = category,
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(top = 22.dp, bottom = 6.dp)
                     )
@@ -270,7 +292,7 @@ private fun SearchTextField(
     ) {
 
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable .search),
+            imageVector = ImageVector.vectorResource(R.drawable.search),
             contentDescription = "Search",
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
