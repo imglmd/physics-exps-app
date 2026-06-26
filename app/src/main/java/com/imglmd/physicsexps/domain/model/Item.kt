@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.presentation.screens.constants.component
+package com.imglmd.physicsexps.domain.model
 
 data class Item(
     val symbol: String,
