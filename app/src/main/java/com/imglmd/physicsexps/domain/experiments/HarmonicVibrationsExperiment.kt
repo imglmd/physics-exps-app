@@ -15,18 +15,16 @@ import kotlin.math.sin
 
 class HarmonicVibrationsExperiment: Experiment {
     override val id = "harmonic_vibrations"
-    override val name = "Гармонические колебания"
-    override val category = "Механика"
-    override val description = "Гармонические колебания - колебания, при которых " +
-            "некоторая физическая величина изменяется с " +
-            "течением времени по гармоническому (синусоидальному, косинусоидальному) закону."
-    override val xLabel = "Время, с"
-    override val yLabel = "Смещение, м"
+    override val name = "harmonic_vibrations"
+    override val category = "mechanics"
+    override val description = "harmonic_vibrations_desc"
+    override val xLabel = "time"
+    override val yLabel = "disp"
     override val inputFields = listOf(
-        InputField("period", "Период колебаний","T", "с", min = 0.00001, required = true ),
-        InputField("amplitude", "Амплитуда", "A", "м", required = true, min = 0.00001),
-        InputField("start_position", "Началтная координата", "x₀", "м",required = true),
-        InputField("time", "Продолжительность колебаний", "t", "с", min = 0.0, required = true)
+        InputField("period", "period_o","T", "s", min = 0.00001, required = true ),
+        InputField("amplitude", "amp", "A", "m", required = true, min = 0.00001),
+        InputField("start_position", "start_c", "x₀", "m",required = true),
+        InputField("time", "dur_o", "t", "s", min = 0.0, required = true)
     )
     override val imageRes = R.drawable.harmonical
 
@@ -64,12 +62,12 @@ class HarmonicVibrationsExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Период колебаний", "T", T, "с"),
-                PhysicalQuantity("Амплитуда", "A", A, "м"),
-                PhysicalQuantity("Начальная координата", "x₀", x_0, "м"),
-                PhysicalQuantity("Циклическая частота", "ω", angularFrequency, "рад/с"),
-                PhysicalQuantity("Начальная фаза", "φ", phase, "рад"),
-                PhysicalQuantity("Продолжительность колебаний", "t", t, "с")
+                PhysicalQuantity("period_o", "T", T, "s"),
+                PhysicalQuantity("amp", "A", A, "m"),
+                PhysicalQuantity("start_c", "x₀", x_0, "m"),
+                PhysicalQuantity("ang_f", "ω", angularFrequency, "rad_s"),
+                PhysicalQuantity("in_ph", "φ", phase, "rad"),
+                PhysicalQuantity("dur_o", "t", t, "s")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -98,25 +96,22 @@ class HarmonicVibrationsExperiment: Experiment {
     override fun getSolutionSteps(inputs: Map<String, Double>?): List<SolutionStep> {
         val steps = mutableListOf<SolutionStep>()
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "Уравнение гармонических колебаний описывает осциллирующее движение физической величины по гармоническому закону, чтобы перейти к " +
-                    "гармоническим колебаниям, нам нужно описать величины, которые помогут нам" +
-                    " эти колебания охарактеризовать. Любое колебательное движение можно" +
-                    " описать величинами: период, частота, амплитуда, фаза колебаний."
+            title = "solution_idea",
+            body = "har_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём циклическую частоту - физическая величина, равная числу полных колебаний, совершаемых за 2π секунд",
+            description = "har_step_2",
             expression = "\\omega = \\frac{2\\pi}{T}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём начальную фазу колебаний - физическая величина, которая показывает отклонение точки от положения равновесия.",
+            description = "har_step_3",
             expression = "\\phi = arcsin(\\frac{x_0}{A})"
         )
 
         steps += SolutionStep.Formula(
-            description = "Запишем уравнение гармонических колебаний.",
+            description = "har_step_4",
             expression = "x(t) = A \\sin(\\omega t + \\phi)\\\\ x(t) = A \\cos(\\omega t + \\phi)"
         )
 
@@ -133,19 +128,19 @@ class HarmonicVibrationsExperiment: Experiment {
         val fmt = { d: Double -> "%.2f".format(d) }
 
         steps += SolutionStep.Substitution(
-            description = "Найдём циклическую частоту",
+            description = "har_step_5",
             expression = "\\omega = \\frac{2\\pi}{$T}",
-            result = "\\omega = ${fmt(angularFrequency)} \\text{рад/с}"
+            result = "\\omega = ${fmt(angularFrequency)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём начальную фазу колебаний",
+            description = "har_step_6",
             expression = "\\phi = arcsin(\\frac{$x_0}{$A})",
             result = "\\phi = ${fmt(phase)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Запишем уравнение гармонических колебаний",
+            description = "har_step_4",
             expression = "x(t) = A \\sin(${fmt(angularFrequency)} \\times t + ${fmt(phase)})\\\\ " +
                     "x(t) = A \\cos(${fmt(angularFrequency)} \\times t + ${fmt(phase)})",
             result = ""
@@ -153,9 +148,9 @@ class HarmonicVibrationsExperiment: Experiment {
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Циклическая частота", "ω", angularFrequency, "рад/с"),
-                PhysicalQuantity("Начальная фаза", "φ", phase, "рад"),
-                PhysicalQuantity("Продолжительность колебаний", "t", t, "с")
+                PhysicalQuantity("ang_f", "ω", angularFrequency, "rad_s"),
+                PhysicalQuantity("in_ph", "φ", phase, "rad"),
+                PhysicalQuantity("dur_o", "t", t, "s")
             )
         )
         return steps

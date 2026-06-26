@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.domain.usecase.auth.AuthState
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
@@ -43,7 +45,7 @@ fun HistorySection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Последнее",
+                text = stringResource(R.string.last),
                 style = MaterialTheme.typography.titleLarge
             )
             Row(
@@ -61,7 +63,7 @@ fun HistorySection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
-                    Text("Все", style = MaterialTheme.typography.bodyMedium,)
+                    Text(stringResource(R.string.all), style = MaterialTheme.typography.bodyMedium,)
                 }
             }
         }

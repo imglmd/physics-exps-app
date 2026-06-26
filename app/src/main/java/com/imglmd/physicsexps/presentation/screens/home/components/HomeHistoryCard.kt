@@ -26,8 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -66,7 +68,7 @@ fun HomeHistoryCard(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = item.category.uppercase(),
+                text = getStringByKey(item.category).uppercase(),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary,
                 maxLines = 1,
@@ -74,7 +76,7 @@ fun HomeHistoryCard(
             )
 
             Text(
-                text = item.experimentName,
+                text = getStringByKey(item.experimentName),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,

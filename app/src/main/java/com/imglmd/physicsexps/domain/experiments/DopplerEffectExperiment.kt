@@ -12,19 +12,18 @@ import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {
     override val id = "doppler_effect"
-    override val name = "Эффект Доплера"
-    override val category = "Акустика"
-    override val description = "Эффект Доплера — это изменение частоты волны (звука, света, " +
-            "радиосигнала) из-за движения источника или наблюдателя."
+    override val name = "doppler_effect"
+    override val category = "phonics"
+    override val description = "doppler_desc"
     override val inputFields = listOf(
-        InputField("v_obs", "Скорость наблюдателя", "vₒ", "м/с",
+        InputField("v_obs", "obs_v", "vₒ", "m_s",
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("v_source", "Скорость источника", "vₛ", "м/с",
+        InputField("v_source", "sor_v", "vₛ", "m_s",
             required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("frequency", "Исходная частота", "fₛ", "Гц", required = true, min = 20.0, max = 20000.0),
+        InputField("frequency", "initial_frequency", "fₛ", "hz", required = true, min = 20.0, max = 20000.0),
     )
-    override val xLabel = "Скорость источника, м/с"
-    override val yLabel = "Частота при удалении, Гц"
+    override val xLabel = "sv"
+    override val yLabel = "rm"
     override val imageRes = R.drawable.doppler
 
     override fun validateInputs(
@@ -75,12 +74,12 @@ class DopplerEffectExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
-                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при сближении", "Δf_apr", shiftApr, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при отдалении", "Δf_sep", shiftSep, "Гц"),
-                PhysicalQuantity("Длина волны при сближении", "λ_apr", lengthWaveApr, "м"),
-                PhysicalQuantity("Длина волны при отдалении", "λ_sep", lengthWaveSep, "м")
+                PhysicalQuantity("sor_f_apr", "f_apr", fApr, "hz"),
+                PhysicalQuantity("s_f_a", "f_sep", fSep, "hz"),
+                PhysicalQuantity("dop_sh_apr", "Δf_apr", shiftApr, "hz"),
+                PhysicalQuantity("dop_sh_r", "Δf_sep", shiftSep, "hz"),
+                PhysicalQuantity("w_l_apr", "λ_apr", lengthWaveApr, "m"),
+                PhysicalQuantity("w_l_rec", "λ_sep", lengthWaveSep, "m")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -111,40 +110,37 @@ class DopplerEffectExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "Частота повышается при сближении (звуковые волны сжимаются) и понижается при" +
-                    " удалении (звуковые волны растягиваются)."
+            title = "solution_idea",
+            body = "dop_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём частоту звука при сближении.",
+            description = "dop_step_2",
             expression = "f_apr = f_0 (\\frac{c + v_o}{c - v_s})"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём частоту звука при отдалении.",
+            description = "dop_step_3",
             expression = "f_sep = f_0 (\\frac{c - v_o}{c + v_s})"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём доплеровский сдвиг при сближении - изменение частоты волны " +
-                    "звука из-за движения источника или наблюдателя.",
+            description = "dop_step_4",
             expression = "Δf_apr = f_apr - f_0"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём доплеровский сдвиг при отдалении - изменение частоты волны " +
-                    "звука из-за движения источника или наблюдателя.",
+            description = "dop_step_5",
             expression = "Δf_sep = f_sep - f_0"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём длину звуковой волны при сближении.",
+            description = "dop_step_6",
             expression = "\\lambda_apr = \\frac{c - v_s}{f_0}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём длину звуковой волны при отдалении.",
+            description = "dop_step_7",
             expression = "\\lambda_sep = \\frac{c + v_s}{f_0}"
         )
 
@@ -165,49 +161,49 @@ class DopplerEffectExperiment: Experiment {
         val fmt = {d: Double -> "%.2f".format(d)}
 
         steps += SolutionStep.Substitution(
-            description = "Найдём частоту звука при сближении",
+            description = "dop_step_2",
             expression = "f_apr = $f0 (\\frac{$v + $vO}{$v - $vS})",
-            result = "f_apr = ${fmt(fApr)} \\text{Гц}"
+            result = "f_apr = ${fmt(fApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём частоту звука при отдалении",
+            description = "dop_step_3",
             expression = "f_sep = $f0 (\\frac{$v - $vO}{$v + $vS})",
-            result = "f_sep = ${fmt(fSep)} \\text{Гц}"
+            result = "f_sep = ${fmt(fSep)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём доплеровский сдвиг при сближении",
+            description = "dop_step_8",
             expression = "Δf_apr = ${fmt(fApr)} - $f0",
-            result = "Δf_apr = ${fmt(shiftApr)} \\text{Гц}"
+            result = "Δf_apr = ${fmt(shiftApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём доплеровский сдвиг при отдалении",
+            description = "dop_step_9",
             expression = "Δf_sep = ${fmt(fSep)} - $f0",
-            result ="Δf_sep = ${fmt(shiftSep)} \\text{Гц}"
+            result ="Δf_sep = ${fmt(shiftSep)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём длину звуковой волны при сближении",
+            description = "dop_step_6",
             expression = "\\lambda_apr = \\frac{$v - $vS}{$f0}",
-            result = "\\lambda_apr = ${fmt(lengthWaveApr)} \\text{м}"
+            result = "\\lambda_apr = ${fmt(lengthWaveApr)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём длину звуковой волны при отдалении",
+            description = "dop_step_7",
             expression = "\\lambda_sep = \\frac{$v + $vS}{$f0}",
-            result = "\\lambda_sep = ${fmt(lengthWaveSep)} \\text{м}"
+            result = "\\lambda_sep = ${fmt(lengthWaveSep)}"
         )
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Частота звука при сближении", "f_apr", fApr, "Гц"),
-                PhysicalQuantity("Частота звука при отдалении", "f_sep", fSep, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при сближении", "Δf_apr", shiftApr, "Гц"),
-                PhysicalQuantity("Доплеровский сдвиг при отдалении", "Δf_sep", shiftSep, "Гц"),
-                PhysicalQuantity("Длина волны при сближении", "λ_apr", lengthWaveApr, "м"),
-                PhysicalQuantity("Длина волны при отдалении", "λ_sep", lengthWaveSep, "м")
+                PhysicalQuantity("sor_f_apr", "f_apr", fApr, "hz"),
+                PhysicalQuantity("s_f_a", "f_sep", fSep, "hz"),
+                PhysicalQuantity("dop_sh_apr", "Δf_apr", shiftApr, "hz"),
+                PhysicalQuantity("dop_sh_r", "Δf_sep", shiftSep, "hz"),
+                PhysicalQuantity("w_l_apr", "λ_apr", lengthWaveApr, "m"),
+                PhysicalQuantity("w_l_rec", "λ_sep", lengthWaveSep, "m")
             )
         )
         return steps

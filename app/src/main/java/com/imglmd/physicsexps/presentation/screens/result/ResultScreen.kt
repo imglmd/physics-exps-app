@@ -66,6 +66,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.core.net.toUri
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun ResultScreen(
@@ -140,14 +141,16 @@ private fun Content(
     val context = LocalContext.current
     val modelProducer = remember { CartesianChartModelProducer() }
     val scrollState = rememberScrollState()
+    val expName = getStringByKey(state.result.experimentId)
+    val section = getStringByKey(state.result.experimentId)
 
     BackHandler { onIntent(ResultContract.Intent.Back) }
 
     Scaffold(
         topBar = {
             ExperimentAppBar(
-                title = experiment.name,
-                subtitle = experiment.category,
+                title = getStringByKey(experiment.name),
+                subtitle = getStringByKey(experiment.category),
                 navigateBack = { onIntent(ResultContract.Intent.Back) }
             )
         },
@@ -168,6 +171,9 @@ private fun Content(
                 .imePadding()
         ) {
             Spacer(Modifier.height(16.dp))
+            val data: Map<String, String> =
+                state.result.quantities.associate { getStringByKey(it.label) to "${"%.3f".format(it.value)} ${getStringByKey(it.unit)}"
+                }
 
             ResultCard(
                 state = state,
@@ -175,15 +181,10 @@ private fun Content(
                 navigateSolution = { onIntent(ResultContract.Intent.OpenSolution) },
                 onChangeClick = { onIntent(ResultContract.Intent.Change) },
                 onPdfClick = {
-                    val data: Map<String, String> =
-                        state.result.quantities.associate {
-                            it.label to "${"%.3f".format(it.value)} ${it.unit}"
-                        }
-
                     saveResultAsPdf(
                         context = context,
-                        nameExp = getExperimentName(state.result.experimentId),
-                        nameSection = getCategoryName(state.result.experimentId),
+                        nameExp = expName,
+                        nameSection = section,
                         data = data
                     )
                 }

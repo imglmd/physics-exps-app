@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_s">Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="systemic">Systemic</string>
+    <string name="device_set">As in the device settings</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="extra_dark">Extra-dark theme</string>
+    <string name="dark_desc">Fully black interface for OLED and AMOLED screens</string>
+    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="adjusts">Adjusts the app\'s colors to match the device\'s wallpaper</string>
+    <string name="exps">Experiments</string>
+    <string name="show_all_p">Show all parameters</string>
+    <string name="add_params_desc">Additional parameters will be available immediately.</string>
+    <string name="history_s">History</string>
+    <string name="language">Language</string>
+    <string name="max_rec">Maximum number of records</string>
+    <string name="old_rec">Old records will be deleted automatically</string>
+    <string name="additional_features">Additional features</string>
+    <string name="haptic_feedback">Haptic feedback</string>
+    <string name="haptic_desc">Haptic feedback for interface elements. Works only when system vibration is enabled</string>
+    <string name="offline">Offline mode</string>
+    <string name="dis_online">Disables all online features of the app</string>
+    <string name="about_app">About app</string>
+    <string name="latest">Latest release</string>
+    <string name="current_ver">"Current version: "</string>
+    <string name="gravity">Acceleration of gravity</string>
+</resources>

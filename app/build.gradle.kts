@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import shadow.bundletool.com.android.tools.r8.internal.an
 import java.util.Properties
 
 plugins {
@@ -76,6 +77,9 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+    androidResources {
+        generateLocaleConfig=true
     }
 }
 androidComponents {

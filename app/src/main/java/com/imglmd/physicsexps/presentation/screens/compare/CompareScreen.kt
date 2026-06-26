@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,6 +41,7 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProdu
 import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import com.imglmd.physicsexps.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +65,7 @@ fun CompareScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Сравнение",
+                        text = stringResource(R.string.comparison),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -114,7 +116,7 @@ fun CompareScreen(
 private fun CompareContent(items: List<CompareItem>) {
     if (items.size < 2) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Недостаточно данных для сравнения")
+            Text(stringResource(R.string.insufficient_data))
         }
         return
     }
@@ -158,13 +160,13 @@ private fun CompareContent(items: List<CompareItem>) {
         ) {
             CompareRunCard(
                 item = run1,
-                label = "Запуск 1",
+                label = stringResource(R.string.run_1),
                 accentColor = color1,
                 modifier = Modifier.weight(1f)
             )
             CompareRunCard(
                 item = run2,
-                label = "Запуск 2",
+                label = stringResource(R.string.run_2),
                 accentColor = color2,
                 modifier = Modifier.weight(1f)
             )

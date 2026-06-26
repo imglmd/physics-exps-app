@@ -42,9 +42,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Comment
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -69,7 +71,7 @@ fun CommentSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Заметки",
+                text = stringResource(R.string.notes),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -137,7 +139,7 @@ fun CommentSection(
                     ) {
                         if (inputState.text.isEmpty()) {
                             Text(
-                                text = "Добавить заметку...",
+                                text = stringResource(R.string.add_note),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                             )
@@ -188,7 +190,7 @@ fun CommentSection(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Заметок пока нет",
+                    text = stringResource(R.string.no_notes),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center

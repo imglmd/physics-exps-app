@@ -19,6 +19,9 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
+            _state.update {
+                it.copy(currentLanguage = updateSettings.getAppLang())
+            }
             getSettings().collect { settings ->
                 _state.update { it.copy(settings = settings, isLoading = false) }
             }
@@ -36,6 +39,14 @@ class SettingsViewModel(
                 is SettingsIntent.OfflineModeChanged -> updateSettings.setOfflineMode(intent.enabled)
                 is SettingsIntent.AdvancedModeChanged -> updateSettings.setAdvancedMode(intent.enabled)
                 is SettingsIntent.MaxHistoryChanged -> updateSettings.setMaxHistory(intent.value)
+                is SettingsIntent.ChangeLanguage -> {
+                    updateSettings.setAppLanguage(intent.lang)
+                    _state.update {
+                        it.copy(
+                            currentLanguage = intent.lang
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_s">Настройки</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="systemic">Системная</string>
+    <string name="device_set">Как в настройках устройства</string>
+    <string name="light">Светлая</string>
+    <string name="dark">Тёмная</string>
+    <string name="extra_dark">Экстра тёмная тема</string>
+    <string name="dark_desc">Полностью чёрный интерфейс для OLED и AMOLED экранов</string>
+    <string name="dynamic_colors">Динамические цвета</string>
+    <string name="adjusts">Подстраивает цвета приложения под обои устройства\"</string>
+    <string name="exps">Эксперименты</string>
+    <string name="show_all_p">Показывать все параметры</string>
+    <string name="add_params_desc">Дополнительные параметры будут открыты сразу</string>
+    <string name="history_s">История</string>
+    <string name="language">Язык</string>
+    <string name="max_rec">Максимум записей</string>
+    <string name="old_rec">Старые записи будут удаляться автоматически</string>
+    <string name="additional_features">Дополнительные фичи</string>
+    <string name="haptic_feedback">Виброотклик</string>
+    <string name="haptic_desc">Тактильный отклик элементов интерфейса. Работает только при включённой вибрации в системе</string>
+    <string name="offline">Офлайн-режим</string>
+    <string name="dis_online">Отключает все онлайн функции приложения</string>
+    <string name="about_app">О приложении</string>
+    <string name="latest">Последний релиз</string>
+    <string name="current_ver">"Текущая версия: "</string>
+    <string name="gravity">Ускорение свободного падения</string>
+</resources>

@@ -23,4 +23,12 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
         repository.updateAdvancedMode(enabled)
     suspend fun setMaxHistory(value: Int?) =
         repository.updateMaxHistory(value)
+
+    suspend fun setAppLanguage(lang: String) {
+        repository.setAppLanguage(lang)
+    }
+
+    suspend fun getAppLang(): String =
+        repository.getAppLanguage()
+
 }

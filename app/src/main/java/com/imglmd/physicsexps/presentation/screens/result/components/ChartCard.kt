@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.result.components
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,11 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
@@ -65,12 +69,13 @@ fun ChartCard(
 ) {
     val colors = MaterialTheme.colorScheme
     val normalized = remember(points) { normalizePoints(points) }
+    val xString = getStringByKey(xLabel)
+    val yString = getStringByKey(yLabel)
 
     val marker = rememberDefaultCartesianMarker(
         label = rememberTextComponent(TextStyle(color = colors.onSurface))
     )
-
-    val chart = rememberChart(xLabel, yLabel, marker)
+    val chart = rememberChart(xString, yString, marker)
     val initialZoom = remember { Zoom.min(Zoom.fixed(), Zoom.Content) }
     var resetKey by remember { mutableIntStateOf(0) }
 
@@ -108,7 +113,7 @@ fun ChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "График",
+                text = stringResource(R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold
@@ -166,7 +171,7 @@ fun ChartCard(
 private fun rememberChart(
     xLabel: String,
     yLabel: String,
-    marker: CartesianMarker
+    marker: CartesianMarker,
 ) = rememberCartesianChart(
     rememberLineCartesianLayer(
         lineProvider = LineCartesianLayer.LineProvider.series(

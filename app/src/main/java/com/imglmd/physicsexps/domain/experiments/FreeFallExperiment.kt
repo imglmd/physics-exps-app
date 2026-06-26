@@ -12,15 +12,15 @@ import kotlin.math.pow
 
 class FreeFallExperiment: Experiment {
     override val id = "free_fall"
-    override val name = "Свободное падение тел"
-    override val category = "Кинематика"
-    override val description = "Свободным падением тел называют движение, которое совершается под действием только силы тяжести."
+    override val name = "free_fall"
+    override val category = "kinematics"
+    override val description = "free_fall_desc"
     override val inputFields = listOf(
-        InputField("start_speed", "Начальная скорость", "v₀", "м/c", required = false),
-        InputField("duration", "Продолжительность движения тела", "t", "с", required = true, min = 0.0)
+        InputField("start_speed", "initial_velocity", "v₀", "m_s", required = false),
+        InputField("duration", "body_dur", "t", "s", required = true, min = 0.0)
     )
     override val imageRes = R.drawable.freefall
-    override val xLabel =  "Время, с"
+    override val xLabel =  "time"
     override val yLabel = "у"
 
     override fun validateInputs(
@@ -60,19 +60,19 @@ class FreeFallExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Начальная скорость", "v₀",v0, "м/с"),
-                PhysicalQuantity("Продолжительность движения тела", "t", t, "с"),
+                PhysicalQuantity("initial_velocity", "v₀",v0, "m_s"),
+                PhysicalQuantity("body_dur", "t", t, "s"),
                 PhysicalQuantity(
-                    label = "Скорость в момент времени",
+                    label = "v_moment",
                     symbol = "v",
                     value = v,
-                    unit = "м/с"
+                    unit = "m_s"
                 ),
                 PhysicalQuantity(
-                    label = "Пройденное расстояние",
+                    label = "dist_tr",
                     symbol = "h",
                     value = h,
-                    unit = "м"
+                    unit = "m"
                 )
             ),
             points = getPoints(map),
@@ -104,17 +104,17 @@ class FreeFallExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "Использовании уравнений равноускоренного движения, где ускорение всегда постоянно и равно ускорению свободного падения g."
+            title = "solution_idea",
+            body = "free_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём скорость в указанный момент времени.",
+            description = "free_step_2",
             expression = "v = v_0 + gt"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём расстояние, которое проходит тело по вертикали.",
+            description = "free_step_3",
             expression = "h = v_0t + \\frac{g t^2}{2}"
         )
 
@@ -132,26 +132,26 @@ class FreeFallExperiment: Experiment {
         val fmt = {d: Double -> "%.2f".format(d)}
 
         steps += SolutionStep.Substitution(
-            description = "Найдём скорость в указанный момент времени.",
+            description = "free_step_2",
             expression = "v = $v0 + $g \\times $t",
-            result = "v = ${fmt(v)} \\text{м/c}"
+            result = "v = ${fmt(v)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём расстояние, которое проходит тело по вертикали.",
+            description = "free_step_3",
             expression = "h = $v0 \\times $t + \\frac{$g \\times $t^2}{2}",
-            result = "h = ${fmt(h)} \\text{м}"
+            result = "h = ${fmt(h)}"
         )
 
         steps += SolutionStep.Result(
             listOf(
                 PhysicalQuantity(
-                    label = "Скорость в момент времени, указанный пользователем",
-                    symbol = "v", v, "м/с"
+                    label = "v_moment",
+                    symbol = "v", v, "m_s"
                 ),
                 PhysicalQuantity(
-                    label = "Расстояние, которое проходит тело",
-                    symbol = "h", h, "м"
+                    label = "dist_tr",
+                    symbol = "h", h, "m"
                 )
             )
         )

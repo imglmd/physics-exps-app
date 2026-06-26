@@ -12,19 +12,19 @@ import kotlin.math.pow
 
 class JouleLenzExperiment: Experiment {
     override val id = "joule_lenz"
-    override val name = "Закон Джоуля-Ленца"
-    override val category = "Электричество"
-    override val description = "Закон Джоуля — Ленца — физический закон, определяющий количество теплоты, выделяемой проводником при прохождении электрического тока. Устанавливает связь между тепловым действием тока и электрическими параметрами цепи."
+    override val name = "joule_lenz"
+    override val category = "electricity"
+    override val description = "joule_lenz_desc"
     override val inputFields = listOf(
-        InputField("time", "Время прохождения тока", "t", "с", required = true, min = 0.0),
-        InputField("amperage", "Сила тока", "I", "А", min = 0.0),
-        InputField("voltage", "Напряжение", "U", "В", min = 0.0),
-        InputField("resistance", "Сопротивление", "R", "Ом", min = 0.0)
+        InputField("time", "c_f_d", "t", "s", required = true, min = 0.0),
+        InputField("amperage", "amperage", "I", "a", min = 0.0),
+        InputField("voltage", "voltage", "U", "v", min = 0.0),
+        InputField("resistance", "resistance", "R", "ohm", min = 0.0)
     )
 
     override val imageRes = R.drawable.joulelenz
-    override val xLabel = "Сила тока"
-    override val yLabel = "Количество теплоты, выделяемое проводником"
+    override val xLabel = "amperage"
+    override val yLabel = "heat_am"
 
     override fun validateInputs(
         inputs: Map<String, Double>
@@ -131,14 +131,14 @@ class JouleLenzExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Время прохождения тока", "t", t, "с"),
-                PhysicalQuantity("Количество теплоты", "Q", heat, "Дж"),
-                PhysicalQuantity("Сила тока", "I", amperage, "А"),
-                PhysicalQuantity("Напряжение", "U", voltage, "В"),
-                PhysicalQuantity("Сопротивление", "R", resistance, "Ом"),
-                PhysicalQuantity("Мощность", "P", power, "Вт"),
-                PhysicalQuantity("Электрический заряд", "q", q, "Кл"),
-                PhysicalQuantity("Работа электрического тока", "A", work, "Дж")
+                PhysicalQuantity("c_f_d", "t", t, "s"),
+                PhysicalQuantity("q_h", "Q", heat, "j"),
+                PhysicalQuantity("amperage", "I", amperage, "a"),
+                PhysicalQuantity("voltage", "U", voltage, "v"),
+                PhysicalQuantity("resistance", "R", resistance, "ohm"),
+                PhysicalQuantity("power", "P", power, "w"),
+                PhysicalQuantity("electric_charge", "q", q, "c"),
+                PhysicalQuantity("work_e", "A", work, "j")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -168,55 +168,52 @@ class JouleLenzExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "При прохождении электрического тока по проводнику выделяется теплота. " +
-                    "Количество этой теплоты прямо пропорционально квадрату силы тока, сопротивлению " +
-                    "проводника и времени его протекания."
+            title = "solution_idea",
+            body = "jou_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём силу тока по закону Ома.",
+            description = "jou_step_2",
             expression = "I = \\frac{U}{R}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём напряжение по закону Ома.",
+            description = "jou_step_3",
             expression = "U = I R"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём сопротивление по закону Ома.",
+            description = "jou_step_4",
             expression = "R = \\frac{U}{I}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём количество теплоты, используя закон Джоуля-Ленца. " +
-                    "При известных силе тока и сопротивлении проводника.",
+            description = "jou_step_5",
             expression = "Q = I^2 R t"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём количество теплоты, используя закон Джоуля-Ленца. При известных силе тока и напряжении.",
+            description = "jou_step_6",
             expression = "Q = U I t"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём количество теплоты, используя закон Джоуля-Ленца. При известных напряжении и сопротивлении.",
+            description = "jou_step_7",
             expression = "Q = t \\frac{U^2}{R}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём мощность электрического тока.",
+            description = "jou_step_8",
             expression = "P = UI"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём работу электрического тока.",
+            description = "jou_step_9",
             expression = "A = P t"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём величину электрического заряда.",
+            description = "jou_step_10",
             expression = "q = I t"
         )
 
@@ -238,25 +235,25 @@ class JouleLenzExperiment: Experiment {
             heat = (U.pow(2)/R) * t
             I = U / R
             steps += SolutionStep.Substitution(
-                description = "Найдём количество теплоты",
+                description = "jou_step_11",
                 expression = "Q = $t \\frac{$U^2}{$R}",
-                result = "Q = ${fmt(heat)} \\text{Дж}"
+                result = "Q = ${fmt(heat)}"
             )
         }else if(R != null && I != null) {
             heat = I.pow(2)*R*t
             U = I * R
             steps += SolutionStep.Substitution(
-                description = "Найдём количество теплоты",
+                description = "jou_step_11",
                 expression = "Q = $I^2 \\times $R \\times $t",
-                result ="Q = ${fmt(heat)} \\text{Дж}"
+                result ="Q = ${fmt(heat)}"
             )
         }else if(U != null && I != null) {
             heat = I * U * t
             R = U / I
             steps += SolutionStep.Substitution(
-                description = "Найдём количество теплоты",
+                description = "jou_step_11",
                 expression = "Q = $U \\times $I \\times $t",
-                result ="Q = ${fmt(heat)} \\text{Дж}"
+                result ="Q = ${fmt(heat)}"
             )
         }
 
@@ -265,32 +262,32 @@ class JouleLenzExperiment: Experiment {
         work = power * t
 
         steps += SolutionStep.Substitution(
-            description = "Найдём мощность электрического тока.",
+            description = "jou_step_8",
             expression = "P = ${fmt(U)} \\times ${fmt(I)}",
-            result = "P = ${fmt(power)} \\text{Вт}"
+            result = "P = ${fmt(power)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём работу электрического тока.",
+            description = "jou_step_9",
             expression = "A = ${fmt(power)} \\times t",
-            result = "A = ${fmt(work)} \\text{Дж}"
+            result = "A = ${fmt(work)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём величину электрического заряда.",
+            description = "jou_step_10",
             expression = "q = ${fmt(I)} \\times $t",
-            result = "q = ${fmt(q)} \\text{Кл}"
+            result = "q = ${fmt(q)}"
         )
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Количество теплоты", "Q", heat, "Дж"),
-                PhysicalQuantity("Сила тока", "I", I, "А"),
-                PhysicalQuantity("Напряжение", "U", U, "В"),
-                PhysicalQuantity("Сопротивление", "R", R!!, "Ом"),
-                PhysicalQuantity("Мощность", "P", power, "Вт"),
-                PhysicalQuantity("Электрический заряд", "q", q, "Кл"),
-                PhysicalQuantity("Работа электрического тока", "A", work, "Дж")
+                PhysicalQuantity("q_h", "Q", heat, "j"),
+                PhysicalQuantity("amperage", "I", I, "a"),
+                PhysicalQuantity("voltage", "U", U, "v"),
+                PhysicalQuantity("resistance", "R", R!!, "ohm"),
+                PhysicalQuantity("power", "P", power, "w"),
+                PhysicalQuantity("electric_charge", "q", q, "c"),
+                PhysicalQuantity("work_e", "A", work, "j")
             )
         )
 

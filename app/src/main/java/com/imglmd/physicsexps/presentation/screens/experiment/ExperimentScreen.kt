@@ -51,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -60,6 +61,7 @@ import com.imglmd.physicsexps.presentation.components.AdvancedToggle
 import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.components.IconPosition
 import com.imglmd.physicsexps.presentation.components.PrimaryButton
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentCarousel
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
 import org.koin.compose.viewmodel.koinViewModel
@@ -154,8 +156,8 @@ fun ExperimentScreen(
     Scaffold(
         topBar = {
             ExperimentAppBar(
-                title = state.experiment.name,
-                subtitle = state.experiment.category,
+                title = getStringByKey(state.experiment.name),
+                subtitle = getStringByKey(state.experiment.category),
                 navigateBack = navigateBack
             )
         }
@@ -188,13 +190,13 @@ fun ExperimentScreen(
                 if (state.experiment.description.isNotEmpty()){
                 item {
                     ExpandableDescription(
-                        text = state.experiment.description
+                        text = getStringByKey(state.experiment.description)
                     )
                 }
                     }
                 item {
                     Text(
-                        text = "Введите известные величины",
+                        text = stringResource(R.string.enter),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -237,8 +239,8 @@ fun ExperimentScreen(
                 if (state.experiment.additionalInputFields.isNotEmpty()){
                     item {
                         AdvancedToggle(
-                            title = "Расширенный режим",
-                            subtitle = if (state.isAdvancedMode) "Доп. параметры включены" else "Только основные параметры",
+                            title = stringResource(R.string.advanced_mode),
+                            subtitle = if (state.isAdvancedMode) stringResource(R.string.additional_params) else stringResource(R.string.key_params),
                             icon = ImageVector.vectorResource(R.drawable.rocket),
                             enabled = state.isAdvancedMode,
                             onToggle = {
@@ -286,7 +288,7 @@ fun ExperimentScreen(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 PrimaryButton(
-                    text = "Начать эксперимент",
+                    text = stringResource(R.string.start_exp),
                     isLoading = state.isLoading,
                     enabled = state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },

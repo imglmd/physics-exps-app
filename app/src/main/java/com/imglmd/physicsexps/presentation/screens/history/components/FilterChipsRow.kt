@@ -20,23 +20,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.model.SortOrder
 import com.imglmd.physicsexps.presentation.screens.history.HistoryContract
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 
-private fun formatDateRange(from: Long?, to: Long?): String {
+private fun formatDateRange(period: String, from: Long?, to: Long?): String {
     val fmt = SimpleDateFormat("d MMM", Locale.getDefault())
     return when {
         from != null && to != null -> "${fmt.format(Date(from))} — ${fmt.format(Date(to))}"
-        from != null -> "c ${fmt.format(Date(from))}"
-        to != null -> "по ${fmt.format(Date(to))}"
-        else -> "Период"
+        from != null -> "${fmt.format(Date(from))} - "
+        to != null -> "${fmt.format(Date(to))}"
+        else -> period
     }
 }
 
@@ -67,8 +70,8 @@ fun FilterChipsRow(
                 },
                 label = {
                     Text(when (state.filter.sortOrder) {
-                        SortOrder.DATE_DESC  -> "Сначала новые"
-                        SortOrder.DATE_ASC   -> "Сначала старые"
+                        SortOrder.DATE_DESC  -> stringResource(R.string.newest_first)
+                        SortOrder.DATE_ASC   -> stringResource(R.string.old_ones_first)
                         SortOrder.EXPERIMENT -> "По эксперименту"
                     },
                         style = MaterialTheme.typography.labelMedium
@@ -97,8 +100,8 @@ fun FilterChipsRow(
                 onClick = onDateChipClick,
                 label = {
                     Text(
-                        if (hasDateFilter) formatDateRange(state.filter.dateFrom, state.filter.dateTo)
-                        else "Период",
+                        if (hasDateFilter) formatDateRange(getStringByKey("per"), state.filter.dateFrom, state.filter.dateTo)
+                        else stringResource(R.string.period),
                         style = MaterialTheme.typography.labelMedium
                     )
                 },
@@ -143,7 +146,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(experiment.name, style = MaterialTheme.typography.labelMedium) },
+                label = { Text(getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant
@@ -155,7 +158,7 @@ fun FilterChipsRow(
             item {
                 AssistChip(
                     onClick = { onIntent(HistoryContract.Intent.ClearFilters) },
-                    label = { Text("Сбросить", style = MaterialTheme.typography.labelMedium) },
+                    label = { Text(stringResource(R.string.reset), style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = {
                         Icon(Icons.Default.Close, null, Modifier.size(16.dp))
                     }

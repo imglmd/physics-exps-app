@@ -15,17 +15,17 @@ import kotlin.math.pow
 
 class CoulombsLawExperiment: Experiment {
     override val id = "coulombs_law"
-    override val name = "Закон Кулона"
-    override val category = "Электричество"
-    override val description = "Закон Кулона — это физический закон, описывающий силу, с которой электрически заряженные тела притягиваются или отталкиваются. Чем больше заряды, тем сильнее взаимодействие."
+    override val name = "coulombs_law"
+    override val category = "electricity"
+    override val description = "coulombs_law_desc"
     override val imageRes = R.drawable.coulombs_law
     override val inputFields = listOf(
-        InputField("q1", "Первый заряд × 10⁻⁹", "q1", "Кл"),
-        InputField("q2", "Второй заряд × 10⁻⁹", "q2", "Кл"),
-        InputField("distance", "Расстояние между зарядами", "r", "м", min = 1e-9)
+        InputField("q1", "q1_10_9", "q1", "Кл"),
+        InputField("q2", "q2_10_9", "q2", "Кл"),
+        InputField("distance", "col_dist", "r", "м", min = 1e-9)
     )
-    override val xLabel = "Расстояние, м"
-    override val yLabel = "Электрическая сила, нН"
+    override val xLabel = "dist"
+    override val yLabel = "nano"
 
     override fun validateInputs(inputs: Map<String, Double>): ValidationResult {
         val q1 = inputs["q1"]
@@ -71,14 +71,14 @@ class CoulombsLawExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Первый заряд", "q1", q1, "нКл"),
-                PhysicalQuantity("Второй заряд", "q2", q2, "нКл"),
-                PhysicalQuantity("Расстояние", "r", r, "м"),
-                PhysicalQuantity("Электрическая сила", "F", f, "нН"),
-                PhysicalQuantity("Напряжённость 1-го заряда", "E1", intensity1, "В/м"),
-                PhysicalQuantity("Напряжённость 2-го заряда", "E2", intensity2, "В/м"),
-                PhysicalQuantity("Потенциальная энергия взаимодействия", "W",
-                    potentialEnergy, "нДж")
+                PhysicalQuantity("first_charge", "q1", q1, "nC"),
+                PhysicalQuantity("second_charge", "q2", q2, "nC"),
+                PhysicalQuantity("distance", "r", r, "m"),
+                PhysicalQuantity("electric_force", "F", f, "nN"),
+                PhysicalQuantity("field_strength_1", "E1", intensity1, "v_m"),
+                PhysicalQuantity("field_strength_2", "E2", intensity2, "v_m"),
+                PhysicalQuantity("potential_energy", "W",
+                    potentialEnergy, "nJ")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -110,29 +110,27 @@ class CoulombsLawExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея рещения",
-            body = "Два неподвижных точечных электрических заряда в вакууме взаимодействуют " +
-                    "с силой, прямо пропорциональной произведению модулей этих " +
-                    "зарядов и обратно пропорциональной квадрату расстояния между ними."
+            title = "solution_idea",
+            body = "sol_col_desc"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём электрическую силу, используя закон Кулона.",
+            description = "col_step_1",
             expression = "F = k \\frac{|q_1||q_2|}{r^2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём напряжённость 1-го заряда - векторная физическая величина, характеризующая силу воздействия поля на заряженные частицы в данной точке пространства.",
+            description = "col_step_2",
             expression = "E_1 = k \\frac{|q_1|}{r^2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём напряжённость 2-го заряда - векторная физическая величина, характеризующая силу воздействия поля на заряженные частицы в данной точке пространства.",
+            description = "col_step_3",
             expression = "E_2 = k \\frac{|q_2|}{r^2}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём потенциальную энергию взаимодействия зарядов.",
+            description = "col_step_4",
             expression = "W = k \\frac{q_1 q_2}{r}"
         )
 
@@ -152,36 +150,36 @@ class CoulombsLawExperiment: Experiment {
         val fmt2 = { d: Double -> "%.4f".format(d) }
 
         steps += SolutionStep.Substitution(
-            description = "Найдём электрическую силу",
+            description = "col_step_5",
             expression = "F = 9 \\times 10^9 \\frac{|${fmt(q1)}||${fmt(q2)}|}{$r^2}",
-            result = "F = ${fmt(F)} \\text{нН}"
+            result = "F = ${fmt(F)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём напряжённость 1-го заряда",
-            expression = "E_1 = 9 \\times 10^9 \\frac{|${fmt(q1)}|{$r^2}",
-            result = "E_1 = ${fmt2(E1)} \\text{В/м}"
+            description = "col_step_6",
+            expression = "E_1 = 9 \\times 10^9 \\frac{|${fmt(q1)}|}{$r^2}",
+            result = "E_1 = ${fmt2(E1)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём напряжённость 2-го заряда",
-            expression = "E_2 = 9 \\times 10^9 \\frac{|${fmt(q2)}|}{r^2}",
-            result = "E2 = ${fmt2(E2)} \\text{В/м}"
+            description = "col_step_7",
+            expression = "E_2 = 9 \\times 10^9 \\frac{|${fmt(q2)}|}{$r^2}",
+            result = "E2 = ${fmt2(E2)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём потенциальную энергию взаимодействия зарядов",
-            expression = "W = 9 \\times 10^9 \\frac{${fmt(q1)} ${fmt(q2)}}{r}",
-            result ="W = ${fmt(W)} \\text{нДж}"
+            description = "col_step_4",
+            expression = "W = 9 \\times 10^9 \\frac{${fmt(q1)} ${fmt(q2)}}{$r}",
+            result ="W = ${fmt(W)}"
         )
 
         steps += SolutionStep.Result(
             quantities = listOf(
-                PhysicalQuantity("Электрическая сила", "F", F, "нН"),
-                PhysicalQuantity("Напряжённость 1-го заряда", "E1", E1, "В/м"),
-                PhysicalQuantity("Напряжённость 2-го заряда", "E2", E2, "В/м"),
-                PhysicalQuantity("Потенциальная энергия взаимодействия", "W",
-                    W, "нДж")
+                PhysicalQuantity("electric_force", "F", F, "nN"),
+                PhysicalQuantity("field_strength_1", "E1", E1, "v_m"),
+                PhysicalQuantity("field_strength_2", "E2", E2, "v_m"),
+                PhysicalQuantity("potential_energy", "W",
+                    W, "nJ")
             )
         )
         return steps

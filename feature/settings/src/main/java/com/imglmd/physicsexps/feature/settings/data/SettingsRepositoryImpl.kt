@@ -1,5 +1,7 @@
 package com.imglmd.physicsexps.feature.settings.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
 
@@ -32,5 +34,15 @@ class SettingsRepositoryImpl(
 
     override suspend fun updateMaxHistory(value: Int?) {
         dataSource.updateMaxHistory(value)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override suspend fun getAppLanguage(): String {
+        return dataSource.getAppLanguage()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override suspend fun setAppLanguage(lang: String) {
+        dataSource.setAppLanguage(lang)
     }
 }

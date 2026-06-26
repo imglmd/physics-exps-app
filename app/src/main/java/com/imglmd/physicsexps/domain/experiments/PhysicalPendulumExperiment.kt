@@ -15,28 +15,24 @@ import kotlin.math.sqrt
 
 class PhysicalPendulumExperiment: Experiment {
     override val id = "physical_pendulum"
-    override val name = "Физический маятник"
-    override val category = "Механика"
-    override val description = "Осциллятор, представляющий собой твёрдое тело, совершающее " +
-            "колебания в поле каких-либо сил относительно точки, не являющейся центром " +
-            "масс этого тела, или неподвижной оси, перпендикулярной направлению действия сил " +
-            "и не проходящей через центр масс этого тела."
+    override val name = "physical_pendulum"
+    override val category = "mechanics"
+    override val description = "physical_pendulum_desc"
     override val inputFields = listOf(
-        InputField("moment", "Момент инерции тела относительно оси вращения",
-            "I", "кг×м²", required = true),
-        InputField("weight", "Масса тела", "m", "кг", required = true, min = 0.0),
-        InputField("distance", "Расстояние от оси вращения до центра масс", "d",
-            "м", required = true, min = 0.0)
+        InputField("moment", "moment", "I", "kg_m_2", required = true),
+        InputField("weight", "weight", "m", "kg", required = true, min = 0.0),
+        InputField("distance", "dist_ax", "d",
+            "m", required = true, min = 0.0)
     )
     override val imageRes = R.drawable.physicalpendulum
 
     override val additionalInputFields = listOf(
-        InputField("angle", "Угол отклонения", "α", "°", min = 0.0,
+        InputField("angle", "def_ang", "α", "ang", min = 0.0,
             required = false)
     )
 
-    override val xLabel = "Расстояние от оси вращения до центра масс, м"
-    override val yLabel = "Период колебаний, с"
+    override val xLabel = "dist_axs"
+    override val yLabel = "period_s"
 
     override fun validateInputs(
         inputs: Map<String, Double>
@@ -104,29 +100,28 @@ class PhysicalPendulumExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = buildList {
-                add(PhysicalQuantity("Момент инерции тела относительно оси вращения",
-                    "I", i, "кг×м²"))
-                add(PhysicalQuantity("Масса тела", "m", m, "кг"))
-                add(PhysicalQuantity("Расстояние от оси вращения до центра масс", "d", d, "м"))
-                add(PhysicalQuantity("Период колебаний", "T", period, "с"))
-                add(PhysicalQuantity("Линейная частота", "ν", frequency, "Гц"))
-                add(PhysicalQuantity("Циклическая частота", "ω₀", angularFrequency, "рад/с"))
-                add(PhysicalQuantity("Длина математического маятника с таким же периодом",
-                    "L", _l, "м"))
+                add(PhysicalQuantity("moment", "I", i, "kg_m_2"))
+                add(PhysicalQuantity("weight", "m", m, "kg"))
+                add(PhysicalQuantity("dist_ax", "d", d, "m"))
+                add(PhysicalQuantity("period_o", "T", period, "s"))
+                add(PhysicalQuantity("linear_frequency", "ν", frequency, "hz"))
+                add(PhysicalQuantity("ang_f", "ω₀", angularFrequency, "rad_s"))
+                add(PhysicalQuantity("length_simp",
+                    "L", _l, "m"))
                 if (a != null) {
-                    add(PhysicalQuantity("Угол отклонения", "α", a, "°"))
+                    add(PhysicalQuantity("def_ang", "α", a, "°"))
                 }
                 if (b != null) {
-                    add(PhysicalQuantity("Угловое ускорение", "β", b, "м/c²"))
+                    add(PhysicalQuantity("ang_a", "β", b, "m_s_2"))
                 }
                 if (M != null) {
-                    add(PhysicalQuantity("Возвращающий момент сил", "M", M, "Н×м"))
+                    add(PhysicalQuantity("restoring_moment", "M", M, "n_m"))
                 }
                 if (ep != null) {
-                    add(PhysicalQuantity("Потенциальная энергия", "E", ep, "Дж"))
+                    add(PhysicalQuantity("potential_energy_", "E", ep, "j"))
                 }
                 if (w != null) {
-                    add(PhysicalQuantity("Максимальная угловая скорость", "ω_max", w, "рад/с"))
+                    add(PhysicalQuantity("max_ang_v", "ω_max", w, "rad_s"))
                 }
             },
             points = getPoints(map),
@@ -158,48 +153,47 @@ class PhysicalPendulumExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решешения",
-            body = "Физический маятник учитывает реальное характеристики тела: форму, размеры, " +
-                    "массу и распределение этой массы относительно оси вращения."
+            title = "solution_idea",
+            body = "ph_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём период колебаний физического маятника.",
+            description = "ph_step_2",
             expression = "T = 2\\pi\\sqrt{\\frac{I}{m g d}}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Зная период, вычислим линейную частоту колебаний.",
+            description = "ph_step_3",
             expression = "\\nu = \\frac{1}{T}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Вычислим циклическую частоту - число колебаний за 2π секунд.",
+            description = "ph_step_4",
             expression = "\\omega = \\sqrt{\\frac{m g d}{I}}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём длину математического маятника с таким же периодом.",
+            description = "ph_step_5",
             expression = "L = \\frac{I}{md}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём угловое ускорение - ускорение в момент времени, когда маятник отклонен на угол α.",
+            description = "ph_step_6",
             expression = "\\beta = \\frac{m g d \\sin(\\alpha)}{I}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём возвращающий момент сил - момент силы тяжести, стремящийся вернуть маятник в равновесие.",
+            description = "ph_step_7",
             expression = "M = -mgd\\sin(\\alpha)"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём потенциальную энергию - энергия маятника в точке отклонения на угол α.",
+            description = "ph_step_8",
             expression = "E = mgd(1 - \\cos(\\alpha))"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём максимальную угловую скорость, достигается в момент прохождения положения равновесия.",
+            description = "ph_step_9",
             expression = "\\omega_max = \\sqrt{\\frac{2 m g d (1 - \\cos(\\alpha))}{I}}"
         )
 
@@ -223,27 +217,27 @@ class PhysicalPendulumExperiment: Experiment {
         val fmt = { d: Double -> "%.2f".format(d) }
 
         steps += SolutionStep.Substitution(
-            description = "Найдём период колебаний физического маятника",
+            description = "ph_step_2",
             expression = "T = 2\\pi\\sqrt{\\frac{$i}{$m \\times $g \\times $d}}",
-            result = "T = ${fmt(period)} \\text{с}"
+            result = "T = ${fmt(period)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём линейную частоту колебаний",
+            description = "ph_step_10",
             expression = "\\nu = \\frac{1}{${fmt(period)}}",
-            result = "\\nu = ${fmt(frequency)} \\text{Гц}"
+            result = "\\nu = ${fmt(frequency)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём циклическую частоту",
+            description = "ph_step_11",
             expression = "\\omega = \\sqrt{\\frac{$m \\times $g \\times $d}{$i}}",
             result = "\\omega = ${fmt(angularFrequency)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём длину математического маятника с таким же периодом",
+            description = "ph_step_12",
             expression = "L = \\frac{$i}{$m \\times $d}",
-            result = "L = ${fmt(_l)} \\text{м}"
+            result = "L = ${fmt(_l)}"
         )
 
         if (a != null) {
@@ -254,58 +248,55 @@ class PhysicalPendulumExperiment: Experiment {
             w = sqrt((2*m*g*d*(1-cos(rad)))/i)
 
             steps += SolutionStep.Substitution(
-                description = "Найдём угловое ускорение",
+                description = "ph_step_13",
                 expression = "\\beta = \\frac{$m \\times $g \\times $d\\sin($a)}{$i}",
-                result = "\\beta = ${fmt(b)} \\text{м/c²}"
+                result = "\\beta = ${fmt(b)}"
             )
 
             steps += SolutionStep.Substitution(
-                description = "Найдём возвращающий момент сил",
+                description = "ph_step_14",
                 expression = "M = -$m \\times $g \\times $d\\sin($a)",
-                result = "M = ${fmt(M)} \\text{Н×м}"
+                result = "M = ${fmt(M)}"
             )
 
             steps += SolutionStep.Substitution(
-                description = "Найдём потенциальную энергию",
+                description = "ph_step_15",
                 expression = "E = $m \\times $g \\times $d(1 - \\cos($a))",
-                result = "E = ${fmt(ep)} \\text{Дж}"
+                result = "E = ${fmt(ep)}"
             )
 
             steps += SolutionStep.Substitution(
-                description = "Найдём максимальную угловую скорость",
+                description = "ph_step_16",
                 expression = "\\omega_max = \\sqrt{\\frac{2$m \\times $g \\times $d(1 - \\cos($a))}{$i}}",
-                result = "\\omega_max = ${fmt(w)} \\text{рад/с}"
+                result = "\\omega_max = ${fmt(w)}"
             )
             steps += SolutionStep.Result(
                 listOf(
-                    PhysicalQuantity("Момент инерции тела относительно оси вращения",
-                        "I", i, "кг×м²"),
-                    PhysicalQuantity("Масса тела", "m", m, "кг"),
-                    PhysicalQuantity("Расстояние от оси вращения до центра масс", "d", d, "м"),
-                    PhysicalQuantity("Период колебаний", "T", period, "с"),
-                    PhysicalQuantity("Линейная частота", "ν", frequency, "Гц"),
-                    PhysicalQuantity("Циклическая частота", "ω₀", angularFrequency, "рад/с"),
-                    PhysicalQuantity("Длина математического маятника с таким же периодом",
-                        "L", _l, "м"),
-                    PhysicalQuantity("Угол отклонения", "α", a, "°"),
-                    PhysicalQuantity("Угловое ускорение", "β", b, "м/c²"),
-                    PhysicalQuantity("Возвращающий момент сил", "M", M, "Н×м"),
-                    PhysicalQuantity("Потенциальная энергия", "E", ep, "Дж"),
-                    PhysicalQuantity("Максимальная угловая скорость", "ω_max", w, "рад/с")
+                    PhysicalQuantity("moment", "I", i, "kg_m_2"),
+                    PhysicalQuantity("weight", "m", m, "kg"),
+                    PhysicalQuantity("dist_ax", "d", d, "m"),
+                    PhysicalQuantity("period_o", "T", period, "s"),
+                    PhysicalQuantity("linear_frequency", "ν", frequency, "hz"),
+                    PhysicalQuantity("ang_f", "ω₀", angularFrequency, "rad_s"),
+                    PhysicalQuantity("length_simp", "L", _l, "m"),
+                    PhysicalQuantity("def_ang", "α", a, "°"),
+                    PhysicalQuantity("ang_a", "β", b, "m_s_2"),
+                    PhysicalQuantity("restoring_moment", "M", M, "n_m"),
+                    PhysicalQuantity("potential_energy_", "E", ep, "j"),
+                    PhysicalQuantity("max_ang_v", "ω_max", w, "rad_s")
                 )
             )
         } else {
             steps += SolutionStep.Result(
                 listOf(
-                    (PhysicalQuantity("Момент инерции тела относительно оси вращения",
-                        "I", i, "кг×м²")),
-                    (PhysicalQuantity("Масса тела", "m", m, "кг")),
-                    (PhysicalQuantity("Расстояние от оси вращения до центра масс", "d", d, "м")),
-                    (PhysicalQuantity("Период колебаний", "T", period, "с")),
-                    (PhysicalQuantity("Линейная частота", "ν", frequency, "Гц")),
-                    (PhysicalQuantity("Циклическая частота", "ω₀", angularFrequency, "рад/с")),
-                    (PhysicalQuantity("Длина математического маятника с таким же периодом",
-                        "L", _l, "м"))
+                    (PhysicalQuantity("moment",
+                        "I", i, "kg_m_2")),
+                    (PhysicalQuantity("weight", "m", m, "kg")),
+                    (PhysicalQuantity("dist_ax", "d", d, "m")),
+                    (PhysicalQuantity("period_o", "T", period, "s")),
+                    (PhysicalQuantity("linear_frequency", "ν", frequency, "hz")),
+                    (PhysicalQuantity("ang_f", "ω₀", angularFrequency, "rad_s")),
+                    (PhysicalQuantity("length_simp","L", _l, "m"))
                 )
             )
         }

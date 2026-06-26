@@ -11,19 +11,15 @@ import kotlin.math.pow
 
 class RadioactiveDecayExperiment: Experiment {
     override val id = "radioactive_decay"
-    override val name = "Радиоактивный распад"
-    override val category = "Ядерная физика"
-    override val description = """
-        Радиоактивный распад — самопроизвольное превращение нестабильных атомных ядер,
-        сопровождающееся уменьшением числа радиоактивных ядер со временем.
-        Процесс описывается экспоненциальным законом распада.
-    """.trimIndent()
-    override val xLabel =  "Время полураспада, с"
-    override val yLabel = "Количество оставшихся радиоактивных ядер"
+    override val name = "radioactive_decay"
+    override val category = "nuclear_physics"
+    override val description = "radioactive_decay_desc"
+    override val xLabel =  "half_life"
+    override val yLabel = "numb"
     override val inputFields = listOf(
-        InputField("start_count", "Начальное число радиоактивных ядер", "N₀", "", required = true, min = 0.0),
-        InputField("period", "Период полураспада", "T", "с", required = true, min = 0.0),
-        InputField("time", "Время от начала распада", "t", "с", required = true, min = 0.0)
+        InputField("start_count", "in_count", "N₀", "", required = true, min = 0.0),
+        InputField("period", "half_life_", "T", "s", required = true, min = 0.0),
+        InputField("time", "decay_time", "t", "s", required = true, min = 0.0)
     )
 
     override val imageRes = R.drawable.radioactive_decay
@@ -58,14 +54,14 @@ class RadioactiveDecayExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("Начальное число ядер", "N₀", N0, ""),
-                PhysicalQuantity("Период полураспада", "T", period, "с"),
-                PhysicalQuantity("Время от начала распада", "t", time, "с"),
-                PhysicalQuantity("Количество оставшихся ядер", "N",
+                PhysicalQuantity("in_count", "N₀", N0, ""),
+                PhysicalQuantity("half_life_", "T", period, "s"),
+                PhysicalQuantity("decay_time", "t", time, "s"),
+                PhysicalQuantity("nmb_rem", "N",
                     N, ""),
-                PhysicalQuantity("Постоянная радиоактивного распада", "λ",
-                    constRadioactiveDecay, "с⁻¹"),
-                PhysicalQuantity("Среднее время жизни", "τ", srTime, "с")
+                PhysicalQuantity("rad_const", "λ",
+                    constRadioactiveDecay, "s_1"),
+                PhysicalQuantity("av_life", "τ", srTime, "s")
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -95,26 +91,22 @@ class RadioactiveDecayExperiment: Experiment {
         val steps = mutableListOf<SolutionStep>()
 
         steps += SolutionStep.Theory(
-            title = "Идея решения",
-            body = "Использование закона радиоактивного распада, описывающего зависимость " +
-                    "интенсивности радиоактивного распада от времени и от количества радиоактивных " +
-                    "атомов в образце."
+            title = "solution_idea",
+            body = "dec_step_1"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём количество оставшихся ядер, используя закон радиоактивного распада.",
+            description = "dec_step_2",
             expression = "N = N_0 2^\\frac{-t}{T}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём постоянную радиоактивного распада - величина, определяющая " +
-                    "вероятность распада нестабильного атомного ядра за единицу времени.",
+            description = "dec_step_3",
             expression = "\\lambda = \\frac{ln2}{T}"
         )
 
         steps += SolutionStep.Formula(
-            description = "Найдём среднее время жизни - средний промежуток времени, в течение " +
-                    "которого ядро остается радиоактивным до распада",
+            description = "dec_step_4",
             expression = "\\tau = \\frac{1}{T}"
         )
 
@@ -135,30 +127,28 @@ class RadioactiveDecayExperiment: Experiment {
         val fmt = { d: Double -> "%.2f".format(d) }
 
         steps += SolutionStep.Substitution(
-            description = "Найдём количество оставшихся ядер",
+            description = "dec_step_5",
             expression = "N = $N0 \\times 2^\\frac{-$t}{$T})",
             result = "N = ${fmt(N)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём постоянную радиоактивного распада",
+            description = "dec_step_6",
             expression = "\\lambda = \\frac{ln2}{$T}",
-            result = "\\lambda = ${fmt(constRadioactiveDecay)} \\text{с^-1}"
+            result = "\\lambda = ${fmt(constRadioactiveDecay)}"
         )
 
         steps += SolutionStep.Substitution(
-            description = "Найдём среднее время жизни",
+            description = "dec_step_7",
             expression = "\\tau = \\frac{1}{$T}",
-            result = "\\tau = ${fmt(srTime)} \\text{с}"
+            result = "\\tau = ${fmt(srTime)}"
         )
 
         steps += SolutionStep.Result(
             listOf(
-                PhysicalQuantity("Количество оставшихся ядер", "N",
-                    N, ""),
-                PhysicalQuantity("Постоянная радиоактивного распада", "λ",
-                    constRadioactiveDecay, "с⁻¹"),
-                PhysicalQuantity("Среднее время жизни", "τ", srTime, "с")
+                PhysicalQuantity("nmb_rem", "N", N, ""),
+                PhysicalQuantity("rad_const", "λ", constRadioactiveDecay, "s_1"),
+                PhysicalQuantity("av_life", "τ", srTime, "s")
             )
         )
 

@@ -2,8 +2,10 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
@@ -87,19 +89,10 @@ class HomeViewModel(
     }
 
     private fun updateExperiments(search: String) {
-
-        val filtered = allExperiments.filter {
-            it.name.contains(search, ignoreCase = true) ||
-            it.category.contains(search, ignoreCase = true) ||
-            it.description.contains(search, ignoreCase = true)
-        }
-
-        val grouped = filtered.groupBy { it.category }
-
         _state.update {
             it.copy(
                 searchText = search,
-                experimentsByCategory = grouped
+                experimentsByCategory = allExperiments.groupBy { exp -> exp.category }
             )
         }
     }

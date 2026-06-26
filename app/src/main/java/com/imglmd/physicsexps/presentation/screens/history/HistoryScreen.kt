@@ -51,6 +51,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -91,7 +92,7 @@ fun HistoryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = if (mode == HistoryMode.SELECTION) "Выберите эксперименты" else "История",
+                        text = if (mode == HistoryMode.SELECTION) stringResource(R.string.select_exps) else stringResource(R.string.history),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -120,7 +121,7 @@ fun HistoryScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Удалить всё"
+                            contentDescription = stringResource(R.string.delete_all)
                         )
                     }
                 },
@@ -179,7 +180,7 @@ fun HistoryScreen(
                     ),
                     enabled = pickerState.selectedStartDateMillis != null
                 ) {
-                    Text("Применить")
+                    Text(stringResource(R.string.apply))
                 }
             },
             dismissButton = {
@@ -189,7 +190,7 @@ fun HistoryScreen(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    Text("Отмена")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         ) {
@@ -207,7 +208,7 @@ fun HistoryScreen(
                 },
                 headline = {
                     Text(
-                        text = "Выберите период",
+                        text = stringResource(R.string.select_period),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(start = 24.dp)
                     )
@@ -237,11 +238,11 @@ fun HistoryScreen(
                 }
             },
             title = {
-                Text("Удалить историю?", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.delete_history), style = MaterialTheme.typography.titleMedium)
             },
             text = {
                 Text(
-                    text = "Все эксперименты будут удалены без возможности восстановления.",
+                    text = stringResource(R.string.delete_exps),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -254,7 +255,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text("Удалить", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -264,7 +265,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                     )
                 ) {
-                    Text("Отмена", color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
@@ -337,7 +338,7 @@ private fun Content(
             PrimaryButton(
                 enabled = state.selectedIds.size >= 2,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
-                text = "Сравнить (${state.selectedIds.size})",
+                text = stringResource(R.string.compare) + "(${state.selectedIds.size})",
                 icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
                 iconPosition = IconPosition.EdgeEnd,
                 onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
@@ -352,15 +353,15 @@ private fun EmptyHistory(
     modifier: Modifier = Modifier
 ) {
     val title = if (hasFilters) {
-        "Ничего не найдено"
+        stringResource(R.string.nothing_found)
     } else {
-        "Пока нет экспериментов"
+        stringResource(R.string.no_exps)
     }
 
     val subtitle = if (hasFilters) {
-        "Попробуйте изменить фильтры\nили сбросить их"
+        stringResource(R.string.try_reset)
     } else {
-        "Проведите первый эксперимент —\nрезультаты появятся здесь"
+        stringResource(R.string.run_first)
     }
 
     Column(

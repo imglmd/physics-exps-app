@@ -33,8 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -186,7 +188,7 @@ fun SolutionScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.alpha(textAlpha)) {
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            "Вернуться назад",
+                            stringResource(R.string.go_back),
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimary
