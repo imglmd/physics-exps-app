@@ -25,4 +25,5 @@
     <string name="about_app">About app</string>
     <string name="latest">Latest release</string>
     <string name="current_ver">"Current version: "</string>
+    <string name="gravity">Acceleration of gravity</string>
 </resources>

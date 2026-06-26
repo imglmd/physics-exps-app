@@ -287,4 +287,11 @@
     <string name="a">А</string>
     <string name="exp_rep">Отчёт по эксперименту</string>
     <string name="pdf">PDF сохранён как</string>
+    <string name="gravity">Ускорение свободного падения</string>
+    <string name="constants">Константы</string>
+    <string name="m_3_kg_s_2">м³/кг×с²</string>
+    <string name="gravitational_constant">Гравитационная постоянная</string>
+    <string name="mass_earth">Масса Земли</string>
+    <string name="radius_earth">Радиус Земли</string>
+    <string name="el_ch">Элементарный заряд</string>
 </resources>

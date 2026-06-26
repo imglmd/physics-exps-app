@@ -84,7 +84,7 @@ fun MediaSection(
     if (unavailableReason != null) {
         Column {
             Text(
-                text = "Вложения",
+                text = stringResource(R.string.attachments),
                 modifier = Modifier.padding(PaddingValues(start = 16.dp, bottom = 10.dp)),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface

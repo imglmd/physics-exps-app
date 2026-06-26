@@ -286,4 +286,11 @@
     <string name="a">A</string>
     <string name="exp_rep">Experiment Report</string>
     <string name="pdf">PDF saved as</string>
+    <string name="gravity">Acceleration of gravity</string>
+    <string name="constants">Constants</string>
+    <string name="m_3_kg_s_2">m³/kg×s²</string>
+    <string name="gravitational_constant">Gravitational constant</string>
+    <string name="mass_earth">Mass of the Earth</string>
+    <string name="radius_earth">Radius of the Earth</string>
+    <string name="el_ch">Elementary charge</string>
 </resources>

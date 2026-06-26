@@ -30,7 +30,7 @@ val navigationModule = module {
             },
             navigateToHistory = {
                 get<Navigator>().navigateTo(Screen.History())
-            }
+            },
         )
     }
     navigation<Screen.Experiment> { route ->

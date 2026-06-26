@@ -25,4 +25,5 @@
     <string name="about_app">О приложении</string>
     <string name="latest">Последний релиз</string>
     <string name="current_ver">"Текущая версия: "</string>
+    <string name="gravity">Ускорение свободного падения</string>
 </resources>

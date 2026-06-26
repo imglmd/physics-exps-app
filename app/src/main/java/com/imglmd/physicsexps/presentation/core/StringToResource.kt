@@ -7,6 +7,13 @@ import com.imglmd.physicsexps.R
 fun getStringByKey(key: String?): String {
     if (key.isNullOrBlank()) return ""
     return when(key) {
+        "el_ch" -> stringResource(R.string.el_ch)
+        "mass_earth" -> stringResource(R.string.mass_earth)
+        "radius_earth" -> stringResource(R.string.radius_earth)
+        "gravitational_constant" -> stringResource(R.string.gravitational_constant)
+        "m_3_kg_s_2" -> stringResource(R.string.m_3_kg_s_2)
+        "constants" -> stringResource(R.string.constants)
+        "gravity" -> stringResource(R.string.gravity)
         "pdf" -> stringResource(R.string.pdf)
         "exp_rep" -> stringResource(R.string.exp_rep)
         "w_l_rec" -> stringResource(R.string.w_l_rec)

@@ -59,6 +59,8 @@ import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
 import org.koin.compose.koinInject
 import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.presentation.screens.constants.ConstantsScreen
+
 @Composable
 fun TabHostScreen(
     navigateToExperiment: (String) -> Unit,
@@ -111,6 +113,7 @@ fun TabHostScreen(
                     gridState = homeGridState
                 )
                 Screen.Tab.Settings -> SettingsScreen(versionName = BuildConfig.VERSION_NAME)
+                Screen.Tab.Constants -> ConstantsScreen()
             }
         }
         Box(
