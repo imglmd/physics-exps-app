@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.feature.settings.domain.repository
 
+import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,5 @@ interface SettingsRepository {
     suspend fun updateAdvancedMode(enabled: Boolean)
     suspend fun updateMaxHistory(value: Int?)
 
-    suspend fun getAppLanguage(): String
-    suspend fun setAppLanguage(lang: String)
+    suspend fun updateLanguage(language: AppLanguage)
 }

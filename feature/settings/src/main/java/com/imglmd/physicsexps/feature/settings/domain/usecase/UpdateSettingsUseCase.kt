@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.feature.settings.domain.usecase
 
+import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
 
@@ -23,12 +24,7 @@ class UpdateSettingsUseCase(private val repository: SettingsRepository) {
         repository.updateAdvancedMode(enabled)
     suspend fun setMaxHistory(value: Int?) =
         repository.updateMaxHistory(value)
-
-    suspend fun setAppLanguage(lang: String) {
-        repository.setAppLanguage(lang)
-    }
-
-    suspend fun getAppLang(): String =
-        repository.getAppLanguage()
+    suspend fun setLanguage(language: AppLanguage) =
+        repository.updateLanguage(language)
 
 }

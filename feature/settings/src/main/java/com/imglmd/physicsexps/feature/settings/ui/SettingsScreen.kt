@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.feature.settings.R
+import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.ui.components.RadioOption
 import com.imglmd.physicsexps.feature.settings.ui.components.SettingsButton
@@ -164,15 +165,15 @@ fun SettingsScreen(
                     SettingsRadioGroup(
                         options = listOf(
                             RadioOption(
-                                value = "ru",
+                                value = AppLanguage.RUSSIAN,
                                 title = "Русский"
                             ),
                             RadioOption(
-                                value = "en",
+                                value = AppLanguage.ENGLISH,
                                 title = "English"
                             )
                         ),
-                        selected = state.currentLanguage,
+                        selected = state.settings.language,
                         onSelected = { viewModel.onIntent(SettingsIntent.ChangeLanguage(it)) }
                     )
                 }

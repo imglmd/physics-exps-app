@@ -4,7 +4,8 @@ import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
 import android.os.LocaleList
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate.setApplicationLocales
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -12,6 +13,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import kotlinx.coroutines.flow.Flow
@@ -22,30 +24,11 @@ import java.util.Locale
 class SettingsDataSource(private val context: Context){
     private val Context.dataStore by preferencesDataStore(name = "settings")
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun setAppLanguage(languageTag: String) {
-        val localeManager = context.getSystemService(LocaleManager::class.java)
-        val localeList = LocaleList(Locale.forLanguageTag(languageTag))
-
-        localeManager.applicationLocales = localeList
-    }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun getAppLanguage(): String {
-        val localeManager = context.getSystemService(LocaleManager::class.java)
-        val currentLocales = localeManager.applicationLocales
-
-        return if (!currentLocales.isEmpty) {
-            currentLocales.get(0).toLanguageTag()
-        } else {
-            Locale.getDefault().toLanguageTag()
-        }
-    }
-
     private object Keys {
         val THEME = stringPreferencesKey("theme")
         val AMOLED_THEME = booleanPreferencesKey("amoled_theme")
         val DYNAMIC_COLORS = booleanPreferencesKey("dynamic_colors")
+        val LANGUAGE = stringPreferencesKey("language")
         val HAPTIC_FEEDBACK = booleanPreferencesKey("haptic_feedback")
 
         val OFFLINE_MODE = booleanPreferencesKey("offline_mode")
@@ -65,6 +48,9 @@ class SettingsDataSource(private val context: Context){
                     ?: AppTheme.SYSTEM,
                 amoledTheme = prefs[Keys.AMOLED_THEME] ?: false,
                 dynamicColors = prefs[Keys.DYNAMIC_COLORS] ?: false,
+                language = prefs[Keys.LANGUAGE]
+                    ?.let { runCatching { AppLanguage.valueOf(it) }.getOrDefault(AppLanguage.RUSSIAN) }
+                    ?: AppLanguage.RUSSIAN,
                 hapticFeedback = prefs[Keys.HAPTIC_FEEDBACK] ?: false,
                 offlineMode = prefs[Keys.OFFLINE_MODE]?: false,
                 advancedMode = prefs[Keys.ADVANCED_MODE] ?: false,
@@ -83,6 +69,10 @@ class SettingsDataSource(private val context: Context){
 
     suspend fun updateHapticFeedback(enabled: Boolean) =
         context.dataStore.edit { it[Keys.HAPTIC_FEEDBACK] = enabled }
+    suspend fun setLanguage(language: AppLanguage) {
+        context.dataStore.edit { it[Keys.LANGUAGE] = language.name }
+        applyLocale(language)
+    }
 
     suspend fun updateOfflineMode(enabled: Boolean) =
         context.dataStore.edit { it[Keys.OFFLINE_MODE] = enabled }
@@ -93,6 +83,22 @@ class SettingsDataSource(private val context: Context){
         context.dataStore.edit {
             if (value == null)  it.remove(Keys.MAX_HISTORY)
             else  it[Keys.MAX_HISTORY] = value
+        }
+    }
+
+    private fun applyLocale(language: AppLanguage) {
+        val locale = when (language) {
+            AppLanguage.RUSSIAN -> Locale.forLanguageTag("ru")
+            AppLanguage.ENGLISH -> Locale.forLanguageTag("en")
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val localeManager = context.getSystemService(LocaleManager::class.java)
+            localeManager.applicationLocales = LocaleList(locale)
+        } else {
+            setApplicationLocales(
+                LocaleListCompat.create(locale)
+            )
         }
     }
 }
