@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import shadow.bundletool.com.android.tools.r8.internal.an
 import java.util.Properties
 
 plugins {
@@ -100,6 +99,7 @@ androidComponents {
 
 dependencies {
     implementation(project(":feature:settings"))
+    implementation(project(":feature:constants"))
     implementation(project(":core:ui"))
     implementation(project(":core:network"))
 

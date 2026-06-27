@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.presentation.screens.constants
+package com.imglmd.physicsexps.feature.constants.presentation
 
-import com.imglmd.physicsexps.domain.model.Category
+import com.imglmd.physicsexps.feature.constants.domain.model.Category
 
 interface ConstantsContract {
     data class State(

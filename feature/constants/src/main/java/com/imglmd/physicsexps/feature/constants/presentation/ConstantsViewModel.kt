@@ -1,8 +1,7 @@
-package com.imglmd.physicsexps.presentation.screens.constants
+package com.imglmd.physicsexps.feature.constants.presentation
 
 import androidx.lifecycle.ViewModel
-import com.imglmd.physicsexps.domain.usecase.GetAllCategoriesUseCase
-import com.imglmd.physicsexps.presentation.screens.home.HomeState
+import com.imglmd.physicsexps.feature.constants.domain.usecase.GetAllCategoriesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

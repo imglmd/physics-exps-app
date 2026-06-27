@@ -59,7 +59,7 @@ import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
 import org.koin.compose.koinInject
 import com.imglmd.physicsexps.presentation.core.getStringByKey
-import com.imglmd.physicsexps.presentation.screens.constants.ConstantsScreen
+import com.imglmd.physicsexps.feature.constants.presentation.ConstantsScreen
 
 @Composable
 fun TabHostScreen(

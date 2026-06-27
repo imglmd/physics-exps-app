@@ -1,9 +1,8 @@
-package com.imglmd.physicsexps.domain.usecase
+package com.imglmd.physicsexps.feature.constants.domain.usecase
 
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.Category
-import com.imglmd.physicsexps.domain.model.Item
-import com.imglmd.physicsexps.presentation.screens.constants.component.CategoryItem
+import com.imglmd.physicsexps.feature.constants.R
+import com.imglmd.physicsexps.feature.constants.domain.model.Category
+import com.imglmd.physicsexps.feature.constants.domain.model.Item
 
 class GetAllCategoriesUseCase(
 ) {

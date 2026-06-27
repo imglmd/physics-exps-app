@@ -1,6 +1,5 @@
-package com.imglmd.physicsexps.presentation.screens.constants
+package com.imglmd.physicsexps.feature.constants.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -40,10 +37,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.Category
-import com.imglmd.physicsexps.presentation.core.getStringByKey
-import com.imglmd.physicsexps.presentation.screens.constants.component.CategoryItem
+import com.imglmd.physicsexps.feature.constants.R
+import com.imglmd.physicsexps.feature.constants.domain.model.Category
+import com.imglmd.physicsexps.feature.constants.presentation.component.CategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -69,7 +65,7 @@ fun ConstantsScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -79,7 +75,7 @@ fun ConstantsScreen(
                 bottom = innerPadding.calculateBottomPadding() + 110.dp,
                 start = 16.dp,
                 end = 16.dp
-            ),
+            )
         ) {
             item {
                 Column(
@@ -101,7 +97,6 @@ fun ConstantsScreen(
             }
             finalFiltered.forEach { category ->
                 item {
-                    Log.e("DEBUG", category.label)
                     CategoryItem(
                         categoryLabel = category.label,
                         listItem = category.listItem,
@@ -109,8 +104,6 @@ fun ConstantsScreen(
                     )
                 }
             }
-
-
         }
     }
 }

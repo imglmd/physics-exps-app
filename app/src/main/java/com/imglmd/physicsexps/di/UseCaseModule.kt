@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.domain.usecase.GetAllCategoriesUseCase
+import com.imglmd.physicsexps.feature.constants.domain.usecase.GetAllCategoriesUseCase
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
 import com.imglmd.physicsexps.domain.usecase.auth.PingUseCase
 import com.imglmd.physicsexps.domain.usecase.auth.RegisterUseCase
