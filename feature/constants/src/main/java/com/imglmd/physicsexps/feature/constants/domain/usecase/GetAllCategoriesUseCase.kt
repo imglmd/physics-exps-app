@@ -4,6 +4,7 @@ import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Category
 import com.imglmd.physicsexps.feature.constants.domain.model.Item
 
+// TODO: вынести данные в data
 class GetAllCategoriesUseCase(
 ) {
     operator fun invoke(): List<Category> {

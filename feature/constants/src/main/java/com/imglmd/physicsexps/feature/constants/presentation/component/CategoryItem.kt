@@ -2,6 +2,7 @@ package com.imglmd.physicsexps.feature.constants.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +24,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Item
 import com.imglmd.physicsexps.feature.constants.presentation.getStringByKey
 
@@ -48,7 +47,7 @@ fun CategoryItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -63,7 +62,7 @@ fun CategoryItem(
                 imageVector = ImageVector.vectorResource(icon),
                 contentDescription = "Изменить",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(22.dp)
             )
         }
         Column(
@@ -85,13 +84,14 @@ fun CategoryItem(
 }
 
 @Composable
-fun ConstantItem(
+private fun ConstantItem(
     name: String,
     unit: String,
     symbol: String,
     value: String,
     modifier: Modifier = Modifier
 ) {
+    val clipboard = LocalClipboardManager.current
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -102,11 +102,15 @@ fun ConstantItem(
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(16.dp)
             )
+            .clickable{
+                clipboard.setText(AnnotatedString(value))
+            }
             .padding(horizontal = 12.dp, vertical = 10.dp),
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(6.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Text(
                 text = getStringByKey(name),
                 style = MaterialTheme.typography.titleMedium,
@@ -120,22 +124,5 @@ fun ConstantItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            val clipboardManager = LocalClipboardManager.current
-            IconButton(
-                onClick = {
-                    clipboardManager.setText(AnnotatedString(value))
-                }
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.copy),
-                    contentDescription = "copy",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-        }
     }
-
 }
