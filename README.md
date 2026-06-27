@@ -12,7 +12,7 @@
 
 ## Скачать приложение
 
-<table align="center"> <tr> <td align="center"> <a href="https://www.rustore.ru/catalog/app/com.imglmd.physicsexps"> <img src="assets/rustore.svg" height="56" alt="RuStore"> </a> </td>
+<table> <tr> <td align="center"> <a href="https://www.rustore.ru/catalog/app/com.imglmd.physicsexps"> <img src="assets/rustore.svg" height="56" alt="RuStore"> </a> </td>
 <td width="24"></td>
 <td align="center"> <a href="https://github.com/imglmd/physics-exps-app/releases/latest"> <img src="assets/github.svg" alt="GitHub Release"> </a> </td> </tr> </table>
 
