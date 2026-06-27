@@ -76,9 +76,4 @@
 
 ## Архитектура
 
-Проект разделен на слои:
-
-- `presentation` - ui, экраны, ViewModel, навигация
-- `domain` - модели, реестр экспериментов, use-case'ы, валидация
-- `data` - repository-реализации, Room, remote API, mappers
-- `di` - Koin-модули
+Проект постепенно переносится на **feature-based multi-module архитектуру**
