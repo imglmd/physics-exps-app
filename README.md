@@ -10,6 +10,12 @@
 ![UI](https://img.shields.io/badge/UI-Compose-orange)
 </div>
 
+## Скачать приложение
+
+<a href="https://www.rustore.ru/catalog/app/com.imglmd.physicsexps">
+  <img src="assets/rustore.svg" height="56" alt="RuStore">
+</a>
+
 ## Возможности
 
 - Каталог экспериментов с поиском и группировкой по категориям.
