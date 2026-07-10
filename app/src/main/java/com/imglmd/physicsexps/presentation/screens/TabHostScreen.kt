@@ -80,9 +80,6 @@ fun TabHostScreen(
     )
 
     val scope = rememberCoroutineScope()
-    BackHandler(enabled = currentTab != 0) {
-        scope.launch { pagerState.animateScrollToPage(0) }
-    }
 
     val bottomBarVisible by remember {
         derivedStateOf {
