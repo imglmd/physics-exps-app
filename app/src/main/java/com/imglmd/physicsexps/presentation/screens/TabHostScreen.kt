@@ -38,7 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,15 +55,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.BuildConfig
+import com.imglmd.physicsexps.feature.constants.presentation.ConstantsScreen
 import com.imglmd.physicsexps.feature.settings.ui.SettingsScreen
-import com.imglmd.physicsexps.presentation.navigation.Navigator
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
-import org.koin.compose.koinInject
-import com.imglmd.physicsexps.presentation.core.getStringByKey
-import com.imglmd.physicsexps.feature.constants.presentation.ConstantsScreen
+import kotlinx.coroutines.launch
+import kotlin.enums.EnumEntries
 
 @Composable
 fun TabHostScreen(
@@ -67,36 +70,31 @@ fun TabHostScreen(
     navigateToResult: (Int) -> Unit,
     navigateToHistory: () -> Unit,
 ) {
-    val navigator = koinInject<Navigator>()
-    val currentTab by navigator.currentTab.collectAsStateWithLifecycle()
+    var currentTab by rememberSaveable { mutableIntStateOf(Screen.Tab.Home.ordinal) }
     val homeGridState = rememberLazyGridState()
-
-    BackHandler {
-        navigator.switchTab(Screen.Tab.Home)
-    }
 
     val tabs = Screen.Tab.entries
     val pagerState = rememberPagerState(
-        initialPage = currentTab.ordinal,
+        initialPage = currentTab,
         pageCount = { tabs.size },
     )
 
+    val scope = rememberCoroutineScope()
+    BackHandler(enabled = currentTab != 0) {
+        scope.launch { pagerState.animateScrollToPage(0) }
+    }
+
     val bottomBarVisible by remember {
         derivedStateOf {
-            if (currentTab != Screen.Tab.Home)  true
+            if (tabs[currentTab] != Screen.Tab.Home)  true
             else homeGridState.firstVisibleItemIndex == 0 && homeGridState.firstVisibleItemScrollOffset < 20
         }
     }
 
     LaunchedEffect(pagerState.settledPage) {
-        val swipedTab = tabs[pagerState.settledPage]
-        if (swipedTab != currentTab) navigator.switchTab(swipedTab)
+        currentTab = pagerState.settledPage
     }
 
-    LaunchedEffect(currentTab) {
-        val targetPage = currentTab.ordinal
-        if (pagerState.settledPage != targetPage) pagerState.animateScrollToPage(targetPage)
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
@@ -140,9 +138,12 @@ fun TabHostScreen(
             exit = slideOutVertically { it } + fadeOut()
         ) {
             TabHostBottomBar(
+                tabs = tabs,
                 pagerState = pagerState,
                 currentTab = currentTab,
-                onTabChange = { navigator.switchTab(it) }
+                onTabChange = { page ->
+                    scope.launch { pagerState.animateScrollToPage(page) }
+                }
             )
         }
     }
@@ -150,9 +151,10 @@ fun TabHostScreen(
 
 @Composable
 private fun TabHostBottomBar(
+    tabs: EnumEntries<Screen.Tab>,
     pagerState: PagerState,
-    currentTab: Screen.Tab,
-    onTabChange: (Screen.Tab) -> Unit,
+    currentTab: Int,
+    onTabChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -204,14 +206,14 @@ private fun TabHostBottomBar(
                     horizontalArrangement = Arrangement.spacedBy(gapDp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Screen.Tab.entries.forEach { tab ->
+                    tabs.forEachIndexed { index, tab ->
                         BottomBarButton(
-                            selected = currentTab == tab,
+                            selected = currentTab == index,
                             selectedIcon = tab.selectedIcon,
                             unselectedIcon = tab.unselectedIcon,
                             label = getStringByKey(tab.label),
                             width = buttonWidthDp,
-                            onClick = { onTabChange(tab) },
+                            onClick = { onTabChange(index) },
                         )
                     }
                 }
