@@ -124,7 +124,6 @@ fun ResultCard(
 
 
         val clipboardManager = LocalClipboardManager.current
-        val context = LocalContext.current
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
