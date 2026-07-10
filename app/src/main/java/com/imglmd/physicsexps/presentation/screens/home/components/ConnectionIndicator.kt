@@ -64,6 +64,7 @@ fun OnlineState.toConnectionState(): ConnectionState =
             isLoading = true
         )
     }
+//TODO: сделать кликабельнымп
 @Composable
 fun ConnectionIndicator(
     state: OnlineState,
