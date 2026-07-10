@@ -12,14 +12,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +44,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Category
+import com.imglmd.physicsexps.feature.constants.domain.model.Item
 import com.imglmd.physicsexps.feature.constants.presentation.component.CategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -47,15 +53,12 @@ fun ConstantsScreen(
     viewModel: ConstantsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val query = state.search.trim()
 
-    val finalFiltered = mutableListOf<Category>()
-    state.allCategories.forEach { cat ->
-        val catName = getStringByKey(cat.label)
-        val search = state.search.trim()
-        val isShow = catName.contains(search, ignoreCase = true)
-        if (isShow) {
-            finalFiltered.add(cat)
-        }
+    val visibleCategories: List<Category> = if (query.isBlank()) {
+        state.allCategories
+    } else {
+        state.allCategories.mapNotNull { category -> filterCategory(category, query) }
     }
 
     val searchState = rememberTextFieldState()
@@ -91,14 +94,15 @@ fun ConstantsScreen(
             }
 
             item {
-                SearchTextField(
-                    state = searchState
-                )
+                SearchTextField(state = searchState)
             }
-            finalFiltered.forEach { category ->
-                item {
+
+            if (visibleCategories.isEmpty()) {
+                item { EmptySearchState() }
+            } else {
+                items(visibleCategories, key = { it.labelRes }) { category ->
                     CategoryItem(
-                        categoryLabel = category.label,
+                        labelRes = category.labelRes,
                         listItem = category.listItem,
                         icon = category.icon
                     )
@@ -107,6 +111,53 @@ fun ConstantsScreen(
         }
     }
 }
+
+@Composable
+private fun filterCategory(category: Category, query: String): Category? {
+    val label = stringResource(category.labelRes)
+    if (label.contains(query, ignoreCase = true)) return category
+
+    val matchingItems = category.listItem.filter { item -> itemMatches(item, query) }
+    return if (matchingItems.isEmpty()) null else category.copy(listItem = matchingItems)
+}
+
+@Composable
+private fun itemMatches(item: Item, query: String): Boolean {
+    val name = stringResource(item.nameRes)
+    return item.symbol.contains(query, ignoreCase = true) ||
+            name.contains(query, ignoreCase = true) ||
+            item.value.contains(query, ignoreCase = true)
+}
+
+@Composable
+private fun EmptySearchState(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth().padding(vertical = 32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(modifier = Modifier.size(80.dp).clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = null,
+                modifier = Modifier.size(36.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.constants_nothing_found),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
 
 @Composable
 private fun SearchTextField(
@@ -130,7 +181,6 @@ private fun SearchTextField(
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.search),
             contentDescription = "Search",
@@ -146,11 +196,7 @@ private fun SearchTextField(
             lineLimits = TextFieldLineLimits.SingleLine,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             decorator = { innerTextField ->
-
-                Box(
-                    contentAlignment = Alignment.CenterStart
-                ) {
-
+                Box(contentAlignment = Alignment.CenterStart) {
                     if (state.text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.search),
@@ -158,16 +204,13 @@ private fun SearchTextField(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
                     innerTextField()
                 }
             }
         )
 
         if (state.text.isNotEmpty()) {
-            IconButton(
-                onClick = { state.clearText() }
-            ) {
+            IconButton(onClick = { state.clearText() }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.cross),
                     contentDescription = "Clear",

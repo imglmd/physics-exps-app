@@ -20,16 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.feature.constants.domain.model.Item
-import com.imglmd.physicsexps.feature.constants.presentation.getStringByKey
 
 @Composable
 fun CategoryItem(
-    categoryLabel: String,
+    labelRes: Int,
     listItem: List<Item>,
     icon: Int
 ) {
@@ -51,7 +51,7 @@ fun CategoryItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = getStringByKey(categoryLabel),
+                text = stringResource(labelRes),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold
@@ -73,8 +73,8 @@ fun CategoryItem(
         ) {
             listItem.forEach { item ->
                 ConstantItem(
-                    name = item.name,
-                    unit = item.unit,
+                    nameRes = item.nameRes,
+                    unitRes = item.unitRes,
                     symbol = item.symbol,
                     value = item.value
                 )
@@ -85,13 +85,15 @@ fun CategoryItem(
 
 @Composable
 private fun ConstantItem(
-    name: String,
-    unit: String,
+    nameRes: Int,
+    unitRes: Int?,
     symbol: String,
     value: String,
     modifier: Modifier = Modifier
 ) {
     val clipboard = LocalClipboardManager.current
+    val unitText = unitRes?.let { stringResource(it) }.orEmpty()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -102,7 +104,7 @@ private fun ConstantItem(
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable{
+            .clickable {
                 clipboard.setText(AnnotatedString(value))
             }
             .padding(horizontal = 12.dp, vertical = 10.dp),
@@ -112,13 +114,13 @@ private fun ConstantItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = getStringByKey(name),
+                text = stringResource(nameRes),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
-                text = "$symbol = $value ${getStringByKey(unit)}",
+                text = if (unitText.isBlank()) "$symbol = $value" else "$symbol = $value $unitText",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface

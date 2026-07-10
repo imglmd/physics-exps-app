@@ -18,7 +18,7 @@ sealed interface Screen {
 
     @Serializable
     enum class Tab {
-        Home, Settings, Constants;
+        Constants, Home, Settings;
         val label: String get() = when (this) {
             Home -> "main"
             Settings -> "settings"

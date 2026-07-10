@@ -1,6 +1,9 @@
 <resources>
     <string name="search">Поиск</string>
     <string name="constants">Константы</string>
+    <string name="constants_nothing_found">Ничего не найдено(</string>
+
+
     <string name="math_c">Константы из математики</string>
     <string name="mechanics">Механика</string>
     <string name="electricity">Электричество</string>
