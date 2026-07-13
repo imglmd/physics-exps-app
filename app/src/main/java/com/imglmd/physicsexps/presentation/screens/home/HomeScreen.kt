@@ -63,6 +63,7 @@ import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.presentation.screens.home.components.ExperimentItem
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
 import org.koin.compose.viewmodel.koinViewModel
@@ -194,82 +195,6 @@ fun HomeScreen(
         }
     }
 }
-
-@Composable
-private fun ExperimentItem(
-    name: String,
-    placeholder: Int,
-    previewUrl: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(24.dp))
-            .clickable(onClick = onClick)
-    ) {
-        if (previewUrl != null) {
-            AsyncImage(
-                model = previewUrl,
-                contentDescription = name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-                placeholder = painterResource(placeholder),
-                error = painterResource(placeholder),
-                fallback = painterResource(placeholder)
-            )
-        } else {
-            Image(
-                painter = painterResource(placeholder),
-                contentDescription = name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-
-        // затемнение картинки
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(
-                    Color.Black.copy(
-                        alpha = if (isSystemInDarkTheme()) 0.15f else 0f
-                    )
-                )
-        )
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = if (isSystemInDarkTheme()) 0.6f else 0.3f)
-                        )
-                    )
-                )
-        ) {
-            Text(
-                text = name,
-                color = Color.White,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    lineBreak = LineBreak.Paragraph
-                ),
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(horizontal = 10.dp, vertical = 10.dp),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
 
 
 @Composable
