@@ -24,15 +24,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceButton
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceSwitch
+import com.imglmd.physicsexps.core.ui.preferences.RadioGroup
+import com.imglmd.physicsexps.core.ui.preferences.RadioOption
 import com.imglmd.physicsexps.feature.settings.R
 import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
-import com.imglmd.physicsexps.feature.settings.ui.components.RadioOption
-import com.imglmd.physicsexps.feature.settings.ui.components.SettingsButton
-import com.imglmd.physicsexps.feature.settings.ui.components.SettingsGroup
-import com.imglmd.physicsexps.feature.settings.ui.components.SettingsRadioGroup
-import com.imglmd.physicsexps.feature.settings.ui.components.SettingsSlider
-import com.imglmd.physicsexps.feature.settings.ui.components.SettingsSwitch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -81,10 +81,10 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup(
+                PreferenceGroup(
                     title = stringResource(R.string.appearance)
                 ) {
-                    SettingsRadioGroup(
+                    RadioGroup(
                         options = listOf(
                             RadioOption(
                                 value = AppTheme.SYSTEM,
@@ -104,7 +104,7 @@ fun SettingsScreen(
                         onSelected = { viewModel.onIntent(SettingsIntent.ThemeChanged(it)) }
                     )
                     if (isDarkTheme) {
-                        SettingsSwitch(
+                        PreferenceSwitch(
                             title = stringResource(R.string.extra_dark),
                             subtitle = stringResource(R.string.dark_desc),
                             checked = state.settings.amoledTheme,
@@ -118,7 +118,7 @@ fun SettingsScreen(
                         )
                     }
                     if (!isDarkTheme){
-                        SettingsSwitch(
+                        PreferenceSwitch(
                             title = stringResource(R.string.dynamic_colors),
                             subtitle = stringResource(R.string.adjusts),
                             checked = state.settings.dynamicColors,
@@ -132,8 +132,8 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup(stringResource(R.string.exps)) {
-                    SettingsSwitch(
+                PreferenceGroup(stringResource(R.string.exps)) {
+                    PreferenceSwitch(
                         title = stringResource(R.string.show_all_p),
                         subtitle = stringResource(R.string.add_params_desc),
                         checked = state.settings.advancedMode,
@@ -148,8 +148,8 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup(stringResource(R.string.history_s)) {
-                    SettingsSlider(
+                PreferenceGroup(stringResource(R.string.history_s)) {
+                    PreferenceSlider(
                         title = stringResource(R.string.max_rec),
                         subtitle = stringResource(R.string.old_rec),
                         value = state.settings.maxHistoryEntries,
@@ -161,8 +161,8 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsGroup(stringResource(R.string.language)){
-                    SettingsRadioGroup(
+                PreferenceGroup(stringResource(R.string.language)){
+                    RadioGroup(
                         options = listOf(
                             RadioOption(
                                 value = AppLanguage.RUSSIAN,
@@ -179,14 +179,14 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup(stringResource(R.string.additional_features)) {
-                    SettingsSwitch(
+                PreferenceGroup(stringResource(R.string.additional_features)) {
+                    PreferenceSwitch(
                         title = stringResource(R.string.haptic_feedback),
                         subtitle = stringResource(R.string.haptic_desc),
                         checked = state.settings.hapticFeedback,
                         onCheckedChange = { viewModel.onIntent(SettingsIntent.HapticFeedbackChanged(it)) }
                     )
-                    SettingsSwitch(
+                    PreferenceSwitch(
                         title = stringResource(R.string.offline),
                         subtitle = stringResource(R.string.dis_online),
                         checked = state.settings.offlineMode,
@@ -195,22 +195,22 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsGroup(stringResource(R.string.about_app)) {
-                    SettingsButton(
+                PreferenceGroup(stringResource(R.string.about_app)) {
+                    PreferenceButton(
                         title = "GitHub",
                         onClick = {
                             context.openUrl("https://github.com/imglmd/physics-exps-app")
                         },
                         showIcon = true,
                     )
-                    SettingsButton(
+                    PreferenceButton(
                         title = stringResource(R.string.latest),
                         onClick = {
                             context.openUrl("https://github.com/imglmd/physics-exps-app/releases/latest")
                         },
                         showIcon = true
                     )
-                    SettingsButton(
+                    PreferenceButton(
                         title = stringResource(R.string.current_ver) + versionName,
                         onClick = null,
                         showIcon = false,

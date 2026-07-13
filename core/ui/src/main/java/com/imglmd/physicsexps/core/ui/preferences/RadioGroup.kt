@@ -1,6 +1,5 @@
-package com.imglmd.physicsexps.feature.settings.ui.components
+package com.imglmd.physicsexps.core.ui.preferences
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,11 +13,9 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
@@ -30,7 +27,7 @@ data class RadioOption<T>(
 )
 
 @Composable
-fun <T> SettingsRadioGroup(
+fun <T> RadioGroup(
     options: List<RadioOption<T>>,
     selected: T,
     onSelected: (T) -> Unit,
@@ -51,7 +48,7 @@ fun <T> SettingsRadioGroup(
                 onClick = {
                     if (!isSelected) haptic.perform(HapticFeedbackType.SegmentTick)
                     onSelected(option.value)
-                          },
+                },
                 shape = RoundedCornerShape(6.dp),
                 color = if (isSelected) {
                     MaterialTheme.colorScheme.surfaceVariant

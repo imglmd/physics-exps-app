@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.ui.components
+package com.imglmd.physicsexps.core.ui.preferences
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +20,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 
+
 @Composable
-fun <T> SettingsSlider(
+fun <T> PreferenceSlider(
     title: String,
     value: T,
     values: List<T>,
