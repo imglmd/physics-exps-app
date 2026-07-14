@@ -1,8 +1,23 @@
 <resources>
     <string name="search">Search</string>
     <string name="constants">Constants</string>
-    <string name="constants_nothing_found">Nothing found</string>
+    <string name="display_preferences">Display</string>
 
+    <string name="digits">Decimal places</string>
+    <string name="digits_subtitle">Choose how many decimal places to display.</string>
+
+    <string name="copy_mode_title">Copying</string>
+
+    <string name="copy_mode_value">Value only</string>
+    <string name="copy_mode_value_example">6.6743 × 10⁻¹¹</string>
+
+    <string name="copy_mode_symbol_value">Symbol and value</string>
+    <string name="copy_mode_symbol_value_example">G = 6.6743 × 10⁻¹¹</string>
+
+    <string name="copy_mode_full">Full information</string>
+    <string name="copy_mode_full_example">Gravitational constant\nG = 6.6743 × 10⁻¹¹ m³/(kg·s²)</string>
+
+    <string name="constants_nothing_found">Nothing found</string>
 
     <string name="math_c">Mathematical constants</string>
     <string name="mechanics">Mechanics</string>

@@ -1,8 +1,23 @@
 <resources>
     <string name="search">Поиск</string>
     <string name="constants">Константы</string>
-    <string name="constants_nothing_found">Ничего не найдено(</string>
+    <string name="display_preferences">Отображение</string>
 
+    <string name="digits">Знаков после запятой</string>
+    <string name="digits_subtitle">Выберите количество знаков после запятой для отображения значений.</string>
+
+    <string name="copy_mode_title">Копирование</string>
+
+    <string name="copy_mode_value">Только значение</string>
+    <string name="copy_mode_value_example">6.6743 × 10⁻¹¹</string>
+
+    <string name="copy_mode_symbol_value">Символ и значение</string>
+    <string name="copy_mode_symbol_value_example">G = 6.6743 × 10⁻¹¹</string>
+
+    <string name="copy_mode_full">Полная информация</string>
+    <string name="copy_mode_full_example">Гравитационная постоянная\nG = 6.6743 × 10⁻¹¹ м³/(кг·с²)</string>
+
+    <string name="constants_nothing_found">Ничего не найдено(</string>
 
     <string name="math_c">Константы из математики</string>
     <string name="mechanics">Механика</string>

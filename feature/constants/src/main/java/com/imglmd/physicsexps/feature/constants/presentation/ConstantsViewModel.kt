@@ -7,22 +7,22 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class ConstantsViewModel(
-    private val getAllCategoriesUseCase: GetAllCategoriesUseCase
+    getAllCategoriesUseCase: GetAllCategoriesUseCase
 ): ViewModel() {
-    private val allCategories = getAllCategoriesUseCase()
-
-    private val _state = MutableStateFlow(ConstantsContract.State())
+    private val _state = MutableStateFlow(ConstantsContract.State(allCategories = getAllCategoriesUseCase()))
     val state = _state.asStateFlow()
-
-    init {
-        _state.update { it.copy(search = "",
-            allCategories = allCategories
-        )}
-    }
 
     fun onIntent(intent: ConstantsContract.Intent) {
         when(intent) {
             is ConstantsContract.Intent.ChangeSearchText -> {_state.update { it.copy(search = intent.text) }}
+            is ConstantsContract.Intent.ChangeDigits -> updatePreferences { copy(digits = intent.value) }
+            is ConstantsContract.Intent.ChangeCopyMode -> updatePreferences { copy(copyMode = intent.mode) }
         }
+    }
+
+    private fun updatePreferences(
+        transform: ConstantsPreferences.() -> ConstantsPreferences
+    ) {
+        _state.update { it.copy(preferences = it.preferences.transform()) }
     }
 }

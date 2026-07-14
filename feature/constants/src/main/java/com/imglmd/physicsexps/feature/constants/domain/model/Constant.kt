@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.feature.constants.domain.model
 
-data class Item(
+data class Constant(
     val symbol: String,
     val unitRes: Int? = null,
     val value: NumberValue,

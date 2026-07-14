@@ -28,8 +28,8 @@ import com.imglmd.physicsexps.core.ui.preferences.PreferenceButton
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceSwitch
-import com.imglmd.physicsexps.core.ui.preferences.RadioGroup
-import com.imglmd.physicsexps.core.ui.preferences.RadioOption
+import com.imglmd.physicsexps.core.ui.RadioGroup
+import com.imglmd.physicsexps.core.ui.RadioOption
 import com.imglmd.physicsexps.feature.settings.R
 import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme

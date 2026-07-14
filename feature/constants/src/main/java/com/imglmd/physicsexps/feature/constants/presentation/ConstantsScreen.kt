@@ -1,5 +1,10 @@
 package com.imglmd.physicsexps.feature.constants.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +30,8 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +41,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,9 +52,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.RadioGroup
+import com.imglmd.physicsexps.core.ui.RadioOption
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
+import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
 import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Category
-import com.imglmd.physicsexps.feature.constants.domain.model.Item
+import com.imglmd.physicsexps.feature.constants.domain.model.Constant
 import com.imglmd.physicsexps.feature.constants.presentation.component.CategoryItem
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -62,6 +76,7 @@ fun ConstantsScreen(
     }
 
     val searchState = rememberTextFieldState()
+    var settingsExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(searchState.text) {
         viewModel.onIntent(ConstantsContract.Intent.ChangeSearchText(searchState.text.toString()))
@@ -70,44 +85,141 @@ fun ConstantsScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(
-                top = innerPadding.calculateTopPadding(),
-                bottom = innerPadding.calculateBottomPadding() + 110.dp,
-                start = 16.dp,
-                end = 16.dp
-            )
+        Column(
+            Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())
         ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        stringResource(R.string.constants),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+            ScreenHeader(
+                settingsExpanded = settingsExpanded,
+                onSettingsClick = { settingsExpanded = !settingsExpanded }
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(
+                    top = 8.dp,
+                    bottom = innerPadding.calculateBottomPadding() + 110.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
+                item {
+                    SearchTextField(state = searchState)
+                }
+
+                item {
+                    AnimatedVisibility(
+                        visible = settingsExpanded,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        SettingsSection(
+                            digits = state.preferences.digits,
+                            copyMode = state.preferences.copyMode,
+                            onDigitsChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeDigits(it)) },
+                            onCopyModeChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeCopyMode(it)) }
+                        )
+                    }
+                }
+
+                if (visibleCategories.isEmpty()) {
+                    item { EmptySearchState() }
+                } else {
+                    items(visibleCategories, key = { it.labelRes }) { category ->
+                        CategoryItem(
+                            labelRes = category.labelRes,
+                            preferences = state.preferences,
+                            listConstant = category.listConstant,
+                            icon = category.icon
+                        )
+                    }
                 }
             }
+        }
+    }
+}
 
-            item {
-                SearchTextField(state = searchState)
-            }
+@Composable
+private fun ScreenHeader(
+    settingsExpanded: Boolean,
+    onSettingsClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(Modifier.width(48.dp))
 
-            if (visibleCategories.isEmpty()) {
-                item { EmptySearchState() }
-            } else {
-                items(visibleCategories, key = { it.labelRes }) { category ->
-                    CategoryItem(
-                        labelRes = category.labelRes,
-                        listItem = category.listItem,
-                        icon = category.icon
-                    )
+        Text(
+            text = stringResource(R.string.constants),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.weight(1f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+
+        IconButton(onClick = onSettingsClick) {
+            Icon(
+                imageVector = if (settingsExpanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.Settings,
+                contentDescription = stringResource(R.string.display_preferences),
+                tint = if (settingsExpanded) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
                 }
-            }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingsSection(
+    digits: Int,
+    copyMode: CopyMode,
+    onDigitsChange: (Int) -> Unit,
+    onCopyModeChange: (CopyMode) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        PreferenceGroup(stringResource(R.string.display_preferences)) {
+            PreferenceSlider(
+                title = stringResource(R.string.digits),
+                subtitle = stringResource(R.string.digits_subtitle),
+                value = digits,
+                values = listOf(0, 1, 2, 3, 4, 5, 6),
+                valueLabel = { it.toString() },
+                onValueChange = onDigitsChange
+            )
+        }
+
+        PreferenceGroup(stringResource(R.string.copy_mode_title)) {
+            RadioGroup(
+                options = listOf(
+                    RadioOption(
+                        value = CopyMode.VALUE,
+                        title = stringResource(R.string.copy_mode_value),
+                        subtitle = stringResource(R.string.copy_mode_value_example)
+                    ),
+                    RadioOption(
+                        value = CopyMode.SYMBOL_VALUE,
+                        title = stringResource(R.string.copy_mode_symbol_value),
+                        subtitle = stringResource(R.string.copy_mode_symbol_value_example)
+                    ),
+                    RadioOption(
+                        value = CopyMode.FULL,
+                        title = stringResource(R.string.copy_mode_full),
+                        subtitle = stringResource(R.string.copy_mode_full_example)
+                    )
+                ),
+                selected = copyMode,
+                onSelected = onCopyModeChange
+            )
         }
     }
 }
@@ -117,27 +229,31 @@ private fun filterCategory(category: Category, query: String): Category? {
     val label = stringResource(category.labelRes)
     if (label.contains(query, ignoreCase = true)) return category
 
-    val matchingItems = category.listItem.filter { item -> itemMatches(item, query) }
-    return if (matchingItems.isEmpty()) null else category.copy(listItem = matchingItems)
+    val matchingItems = category.listConstant.filter { item -> itemMatches(item, query) }
+    return if (matchingItems.isEmpty()) null else category.copy(listConstant = matchingItems)
 }
 
 @Composable
-private fun itemMatches(item: Item, query: String): Boolean {
-    val name = stringResource(item.nameRes)
-    return item.symbol.contains(query, ignoreCase = true) ||
-            name.contains(query, ignoreCase = true) ||
-            item.value.contains(query, ignoreCase = true)
+private fun itemMatches(constant: Constant, query: String): Boolean {
+    val name = stringResource(constant.nameRes)
+    return constant.symbol.contains(query, ignoreCase = true) ||
+            name.contains(query, ignoreCase = true)
 }
 
 @Composable
 private fun EmptySearchState(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(vertical = 32.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(modifier = Modifier.size(80.dp).clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -157,7 +273,6 @@ private fun EmptySearchState(modifier: Modifier = Modifier) {
         )
     }
 }
-
 
 @Composable
 private fun SearchTextField(
