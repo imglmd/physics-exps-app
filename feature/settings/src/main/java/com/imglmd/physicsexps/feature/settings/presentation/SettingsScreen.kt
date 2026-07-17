@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.ui
+package com.imglmd.physicsexps.feature.settings.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -132,6 +132,19 @@ fun SettingsScreen(
                 }
             }
             item {
+                PreferenceGroup(stringResource(R.string.history_s)) {
+                    PreferenceSlider(
+                        title = stringResource(R.string.max_rec),
+                        subtitle = stringResource(R.string.old_rec),
+                        value = state.settings.maxHistoryEntries,
+                        values = listOf(50, 100, 200, null),
+                        valueLabel = { it?.toString() ?: "∞ " },
+                        onValueChange = { viewModel.onIntent(SettingsIntent.MaxHistoryChanged(it))}
+                    )
+                }
+            }
+
+            item {
                 PreferenceGroup(stringResource(R.string.exps)) {
                     PreferenceSwitch(
                         title = stringResource(R.string.show_all_p),
@@ -144,18 +157,6 @@ fun SettingsScreen(
                                 )
                             )
                         }
-                    )
-                }
-            }
-            item {
-                PreferenceGroup(stringResource(R.string.history_s)) {
-                    PreferenceSlider(
-                        title = stringResource(R.string.max_rec),
-                        subtitle = stringResource(R.string.old_rec),
-                        value = state.settings.maxHistoryEntries,
-                        values = listOf(50, 100, 200, null),
-                        valueLabel = { it?.toString() ?: "∞ " },
-                        onValueChange = { viewModel.onIntent(SettingsIntent.MaxHistoryChanged(it))}
                     )
                 }
             }

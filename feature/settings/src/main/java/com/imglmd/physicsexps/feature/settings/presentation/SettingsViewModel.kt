@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.ui
+package com.imglmd.physicsexps.feature.settings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

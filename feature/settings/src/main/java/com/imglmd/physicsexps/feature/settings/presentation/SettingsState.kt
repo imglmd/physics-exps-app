@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.ui
+package com.imglmd.physicsexps.feature.settings.presentation
 
 import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
 import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings

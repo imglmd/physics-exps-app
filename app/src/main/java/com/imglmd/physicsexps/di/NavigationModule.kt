@@ -2,7 +2,6 @@
 
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.feature.settings.ui.SettingsScreen
 import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
@@ -10,7 +9,6 @@ import com.imglmd.physicsexps.presentation.screens.TabHostScreen
 import com.imglmd.physicsexps.presentation.screens.compare.CompareScreen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
 import com.imglmd.physicsexps.presentation.screens.history.HistoryScreen
-import com.imglmd.physicsexps.presentation.screens.home.HomeScreen
 import com.imglmd.physicsexps.presentation.screens.result.FullScreenChartScreen
 import com.imglmd.physicsexps.presentation.screens.result.ResultScreen
 import com.imglmd.physicsexps.presentation.screens.solution.SolutionScreen

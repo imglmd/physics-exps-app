@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -41,6 +42,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +60,7 @@ import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Category
 import com.imglmd.physicsexps.feature.constants.domain.model.Constant
 import com.imglmd.physicsexps.feature.constants.presentation.component.CategoryItem
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -76,6 +79,9 @@ fun ConstantsScreen(
     val searchState = rememberTextFieldState()
     var settingsExpanded by remember { mutableStateOf(false) }
 
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(searchState.text) {
         viewModel.onIntent(ConstantsContract.Intent.ChangeSearchText(searchState.text.toString()))
     }
@@ -88,17 +94,19 @@ fun ConstantsScreen(
         ) {
             ScreenHeader(
                 settingsExpanded = settingsExpanded,
-                onSettingsClick = { settingsExpanded = !settingsExpanded }
+                onSettingsClick = {
+                    settingsExpanded = !settingsExpanded
+                    if (settingsExpanded) scope.launch { listState.animateScrollToItem(0) }
+                }
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)),
+                state = listState,
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp).clip(RoundedCornerShape(24.dp)),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(
                     top = 8.dp,
-                    bottom = innerPadding.calculateBottomPadding() + 110.dp,
-                    start = 16.dp,
-                    end = 16.dp
+                    bottom = innerPadding.calculateBottomPadding() + 110.dp
                 )
             ) {
                 item {
