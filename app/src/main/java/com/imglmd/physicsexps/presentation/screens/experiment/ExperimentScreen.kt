@@ -245,7 +245,7 @@ fun ExperimentScreen(
                         AdvancedToggle(
                             title = stringResource(R.string.advanced_mode),
                             subtitle = if (state.isAdvancedMode) stringResource(R.string.additional_params) else stringResource(R.string.key_params),
-                            icon = ImageVector.vectorResource(R.drawable.rocket),
+                            icon = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
                             enabled = state.isAdvancedMode,
                             onToggle = {
                                 viewModel.onIntent(ExperimentContract.Intent.ToggleAdvancedMode)

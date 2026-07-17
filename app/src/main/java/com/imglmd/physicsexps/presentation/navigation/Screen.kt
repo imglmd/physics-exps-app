@@ -26,14 +26,14 @@ sealed interface Screen {
         }
         val selectedIcon: ImageVector @Composable
         get() = when (this) {
-            Home -> Icons.Filled.Home
-            Settings -> Icons.Filled.Settings
+            Home -> ImageVector.vectorResource(R.drawable.home_filled)
+            Settings -> ImageVector.vectorResource(R.drawable.settings_filled)
             Constants -> ImageVector.vectorResource(R.drawable.book_filled)
         }
         val unselectedIcon: ImageVector @Composable
         get() = when (this) {
-            Home -> Icons.Outlined.Home
-            Settings -> Icons.Outlined.Settings
+            Home -> ImageVector.vectorResource(R.drawable.home_outlined)
+            Settings -> ImageVector.vectorResource(R.drawable.settings_outlined)
             Constants -> ImageVector.vectorResource(R.drawable.book_outlined)
         }
     }

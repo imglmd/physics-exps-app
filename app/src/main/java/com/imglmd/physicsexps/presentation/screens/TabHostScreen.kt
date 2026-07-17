@@ -2,7 +2,6 @@
 
 package com.imglmd.physicsexps.presentation.screens
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -245,13 +244,6 @@ private fun BottomBarButton(
         label = "icon_color",
     )
 
-    val labelColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.onSurfaceVariant,
-        animationSpec = MaterialTheme.motionScheme.slowEffectsSpec(),
-        label = "label_color",
-    )
-
     Surface(
         onClick = onClick,
         interactionSource = interactionSource,
@@ -260,25 +252,15 @@ private fun BottomBarButton(
         shape = CircleShape,
         color = Color.Transparent,
     ) {
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = if (selected) selectedIcon else unselectedIcon,
                 contentDescription = label,
                 tint = iconColor,
-                modifier = Modifier.size(22.dp)
-            )
-            Text(
-                text = label,
-                fontSize = 11.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = labelColor,
-                letterSpacing = 0.15.sp,
-                lineHeight = 12.sp,
-                maxLines = 1
+                modifier = Modifier.size(24.dp)
             )
         }
     }

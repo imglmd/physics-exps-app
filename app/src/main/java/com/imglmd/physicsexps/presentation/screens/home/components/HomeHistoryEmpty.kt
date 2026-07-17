@@ -67,7 +67,7 @@ fun HomeHistoryEmpty(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.rocket),
+                    imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)

@@ -92,7 +92,7 @@ fun ConstantsScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(24.dp)),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 contentPadding = PaddingValues(
                     top = 8.dp,
@@ -162,7 +162,7 @@ private fun ScreenHeader(
 
         IconButton(onClick = onSettingsClick) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.tune),
+                imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.tune),
                 contentDescription = stringResource(R.string.display_preferences),
                 tint = if (settingsExpanded) {
                     MaterialTheme.colorScheme.primary
@@ -296,7 +296,7 @@ private fun SearchTextField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.search),
+            imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.search),
             contentDescription = "Search",
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
