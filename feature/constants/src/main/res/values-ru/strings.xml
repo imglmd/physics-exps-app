@@ -3,8 +3,8 @@
     <string name="constants">Константы</string>
     <string name="display_preferences">Отображение</string>
 
-    <string name="digits">Знаков после запятой</string>
-    <string name="digits_subtitle">Выберите количество знаков после запятой для отображения значений.</string>
+    <string name="digits">Точность отображения</string>
+    <string name="digits_subtitle">Выберите количество значащих цифр</string>
 
     <string name="copy_mode_title">Копирование</string>
 

@@ -3,8 +3,8 @@
     <string name="constants">Constants</string>
     <string name="display_preferences">Display</string>
 
-    <string name="digits">Decimal places</string>
-    <string name="digits_subtitle">Choose how many decimal places to display.</string>
+    <string name="digits">Precision</string>
+    <string name="digits_subtitle">Choose the number of significant digits to display</string>
 
     <string name="copy_mode_title">Copying</string>
 

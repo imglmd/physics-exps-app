@@ -121,7 +121,6 @@ fun ConstantsScreen(
                     }
                 }
 
-
                 if (visibleCategories.isEmpty()) {
                     item { EmptySearchState() }
                 } else {

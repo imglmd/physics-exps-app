@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.feature.constants.domain.model.Constant
 import com.imglmd.physicsexps.feature.constants.presentation.ConstantsPreferences
-import com.imglmd.physicsexps.feature.constants.presentation.util.buildCopyText
+import com.imglmd.physicsexps.feature.constants.presentation.CopyMode
 import com.imglmd.physicsexps.feature.constants.presentation.util.format
 
 @Composable
@@ -32,6 +32,7 @@ fun ConstantItem(
 ) {
     val clipboard = LocalClipboardManager.current
     val unitText = constant.unitRes?.let { stringResource(it) }.orEmpty()
+    val nameText = stringResource(constant.nameRes)
     val formattedValue = constant.value.format(preferences.digits)
 
     Column(
@@ -47,6 +48,7 @@ fun ConstantItem(
             .clickable {
                 val copyText = buildCopyText(
                     constant = constant,
+                    nameText = nameText,
                     formattedValue = formattedValue,
                     unitText = unitText,
                     copyMode = preferences.copyMode
@@ -78,6 +80,28 @@ fun ConstantItem(
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
+        }
+    }
+}
+
+private fun buildCopyText(
+    constant: Constant,
+    nameText: String,
+    formattedValue: String,
+    unitText: String,
+    copyMode: CopyMode
+): String = when (copyMode) {
+    CopyMode.VALUE -> formattedValue
+    CopyMode.SYMBOL_VALUE -> "${constant.symbol} = $formattedValue"
+    CopyMode.FULL -> buildString {
+        append(nameText)
+        append("\n")
+        append(constant.symbol)
+        append(" = ")
+        append(formattedValue)
+        if (unitText.isNotBlank()) {
+            append(" ")
+            append(unitText)
         }
     }
 }
