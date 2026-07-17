@@ -87,8 +87,8 @@ fun TabHostScreen(
         }
     }
 
-    LaunchedEffect(pagerState.settledPage) {
-        currentTab = pagerState.settledPage
+    LaunchedEffect(pagerState.currentPage) {
+        currentTab = pagerState.currentPage
     }
 
 
@@ -138,6 +138,7 @@ fun TabHostScreen(
                 pagerState = pagerState,
                 currentTab = currentTab,
                 onTabChange = { page ->
+                    currentTab = page
                     scope.launch { pagerState.animateScrollToPage(page) }
                 }
             )

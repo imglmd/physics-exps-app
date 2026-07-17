@@ -27,12 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
 import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Constant
 import com.imglmd.physicsexps.feature.constants.presentation.ConstantsPreferences
@@ -48,6 +50,7 @@ fun ConstantItem(
     modifier: Modifier = Modifier,
     onCopied: (String) -> Unit = {}
 ) {
+    val haptic = LocalHapticManager.current
     val clipboard = LocalClipboardManager.current
     val unitText = constant.unitRes?.let { stringResource(it) }.orEmpty()
     val nameText = stringResource(constant.nameRes)
@@ -81,6 +84,7 @@ fun ConstantItem(
                 )
                 clipboard.setText(AnnotatedString(copyText))
                 onCopied(copyText)
+                haptic.perform(HapticFeedbackType.Confirm)
                 copied = true
             }
             .padding(horizontal = 12.dp, vertical = 10.dp),
@@ -117,9 +121,8 @@ fun ConstantItem(
                 label = "copy_icon"
             ) { copied ->
                 Icon(
-                    imageVector = if (copied) Icons.Outlined.CheckCircle else ImageVector.vectorResource(
-                        R.drawable.copy
-                    ),
+                    imageVector = if (copied) ImageVector.vectorResource(R.drawable.content_copy_filled)
+                    else ImageVector.vectorResource(R.drawable.copy),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
