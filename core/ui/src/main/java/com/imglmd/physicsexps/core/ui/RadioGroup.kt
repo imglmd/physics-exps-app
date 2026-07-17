@@ -50,11 +50,7 @@ fun <T> RadioGroup(
                     onSelected(option.value)
                 },
                 shape = RoundedCornerShape(6.dp),
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.surfaceVariant
-                } else {
-                    MaterialTheme.colorScheme.surfaceContainer
-                },
+                color = MaterialTheme.colorScheme.surfaceContainer,
                 modifier = Modifier.fillMaxWidth()
             ) {
 

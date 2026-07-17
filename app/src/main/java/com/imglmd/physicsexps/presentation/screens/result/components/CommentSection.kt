@@ -111,7 +111,7 @@ fun CommentSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .border(
                     width = 1.dp,
                     color = borderColor,
@@ -141,7 +141,7 @@ fun CommentSection(
                             Text(
                                 text = stringResource(R.string.add_note),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         inner()
@@ -185,7 +185,7 @@ fun CommentSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(vertical = 24.dp),
                 contentAlignment = Alignment.Center
             ) {

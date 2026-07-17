@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -168,6 +169,11 @@ private fun TabHostBottomBar(
             modifier = Modifier
                 .padding(bottom = 20.dp)
                 .navigationBarsPadding()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    shape = CircleShape
+                )
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(5.dp),
@@ -191,8 +197,7 @@ private fun TabHostBottomBar(
                         .size(width = buttonWidthDp, height = 46.dp)
                         .graphicsLayer { translationX = pillOffsetPx }
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
-
+                        .background(MaterialTheme.colorScheme.primaryContainer)
                 )
 
                 Row(

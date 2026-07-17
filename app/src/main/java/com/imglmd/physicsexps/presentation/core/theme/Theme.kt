@@ -63,28 +63,38 @@ private val AmoledColorScheme = DarkColorScheme.copy(
 )
 private val LightColorScheme = lightColorScheme(
     primary = CherryRose,
-    tertiary = AlabasterGrey,
-    surface = White,
-    surfaceVariant = Parchment,
-    background = White,
-    surfaceContainer = Parchment,
-    primaryContainer = CherryRose.copy(alpha = 0.1f),
-    onPrimaryContainer = ShadowGrey,
     onPrimary = White,
+
+    primaryContainer = BlushRose,
+    onPrimaryContainer = ShadowGrey,
+
+    secondary = Plum,
+    onSecondary = White,
+    secondaryContainer = PlumLight,
+    onSecondaryContainer = OnPlumContainerLight,
+
+    tertiary = StoneGrey,
+
+    background = BackgroundLight,
     onBackground = ShadowGrey,
+
+    surface = SurfaceLight,
     onSurface = ShadowGrey,
+
+    surfaceVariant = SurfaceVariantLight,
     onSurfaceVariant = WarmGrey,
+
+    surfaceContainer = SurfaceContainerLight,
+
+    outline = StoneGrey,
+    outlineVariant = AlabasterGrey,
+
     error = ErrorRose,
     errorContainer = ErrorContainerLight,
     onError = White,
     onErrorContainer = OnErrorContainerLight,
-    outline = StoneGrey,
-    outlineVariant = AlabasterGrey,
-    scrim = ShadowGrey,
-    secondary = Plum,
-    secondaryContainer = PlumLight,
-    onSecondary = OnPlum,
-    onSecondaryContainer = OnPlumContainerLight,
+
+    scrim = ShadowGrey
 )
 
 @Composable

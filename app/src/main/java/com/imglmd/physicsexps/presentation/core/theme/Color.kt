@@ -2,22 +2,31 @@ package com.imglmd.physicsexps.presentation.core.theme
 
 import androidx.compose.ui.graphics.Color
 
-val CherryRose = Color(0xFFA90735)
-val ShadowGrey = Color(0xFF232020)
+val White = Color(0xFFFFFFFF)
+val BackgroundLight = Color(0xFFFCFBF9)
+val SurfaceLight = Color(0xFFFFFFFF)
+val SurfaceVariantLight = Color(0xFFF8F6F4)
+val SurfaceContainerLight = Color(0xFFF8F5F2)
+
+val ShadowGrey = Color(0xFF1F1C1C)
+val WarmGrey = Color(0xFF68625F)
+
+val StoneGrey = Color(0xFFD4CEC8)
+val AlabasterGrey = Color(0xFFE8E3DE)
+
+val CherryRose = Color(0xFFB10B3C)
+val BlushRose = Color(0xFFFCE7EE)
+
 val Parchment = Color(0xFFF5F5F3)
 
-val BlushRose = Color(0xFFF9E4EB)
 val Silver = Color(0xFFB2B2AB)
-val White = Color(0xFFFFFFFF)
-val AlabasterGrey = Color(0xFFD9D9D9)
+
 
 val NightBlack = Color(0xFF141212)
 val DarkSurface = Color(0xFF1E1B1B)
 val DarkSurfaceVariant = Color(0xFF2A2626)
 val DimSilver = Color(0xFF403E3E)
 
-val WarmGrey = Color(0xFF6B6966)
-val StoneGrey = Color(0xFFC4C3BE)
 
 val ErrorRose = Color(0xFF8E1C2F)
 val ErrorRoseDark = Color(0xFFFFB3C1)

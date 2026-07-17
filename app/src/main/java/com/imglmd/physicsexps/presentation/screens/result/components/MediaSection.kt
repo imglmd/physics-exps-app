@@ -92,7 +92,7 @@ fun MediaSection(
             Surface(
                 modifier = modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Text(
                     text = unavailableReason,
@@ -221,7 +221,7 @@ fun MediaSection(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Text(
                     text = stringResource(R.string.no_files),
@@ -328,7 +328,7 @@ private fun ImageCard(
                     .fillMaxWidth()
                     .height(150.dp)
                     .clip(RoundedCornerShape(22.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
 
                 SubcomposeAsyncImage(
