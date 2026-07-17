@@ -10,6 +10,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,25 +30,37 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 class MainActivity : ComponentActivity() {
+    private var keepSplash = true
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splash = installSplashScreen()
+        splash.setKeepOnScreenCondition {
+            keepSplash
+        }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val settingsRepo: SettingsRepository by inject()
-            val settings by settingsRepo.settings.collectAsStateWithLifecycle(AppSettings())
+            val settings by settingsRepo.settings.collectAsStateWithLifecycle(null)
 
-            val darkTheme = when (settings.theme) {
+            LaunchedEffect(settings) {
+                if (settings != null) keepSplash = false
+
+            }
+
+            val darkTheme = when (settings?.theme) {
                 AppTheme.DARK   -> true
                 AppTheme.LIGHT  -> false
                 AppTheme.SYSTEM -> isSystemInDarkTheme()
+                null -> true
             }
-            PhysicsExpsTheme(
-                darkTheme = darkTheme,
-                amoledTheme = settings.amoledTheme,
-                dynamicColor = settings.dynamicColors
-            ) {
-                AppRoot(settings)
+            settings?.let { currentSettings ->
+                PhysicsExpsTheme(
+                    darkTheme = darkTheme,
+                    amoledTheme = currentSettings.amoledTheme,
+                    dynamicColor = currentSettings.dynamicColors
+                ) {
+                    AppRoot(currentSettings)
+                }
             }
         }
     }

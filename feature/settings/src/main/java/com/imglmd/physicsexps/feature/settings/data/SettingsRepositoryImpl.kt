@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.onEach
 class SettingsRepositoryImpl(
     private val dataSource: SettingsDataSource
 ): SettingsRepository{
-
+    //TODO сделать лучше
     private var cachedSettings: AppSettings? = null
 
     override val settings: Flow<AppSettings> = dataSource.settings
