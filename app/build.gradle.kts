@@ -53,8 +53,8 @@ android {
         applicationId = "com.imglmd.physicsexps"
         minSdk = 29
         targetSdk = 37
-        versionCode = 5
-        versionName = "1.2.1"
+        versionCode = 6
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "BACKEND_BASE_URL", backendBaseUrl.asBuildConfigValue())
