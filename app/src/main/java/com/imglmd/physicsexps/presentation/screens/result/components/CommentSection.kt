@@ -111,7 +111,7 @@ fun CommentSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .border(
                     width = 1.dp,
                     color = borderColor,
@@ -185,7 +185,7 @@ fun CommentSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
                     .padding(vertical = 24.dp),
                 contentAlignment = Alignment.Center
             ) {
