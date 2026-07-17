@@ -30,8 +30,6 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -105,22 +103,24 @@ fun ConstantsScreen(
             ) {
                 item {
                     SearchTextField(state = searchState)
-                }
-
-                item {
                     AnimatedVisibility(
+                        modifier = Modifier.clip(RoundedCornerShape(24.dp)),
                         visible = settingsExpanded,
                         enter = fadeIn() + expandVertically(),
                         exit = fadeOut() + shrinkVertically()
                     ) {
-                        SettingsSection(
-                            digits = state.preferences.digits,
-                            copyMode = state.preferences.copyMode,
-                            onDigitsChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeDigits(it)) },
-                            onCopyModeChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeCopyMode(it)) }
-                        )
+                        Column {
+                            Spacer(Modifier.height(24.dp))
+                            SettingsSection(
+                                digits = state.preferences.digits,
+                                copyMode = state.preferences.copyMode,
+                                onDigitsChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeDigits(it)) },
+                                onCopyModeChange = { viewModel.onIntent(ConstantsContract.Intent.ChangeCopyMode(it)) }
+                            )
+                        }
                     }
                 }
+
 
                 if (visibleCategories.isEmpty()) {
                     item { EmptySearchState() }
@@ -163,7 +163,7 @@ private fun ScreenHeader(
 
         IconButton(onClick = onSettingsClick) {
             Icon(
-                imageVector = if (settingsExpanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.Settings,
+                imageVector = ImageVector.vectorResource(R.drawable.tune),
                 contentDescription = stringResource(R.string.display_preferences),
                 tint = if (settingsExpanded) {
                     MaterialTheme.colorScheme.primary

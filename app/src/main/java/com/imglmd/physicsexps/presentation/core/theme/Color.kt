@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val CherryRose = Color(0xFFA90735)
 val ShadowGrey = Color(0xFF232020)
-val Parchment = Color(0xFFF4F3EE)
+val Parchment = Color(0xFFF5F5F3)
 
 val BlushRose = Color(0xFFF9E4EB)
 val Silver = Color(0xFFB2B2AB)
