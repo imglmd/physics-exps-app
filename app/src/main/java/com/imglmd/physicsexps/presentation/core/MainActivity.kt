@@ -33,9 +33,7 @@ class MainActivity : ComponentActivity() {
     private var keepSplash = true
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
-        splash.setKeepOnScreenCondition {
-            keepSplash
-        }
+        splash.setKeepOnScreenCondition { keepSplash }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -44,7 +42,6 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(settings) {
                 if (settings != null) keepSplash = false
-
             }
 
             val darkTheme = when (settings?.theme) {
