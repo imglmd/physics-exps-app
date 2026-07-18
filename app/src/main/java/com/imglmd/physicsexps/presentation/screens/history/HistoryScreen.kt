@@ -71,6 +71,7 @@ fun HistoryScreen(
     preselectedIds: List<Int>,
     navigateBack: () -> Unit,
     navigateToResult: (runId: Int) -> Unit,
+    navigateToSelection: (Int) -> Unit,
     onSelectRuns: (ids: List<Int>) -> Unit,
     viewModel: HistoryViewModel = koinViewModel{ parametersOf(preselectedIds) }
 ) {
@@ -138,6 +139,9 @@ fun HistoryScreen(
             onItemClick = {
                 if (mode == HistoryMode.SELECTION) viewModel.onIntent(HistoryContract.Intent.ToggleSelection(it))
                 else viewModel.onIntent(HistoryContract.Intent.NavigateToResult(it)) },
+            onItemLongClick = {
+                if (mode == HistoryMode.NORMAL) navigateToSelection(it)
+            },
             padding = innerPadding,
             isLoading = state.isLoading,
             onIntent = viewModel::onIntent,
@@ -278,6 +282,7 @@ private fun Content(
     state: HistoryContract.State,
     isLoading: Boolean,
     onItemClick: (id: Int) -> Unit,
+    onItemLongClick: (id: Int) -> Unit,
     onIntent: (HistoryContract.Intent) -> Unit,
     onDateChipClick: () -> Unit,
     padding: PaddingValues = PaddingValues()
@@ -318,7 +323,13 @@ private fun Content(
                             else -> false
                         }
 
-                        HistoryCard(item, onClick = { onItemClick(item.id) }, selectionIndex = index, isActive = isActive)
+                        HistoryCard(
+                            item,
+                            onClick = { onItemClick(item.id) },
+                            onLongClick = { onItemLongClick(item.id) },
+                            selectionIndex = index,
+                            isActive = isActive
+                        )
                     }
                 }
             }

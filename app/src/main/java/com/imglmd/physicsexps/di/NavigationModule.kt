@@ -69,6 +69,10 @@ val navigationModule = module {
             navigateToResult = { runId ->
                 get<Navigator>().navigateTo(Screen.Result(runId))
             },
+            // TODO: пока так, в будущем сделать нормально!!!!
+            navigateToSelection = { id ->
+                get<Navigator>().navigateTo(Screen.History(mode = HistoryMode.SELECTION, listOf(id)))
+            },
             onSelectRuns = { ids ->
                 get<Navigator>().navigateTo(Screen.Compare(ids))
             }

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ fun HistoryCard(
     item: HistoryItemUi,
     selectionIndex: Int?,
     isActive: Boolean,
+    onLongClick: () -> Unit,
     onClick: () -> Unit
 ) {
     val contentAlpha by animateFloatAsState(
@@ -86,7 +88,11 @@ fun HistoryCard(
                 )
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.surface)
-                .clickable(isActive) { onClick() }
+                .combinedClickable(
+                    enabled = isActive,
+                    onClick = onClick,
+                    onLongClick = onLongClick
+                )
         ) {
             /*if (isSystemInDarkTheme()) {
                 Box(
