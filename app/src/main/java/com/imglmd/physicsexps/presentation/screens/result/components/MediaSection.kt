@@ -221,7 +221,7 @@ fun MediaSection(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surfaceContainer
             ) {
                 Text(
                     text = stringResource(R.string.no_files),
