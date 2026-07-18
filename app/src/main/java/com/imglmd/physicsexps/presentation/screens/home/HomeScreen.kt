@@ -169,6 +169,7 @@ fun HomeScreen(
                     Column {
                         ExperimentItem(
                             name = getStringByKey(experiment.name),
+                            inputs = experiment.inputFields,
                             previewUrl = state.previewUrlsByExperimentId[experiment.id],
                             placeholder = experiment.imageRes,
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
