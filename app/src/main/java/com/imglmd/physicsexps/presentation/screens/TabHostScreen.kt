@@ -167,7 +167,7 @@ private fun TabHostBottomBar(
     ) {
         Row(
             modifier = Modifier
-                .padding(bottom = 20.dp)
+                .padding(bottom = 6.dp)
                 .navigationBarsPadding()
                 .border(
                     width = 1.dp,
