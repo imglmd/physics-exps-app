@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.delete
 import androidx.compose.foundation.text.input.insert
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,11 +65,10 @@ fun ExperimentTextField(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 60.dp)
                 .padding(start = if (isError) 4.dp else 0.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(modifier = Modifier.width(symbolWidth).padding(vertical = 12.dp)) {
+            Box(modifier = Modifier.width(symbolWidth)) {
                 Text(
                     text = symbol,
                     style = MaterialTheme.typography.titleLarge,
@@ -91,7 +91,7 @@ fun ExperimentTextField(
                 state = state,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 textStyle = MaterialTheme.typography.titleLarge.copy(color = colors.onSurface),
-                modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
+                modifier = Modifier.weight(1f).padding(horizontal = 4.dp, vertical = 12.dp),
                 lineLimits = TextFieldLineLimits.SingleLine,
                 inputTransformation = InputTransformation {
                     for (i in 0 until length) {
@@ -144,7 +144,6 @@ fun ExperimentTextField(
                 modifier = Modifier.padding(end = 12.dp, start = 4.dp)
             )
         }
-
         AnimatedVisibility(visible = isError) {
             Text(
                 text = errorMessage.orEmpty(),
