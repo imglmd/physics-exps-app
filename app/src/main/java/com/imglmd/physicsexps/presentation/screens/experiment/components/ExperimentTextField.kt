@@ -49,17 +49,29 @@ fun ExperimentTextField(
     val colors = MaterialTheme.colorScheme
     val isError = errorMessage != null
 
-    Column(modifier = modifier) {
-        Box(
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
+        if (isError) {
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .fillMaxHeight()
+                    .background(colors.error)
+            )
+        }
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .heightIn(min = 60.dp)
+                .weight(1f)
+                .background(colors.surfaceContainer)
         ) {
             Row(
                 modifier = Modifier
-                    .matchParentSize()
-                    .background(colors.surfaceContainer)
+                    .fillMaxWidth()
+                    .heightIn(min = 60.dp)
                     .padding(start = if (isError) 4.dp else 0.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -88,7 +100,33 @@ fun ExperimentTextField(
                     textStyle = MaterialTheme.typography.titleLarge.copy(color = colors.onSurface),
                     modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
                     lineLimits = TextFieldLineLimits.SingleLine,
-                    inputTransformation = InputTransformation { /* без изменений */ },
+                    inputTransformation = InputTransformation {
+                        for (i in 0 until length) {
+                            if (charAt(i) == ',') {
+                                delete(i, i + 1)
+                                insert(i, ".")
+                            }
+                        }
+                        var hasDecimal = false
+                        var hasMinus = false
+                        for (i in 0 until length) {
+                            val c = charAt(i)
+                            when {
+                                c.isDigit() -> Unit
+                                c == '.' -> {
+                                    if (hasDecimal) delete(i, i + 1)
+                                    else hasDecimal = true
+                                }
+                                c == '-' -> {
+                                    if (i != 0 || hasMinus) delete(i, i + 1)
+                                    else hasMinus = true
+                                }
+                                else -> delete(i, i + 1)
+                            }
+                        }
+                        if (length == 1 && charAt(0) == '.') insert(0, "0")
+                        if (length >= 2 && charAt(0) == '-' && charAt(1) == '.') insert(1, "0")
+                    },
                     cursorBrush = SolidColor(colors.primary),
                     decorator = { innerTextField ->
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
@@ -114,24 +152,16 @@ fun ExperimentTextField(
                 )
             }
 
-            if (isError) {
-                Box(
+            AnimatedVisibility(visible = isError) {
+                Text(
+                    text = errorMessage.orEmpty(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.error,
                     modifier = Modifier
-                        .width(4.dp)
-                        .fillMaxHeight()
-                        .background(colors.error)
-                        .align(Alignment.CenterStart)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 16.dp, bottom = 10.dp)
                 )
             }
-        }
-
-        AnimatedVisibility(visible = errorMessage != null) {
-            Text(
-                text = errorMessage.orEmpty(),
-                style = MaterialTheme.typography.bodySmall,
-                color = colors.error,
-                modifier = Modifier.padding(start = 20.dp, top = 4.dp, bottom = 2.dp)
-            )
         }
     }
 }
