@@ -152,7 +152,7 @@ fun ExperimentTextField(
                 color = colors.error,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 16.dp, bottom = 10.dp)
+                    .padding(start = 20.dp, end = 16.dp, bottom = 4.dp)
             )
         }
     }
