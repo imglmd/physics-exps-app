@@ -3,13 +3,15 @@ package com.imglmd.physicsexps.presentation.screens.experiment
 import com.imglmd.physicsexps.domain.model.Experiment
 
 interface ExperimentContract {
-    data class State (
+    data class State(
         val experiment: Experiment,
         val imageUrls: List<String> = emptyList(),
         val isImagesLoading: Boolean = true,
         val isImagesError: Boolean = false,
         val inputs: Map<String, String> = emptyMap(),
-        val error: String? = null,
+        val fieldErrors: Map<String, String> = emptyMap(),
+        val generalError: String? = null,
+        val hasAttemptedSubmit: Boolean = false,
         val isLoading: Boolean = false,
         val isButtonActive: Boolean = false,
         val isAdvancedMode: Boolean = false,

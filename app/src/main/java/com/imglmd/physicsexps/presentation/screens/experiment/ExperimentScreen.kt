@@ -97,15 +97,6 @@ fun ExperimentScreen(
 
     val listState = rememberLazyListState()
 
-    LaunchedEffect(state.error) {
-        if (state.error != null) {
-            listState.animateScrollToItem(
-                index = listState.layoutInfo.totalItemsCount - 1,
-                scrollOffset = -200
-            )
-        }
-    }
-
     LaunchedEffect(state.isAdvancedMode) {
         if (state.isAdvancedMode) {
             kotlinx.coroutines.delay(200)
@@ -220,7 +211,7 @@ fun ExperimentScreen(
                                 symbol = field.symbol,
                                 unit = field.unit,
                                 modifier = Modifier.fillMaxWidth(),
-                                isError = state.error != null,
+                                errorMessage = state.fieldErrors[field.key],
                                 isRequired = field.required
                             )
                         }
@@ -233,28 +224,14 @@ fun ExperimentScreen(
                                     symbol = field.symbol,
                                     unit = field.unit,
                                     modifier = Modifier.fillMaxWidth(),
-                                    isError = state.error != null
+                                    errorMessage = state.fieldErrors[field.key],
                                 )
                             }
                         }
                     }
                 }
 
-                if (state.experiment.additionalInputFields.isNotEmpty()){
-                    item {
-                        AdvancedToggle(
-                            title = stringResource(R.string.advanced_mode),
-                            subtitle = if (state.isAdvancedMode) stringResource(R.string.additional_params) else stringResource(R.string.key_params),
-                            icon = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
-                            enabled = state.isAdvancedMode,
-                            onToggle = {
-                                viewModel.onIntent(ExperimentContract.Intent.ToggleAdvancedMode)
-                            }
-                        )
-                    }
-                }
-
-                state.error?.let { error ->
+                state.generalError?.let { error ->
                     item {
                         Row(
                             modifier = Modifier
@@ -274,10 +251,23 @@ fun ExperimentScreen(
                             Text(
                                 text = error,
                                 color = MaterialTheme.colorScheme.onErrorContainer,
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Start
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
+                    }
+                }
+
+                if (state.experiment.additionalInputFields.isNotEmpty()){
+                    item {
+                        AdvancedToggle(
+                            title = stringResource(R.string.advanced_mode),
+                            subtitle = if (state.isAdvancedMode) stringResource(R.string.additional_params) else stringResource(R.string.key_params),
+                            icon = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
+                            enabled = state.isAdvancedMode,
+                            onToggle = {
+                                viewModel.onIntent(ExperimentContract.Intent.ToggleAdvancedMode)
+                            }
+                        )
                     }
                 }
 
@@ -294,7 +284,7 @@ fun ExperimentScreen(
                 PrimaryButton(
                     text = stringResource(R.string.start_exp),
                     isLoading = state.isLoading,
-                    enabled = state.isButtonActive,
+                    isMuted = !state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
                     iconPosition = IconPosition.EdgeEnd,
                     icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,

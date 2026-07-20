@@ -74,31 +74,21 @@ class ExperimentViewModel(
     }
 
     private fun start() = viewModelScope.launch {
-
-        _state.update { it.copy(isLoading = true, error = null) }
+        _state.update { it.copy(isLoading = true, generalError = null, hasAttemptedSubmit = true) }
 
         when (val result = calculate(id, state.value.inputs)) {
-
             is CalculateExperimentUseCase.Result.Success -> {
                 resultRepository.save(result.result, result.inputs, replaceRunId)
                 _actionFlow.emit(ExperimentContract.Action.NavigateToResult)
             }
-
             is CalculateExperimentUseCase.Result.ValidationError -> {
-                _state.update {
-                    it.copy(
-                        error = mapValidationErrors(result.errors)
-                    )
-                }
+                val (fieldErrors, generalError) = mapValidationErrors(result.errors)
+                _state.update { it.copy(fieldErrors = fieldErrors, generalError = generalError) }
             }
-
             is CalculateExperimentUseCase.Result.Failure -> {
-                _state.update {
-                    it.copy(error = result.message)
-                }
+                _state.update { it.copy(generalError = result.message) }
             }
         }
-
         _state.update { it.copy(isLoading = false) }
     }
 
@@ -112,43 +102,60 @@ class ExperimentViewModel(
         }
     }
     private fun changeValue(key: String, newValue: String) {
-
         _state.update { current ->
-
             val newInputs = current.inputs + (key to newValue)
+            val validation = validator.validate(current.experiment, newInputs)
 
-            val validation = validator.validate(
-                experiment = current.experiment,
-                rawInputs = newInputs
-            )
+            if (!current.hasAttemptedSubmit) {
+                return@update current.copy(
+                    inputs = newInputs,
+                    isButtonActive = validation is ValidationResult.Success
+                )
+            }
+            val (fieldErrors, generalError) = if (validation is ValidationResult.Error) {
+                mapValidationErrors(validation.errors)
+            } else {
+                emptyMap<String, String>() to null
+            }
 
             current.copy(
                 inputs = newInputs,
-                error = null,
+                fieldErrors = fieldErrors,
+                generalError = generalError,
                 isButtonActive = validation is ValidationResult.Success
             )
         }
     }
-    private fun mapValidationErrors(errors: List<ValidationError>): String {
-        return when (errors.firstOrNull()) {
-            ValidationError.NotEnoughInputs ->
-                "Недостаточно данных"
+    private fun mapValidationErrors(errors: List<ValidationError>): Pair<Map<String, String>, String?> {
+        val fieldErrors = mutableMapOf<String, String>()
+        var generalError: String? = null
 
-            ValidationError.InvalidCombination ->
-                "Некорректная комбинация значений"
+        for (error in errors) {
+            when (error) {
+                is ValidationError.RequiredField ->
+                    fieldErrors[error.fieldKey] = "Обязательное поле"
 
-            is ValidationError.InvalidNumber ->
-                "Некорректное число"
+                is ValidationError.InvalidNumber ->
+                    fieldErrors[error.fieldKey] = "Введите число"
 
-            is ValidationError.OutOfRange ->
-                "Значение вне допустимого диапазона"
+                is ValidationError.OutOfRange -> {
+                    fieldErrors[error.fieldKey] = when {
+                        error.min != null && error.max != null -> "От ${error.min} до ${error.max}"
+                        error.min != null -> "Не меньше ${error.min}"
+                        error.max != null -> "Не больше ${error.max}"
+                        else -> "Значение вне диапазона"
+                    }
+                }
 
-            is ValidationError.RequiredField ->
-                "Заполните обязательные поля"
+                ValidationError.NotEnoughInputs ->
+                    generalError = "Недостаточно данных для расчёта"
 
-            null ->
-                "Ошибка ввода"
+                ValidationError.InvalidCombination ->
+                    generalError = "Такая комбинация значений невозможна"
+            }
         }
+
+        return fieldErrors to generalError
     }
 
     private fun loadImages() {

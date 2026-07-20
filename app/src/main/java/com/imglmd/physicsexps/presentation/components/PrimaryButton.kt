@@ -52,6 +52,7 @@ fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isMuted: Boolean = false,
     enabled: Boolean = true,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     borderColor: Color? = null,
@@ -85,7 +86,8 @@ fun PrimaryButton(
             .height(56.dp)
             .scale(scale.value),
         enabled = enabled,
-        colors = colors,
+        colors = if (isMuted) colors.copy(containerColor = colors.containerColor.copy(alpha = 0.67f))
+        else colors,
         shapes = ButtonDefaults.shapes(
             shape = CircleShape,
             pressedShape = RoundedCornerShape(30)
