@@ -1,8 +1,10 @@
 package com.imglmd.physicsexps.presentation.screens.compare
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +15,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,7 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,6 +53,8 @@ import com.patrykandpatrick.vico.compose.cartesian.data.lineSeries
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.components.IconPosition
+import com.imglmd.physicsexps.presentation.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,34 +74,8 @@ fun CompareScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.comparison),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { viewModel.onIntent(CompareContract.Intent.Back) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
-            )
-        }
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
+        Box(Modifier.fillMaxSize()) {
             when (val s = state) {
                 is CompareContract.State.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -109,15 +92,31 @@ fun CompareScreen(
                 }
 
                 is CompareContract.State.Success -> {
-                    CompareContent(items = s.items)
+                    CompareContent(items = s.items, navigateBack, padding)
                 }
             }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .align(Alignment.TopCenter)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.92f),
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.67f),
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.3f),
+                                Color.Transparent,
+                            )
+                        )
+                    )
+            )
         }
     }
 }
 
 @Composable
-private fun CompareContent(items: List<CompareItem>) {
+private fun CompareContent(items: List<CompareItem>, navigateBack: () -> Unit, padding: PaddingValues) {
     if (items.size < 2) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(stringResource(R.string.insufficient_data))
@@ -160,7 +159,7 @@ private fun CompareContent(items: List<CompareItem>) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(20.dp)),
+            .padding(padding),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
@@ -195,6 +194,11 @@ private fun CompareContent(items: List<CompareItem>) {
             color2 = color2
         )
 
-        Spacer(Modifier.height(8.dp))
+        PrimaryButton(
+            text = stringResource(R.string.go_back),
+            onClick = navigateBack,
+            icon = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+            iconPosition = IconPosition.EdgeStart
+        )
     }
 }

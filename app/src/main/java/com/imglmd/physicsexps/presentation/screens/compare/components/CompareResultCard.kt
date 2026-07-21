@@ -76,10 +76,7 @@ fun CompareResultsCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .animateContentSize()
-            .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, colors.outlineVariant, RoundedCornerShape(24.dp))
-            .padding(6.dp),
+            .animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Row(

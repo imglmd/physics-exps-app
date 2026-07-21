@@ -170,7 +170,7 @@ private fun Content(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .padding(padding)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp)
                 .imePadding()
         ) {
             Spacer(Modifier.height(16.dp))

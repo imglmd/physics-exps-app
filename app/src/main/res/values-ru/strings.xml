@@ -67,7 +67,7 @@
     <string name="doppler_effect">Эффект Доплера</string>
     <string name="doppler_desc">Эффект Доплера — это изменение частоты волны (звука, света, радиосигнала) из-за движения источника или наблюдателя.</string>
     <string name="free_fall">Свободное падение тел</string>
-    <string name="kinematics">" Кинематика"</string>
+    <string name="kinematics">"Кинематика"</string>
     <string name="free_fall_desc">Свободным падением тел называют движение, которое совершается под действием только силы тяжести.</string>
     <string name="harmonic_vibrations">Гармонические колебания</string>
     <string name="harmonic_vibrations_desc">Гармонические колебания - колебания, при которых некоторая физическая величина изменяется с течением времени по гармоническому (синусоидальному, косинусоидальному) закону.</string>
