@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import kotlin.math.abs
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.core.getStringByKey
+import kotlin.math.abs
 
 @Composable
 fun CompareResultsCard(
@@ -48,29 +50,29 @@ fun CompareResultsCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .background(colors.surface).padding(vertical = 4.dp),
+            .border(1.dp, colors.outlineVariant, RoundedCornerShape(24.dp))
+            .background(colors.surface)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ){
-            Text(
-                text = stringResource(R.string.results),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = colors.onSurface)
-        }
-        allSymbols.forEach { symbol ->
-            val q1 = map1[symbol]
-            val q2 = map2[symbol]
+        Text(
+            text = stringResource(R.string.results),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = colors.onSurface,
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+        )
+
+        allSymbols.forEachIndexed { index, symbol ->
             QuantityCompareRow(
-                q1 = q1,
-                q2 = q2,
+                q1 = map1[symbol],
+                q2 = map2[symbol],
                 symbol = symbol,
                 color1 = color1,
                 color2 = color2
             )
+            if (index != allSymbols.lastIndex) {
+                HorizontalDivider(color = colors.outline.copy(alpha = 0.42f))
+            }
         }
     }
 }
@@ -85,109 +87,81 @@ private fun QuantityCompareRow(
 ) {
     val colors = MaterialTheme.colorScheme
     val label = q1?.label ?: q2?.label ?: symbol
-    val unit = q1?.unit ?: q2?.unit ?: ""
+    val unit = getStringByKey(q1?.unit ?: q2?.unit ?: "")
     val v1 = q1?.value
     val v2 = q2?.value
 
+    val diffPercent = if (v1 != null && v2 != null && v1 != 0.0) {
+        ((v2 - v1) / abs(v1)) * 100
+    } else null
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(colors.surfaceVariant)
-            .padding(horizontal = 12.dp, vertical = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = symbol,
                 style = MaterialTheme.typography.bodyMedium,
                 fontFamily = FontFamily.Monospace,
-                color = colors.primary
+                color = colors.primary,
+                modifier = Modifier.padding(end = 6.dp)
             )
             Text(
                 text = getStringByKey(label),
                 style = MaterialTheme.typography.bodyMedium,
                 color = colors.onSurfaceVariant,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
             )
+            if (diffPercent != null) {
+                DiffBadge(diffPercent = diffPercent, favorsRun2 = v2!! > v1!!, color1 = color1, color2 = color2)
+            }
         }
+
+        Spacer(Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ValueTile(
-                value = v1,
-                unit = getStringByKey(unit),
-                accentColor = color1,
-                runLabel = stringResource(R.string.run_1),
-                modifier = Modifier.weight(1f)
-            )
-
-            DeltaColumn(
-                v1 = v1,
-                v2 = v2,
-                color1 = color1,
-                color2 = color2
-            )
-
-            ValueTile(
-                value = v2,
-                unit = getStringByKey(unit),
-                accentColor = color2,
-                runLabel = stringResource(R.string.run_2),
-                modifier = Modifier.weight(1f)
-            )
+            ValueColumn(value = v1, unit = unit, accentColor = color1, modifier = Modifier.weight(1f))
+            ValueColumn(value = v2, unit = unit, accentColor = color2, modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-private fun ValueTile(
+private fun ValueColumn(
     value: Double?,
     unit: String,
     accentColor: Color,
-    runLabel: String,
     modifier: Modifier = Modifier
 ) {
-    val colors = MaterialTheme.colorScheme
-
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(colors.surface)
-            .border(1.dp, accentColor.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 10.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = runLabel,
-            style = MaterialTheme.typography.labelSmall,
-            color = accentColor,
-            fontSize = 10.sp
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .clip(CircleShape)
+                .background(accentColor)
         )
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(3.dp)
-        ) {
+        Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(3.dp)) {
             Text(
                 text = if (value != null) formatDouble(value) else "—",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = if (value != null) colors.onSurface
-                else colors.onSurfaceVariant.copy(alpha = 0.4f)
+                color = if (value != null) MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
             )
             if (unit.isNotBlank() && value != null) {
                 Text(
                     text = unit,
                     style = MaterialTheme.typography.bodySmall,
-                    color = colors.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 2.dp)
                 )
             }
@@ -196,86 +170,47 @@ private fun ValueTile(
 }
 
 @Composable
-private fun DeltaColumn(
-    v1: Double?,
-    v2: Double?,
+private fun DiffBadge(
+    diffPercent: Double,
+    favorsRun2: Boolean,
     color1: Color,
     color2: Color
 ) {
-    val delta = if (v1 != null && v2 != null) v2 - v1 else null
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.width(52.dp)
-    ) {
-        Text(
-            text = if (delta != null) formatDelta(delta) else "—",
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.SemiBold,
-            color = when {
-                v1 == null || v2 == null -> MaterialTheme.colorScheme.onSurfaceVariant
-                v2 > v1 -> color2
-                v1 > v2 -> color1
-                else -> MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            fontSize = 10.sp,
-            textAlign = TextAlign.Center
-        )
-
-        if (v1 != null && v2 != null) {
-            DeltaBar(
-                v1 = v1,
-                v2 = v2,
-                color1 = color1,
-                color2 = color2
+    val absDiff = abs(diffPercent)
+    if (absDiff < 0.05) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(horizontal = 8.dp, vertical = 3.dp)
+        ) {
+            Text(
+                text = "=",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 11.sp
             )
         }
+        return
     }
-}
-@Composable
-private fun DeltaBar(
-    v1: Double,
-    v2: Double,
-    color1: Color,
-    color2: Color
-) {
-    val total = (abs(v1) + abs(v2)).coerceAtLeast(1e-6)
 
-    fun ratio(v: Double) = (abs(v) / total).toFloat()
-
-    val r1 = ratio(v1)
-    val r2 = ratio(v2)
-
+    val badgeColor = if (favorsRun2) color2 else color1
     Box(
         modifier = Modifier
-            .size(width = 48.dp, height = 4.dp)
-            .clip(RoundedCornerShape(3.dp))
-            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+            .clip(RoundedCornerShape(8.dp))
+            .background(badgeColor.copy(alpha = 0.14f))
+            .padding(horizontal = 8.dp, vertical = 3.dp)
     ) {
-        fun Modifier.bar(ratio: Float, align: Alignment, color: Color) =
-            fillMaxWidth(ratio)
-                .fillMaxHeight()
-                .align(align)
-                .background(color)
-
-        Box(Modifier.bar(r1, Alignment.CenterStart, color1))
-        Box(Modifier.bar(r2, Alignment.CenterEnd, color2))
+        Text(
+            text = "${if (diffPercent > 0) "+" else ""}${"%.1f".format(diffPercent)}%",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = badgeColor,
+            fontSize = 11.sp
+        )
     }
 }
 
 private fun formatDouble(value: Double): String =
     if (value == value.toLong().toDouble()) value.toLong().toString()
     else "%.4g".format(value)
-
-private fun formatDelta(delta: Double): String {
-    val absDelta = abs(delta)
-
-    if (absDelta < 1e-6) return "0"
-
-    return when {
-        absDelta >= 1000 -> "%.0f".format(absDelta)
-        absDelta >= 1    -> "%.2f".format(absDelta)
-        else             -> "%.4f".format(absDelta)
-    }.trimEnd('0').trimEnd('.').trimEnd(',')
-}
