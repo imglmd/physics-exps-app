@@ -1,5 +1,12 @@
 package com.imglmd.physicsexps.presentation.screens.compare.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -13,25 +20,37 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import kotlin.math.abs
+private const val COLLAPSED_COUNT = 4
 
 @Composable
 fun CompareResultsCard(
@@ -46,23 +65,58 @@ fun CompareResultsCard(
     val map1 = quantities1.associateBy { it.symbol }
     val map2 = quantities2.associateBy { it.symbol }
 
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    val canExpand = allSymbols.size > COLLAPSED_COUNT
+
+    val visibleSymbols = if (isExpanded || !canExpand) allSymbols else allSymbols.take(COLLAPSED_COUNT)
+    val hiddenSymbols = if (!isExpanded && canExpand) allSymbols.drop(COLLAPSED_COUNT) else emptyList()
+
+    val arrowRotation by animateFloatAsState(if (isExpanded) 180f else 0f, label = "arrow_rotation")
+
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .animateContentSize()
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, colors.outlineVariant, RoundedCornerShape(24.dp))
-            .background(colors.surface)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Text(
-            text = stringResource(R.string.results),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = colors.onSurface,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp, end = 2.dp, top = 2.dp, bottom = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.results),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.onSurface
+            )
 
-        allSymbols.forEachIndexed { index, symbol ->
+            if (canExpand) {
+                IconButton(
+                    onClick = { isExpanded = !isExpanded },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = colors.primaryContainer
+                    ),
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = colors.primary,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .rotate(arrowRotation)
+                    )
+                }
+            }
+        }
+
+        visibleSymbols.forEach { symbol ->
             QuantityCompareRow(
                 q1 = map1[symbol],
                 q2 = map2[symbol],
@@ -70,9 +124,17 @@ fun CompareResultsCard(
                 color1 = color1,
                 color2 = color2
             )
-            if (index != allSymbols.lastIndex) {
-                HorizontalDivider(color = colors.outline.copy(alpha = 0.42f))
-            }
+        }
+
+        if (!isExpanded) return
+        hiddenSymbols.forEach { symbol ->
+            QuantityCompareRow(
+                q1 = map1[symbol],
+                q2 = map2[symbol],
+                symbol = symbol,
+                color1 = color1,
+                color2 = color2
+            )
         }
     }
 }
@@ -96,7 +158,11 @@ private fun QuantityCompareRow(
     } else null
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(colors.surfaceContainer)
+            .padding(14.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -119,7 +185,7 @@ private fun QuantityCompareRow(
             }
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(10.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -166,8 +232,7 @@ private fun ValueColumn(
                 )
             }
         }
-    }
-}
+    }}
 
 @Composable
 private fun DiffBadge(
