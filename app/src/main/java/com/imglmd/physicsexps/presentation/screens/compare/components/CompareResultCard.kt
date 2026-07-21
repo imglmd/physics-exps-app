@@ -158,7 +158,8 @@ private fun QuantityCompareRow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(colors.surfaceContainer)
+            .background(colors.surface)
+            .border(1.dp, colors.outlineVariant, RoundedCornerShape(16.dp))
             .padding(14.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
