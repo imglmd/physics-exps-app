@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.presentation.components
+package com.imglmd.physicsexps.core.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +76,7 @@ private fun BackButton(
         ),
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.arrow_left),
+            imageVector = AppIcons.ArrowBack,
             contentDescription = "back"
         )
     }

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui
+package com.imglmd.physicsexps.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

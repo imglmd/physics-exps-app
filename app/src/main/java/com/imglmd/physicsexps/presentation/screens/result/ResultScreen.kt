@@ -58,7 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.presentation.components.ExperimentAppBar
+import com.imglmd.physicsexps.core.ui.component.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.CommentSection
 import com.imglmd.physicsexps.presentation.screens.result.components.MediaSection

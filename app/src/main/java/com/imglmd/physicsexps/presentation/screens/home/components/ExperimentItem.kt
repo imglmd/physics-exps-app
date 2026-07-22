@@ -24,14 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.imglmd.physicsexps.core.ui.R
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.domain.model.InputField
 
 
@@ -109,7 +107,7 @@ fun ExperimentItem(
             }
             Icon(
                 modifier = Modifier.size(20.dp),
-                imageVector = ImageVector.vectorResource(R.drawable.chevron_right),
+                imageVector = AppIcons.ChevronRight,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = null
             )

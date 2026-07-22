@@ -52,8 +52,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.RadioGroup
-import com.imglmd.physicsexps.core.ui.RadioOption
+import com.imglmd.physicsexps.core.ui.component.RadioGroup
+import com.imglmd.physicsexps.core.ui.component.RadioOption
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
 import com.imglmd.physicsexps.feature.constants.R

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.presentation.components
+package com.imglmd.physicsexps.core.ui.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
