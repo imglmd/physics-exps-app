@@ -5,6 +5,7 @@ import com.imglmd.physicsexps.feature.constants.di.constantsModule
 import com.imglmd.physicsexps.feature.settings.di.settingsModule
 
 val appModules = listOf(
+    coreModule,
     networkModule,
 
     databaseModule,

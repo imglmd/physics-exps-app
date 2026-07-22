@@ -57,6 +57,7 @@ val viewModelModule = module {
         ResultViewModel(
             runId,
             get(),
+            get(APP_SCOPE),
             get(),
             get(),
             get(),

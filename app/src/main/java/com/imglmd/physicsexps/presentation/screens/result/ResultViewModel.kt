@@ -24,6 +24,7 @@ import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateExperiment
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateHome
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateSolution
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +37,7 @@ import kotlinx.serialization.json.Json
 class ResultViewModel(
     private val runId: Int?,
     private val appContext: Context,
+    private val appScope: CoroutineScope,
     private val resultRepository: InMemoryResultRepository,
     private val saveRunUseCase: SaveRunUseCase,
     private val deleteRunUseCase: DeleteRunUseCase,
@@ -114,7 +116,7 @@ class ResultViewModel(
     fun onIntent(intent: ResultContract.Intent) = when (intent) {
         ResultContract.Intent.Back -> handleBack()
         ResultContract.Intent.Save -> emit(NavigateHome)
-        ResultContract.Intent.Delete -> deleteRunThen { emit(NavigateHome) }
+        ResultContract.Intent.Delete -> deleteRunThenNavigate(NavigateHome)
         ResultContract.Intent.Change -> handleChange()
         ResultContract.Intent.Compare -> emit(NavigateCompare(savedRunId ?: 0))
         ResultContract.Intent.OpenChart -> savedRunId?.let { emit(NavigateChart(it)) }
@@ -128,7 +130,7 @@ class ResultViewModel(
 
     private fun handleBack() {
         if (isNewRun) {
-            deleteRunThen { emit(NavigateBack) }
+            deleteRunThenNavigate(NavigateBack)
         } else {
             emit(NavigateBack)
         }
@@ -165,8 +167,12 @@ class ResultViewModel(
                     savedRemoteRunId = run.remoteId
 
                     if (replaceRunId != null) {
-                        //deleteRemoteMediaForRun(replaceRunId)
-                        runCatching { deleteRunUseCase(replaceRunId) }
+                        appScope.launch {
+                            runCatching {
+                                deleteRemoteMediaForRun(replaceRunId)
+                                deleteRunUseCase(replaceRunId)
+                            }
+                        }
                     }
 
                     _state.update { state ->
@@ -191,7 +197,20 @@ class ResultViewModel(
         }
     }
 
-    private fun deleteRunThen(onSuccess: suspend () -> Unit) {
+    private fun deleteRunThenNavigate(effect: ResultContract.Effect) {
+        val id = savedRunId
+        emit(effect)
+
+        if (id != null) {
+            appScope.launch {
+                runCatching {
+                    deleteRemoteMediaForRun(id)
+                    deleteRunUseCase(id)
+                }
+            }
+        }
+    }
+   /* private fun deleteRunThen(onSuccess: suspend () -> Unit) {
         viewModelScope.launch {
             val id = savedRunId
             if (id != null) {
@@ -202,7 +221,7 @@ class ResultViewModel(
                 onSuccess()
             }
         }
-    }
+    }*/
 
     private fun observeOnlineState() {
         viewModelScope.launch {
