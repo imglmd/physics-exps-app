@@ -12,6 +12,10 @@ import com.imglmd.physicsexps.core.ui.R
 object AppIcons {
     val ChevronRight @Composable get() =
         ImageVector.vectorResource(R.drawable.chevron_right)
+    val ChevronLeft @Composable get() =
+        ImageVector.vectorResource(R.drawable.chevron_left)
+    val ArrowDropDown @Composable get() =
+        ImageVector.vectorResource(R.drawable.arrow_drop_down)
     val ArrowBack @Composable get() =
         ImageVector.vectorResource(R.drawable.arrow_back)
     val Search @Composable get() =

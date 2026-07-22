@@ -29,9 +29,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -60,6 +57,7 @@ import com.imglmd.physicsexps.core.ui.component.AdvancedToggle
 import com.imglmd.physicsexps.core.ui.component.ExperimentAppBar
 import com.imglmd.physicsexps.core.ui.component.IconPosition
 import com.imglmd.physicsexps.core.ui.component.PrimaryButton
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentCarousel
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
@@ -261,7 +259,7 @@ fun ExperimentScreen(
                         AdvancedToggle(
                             title = stringResource(R.string.advanced_mode),
                             subtitle = if (state.isAdvancedMode) stringResource(R.string.additional_params) else stringResource(R.string.key_params),
-                            icon = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
+                            icon = AppIcons.Rocket,
                             enabled = state.isAdvancedMode,
                             onToggle = {
                                 viewModel.onIntent(ExperimentContract.Intent.ToggleAdvancedMode)
@@ -286,7 +284,7 @@ fun ExperimentScreen(
                     isMuted = !state.isButtonActive,
                     onClick = { viewModel.onIntent(ExperimentContract.Intent.Start) },
                     iconPosition = IconPosition.EdgeEnd,
-                    icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                    icon = AppIcons.ChevronRight,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .navigationBarsPadding()
@@ -352,7 +350,7 @@ private fun ExpandableDescription(
             )
 
             Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
+                imageVector = AppIcons.ArrowDropDown,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier

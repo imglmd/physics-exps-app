@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.ui.component.IconPosition
+import com.imglmd.physicsexps.core.ui.component.PrimaryButton
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.presentation.alignSeries
 import com.imglmd.physicsexps.presentation.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
@@ -39,9 +41,6 @@ import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProdu
 import com.patrykandpatrick.vico.compose.cartesian.data.lineModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.component.IconPosition
-import com.imglmd.physicsexps.core.ui.component.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -184,7 +183,7 @@ private fun CompareContent(items: List<CompareItem>, navigateBack: () -> Unit, p
         PrimaryButton(
             text = stringResource(R.string.go_back),
             onClick = navigateBack,
-            icon = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+            icon = AppIcons.ChevronLeft,
             iconPosition = IconPosition.EdgeStart
         )
     }

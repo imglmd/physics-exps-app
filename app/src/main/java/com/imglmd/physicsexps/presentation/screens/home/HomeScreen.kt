@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.ExperimentItem
@@ -207,7 +208,7 @@ private fun SearchTextField(
     ) {
 
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.search),
+            imageVector = AppIcons.Search,
             contentDescription = "Search",
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
