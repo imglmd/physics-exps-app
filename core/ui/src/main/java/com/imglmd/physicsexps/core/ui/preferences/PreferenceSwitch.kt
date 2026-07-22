@@ -3,8 +3,10 @@ package com.imglmd.physicsexps.core.ui.preferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -54,7 +56,7 @@ fun PreferenceSwitch(
                 )
             }
         }
-
+        Spacer(Modifier.width(6.dp))
         Switch(
             colors = SwitchDefaults.colors(
                 uncheckedTrackColor = Color.Transparent,
