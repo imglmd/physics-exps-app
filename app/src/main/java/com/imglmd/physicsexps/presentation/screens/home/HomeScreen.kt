@@ -46,7 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.Experiment
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.physicsexps.experiments.model.Experiment
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.ExperimentItem
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
@@ -68,7 +69,7 @@ fun HomeScreen(
         val category= getStringByKey(key = string)
         val expsShow = mutableListOf<Experiment>()
         experiments.forEach {
-            val name = getStringByKey(it.name)
+            val name = getStringByKey(it.id)
             val description = getStringByKey(it.description)
             val search = state.searchText.trim()
             val isShow = name.contains(search, ignoreCase = true) ||
@@ -168,10 +169,11 @@ fun HomeScreen(
                 items(experiments) { experiment ->
                     Column {
                         ExperimentItem(
-                            name = getStringByKey(experiment.name),
+                            name = getStringByKey(experiment.id),
+                            experimentId = experiment.id,
                             inputs = experiment.inputFields,
-                            previewUrl = state.previewUrlsByExperimentId[experiment.id],
-                            placeholder = experiment.imageRes,
+                            /*previewUrl = state.previewUrlsByExperimentId[experiment.id],
+                            placeholder = experiment.imageRes,*/
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
                         )
                         Spacer(Modifier.height(10.dp))
@@ -207,7 +209,7 @@ private fun SearchTextField(
     ) {
 
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.search),
+            imageVector = AppIcons.Search,
             contentDescription = "Search",
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -228,7 +230,7 @@ private fun SearchTextField(
 
                     if (state.text.isEmpty()) {
                         Text(
-                            text = stringResource(R.string.search),
+                            text = stringResource(com.imglmd.physicsexps.core.ui.R.string.search),
                             style = textStyle,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

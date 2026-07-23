@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history">История</string>
+    <string name="main">Главная</string>
+    <string name="settings">Настройки</string>
+    <string name="chart">График</string>
+    <string name="results">Результаты</string>
+    <string name="comparison">Сравнение</string>
+
+
+    <string name="go_back">Вернуться назад</string>
+
+    <string name="apply">Применить</string>
+    <string name="cancel">Отменить</string>
+
+    <string name="delete">Удалить</string>
+    <string name="nothing_found">Ничего не найдено</string>
+
+    <string name="all">Все</string>
+    <string name="search">Поиск</string>
+
+    <string name="mechanics">Механика</string>
+    <string name="pendulum">Математический маятник</string>
+    <string name="physical_pendulum">Физический маятник</string>
+    <string name="spring_pendulum">Пружинный маятник</string>
+    <string name="harmonic_vibrations">Гармонические колебания</string>
+
+    <string name="kinematics">"Кинематика"</string>
+    <string name="free_fall">Свободное падение тел</string>
+    <string name="projectile_motion">Движение тела, брошенного под углом к горизонту</string>
+
+    <string name="electricity">Электричество</string>
+    <string name="coulombs_law">Закон Кулона</string>
+    <string name="joule_lenz">Закон Джоуля-Ленца</string>
+
+    <string name="phonics">Акустика</string>
+    <string name="doppler_effect">Эффект Доплера</string>
+
+    <string name="nuclear_physics">Ядерная физика</string>
+    <string name="radioactive_decay">Радиоактивный распад</string>
+</resources>

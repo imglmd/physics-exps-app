@@ -33,6 +33,7 @@ converterKotlinxSerialization = "3.0.0"
 coil = "2.7.0"
 appcompat = "1.7.1"
 material = "1.14.0"
+jetbrainsKotlinJvm = "2.4.0"
 
 [libraries]
 
@@ -62,6 +63,7 @@ navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref =
 navigation3-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Vm" }
 
 # Koin
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-navigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
@@ -99,6 +101,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 nav3 = ["navigation3-runtime", "navigation3-ui", "navigation3-viewmodel"]

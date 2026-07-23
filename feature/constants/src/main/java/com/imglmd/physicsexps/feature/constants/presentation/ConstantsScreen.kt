@@ -52,8 +52,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.RadioGroup
-import com.imglmd.physicsexps.core.ui.RadioOption
+import com.imglmd.physicsexps.core.ui.component.RadioGroup
+import com.imglmd.physicsexps.core.ui.component.RadioOption
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
 import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
 import com.imglmd.physicsexps.feature.constants.R
@@ -170,7 +171,7 @@ private fun ScreenHeader(
 
         IconButton(onClick = onSettingsClick) {
             Icon(
-                imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.tune),
+                imageVector = AppIcons.Tune,
                 contentDescription = stringResource(R.string.display_preferences),
                 tint = if (settingsExpanded) {
                     MaterialTheme.colorScheme.primary
@@ -304,7 +305,7 @@ private fun SearchTextField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.search),
+            imageVector = AppIcons.Search,
             contentDescription = "Search",
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )

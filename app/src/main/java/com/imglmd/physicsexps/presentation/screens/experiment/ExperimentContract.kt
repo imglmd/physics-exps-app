@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.experiment
 
-import com.imglmd.physicsexps.domain.model.Experiment
+import com.imglmd.physicsexps.experiments.model.Experiment
 
 interface ExperimentContract {
     data class State(

@@ -18,20 +18,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.presentation.core.getStringByKey
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.model.SortOrder
 import com.imglmd.physicsexps.presentation.screens.history.HistoryContract
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 private fun formatDateRange(period: String, from: Long?, to: Long?): String {
     val fmt = SimpleDateFormat("d MMM", Locale.getDefault())
@@ -146,7 +144,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
+                label = { Text(getStringByKey(experiment.id), style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant

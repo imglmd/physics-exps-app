@@ -33,7 +33,7 @@ class GetFilteredRunsUseCase(
                     SortOrder.DATE_DESC  -> filtered.sortedByDescending { it.date }
                     SortOrder.DATE_ASC   -> filtered.sortedBy { it.date }
                     SortOrder.EXPERIMENT -> filtered.sortedBy {
-                        getExperiment(it.experimentId).name
+                        getExperiment(it.experimentId).id
                     }
                 }
             }

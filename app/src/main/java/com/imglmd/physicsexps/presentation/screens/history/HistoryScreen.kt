@@ -19,13 +19,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
@@ -50,14 +48,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.presentation.components.IconPosition
-import com.imglmd.physicsexps.presentation.components.PrimaryButton
+import com.imglmd.physicsexps.core.ui.component.IconPosition
+import com.imglmd.physicsexps.core.ui.component.PrimaryButton
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.navigation.HistoryMode
 import com.imglmd.physicsexps.presentation.screens.history.components.FilterChipsRow
@@ -93,7 +90,8 @@ fun HistoryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = if (mode == HistoryMode.SELECTION) stringResource(R.string.select_exps) else stringResource(R.string.history),
+                        text = if (mode == HistoryMode.SELECTION) stringResource(R.string.select_exps)
+                        else stringResource(com.imglmd.physicsexps.core.ui.R.string.history),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -107,7 +105,7 @@ fun HistoryScreen(
                         ),
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.arrow_left),
+                            imageVector = AppIcons.ArrowBack,
                             contentDescription = "back"
                         )
                     }
@@ -184,7 +182,7 @@ fun HistoryScreen(
                     ),
                     enabled = pickerState.selectedStartDateMillis != null
                 ) {
-                    Text(stringResource(R.string.apply))
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.apply))
                 }
             },
             dismissButton = {
@@ -194,7 +192,7 @@ fun HistoryScreen(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel))
                 }
             }
         ) {
@@ -259,7 +257,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.delete), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -269,7 +267,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                     )
                 ) {
-                    Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
@@ -350,7 +348,7 @@ private fun Content(
                 enabled = state.selectedIds.size >= 2,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
                 text = stringResource(R.string.compare) + "(${state.selectedIds.size})",
-                icon = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                icon = AppIcons.ChevronRight,
                 iconPosition = IconPosition.EdgeEnd,
                 onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
             )
@@ -364,7 +362,7 @@ private fun EmptyHistory(
     modifier: Modifier = Modifier
 ) {
     val title = if (hasFilters) {
-        stringResource(R.string.nothing_found)
+        stringResource(com.imglmd.physicsexps.core.ui.R.string.nothing_found)
     } else {
         stringResource(R.string.no_exps)
     }

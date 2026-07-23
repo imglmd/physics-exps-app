@@ -1,9 +1,9 @@
 package com.imglmd.physicsexps.domain.usecase.experiment
 
-import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.domain.model.ExperimentResult
-import com.imglmd.physicsexps.domain.validation.ExperimentValidator
-import com.imglmd.physicsexps.domain.validation.ValidationResult
+import com.imglmd.physicsexps.experiments.ExperimentRegistry
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
+import com.imglmd.physicsexps.experiments.validation.ValidationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,7 +17,7 @@ class CalculateExperimentUseCase(
             val result: ExperimentResult,
             val inputs: Map<String, Double>
         ): Result()
-        data class ValidationError(val errors: List<com.imglmd.physicsexps.domain.validation.ValidationError>): Result()
+        data class ValidationError(val errors: List<com.imglmd.physicsexps.experiments.validation.ValidationError>): Result()
         data class Failure(val message: String): Result()
     }
 

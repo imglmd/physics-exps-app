@@ -24,26 +24,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import com.imglmd.physicsexps.core.ui.R
-import com.imglmd.physicsexps.domain.model.InputField
+import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.physicsexps.experiments.model.InputField
 
+private val experimentImages = mapOf(
+    "coulombs_law" to R.drawable.coulombs_law,
+    "doppler_effect" to R.drawable.doppler,
+    "free_fall" to R.drawable.freefall,
+    "harmonic_vibrations" to R.drawable.harmonical,
+    "joule_lenz" to R.drawable.joulelenz,
+    "pendulum" to R.drawable.mathpendulum,
+    "physical_pendulum" to R.drawable.physicalpendulum,
+    "projectile_motion" to R.drawable.projectile_motion,
+    "radioactive_decay" to R.drawable.radioactive_decay,
+    "spring_pendulum" to R.drawable.springpendulum
+)
 
 @Composable
 fun ExperimentItem(
     name: String,
+    experimentId: String,
     inputs: List<InputField>,
-    placeholder: Int,
-    previewUrl: String?,
+    //placeholder: Int,
+    //previewUrl: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageRes = experimentImages[experimentId] ?: R.drawable.placeholder
+
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
@@ -62,7 +75,7 @@ fun ExperimentItem(
                 .aspectRatio(1.067f)
                 .clip(RoundedCornerShape(19.dp))
         ) {
-            if (previewUrl != null) {
+            /*if (previewUrl != null) {
                 AsyncImage(
                     model = previewUrl,
                     contentDescription = null,
@@ -79,7 +92,13 @@ fun ExperimentItem(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
-            }
+            }*/
+            Image(
+                painter = painterResource(imageRes),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
             BlueprintGrid(Modifier.matchParentSize())
         }
         Text(
@@ -109,7 +128,7 @@ fun ExperimentItem(
             }
             Icon(
                 modifier = Modifier.size(20.dp),
-                imageVector = ImageVector.vectorResource(R.drawable.chevron_right),
+                imageVector = AppIcons.ChevronRight,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 contentDescription = null
             )

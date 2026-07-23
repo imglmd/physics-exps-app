@@ -126,7 +126,7 @@ fun CompareChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.chart),
+                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold

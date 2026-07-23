@@ -19,12 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 
 @Composable
 fun HomeHistoryEmpty(
@@ -37,7 +36,7 @@ fun HomeHistoryEmpty(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.history),
+                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.history),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -67,7 +66,7 @@ fun HomeHistoryEmpty(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(com.imglmd.physicsexps.core.ui.R.drawable.rocket_filled),
+                    imageVector = AppIcons.Rocket,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)

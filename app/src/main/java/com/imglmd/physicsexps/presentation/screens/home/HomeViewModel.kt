@@ -2,19 +2,16 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.os.Build
 import android.provider.Settings
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
-import com.imglmd.physicsexps.domain.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.AuthState
+import com.imglmd.physicsexps.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentPreviewsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
@@ -38,7 +35,7 @@ class HomeViewModel(
     private val registry: ExperimentRegistry,
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
+    //private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
     private val ensureAuthorizedUseCase: EnsureAuthorizedUseCase,
     private val onlineStateManager: OnlineStateManager
 ): AndroidViewModel(application) {
@@ -51,7 +48,7 @@ class HomeViewModel(
     private val _actionFlow = MutableSharedFlow<HomeAction>()
     val actionFlow = _actionFlow.asSharedFlow()
 
-    private var previewsLoaded = false
+    //private var previewsLoaded = false
     private val json = Json
 
     init {
@@ -78,12 +75,13 @@ class HomeViewModel(
         viewModelScope.launch {
             onlineStateManager.state.collect { onlineState ->
                 _state.update { it.copy(onlineState = onlineState) }
-                if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
+                if (onlineState.canUseOnlineFeatures) ensureAuthorization()
+                /*if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
                     previewsLoaded = true
 
                     val authState = ensureAuthorization()
                     if (authState == AuthState.Authorized) loadPreviewImages()
-                }
+                }*/
             }
         }
     }
@@ -139,7 +137,7 @@ class HomeViewModel(
                         HistoryItemUi(
                             id = run.id,
                             experimentId = experiment?.id ?: "unknown",
-                            experimentName = experiment?.name ?: run.experimentId,
+                            experimentName = experiment?.id ?: run.experimentId,
                             category = experiment?.category ?: "",
                             date = run.date,
                             inputs = inputs
@@ -157,14 +155,14 @@ class HomeViewModel(
         }
     }
 
-    private fun loadPreviewImages() {
+    /*private fun loadPreviewImages() {
         viewModelScope.launch {
             getExperimentPreviewsUseCase()
                 .onSuccess { previews ->
                     _state.update { it.copy(previewUrlsByExperimentId = previews) }
                 }
         }
-    }
+    }*/
 
     @SuppressLint("HardwareIds")
     private suspend fun ensureAuthorization(): AuthState {

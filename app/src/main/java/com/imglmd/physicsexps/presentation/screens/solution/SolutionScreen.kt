@@ -16,8 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -181,14 +180,14 @@ fun SolutionScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                        imageVector = AppIcons.ChevronLeft,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.alpha(textAlpha)) {
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            stringResource(R.string.go_back),
+                            stringResource(com.imglmd.physicsexps.core.ui.R.string.go_back),
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimary

@@ -1,0 +1,137 @@
+package com.imglmd.physicsexps.core.ui.theme
+
+import android.app.Activity
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+
+private val DarkColorScheme = darkColorScheme(
+    primary = CherryRose,
+    tertiary = DimSilver,
+    surface = DarkSurface,
+    surfaceVariant = DarkSurfaceVariant,
+    background = NightBlack,
+    surfaceContainer = DarkSurface,
+    primaryContainer = CherryRose.copy(alpha = 0.1f),
+    onPrimaryContainer = Parchment,
+    onPrimary = White,
+    onBackground = Parchment,
+    onSurface = Parchment,
+    onSurfaceVariant = Silver,
+    error = ErrorRose,
+    errorContainer = ErrorContainerDark,
+    onError = ShadowGrey,
+    onErrorContainer = OnErrorContainerDark,
+    outline = DimSilver,
+    outlineVariant = Color.Transparent,
+    scrim = NightBlack,
+    secondary = Plum,
+    secondaryContainer = PlumDark,
+    onSecondary = OnPlum,
+    onSecondaryContainer = OnPlumContainerDark,
+)
+private val AmoledColorScheme = DarkColorScheme.copy(
+    primary = CherryRose,
+
+    background = Color.Black,
+    surface = Color(0xFF0C0C0C),
+
+    surfaceContainer = Color(0xFF080808),
+    surfaceVariant = NightBlack,
+
+    onBackground = Parchment,
+    onSurface = Parchment,
+    onSurfaceVariant = Silver,
+
+    primaryContainer = CherryRose.copy(alpha = 0.12f),
+    onPrimaryContainer = Parchment,
+
+    tertiary = DimSilver,
+    outline = Color(0xFF2A2A2A)
+)
+private val LightColorScheme = lightColorScheme(
+    primary = CherryRose,
+    onPrimary = White,
+
+    primaryContainer = BlushRose,
+    onPrimaryContainer = ShadowGrey,
+
+    secondary = Plum,
+    onSecondary = White,
+    secondaryContainer = PlumLight,
+    onSecondaryContainer = OnPlumContainerLight,
+
+    tertiary = StoneGrey,
+
+    background = BackgroundLight,
+    onBackground = ShadowGrey,
+
+    surface = SurfaceLight,
+    onSurface = ShadowGrey,
+
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = WarmGrey,
+
+    surfaceContainer = SurfaceContainerLight,
+
+    outline = StoneGrey,
+    outlineVariant = AlabasterGrey,
+
+    error = ErrorRose,
+    errorContainer = ErrorContainerLight,
+    onError = White,
+    onErrorContainer = OnErrorContainerLight,
+
+    scrim = ShadowGrey
+)
+
+@Composable
+fun PhysicsExpsTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    amoledTheme: Boolean = false,
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && !darkTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            dynamicLightColorScheme(context).copy(
+                surfaceVariant = LightColorScheme.surfaceVariant,
+            )
+        }
+        darkTheme && amoledTheme -> AmoledColorScheme
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+    val view = LocalView.current
+
+    SideEffect {
+        val window = (view.context as Activity).window
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+    }
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        motionScheme = MotionScheme.expressive()
+    ) {
+        Surface(
+            color = colorScheme.background,
+            modifier = androidx.compose.ui.Modifier.fillMaxSize()
+        ) {
+            content()
+        }
+    }
+}

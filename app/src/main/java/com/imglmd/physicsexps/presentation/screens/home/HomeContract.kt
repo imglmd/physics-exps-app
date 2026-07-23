@@ -1,14 +1,13 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
 import com.imglmd.physicsexps.core.network.OnlineState
-import com.imglmd.physicsexps.domain.model.Experiment
-import com.imglmd.physicsexps.domain.usecase.auth.AuthState
+import com.imglmd.physicsexps.experiments.model.Experiment
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 
 
 data class HomeState(
     val experimentsByCategory: Map<String, List<Experiment>> = emptyMap(),
-    val previewUrlsByExperimentId: Map<String, String> = emptyMap(),
+    //val previewUrlsByExperimentId: Map<String, String> = emptyMap(),
     val history: List<HistoryItemUi> = emptyList(),
     val hasMoreHistory: Boolean = false,
     val searchText: String = "",

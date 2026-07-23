@@ -3,7 +3,7 @@ package com.imglmd.physicsexps.presentation.screens.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.data.InMemoryResultRepository
-import com.imglmd.physicsexps.domain.ExperimentRegistry
+import com.imglmd.physicsexps.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.model.ExperimentRun
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.DeleteAllRunsUseCase
@@ -194,7 +194,7 @@ class HistoryViewModel(
         return HistoryItemUi(
             id = run.id,
             experimentId = run.experimentId,
-            experimentName = experiment?.name ?: run.experimentId,
+            experimentName = experiment?.id ?: run.experimentId,
             category = experiment?.category ?: "",
             date = run.date,
             inputs = inputs,

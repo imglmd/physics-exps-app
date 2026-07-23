@@ -1,6 +1,7 @@
 package com.imglmd.physicsexps.domain.repository
 
-import com.imglmd.physicsexps.domain.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
+
 
 interface ResultsRepository {
     suspend fun getByRunId(runId: Int): ExperimentResult?

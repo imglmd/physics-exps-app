@@ -3,8 +3,8 @@ package com.imglmd.physicsexps.presentation.screens.result
 import android.net.Uri
 import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.domain.model.Comment
-import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.Media
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
 
 object ResultContract {
 

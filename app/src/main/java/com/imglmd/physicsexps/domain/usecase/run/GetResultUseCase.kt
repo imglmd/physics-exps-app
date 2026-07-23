@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.run
 
-import com.imglmd.physicsexps.domain.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
 
 class GetResultUseCase(
