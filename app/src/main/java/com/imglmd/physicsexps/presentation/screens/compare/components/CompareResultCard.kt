@@ -88,7 +88,7 @@ fun CompareResultsCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.results),
+                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.onSurface

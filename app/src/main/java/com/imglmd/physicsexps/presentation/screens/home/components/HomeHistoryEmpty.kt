@@ -36,7 +36,7 @@ fun HomeHistoryEmpty(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.history),
+                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.history),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )

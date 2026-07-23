@@ -229,7 +229,7 @@ private fun SearchTextField(
 
                     if (state.text.isEmpty()) {
                         Text(
-                            text = stringResource(R.string.search),
+                            text = stringResource(com.imglmd.physicsexps.core.ui.R.string.search),
                             style = textStyle,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

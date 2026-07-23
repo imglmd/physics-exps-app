@@ -70,7 +70,7 @@ fun ResultCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(R.string.results),
+                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold

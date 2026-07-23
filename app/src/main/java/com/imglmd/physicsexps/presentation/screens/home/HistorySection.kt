@@ -63,7 +63,7 @@ fun HistorySection(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
-                    Text(stringResource(R.string.all), style = MaterialTheme.typography.bodyMedium,)
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.all), style = MaterialTheme.typography.bodyMedium,)
                 }
             }
         }

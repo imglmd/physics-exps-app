@@ -187,7 +187,7 @@ fun SolutionScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.alpha(textAlpha)) {
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            stringResource(R.string.go_back),
+                            stringResource(com.imglmd.physicsexps.core.ui.R.string.go_back),
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimary

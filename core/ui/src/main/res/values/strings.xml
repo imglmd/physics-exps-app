@@ -17,4 +17,24 @@
 
     <string name="all">All</string>
     <string name="search">Search</string>
+
+    <string name="mechanics">Mechanics</string>
+    <string name="pendulum">Mathematical pendulum</string>
+    <string name="physical_pendulum">Physical pendulum</string>
+    <string name="spring_pendulum">Spring pendulum</string>
+    <string name="harmonic_vibrations">Harmonic oscillations</string>
+
+    <string name="kinematics">Kinematics</string>
+    <string name="free_fall">Free fall of bodies</string>
+    <string name="projectile_motion">Motion of a body projected at an angle to the horizontal</string>
+
+    <string name="electricity">Electricity</string>
+    <string name="coulombs_law">Coulombs Law</string>
+    <string name="joule_lenz">Joule-Lenz law</string>
+
+    <string name="phonics">Phonics</string>
+    <string name="doppler_effect">Doppler Effect</string>
+
+    <string name="nuclear_physics">Nuclear physics</string>
+    <string name="radioactive_decay">Radioactive decay</string>
 </resources>

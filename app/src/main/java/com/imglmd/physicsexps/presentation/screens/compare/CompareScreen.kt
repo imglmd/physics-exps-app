@@ -181,7 +181,7 @@ private fun CompareContent(items: List<CompareItem>, navigateBack: () -> Unit, p
         )
 
         PrimaryButton(
-            text = stringResource(R.string.go_back),
+            text = stringResource(com.imglmd.physicsexps.core.ui.R.string.go_back),
             onClick = navigateBack,
             icon = AppIcons.ChevronLeft,
             iconPosition = IconPosition.EdgeStart
