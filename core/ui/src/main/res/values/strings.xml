@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history">History</string>
+    <string name="main">Main</string>
+    <string name="settings">Settings</string>
+    <string name="chart">Chart</string>
+    <string name="results">Results</string>
+    <string name="comparison">Comparison</string>
+
+    <string name="go_back">Go back</string>
+
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="delete">Delete</string>
+    <string name="nothing_found">Nothing found</string>
+
+    <string name="all">All</string>
+    <string name="search">Search</string>
+</resources>

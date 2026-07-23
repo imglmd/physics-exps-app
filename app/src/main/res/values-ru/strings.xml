@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PhysicsExps</string>
-    <string name="history">История</string>
-    <string name="main">Главная</string>
-    <string name="settings">Настройки</string>
-    <string name="chart">График</string>
+
     <string name="reset_zoom">Сбросить масштаб</string>
     <string name="run_1">Запуск 1</string>
     <string name="run_2">Запуск 2</string>
-    <string name="results">Результаты</string>
-    <string name="comparison">Сравнение</string>
+
     <string name="insufficient_data">Недостаточно данных для сравнения</string>
     <string name="advanced_mode">Расширенный режим</string>
     <string name="additional_params">Доп. параметры включены</string>
@@ -21,13 +17,11 @@
     <string name="reset">Сбросить</string>
     <string name="select_exps">Выберите эксперименты</string>
     <string name="delete_all">Удалить всё</string>
-    <string name="apply">Применить</string>
-    <string name="cancel">Отменить</string>
+
     <string name="select_period">Выберите период</string>
     <string name="delete_history">Удалить историю?</string>
     <string name="delete_exps">Все эксперименты будут удалены без возможности восстановления.</string>
-    <string name="delete">Удалить</string>
-    <string name="nothing_found">Ничего не найдено</string>
+
     <string name="no_exps">Пока нет экспериментов</string>
     <string name="try_reset">Попробуйте изменить фильтры\\nили сбросить их</string>
     <string name="run_first">Проведите первый эксперимент —\\nрезультаты появятся здесь</string>
@@ -35,8 +29,7 @@
     <string name="offline_mode">Оффлайн режим</string>
     <string name="all_history">Вся история</string>
     <string name="last">Последнее</string>
-    <string name="all">Все</string>
-    <string name="search">Поиск</string>
+
     <string name="notes">Заметки</string>
     <string name="add_note">Добавить заметку...</string>
     <string name="no_notes">Заметок пока нет</string>
@@ -50,7 +43,7 @@
     <string name="min">Мин</string>
     <string name="max">Макс</string>
     <string name="mathematical_pendulum">Математический маятник</string>
-    <string name="go_back">Вернуться назад</string>
+
     <string name="answer">Ответ</string>
     <string name="launch_exp">Запустите эксперимент, чтобы он появился здесь</string>
     <string name="no_results">Нет результатов</string>
@@ -97,7 +90,7 @@
     <string name="nN">нН</string>
     <string name="v_m">В/м</string>
     <string name="nJ">нДж</string>
-    <string name="solution_idea">Идея рещения</string>
+    <string name="solution_idea">Идея решения</string>
     <string name="sol_col_desc">Два неподвижных точечных электрических заряда в вакууме взаимодействуют с силой, прямо пропорциональной произведению модулей этих зарядов и обратно пропорциональной квадрату расстояния между ними.</string>
     <string name="col_step_1">Найдём электрическую силу, используя закон Кулона.</string>
     <string name="col_step_2">Найдём напряжённость 1-го заряда - векторная физическая величина, характеризующая силу воздействия поля на заряженные частицы в данной точке пространства.</string>
