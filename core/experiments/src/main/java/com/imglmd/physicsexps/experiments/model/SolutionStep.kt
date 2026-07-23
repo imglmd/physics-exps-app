@@ -1,5 +1,4 @@
-package com.imglmd.physicsexps.domain.model
-
+package com.imglmd.physicsexps.experiments.model
 
 /**
  *  шаг решения задачи

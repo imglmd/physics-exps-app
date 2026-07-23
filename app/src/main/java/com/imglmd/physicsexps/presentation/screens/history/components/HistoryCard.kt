@@ -3,7 +3,6 @@ package com.imglmd.physicsexps.presentation.screens.history.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,13 +30,13 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.take
 import kotlin.text.uppercase
 import androidx.compose.ui.platform.LocalLocale
+import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable

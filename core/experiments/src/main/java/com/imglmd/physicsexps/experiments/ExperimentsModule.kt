@@ -1,8 +1,8 @@
-package com.imglmd.physicsexps.di
+package com.imglmd.physicsexps.experiments
 
-import com.imglmd.physicsexps.domain.ExperimentRegistry
-import com.imglmd.physicsexps.domain.experiments.*
-import com.imglmd.physicsexps.domain.model.Experiment
+import com.imglmd.physicsexps.experiments.impl.*
+import com.imglmd.physicsexps.experiments.impl.CoulombsLawExperiment
+import com.imglmd.physicsexps.experiments.model.Experiment
 import org.koin.dsl.module
 
 val experimentsModule = module {

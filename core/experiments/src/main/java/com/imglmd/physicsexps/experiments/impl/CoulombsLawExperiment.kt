@@ -1,17 +1,18 @@
-package com.imglmd.physicsexps.domain.experiments
+package com.imglmd.physicsexps.experiments.impl
 
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.Experiment
-import com.imglmd.physicsexps.domain.model.ExperimentResult
-import com.imglmd.physicsexps.domain.model.InputField
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import com.imglmd.physicsexps.domain.model.SolutionStep
-import com.imglmd.physicsexps.domain.validation.ValidationError
-import com.imglmd.physicsexps.domain.validation.ValidationResult
+import com.imglmd.physicsexps.experiments.ExpConstants
+import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.model.InputField
+import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
+import com.imglmd.physicsexps.experiments.model.SolutionStep
+import com.imglmd.physicsexps.experiments.validation.ValidationError
+import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import kotlin.collections.plusAssign
 import kotlin.math.abs
 import kotlin.math.pow
 
-class CoulombsLawExperiment: Experiment {
+class CoulombsLawExperiment : Experiment {
     override val id = "coulombs_law"
     override val category = "electricity"
     override val description = "coulombs_law_desc"
@@ -52,10 +53,11 @@ class CoulombsLawExperiment: Experiment {
 
         when {
             q1 != null && q2 != null && r != null -> {
-                f = k * (abs(q1 * q2 * nano * nano) /(r*r)) * nanoInv
+                f = k * (abs(q1 * q2 * nano * nano) / (r * r)) * nanoInv
                 intensity1 = k * q1 * ExpConstants.NANO / r.pow(2)
                 intensity2 = k * q2 * ExpConstants.NANO / r.pow(2)
-                potentialEnergy = k * (q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
+                potentialEnergy =
+                    k * (q1 * q2 * ExpConstants.NANO * ExpConstants.NANO / r) * ExpConstants.NANO_INVERSE
                 map.put("q1", q1)
                 map.put("q2", q2)
                 map.put("distance", r)
@@ -73,8 +75,10 @@ class CoulombsLawExperiment: Experiment {
                 PhysicalQuantity("electric_force", "F", f, "nN"),
                 PhysicalQuantity("field_strength_1", "E1", intensity1, "v_m"),
                 PhysicalQuantity("field_strength_2", "E2", intensity2, "v_m"),
-                PhysicalQuantity("potential_energy", "W",
-                    potentialEnergy, "nJ")
+                PhysicalQuantity(
+                    "potential_energy", "W",
+                    potentialEnergy, "nJ"
+                )
             ),
             points = getPoints(map),
             xLabel = xLabel,
@@ -93,8 +97,8 @@ class CoulombsLawExperiment: Experiment {
         val step = (r - startX) / ExpConstants.DEFAULT_POINTS_COUNT
 
         var x = startX
-        while(x <= r + step) {
-            val y = (k * (abs(q1 * q2) /(x*x))) * ExpConstants.NANO_INVERSE
+        while (x <= r + step) {
+            val y = (k * (abs(q1 * q2) / (x * x))) * ExpConstants.NANO_INVERSE
             list.add(Pair(x, y))
             x += step
         }
@@ -137,10 +141,12 @@ class CoulombsLawExperiment: Experiment {
         val r = inputs.getValue("distance")
         val k = ExpConstants.COULOMB_CONSTANT
 
-        val F = k*(q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
+        val F =
+            k * (q1 * q2 * ExpConstants.NANO * ExpConstants.NANO / r) * ExpConstants.NANO_INVERSE
         val E1 = k * q1 * ExpConstants.NANO / r.pow(2)
         val E2 = k * q2 * ExpConstants.NANO / r.pow(2)
-        val W = k * (q1*q2*ExpConstants.NANO*ExpConstants.NANO/r) * ExpConstants.NANO_INVERSE
+        val W =
+            k * (q1 * q2 * ExpConstants.NANO * ExpConstants.NANO / r) * ExpConstants.NANO_INVERSE
 
         val fmt = { d: Double -> "%.2f".format(d) }
         val fmt2 = { d: Double -> "%.4f".format(d) }
@@ -166,7 +172,7 @@ class CoulombsLawExperiment: Experiment {
         steps += SolutionStep.Substitution(
             description = "col_step_4",
             expression = "W = 9 \\times 10^9 \\frac{${fmt(q1)} ${fmt(q2)}}{$r}",
-            result ="W = ${fmt(W)}"
+            result = "W = ${fmt(W)}"
         )
 
         steps += SolutionStep.Result(
@@ -174,8 +180,10 @@ class CoulombsLawExperiment: Experiment {
                 PhysicalQuantity("electric_force", "F", F, "nN"),
                 PhysicalQuantity("field_strength_1", "E1", E1, "v_m"),
                 PhysicalQuantity("field_strength_2", "E2", E2, "v_m"),
-                PhysicalQuantity("potential_energy", "W",
-                    W, "nJ")
+                PhysicalQuantity(
+                    "potential_energy", "W",
+                    W, "nJ"
+                )
             )
         )
         return steps

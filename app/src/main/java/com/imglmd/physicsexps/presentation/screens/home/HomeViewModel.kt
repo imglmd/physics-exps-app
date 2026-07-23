@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
-import com.imglmd.physicsexps.domain.ExperimentRegistry
+import com.imglmd.physicsexps.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetLastRunsUseCase

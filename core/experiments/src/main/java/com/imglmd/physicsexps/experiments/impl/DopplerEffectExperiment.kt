@@ -1,12 +1,13 @@
-package com.imglmd.physicsexps.domain.experiments
+package com.imglmd.physicsexps.experiments.impl
 
-import com.imglmd.physicsexps.domain.model.Experiment
-import com.imglmd.physicsexps.domain.model.ExperimentResult
-import com.imglmd.physicsexps.domain.model.InputField
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
-import com.imglmd.physicsexps.domain.model.SolutionStep
-import com.imglmd.physicsexps.domain.validation.ValidationError
-import com.imglmd.physicsexps.domain.validation.ValidationResult
+import com.imglmd.physicsexps.experiments.ExpConstants
+import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.model.InputField
+import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
+import com.imglmd.physicsexps.experiments.model.SolutionStep
+import com.imglmd.physicsexps.experiments.validation.ValidationError
+import com.imglmd.physicsexps.experiments.validation.ValidationResult
 import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {

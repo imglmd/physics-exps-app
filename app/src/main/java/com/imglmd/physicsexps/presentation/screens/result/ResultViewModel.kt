@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.model.Comment
-import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
@@ -18,6 +17,7 @@ import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateBack
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateChart
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateCompare

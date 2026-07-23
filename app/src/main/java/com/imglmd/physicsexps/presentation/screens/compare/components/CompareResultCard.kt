@@ -39,9 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 import kotlin.math.abs
 

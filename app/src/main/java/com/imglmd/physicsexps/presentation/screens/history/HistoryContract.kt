@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.history
 
-import com.imglmd.physicsexps.domain.model.Experiment
+import com.imglmd.physicsexps.experiments.model.Experiment
 import com.imglmd.physicsexps.presentation.model.HistoryFilter
 import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import com.imglmd.physicsexps.presentation.model.SortOrder

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.experiments
+package com.imglmd.physicsexps.experiments
 
 import kotlin.math.PI
 

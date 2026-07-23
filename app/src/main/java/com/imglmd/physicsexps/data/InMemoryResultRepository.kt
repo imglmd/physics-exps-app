@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.data
 
-import com.imglmd.physicsexps.domain.model.ExperimentResult
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
 
 
 data class ResultBundle(

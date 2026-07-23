@@ -2,8 +2,8 @@ package com.imglmd.physicsexps.data.repository
 
 import com.imglmd.physicsexps.data.database.ResultsDao
 import com.imglmd.physicsexps.data.database.models.ResultEntity
-import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.repository.ResultsRepository
+import com.imglmd.physicsexps.experiments.model.ExperimentResult
 import kotlinx.serialization.json.Json
 
 class ResultsRepositoryImpl(

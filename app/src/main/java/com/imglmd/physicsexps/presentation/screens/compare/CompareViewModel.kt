@@ -2,7 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.compare
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imglmd.physicsexps.domain.ExperimentRegistry
+import com.imglmd.physicsexps.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
 import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
 import com.imglmd.physicsexps.presentation.model.InputItem

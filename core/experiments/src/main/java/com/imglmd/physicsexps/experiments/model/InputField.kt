@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.model
+package com.imglmd.physicsexps.experiments.model
 
 data class InputField(
     val key: String, //time

@@ -40,7 +40,7 @@ import com.hrm.latex.renderer.Latex
 import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.SolutionStep
+import com.imglmd.physicsexps.experiments.model.SolutionStep
 import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
@@ -54,8 +54,8 @@ fun SolutionStepCard(
         targetValue = when {
             !focusState.hasFocus -> 1f
             focusState.isActive -> 1f
-            focusState.isPast   -> 0.45f
-            else                -> 0.35f
+            focusState.isPast -> 0.45f
+            else-> 0.35f
         },
         animationSpec = tween(350),
         label = "step_alpha"

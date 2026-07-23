@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.domain
+package com.imglmd.physicsexps.experiments
 
-import com.imglmd.physicsexps.domain.model.Experiment
+import com.imglmd.physicsexps.experiments.model.Experiment
 
 class ExperimentRegistry(
     private val experiments: List<Experiment>

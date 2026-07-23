@@ -102,6 +102,7 @@ dependencies {
     implementation(project(":feature:constants"))
     implementation(project(":core:ui"))
     implementation(project(":core:network"))
+    implementation(project(":core:experiments"))
 
     // Core
     implementation(libs.androidx.core.ktx)

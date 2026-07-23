@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.presentation.model
 
-import com.imglmd.physicsexps.domain.model.PhysicalQuantity
+import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
 
 
 data class HistoryItemUi(
