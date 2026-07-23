@@ -1,10 +1,14 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.os.Build
+import android.provider.Settings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.physicsexps.data.InMemoryResultRepository
+import com.imglmd.physicsexps.domain.usecase.auth.AuthState
 import com.imglmd.physicsexps.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetAllExperimentsUseCase
@@ -71,6 +75,7 @@ class HomeViewModel(
         viewModelScope.launch {
             onlineStateManager.state.collect { onlineState ->
                 _state.update { it.copy(onlineState = onlineState) }
+                if (onlineState.canUseOnlineFeatures) ensureAuthorization()
                 /*if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
                     previewsLoaded = true
 
@@ -157,7 +162,7 @@ class HomeViewModel(
                     _state.update { it.copy(previewUrlsByExperimentId = previews) }
                 }
         }
-    }
+    }*/
 
     @SuppressLint("HardwareIds")
     private suspend fun ensureAuthorization(): AuthState {
@@ -169,7 +174,7 @@ class HomeViewModel(
             ),
             deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
         )
-    }*/
+    }
 
     private fun navigateToHistory() {
         viewModelScope.launch {
