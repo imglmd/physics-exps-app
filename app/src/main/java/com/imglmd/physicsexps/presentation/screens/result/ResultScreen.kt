@@ -152,7 +152,7 @@ private fun Content(
     Scaffold(
         topBar = {
             ExperimentAppBar(
-                title = getStringByKey(experiment.name),
+                title = getStringByKey(experiment.id),
                 subtitle = getStringByKey(experiment.category),
                 navigateBack = { onIntent(ResultContract.Intent.Back) }
             )

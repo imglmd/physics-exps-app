@@ -15,7 +15,6 @@ import kotlin.math.sin
 
 class HarmonicVibrationsExperiment: Experiment {
     override val id = "harmonic_vibrations"
-    override val name = "harmonic_vibrations"
     override val category = "mechanics"
     override val description = "harmonic_vibrations_desc"
     override val xLabel = "time"
@@ -26,7 +25,6 @@ class HarmonicVibrationsExperiment: Experiment {
         InputField("start_position", "start_c", "x₀", "m",required = true),
         InputField("time", "dur_o", "t", "s", min = 0.0, required = true)
     )
-    override val imageRes = R.drawable.harmonical
 
     override fun validateInputs(
         inputs: Map<String, Double>

@@ -17,10 +17,8 @@ import kotlin.math.sqrt
 class PendulumExperiment : Experiment {
 
     override val id = "pendulum"
-    override val name = "pendulum"
     override val category = "mechanics"
     override val description = "pendulum_desc"
-    override val imageRes = R.drawable.mathpendulum
 
     override val xLabel =  "thread"
     override val yLabel = "period_s"

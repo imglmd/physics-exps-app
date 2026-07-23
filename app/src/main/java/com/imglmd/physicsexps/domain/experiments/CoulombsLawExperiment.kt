@@ -15,10 +15,8 @@ import kotlin.math.pow
 
 class CoulombsLawExperiment: Experiment {
     override val id = "coulombs_law"
-    override val name = "coulombs_law"
     override val category = "electricity"
     override val description = "coulombs_law_desc"
-    override val imageRes = R.drawable.coulombs_law
     override val inputFields = listOf(
         InputField("q1", "q1_10_9", "q1", "Кл"),
         InputField("q2", "q2_10_9", "q2", "Кл"),

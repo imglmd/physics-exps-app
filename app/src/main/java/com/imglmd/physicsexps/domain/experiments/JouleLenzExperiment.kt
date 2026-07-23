@@ -12,7 +12,6 @@ import kotlin.math.pow
 
 class JouleLenzExperiment: Experiment {
     override val id = "joule_lenz"
-    override val name = "joule_lenz"
     override val category = "electricity"
     override val description = "joule_lenz_desc"
     override val inputFields = listOf(
@@ -22,7 +21,6 @@ class JouleLenzExperiment: Experiment {
         InputField("resistance", "resistance", "R", "ohm", min = 0.0)
     )
 
-    override val imageRes = R.drawable.joulelenz
     override val xLabel = "amperage"
     override val yLabel = "heat_am"
 

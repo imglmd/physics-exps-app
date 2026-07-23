@@ -15,7 +15,6 @@ import kotlin.math.sqrt
 
 class PhysicalPendulumExperiment: Experiment {
     override val id = "physical_pendulum"
-    override val name = "physical_pendulum"
     override val category = "mechanics"
     override val description = "physical_pendulum_desc"
     override val inputFields = listOf(
@@ -24,7 +23,6 @@ class PhysicalPendulumExperiment: Experiment {
         InputField("distance", "dist_ax", "d",
             "m", required = true, min = 0.0)
     )
-    override val imageRes = R.drawable.physicalpendulum
 
     override val additionalInputFields = listOf(
         InputField("angle", "def_ang", "α", "ang", min = 0.0,

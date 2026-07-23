@@ -69,7 +69,7 @@ fun HomeScreen(
         val category= getStringByKey(key = string)
         val expsShow = mutableListOf<Experiment>()
         experiments.forEach {
-            val name = getStringByKey(it.name)
+            val name = getStringByKey(it.id)
             val description = getStringByKey(it.description)
             val search = state.searchText.trim()
             val isShow = name.contains(search, ignoreCase = true) ||
@@ -169,10 +169,11 @@ fun HomeScreen(
                 items(experiments) { experiment ->
                     Column {
                         ExperimentItem(
-                            name = getStringByKey(experiment.name),
+                            name = getStringByKey(experiment.id),
+                            experimentId = experiment.id,
                             inputs = experiment.inputFields,
-                            previewUrl = state.previewUrlsByExperimentId[experiment.id],
-                            placeholder = experiment.imageRes,
+                            /*previewUrl = state.previewUrlsByExperimentId[experiment.id],
+                            placeholder = experiment.imageRes,*/
                             onClick = { viewModel.onIntent(HomeIntent.NavigateToExperiment(experiment.id)) }
                         )
                         Spacer(Modifier.height(10.dp))

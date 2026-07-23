@@ -38,7 +38,7 @@ class HomeViewModel(
     private val registry: ExperimentRegistry,
     private val getRunUseCase: GetRunUseCase,
     private val resultRepository: InMemoryResultRepository,
-    private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
+    //private val getExperimentPreviewsUseCase: GetExperimentPreviewsUseCase,
     private val ensureAuthorizedUseCase: EnsureAuthorizedUseCase,
     private val onlineStateManager: OnlineStateManager
 ): AndroidViewModel(application) {
@@ -51,7 +51,7 @@ class HomeViewModel(
     private val _actionFlow = MutableSharedFlow<HomeAction>()
     val actionFlow = _actionFlow.asSharedFlow()
 
-    private var previewsLoaded = false
+    //private var previewsLoaded = false
     private val json = Json
 
     init {
@@ -78,12 +78,12 @@ class HomeViewModel(
         viewModelScope.launch {
             onlineStateManager.state.collect { onlineState ->
                 _state.update { it.copy(onlineState = onlineState) }
-                if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
+                /*if (onlineState.canUseOnlineFeatures && !previewsLoaded) {
                     previewsLoaded = true
 
                     val authState = ensureAuthorization()
                     if (authState == AuthState.Authorized) loadPreviewImages()
-                }
+                }*/
             }
         }
     }
@@ -139,7 +139,7 @@ class HomeViewModel(
                         HistoryItemUi(
                             id = run.id,
                             experimentId = experiment?.id ?: "unknown",
-                            experimentName = experiment?.name ?: run.experimentId,
+                            experimentName = experiment?.id ?: run.experimentId,
                             category = experiment?.category ?: "",
                             date = run.date,
                             inputs = inputs
@@ -157,7 +157,7 @@ class HomeViewModel(
         }
     }
 
-    private fun loadPreviewImages() {
+    /*private fun loadPreviewImages() {
         viewModelScope.launch {
             getExperimentPreviewsUseCase()
                 .onSuccess { previews ->
@@ -176,7 +176,7 @@ class HomeViewModel(
             ),
             deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
         )
-    }
+    }*/
 
     private fun navigateToHistory() {
         viewModelScope.launch {

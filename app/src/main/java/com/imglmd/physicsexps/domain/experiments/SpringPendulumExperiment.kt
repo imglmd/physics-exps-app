@@ -14,10 +14,8 @@ import kotlin.math.sqrt
 
 class SpringPendulumExperiment: Experiment {
     override val id = "spring_pendulum"
-    override val name = "spring_pendulum"
     override val category = "mechanics"
     override val description = "spring_pendulum_desc"
-    override val imageRes = R.drawable.springpendulum
 
     override val inputFields = listOf(
         InputField("weight", "weight", "m", "kg", min = 0.0),

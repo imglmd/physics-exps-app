@@ -194,7 +194,7 @@ class HistoryViewModel(
         return HistoryItemUi(
             id = run.id,
             experimentId = run.experimentId,
-            experimentName = experiment?.name ?: run.experimentId,
+            experimentName = experiment?.id ?: run.experimentId,
             category = experiment?.category ?: "",
             date = run.date,
             inputs = inputs,

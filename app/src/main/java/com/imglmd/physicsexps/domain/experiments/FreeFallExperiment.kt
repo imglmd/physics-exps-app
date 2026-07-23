@@ -12,14 +12,12 @@ import kotlin.math.pow
 
 class FreeFallExperiment: Experiment {
     override val id = "free_fall"
-    override val name = "free_fall"
     override val category = "kinematics"
     override val description = "free_fall_desc"
     override val inputFields = listOf(
         InputField("start_speed", "initial_velocity", "v₀", "m_s", required = false),
         InputField("duration", "body_dur", "t", "s", required = true, min = 0.0)
     )
-    override val imageRes = R.drawable.freefall
     override val xLabel =  "time"
     override val yLabel = "у"
 

@@ -12,7 +12,6 @@ import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {
     override val id = "doppler_effect"
-    override val name = "doppler_effect"
     override val category = "phonics"
     override val description = "doppler_desc"
     override val inputFields = listOf(
@@ -24,7 +23,6 @@ class DopplerEffectExperiment: Experiment {
     )
     override val xLabel = "sv"
     override val yLabel = "rm"
-    override val imageRes = R.drawable.doppler
 
     override fun validateInputs(
         inputs: Map<String, Double>

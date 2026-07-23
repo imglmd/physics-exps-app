@@ -11,7 +11,6 @@ import kotlin.math.pow
 
 class RadioactiveDecayExperiment: Experiment {
     override val id = "radioactive_decay"
-    override val name = "radioactive_decay"
     override val category = "nuclear_physics"
     override val description = "radioactive_decay_desc"
     override val xLabel =  "half_life"
@@ -22,7 +21,6 @@ class RadioactiveDecayExperiment: Experiment {
         InputField("time", "decay_time", "t", "s", required = true, min = 0.0)
     )
 
-    override val imageRes = R.drawable.radioactive_decay
 
     override fun calculate(inputs: Map<String, Double>): ExperimentResult {
         val N0 = inputs["start_count"]

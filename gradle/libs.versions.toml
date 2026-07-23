@@ -33,6 +33,7 @@ converterKotlinxSerialization = "3.0.0"
 coil = "2.7.0"
 appcompat = "1.7.1"
 material = "1.14.0"
+jetbrainsKotlinJvm = "2.4.0"
 
 [libraries]
 
@@ -99,6 +100,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 nav3 = ["navigation3-runtime", "navigation3-ui", "navigation3-viewmodel"]

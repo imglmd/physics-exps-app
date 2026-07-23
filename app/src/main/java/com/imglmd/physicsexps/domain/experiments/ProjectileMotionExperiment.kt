@@ -18,10 +18,8 @@ import kotlin.math.sqrt
 
 class ProjectileMotionExperiment : Experiment {
     override val id = "projectile_motion"
-    override val name = "projectile_motion"
     override val category = "kinematics"
     override val description = "projectile_motion_desc"
-    override val imageRes = R.drawable.projectile_motion
 
     override val inputFields = listOf(
         InputField(

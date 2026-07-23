@@ -59,7 +59,7 @@ class CompareViewModel(
                         )
                     }
                     CompareItem (
-                        experimentName = experiment.name,
+                        experimentName = experiment.id,
                         date = run.date,
                         inputs = inputs,
                         result = result

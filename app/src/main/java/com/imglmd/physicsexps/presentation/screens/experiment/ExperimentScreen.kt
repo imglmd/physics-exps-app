@@ -144,7 +144,7 @@ fun ExperimentScreen(
     Scaffold(
         topBar = {
             ExperimentAppBar(
-                title = getStringByKey(state.experiment.name),
+                title = getStringByKey(state.experiment.id),
                 subtitle = getStringByKey(state.experiment.category),
                 navigateBack = navigateBack
             )

@@ -5,10 +5,8 @@ import com.imglmd.physicsexps.domain.validation.ValidationResult
 
 interface Experiment {
     val id: String
-    val name: String
     val category: String
     val description: String
-    val imageRes: Int get() = R.drawable.placeholder  //TODO: брать картинку с сервера
 
     val inputFields: List<InputField>
     val additionalInputFields: List<InputField> get() = emptyList()

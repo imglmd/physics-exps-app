@@ -146,7 +146,7 @@ fun FilterChipsRow(
                     selectedContainerColor = colors.primaryContainer,
                     selectedLabelColor = colors.onPrimaryContainer
                 ),
-                label = { Text(getStringByKey(experiment.name), style = MaterialTheme.typography.labelMedium) },
+                label = { Text(getStringByKey(experiment.id), style = MaterialTheme.typography.labelMedium) },
                 border = BorderStroke(
                     width = 1.dp,
                     color = if (state.filter.experimentId == experiment.id) colors.primary else MaterialTheme.colorScheme.outlineVariant
