@@ -1,6 +1,5 @@
 package com.imglmd.physicsexps.presentation.screens.compare
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.domain.ExperimentRegistry

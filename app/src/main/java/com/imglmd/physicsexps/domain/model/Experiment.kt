@@ -1,6 +1,5 @@
 package com.imglmd.physicsexps.domain.model
 
-import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.validation.ValidationResult
 
 interface Experiment {

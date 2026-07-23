@@ -1,6 +1,5 @@
 package com.imglmd.physicsexps.domain.experiments
 
-import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.domain.model.Experiment
 import com.imglmd.physicsexps.domain.model.ExperimentResult
 import com.imglmd.physicsexps.domain.model.InputField

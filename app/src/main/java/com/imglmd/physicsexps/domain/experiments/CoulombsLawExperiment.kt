@@ -8,8 +8,6 @@ import com.imglmd.physicsexps.domain.model.PhysicalQuantity
 import com.imglmd.physicsexps.domain.model.SolutionStep
 import com.imglmd.physicsexps.domain.validation.ValidationError
 import com.imglmd.physicsexps.domain.validation.ValidationResult
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import kotlin.math.abs
 import kotlin.math.pow
 

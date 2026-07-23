@@ -28,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.domain.model.InputField
