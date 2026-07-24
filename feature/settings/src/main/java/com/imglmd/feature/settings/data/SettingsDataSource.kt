@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.data
+package com.imglmd.feature.settings.data
 
 import android.app.LocaleManager
 import android.content.Context
@@ -13,9 +13,9 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
-import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
-import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.domain.model.AppLanguage
+import com.imglmd.feature.settings.domain.model.AppSettings
+import com.imglmd.feature.settings.domain.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -52,7 +52,7 @@ class SettingsDataSource(private val context: Context){
                     ?.let { runCatching { AppLanguage.valueOf(it) }.getOrDefault(AppLanguage.RUSSIAN) }
                     ?: AppLanguage.RUSSIAN,
                 hapticFeedback = prefs[Keys.HAPTIC_FEEDBACK] ?: false,
-                offlineMode = prefs[Keys.OFFLINE_MODE]?: false,
+                offlineMode = prefs[Keys.OFFLINE_MODE] ?: false,
                 advancedMode = prefs[Keys.ADVANCED_MODE] ?: false,
                 maxHistoryEntries = prefs[Keys.MAX_HISTORY]
             )

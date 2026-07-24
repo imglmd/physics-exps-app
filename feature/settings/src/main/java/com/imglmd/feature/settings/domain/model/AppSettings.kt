@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.domain.model
+package com.imglmd.feature.settings.domain.model
 
 enum class AppTheme { LIGHT, DARK, SYSTEM }
 enum class AppLanguage { RUSSIAN, ENGLISH }

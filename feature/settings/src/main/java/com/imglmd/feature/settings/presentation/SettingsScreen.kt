@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.settings.presentation
+package com.imglmd.feature.settings.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -30,9 +30,9 @@ import com.imglmd.core.ui.preferences.PreferenceSlider
 import com.imglmd.core.ui.preferences.PreferenceSwitch
 import com.imglmd.core.ui.component.RadioGroup
 import com.imglmd.core.ui.component.RadioOption
-import com.imglmd.physicsexps.feature.settings.R
-import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
-import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.domain.model.AppLanguage
+import com.imglmd.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.R
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

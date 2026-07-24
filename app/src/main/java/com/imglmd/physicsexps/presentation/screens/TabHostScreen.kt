@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.BuildConfig
 import com.imglmd.feature.constants.presentation.ConstantsScreen
-import com.imglmd.physicsexps.feature.settings.presentation.SettingsScreen
+import com.imglmd.feature.settings.presentation.SettingsScreen
 import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.home.HomeScreen

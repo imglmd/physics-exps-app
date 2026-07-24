@@ -9,7 +9,7 @@ import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCa
 import com.imglmd.core.experiments.validation.ExperimentValidator
 import com.imglmd.core.experiments.validation.ValidationError
 import com.imglmd.core.experiments.validation.ValidationResult
-import com.imglmd.physicsexps.feature.settings.domain.usecase.GetSettingsUseCase
+import com.imglmd.feature.settings.domain.usecase.GetSettingsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

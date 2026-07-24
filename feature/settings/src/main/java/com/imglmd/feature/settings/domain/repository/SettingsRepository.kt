@@ -1,8 +1,8 @@
-package com.imglmd.physicsexps.feature.settings.domain.repository
+package com.imglmd.feature.settings.domain.repository
 
-import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
-import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
-import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.domain.model.AppLanguage
+import com.imglmd.feature.settings.domain.model.AppSettings
+import com.imglmd.feature.settings.domain.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {

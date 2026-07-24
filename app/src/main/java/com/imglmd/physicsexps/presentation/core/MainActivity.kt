@@ -10,8 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.core.ui.theme.PhysicsExpsTheme
-import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
-import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
+import com.imglmd.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.domain.repository.SettingsRepository
 import com.imglmd.physicsexps.presentation.navigation.AppRoot
 import org.koin.android.ext.android.inject
 import org.koin.core.annotation.KoinExperimentalAPI

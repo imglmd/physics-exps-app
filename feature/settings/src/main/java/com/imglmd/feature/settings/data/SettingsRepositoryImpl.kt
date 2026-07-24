@@ -1,15 +1,15 @@
-package com.imglmd.physicsexps.feature.settings.data
+package com.imglmd.feature.settings.data
 
-import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
-import com.imglmd.physicsexps.feature.settings.domain.model.AppLanguage
-import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
-import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
+import com.imglmd.feature.settings.domain.model.AppLanguage
+import com.imglmd.feature.settings.domain.model.AppSettings
+import com.imglmd.feature.settings.domain.model.AppTheme
+import com.imglmd.feature.settings.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
 class SettingsRepositoryImpl(
     private val dataSource: SettingsDataSource
-): SettingsRepository{
+): SettingsRepository {
     //TODO сделать лучше
     private var cachedSettings: AppSettings? = null
 
