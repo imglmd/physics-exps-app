@@ -9,7 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.imglmd.physicsexps.core.ui.theme.PhysicsExpsTheme
+import com.imglmd.core.ui.theme.PhysicsExpsTheme
 import com.imglmd.physicsexps.feature.settings.domain.model.AppTheme
 import com.imglmd.physicsexps.feature.settings.domain.repository.SettingsRepository
 import com.imglmd.physicsexps.presentation.navigation.AppRoot

@@ -1,8 +1,7 @@
 package com.imglmd.physicsexps.presentation.core
 
-import androidx.compose.ui.res.stringResource
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.utils.StringKeyProvider
+import com.imglmd.core.ui.utils.StringKeyProvider
 
 class ExperimentsStringProvider: StringKeyProvider {
     override fun resolve(key: String): Int? = when (key) {
@@ -48,38 +47,38 @@ class ExperimentsStringProvider: StringKeyProvider {
         "a" -> R.string.a
         "in_ph" -> R.string.in_ph
         "ang_f" -> R.string.ang_f
-        "main" -> com.imglmd.physicsexps.core.ui.R.string.main
-        "settings" -> com.imglmd.physicsexps.core.ui.R.string.settings
-        "coulombs_law" -> com.imglmd.physicsexps.core.ui.R.string.coulombs_law
-        "electricity" -> com.imglmd.physicsexps.core.ui.R.string.electricity
+        "main" -> com.imglmd.core.ui.R.string.main
+        "settings" -> com.imglmd.core.ui.R.string.settings
+        "coulombs_law" -> com.imglmd.core.ui.R.string.coulombs_law
+        "electricity" -> com.imglmd.core.ui.R.string.electricity
         "coulombs_law_desc" -> R.string.coulombs_law_desc
         "q1_10_9" -> R.string.q1_10_9
         "q2_10_9" -> R.string.q2_10_9
         "col_dist" -> R.string.col_dist
         "dist" -> R.string.dist
         "nano" -> R.string.nano
-        "doppler_effect" -> com.imglmd.physicsexps.core.ui.R.string.doppler_effect
-        "phonics" -> com.imglmd.physicsexps.core.ui.R.string.phonics
+        "doppler_effect" -> com.imglmd.core.ui.R.string.doppler_effect
+        "phonics" -> com.imglmd.core.ui.R.string.phonics
         "doppler_desc" -> R.string.doppler_desc
-        "free_fall" -> com.imglmd.physicsexps.core.ui.R.string.free_fall
-        "kinematics" -> com.imglmd.physicsexps.core.ui.R.string.kinematics
+        "free_fall" -> com.imglmd.core.ui.R.string.free_fall
+        "kinematics" -> com.imglmd.core.ui.R.string.kinematics
         "free_fall_desc" -> R.string.free_fall_desc
-        "harmonic_vibrations" -> com.imglmd.physicsexps.core.ui.R.string.harmonic_vibrations
-        "mechanics" -> com.imglmd.physicsexps.core.ui.R.string.mechanics
+        "harmonic_vibrations" -> com.imglmd.core.ui.R.string.harmonic_vibrations
+        "mechanics" -> com.imglmd.core.ui.R.string.mechanics
         "harmonic_vibrations_desc" -> R.string.harmonic_vibrations_desc
-        "joule_lenz" -> com.imglmd.physicsexps.core.ui.R.string.joule_lenz
+        "joule_lenz" -> com.imglmd.core.ui.R.string.joule_lenz
         "joule_lenz_desc" -> R.string.joule_lenz_desc
         "pendulum_desc" -> R.string.pendulum_desc
-        "pendulum" -> com.imglmd.physicsexps.core.ui.R.string.pendulum
+        "pendulum" -> com.imglmd.core.ui.R.string.pendulum
         "physical_pendulum_desc" -> R.string.physical_pendulum_desc
-        "physical_pendulum" -> com.imglmd.physicsexps.core.ui.R.string.physical_pendulum
+        "physical_pendulum" -> com.imglmd.core.ui.R.string.physical_pendulum
         "projectile_motion_desc" -> R.string.projectile_motion_desc
-        "projectile_motion" -> com.imglmd.physicsexps.core.ui.R.string.projectile_motion
+        "projectile_motion" -> com.imglmd.core.ui.R.string.projectile_motion
         "radioactive_decay_desc" -> R.string.radioactive_decay_desc
-        "radioactive_decay" -> com.imglmd.physicsexps.core.ui.R.string.radioactive_decay
-        "nuclear_physics" -> com.imglmd.physicsexps.core.ui.R.string.nuclear_physics
+        "radioactive_decay" -> com.imglmd.core.ui.R.string.radioactive_decay
+        "nuclear_physics" -> com.imglmd.core.ui.R.string.nuclear_physics
         "spring_pendulum_desc" -> R.string.spring_pendulum_desc
-        "spring_pendulum" -> com.imglmd.physicsexps.core.ui.R.string.spring_pendulum
+        "spring_pendulum" -> com.imglmd.core.ui.R.string.spring_pendulum
         "first_charge" -> R.string.first_charge
         "second_charge" -> R.string.second_charge
         "distance" -> R.string.distance

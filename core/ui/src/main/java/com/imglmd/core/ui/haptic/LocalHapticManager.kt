@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.haptic
+package com.imglmd.core.ui.haptic
 
 import androidx.compose.runtime.compositionLocalOf
 

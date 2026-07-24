@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.haptic
+package com.imglmd.core.ui.haptic
 
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType

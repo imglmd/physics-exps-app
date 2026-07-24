@@ -23,7 +23,7 @@ import com.imglmd.feature.history.R
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.domain.model.SortOrder
 import com.imglmd.feature.history.presentation.HistoryContract
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

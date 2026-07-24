@@ -1,7 +1,7 @@
 package com.imglmd.feature.history.presentation
 
 import com.imglmd.feature.history.R
-import com.imglmd.physicsexps.core.ui.utils.StringKeyProvider
+import com.imglmd.core.ui.utils.StringKeyProvider
 
 //TODO перенести сюда строки из app либо сделать норм логику
 class HistoryStringProvider : StringKeyProvider {

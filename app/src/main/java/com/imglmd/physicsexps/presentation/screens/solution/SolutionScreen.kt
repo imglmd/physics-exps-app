@@ -35,8 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.icons.AppIcons
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -187,7 +187,7 @@ fun SolutionScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.alpha(textAlpha)) {
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            stringResource(com.imglmd.physicsexps.core.ui.R.string.go_back),
+                            stringResource(com.imglmd.core.ui.R.string.go_back),
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimary

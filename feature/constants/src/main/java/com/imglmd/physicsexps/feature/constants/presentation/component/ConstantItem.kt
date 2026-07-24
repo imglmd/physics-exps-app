@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.haptic.LocalHapticManager
 import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Constant
 import com.imglmd.physicsexps.feature.constants.presentation.ConstantsPreferences

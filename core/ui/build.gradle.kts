@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.imglmd.physicsexps.core.ui"
+    namespace = "com.imglmd.core.ui"
     compileSdk {
         version = release(37)
     }

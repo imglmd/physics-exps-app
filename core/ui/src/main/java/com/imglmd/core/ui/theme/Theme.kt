@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.theme
+package com.imglmd.core.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -12,6 +12,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -129,7 +130,7 @@ fun PhysicsExpsTheme(
     ) {
         Surface(
             color = colorScheme.background,
-            modifier = androidx.compose.ui.Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             content()
         }

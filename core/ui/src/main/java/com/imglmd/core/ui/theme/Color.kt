@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.theme
+package com.imglmd.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

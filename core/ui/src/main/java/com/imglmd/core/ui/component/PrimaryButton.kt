@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
-package com.imglmd.physicsexps.core.ui.component
+package com.imglmd.core.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -38,7 +38,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.haptic.LocalHapticManager
 
 enum class IconPosition {
     Start,

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.preferences
+package com.imglmd.core.ui.preferences
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.haptic.LocalHapticManager
 
 @Composable
 fun PreferenceSwitch(

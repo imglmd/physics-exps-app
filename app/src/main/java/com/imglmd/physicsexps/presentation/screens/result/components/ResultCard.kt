@@ -38,7 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract
 import kotlin.math.round
 
@@ -69,7 +69,7 @@ fun ResultCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.results),
+                text = stringResource(com.imglmd.core.ui.R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold

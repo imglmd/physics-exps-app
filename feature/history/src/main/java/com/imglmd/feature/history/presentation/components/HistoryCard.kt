@@ -37,7 +37,7 @@ import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.vectorResource
 import com.imglmd.feature.history.R
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
 
 @Composable

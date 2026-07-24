@@ -39,9 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import kotlin.math.abs
 
 private const val COLLAPSED_COUNT = 4
@@ -87,7 +87,7 @@ fun CompareResultsCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.results),
+                text = stringResource(com.imglmd.core.ui.R.string.results),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.onSurface

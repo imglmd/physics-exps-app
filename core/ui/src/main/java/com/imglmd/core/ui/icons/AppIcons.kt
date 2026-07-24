@@ -1,9 +1,9 @@
-package com.imglmd.physicsexps.core.ui.icons
+package com.imglmd.core.ui.icons
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import com.imglmd.physicsexps.core.ui.R
+import com.imglmd.core.ui.R
 
 //TODO вынести сюда все общие иконки и использовать их в приложении
 /**

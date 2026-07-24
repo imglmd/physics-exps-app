@@ -54,9 +54,9 @@ import com.imglmd.feature.history.R
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.presentation.components.FilterChipsRow
 import com.imglmd.feature.history.presentation.components.HistoryCard
-import com.imglmd.physicsexps.core.ui.component.IconPosition
-import com.imglmd.physicsexps.core.ui.component.PrimaryButton
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.component.IconPosition
+import com.imglmd.core.ui.component.PrimaryButton
+import com.imglmd.core.ui.icons.AppIcons
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -96,7 +96,7 @@ fun HistoryScreen(
                 title = {
                     Text(
                         text = if (mode == HistoryMode.SELECTION) stringResource(R.string.select_exps)
-                        else stringResource(com.imglmd.physicsexps.core.ui.R.string.history),
+                        else stringResource(com.imglmd.core.ui.R.string.history),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -187,7 +187,7 @@ fun HistoryScreen(
                     ),
                     enabled = pickerState.selectedStartDateMillis != null
                 ) {
-                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.apply))
+                    Text(stringResource(com.imglmd.core.ui.R.string.apply))
                 }
             },
             dismissButton = {
@@ -197,7 +197,7 @@ fun HistoryScreen(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel))
+                    Text(stringResource(com.imglmd.core.ui.R.string.cancel))
                 }
             }
         ) {
@@ -262,7 +262,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.delete), color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(com.imglmd.core.ui.R.string.delete), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -272,7 +272,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                     )
                 ) {
-                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(com.imglmd.core.ui.R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
@@ -367,7 +367,7 @@ private fun EmptyHistory(
     modifier: Modifier = Modifier
 ) {
     val title = if (hasFilters) {
-        stringResource(com.imglmd.physicsexps.core.ui.R.string.nothing_found)
+        stringResource(com.imglmd.core.ui.R.string.nothing_found)
     } else {
         stringResource(R.string.no_exps)
     }

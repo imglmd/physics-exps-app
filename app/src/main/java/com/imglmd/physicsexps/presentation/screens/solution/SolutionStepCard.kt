@@ -41,7 +41,7 @@ import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.experiments.model.SolutionStep
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 
 @Composable
 fun SolutionStepCard(

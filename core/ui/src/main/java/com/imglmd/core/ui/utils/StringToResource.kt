@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.utils
+package com.imglmd.core.ui.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import org.koin.compose.koinInject

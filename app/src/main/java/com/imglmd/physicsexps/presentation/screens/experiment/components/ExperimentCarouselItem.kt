@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.imglmd.physicsexps.core.ui.utils.rememberShimmerBrush
+import com.imglmd.core.ui.utils.rememberShimmerBrush
 
 @Composable
 fun ExperimentCarouselItem(

@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.utils.rememberShimmerBrush
+import com.imglmd.core.ui.utils.rememberShimmerBrush
 
 @Composable
 fun HomeHistoryPlaceholder(

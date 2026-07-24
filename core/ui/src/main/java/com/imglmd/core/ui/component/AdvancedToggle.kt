@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.component
+package com.imglmd.core.ui.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.haptic.LocalHapticManager
 
 @Composable
 fun AdvancedToggle(

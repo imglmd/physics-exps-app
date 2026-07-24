@@ -46,9 +46,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.ExperimentItem
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryPlaceholder
@@ -230,7 +230,7 @@ private fun SearchTextField(
 
                     if (state.text.isEmpty()) {
                         Text(
-                            text = stringResource(com.imglmd.physicsexps.core.ui.R.string.search),
+                            text = stringResource(com.imglmd.core.ui.R.string.search),
                             style = textStyle,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

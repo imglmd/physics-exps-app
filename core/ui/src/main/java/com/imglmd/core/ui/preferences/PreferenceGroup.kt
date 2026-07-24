@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.preferences
+package com.imglmd.core.ui.preferences
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement

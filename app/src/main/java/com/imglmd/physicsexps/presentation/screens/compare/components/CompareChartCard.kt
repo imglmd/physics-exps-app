@@ -49,7 +49,7 @@ import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 
 
 @Composable
@@ -125,7 +125,7 @@ fun CompareChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.chart),
+                text = stringResource(com.imglmd.core.ui.R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold

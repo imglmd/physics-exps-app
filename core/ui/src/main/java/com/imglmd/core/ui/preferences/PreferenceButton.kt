@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.preferences
+package com.imglmd.core.ui.preferences
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.icons.AppIcons
 
 @Composable
 fun PreferenceButton(

@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.model.InputItem
 import com.imglmd.physicsexps.presentation.screens.compare.CompareItem
 import java.text.SimpleDateFormat

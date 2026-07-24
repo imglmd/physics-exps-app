@@ -36,8 +36,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.utils.getStringByKey
-import com.imglmd.physicsexps.core.ui.utils.normalizePoints
+import com.imglmd.core.ui.utils.getStringByKey
+import com.imglmd.core.ui.utils.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
@@ -111,7 +111,7 @@ fun ChartCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.chart),
+                text = stringResource(com.imglmd.core.ui.R.string.chart),
                 style = MaterialTheme.typography.titleMedium,
                 color = colors.onSurface,
                 fontWeight = FontWeight.SemiBold

@@ -29,11 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.component.IconPosition
-import com.imglmd.physicsexps.core.ui.component.PrimaryButton
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.core.ui.utils.alignSeries
-import com.imglmd.physicsexps.core.ui.utils.normalizePoints
+import com.imglmd.core.ui.component.IconPosition
+import com.imglmd.core.ui.component.PrimaryButton
+import com.imglmd.core.ui.icons.AppIcons
+import com.imglmd.core.ui.utils.alignSeries
+import com.imglmd.core.ui.utils.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareResultsCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareRunCard
@@ -181,7 +181,7 @@ private fun CompareContent(items: List<CompareItem>, navigateBack: () -> Unit, p
         )
 
         PrimaryButton(
-            text = stringResource(com.imglmd.physicsexps.core.ui.R.string.go_back),
+            text = stringResource(com.imglmd.core.ui.R.string.go_back),
             onClick = navigateBack,
             icon = AppIcons.ChevronLeft,
             iconPosition = IconPosition.EdgeStart

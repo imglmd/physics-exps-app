@@ -1,7 +1,7 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.feature.history.presentation.HistoryStringProvider
-import com.imglmd.physicsexps.core.ui.utils.StringKeyProvider
+import com.imglmd.core.ui.utils.StringKeyProvider
 import com.imglmd.physicsexps.presentation.core.ExperimentsStringProvider
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

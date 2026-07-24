@@ -52,11 +52,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.component.RadioGroup
-import com.imglmd.physicsexps.core.ui.component.RadioOption
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.core.ui.preferences.PreferenceGroup
-import com.imglmd.physicsexps.core.ui.preferences.PreferenceSlider
+import com.imglmd.core.ui.component.RadioGroup
+import com.imglmd.core.ui.component.RadioOption
+import com.imglmd.core.ui.icons.AppIcons
+import com.imglmd.core.ui.preferences.PreferenceGroup
+import com.imglmd.core.ui.preferences.PreferenceSlider
 import com.imglmd.physicsexps.feature.constants.R
 import com.imglmd.physicsexps.feature.constants.domain.model.Category
 import com.imglmd.physicsexps.feature.constants.domain.model.Constant

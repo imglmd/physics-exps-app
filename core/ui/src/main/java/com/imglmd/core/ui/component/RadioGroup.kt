@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.ui.component
+package com.imglmd.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.haptic.LocalHapticManager
 
 data class RadioOption<T>(
     val value: T,
