@@ -28,26 +28,6 @@ import org.koin.dsl.module
 val useCaseModule = module {
     factory { PingUseCase(get()) }
 
-    factory { SaveRunUseCase(get(), get(), get()) }
-
-    factory { DeleteRunUseCase(get()) }
-
-    factory { DeleteAllRunsUseCase(get()) }
-
-    factory { GetAllRunsUseCase(get()) }
-
-    factory { GetRunUseCase(get()) }
-
-    factory { GetResultUseCase(get()) }
-
-    factory { GetLastRunsUseCase(get()) }
-
-    factory { GetFilteredRunsUseCase(get(), get()) }
-
-    factory { GetAllExperimentsUseCase(get()) }
-
-    factory { GetExperimentByIdUseCase(get()) }
-
     factory { GetExperimentPreviewsUseCase(get()) }
 
     factory { GetExperimentImagesUseCase(get()) }

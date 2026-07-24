@@ -11,9 +11,13 @@ import com.imglmd.core.experiments.impl.ProjectileMotionExperiment
 import com.imglmd.core.experiments.impl.RadioactiveDecayExperiment
 import com.imglmd.core.experiments.impl.SpringPendulumExperiment
 import com.imglmd.core.experiments.model.Experiment
+import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
 import org.koin.dsl.module
 
 val experimentsModule = module {
+    factory { GetAllExperimentsUseCase(get()) }
+    factory { GetExperimentByIdUseCase(get()) }
 
     single<List<Experiment>> {
         listOf(

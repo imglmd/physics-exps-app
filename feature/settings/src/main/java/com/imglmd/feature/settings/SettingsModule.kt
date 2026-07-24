@@ -1,4 +1,4 @@
-package com.imglmd.feature.settings.di
+package com.imglmd.feature.settings
 
 import com.imglmd.feature.settings.data.SettingsDataSource
 import com.imglmd.feature.settings.data.SettingsRepositoryImpl

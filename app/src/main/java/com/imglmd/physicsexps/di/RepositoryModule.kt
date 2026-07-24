@@ -17,18 +17,9 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single { InMemoryResultRepository() }
 
     single<AuthRepository> {
         AuthRepositoryImpl(get(), get())
-    }
-
-    single<ResultsRepository> {
-        ResultsRepositoryImpl(get())
-    }
-
-    single<ExperimentRunsRepository> {
-        ExperimentRunsRepositoryImpl(get())
     }
 
     single<ExperimentMediaRepository> {

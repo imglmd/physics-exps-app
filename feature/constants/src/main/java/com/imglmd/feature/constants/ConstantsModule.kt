@@ -1,4 +1,4 @@
-package com.imglmd.feature.constants.di
+package com.imglmd.feature.constants
 
 import com.imglmd.feature.constants.domain.usecase.GetAllCategoriesUseCase
 import com.imglmd.feature.constants.presentation.ConstantsViewModel
