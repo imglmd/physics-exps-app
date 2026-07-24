@@ -20,6 +20,8 @@ object AppIcons {
         ImageVector.vectorResource(R.drawable.arrow_back)
     val Search @Composable get() =
         ImageVector.vectorResource(R.drawable.search)
+    val Refresh @Composable get() =
+        ImageVector.vectorResource(R.drawable.refresh)
     val Tune @Composable get() =
         ImageVector.vectorResource(R.drawable.tune)
     val Rocket @Composable get() =

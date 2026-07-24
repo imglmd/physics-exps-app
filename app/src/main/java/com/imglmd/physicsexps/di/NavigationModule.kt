@@ -2,11 +2,11 @@
 
 package com.imglmd.physicsexps.di
 
+import com.imglmd.feature.compare.presentation.CompareScreen
 import com.imglmd.feature.history.presentation.HistoryMode
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.TabHostScreen
-import com.imglmd.physicsexps.presentation.screens.compare.CompareScreen
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
 import com.imglmd.feature.history.presentation.HistoryScreen
 import com.imglmd.physicsexps.presentation.screens.result.FullScreenChartScreen

@@ -1,7 +1,6 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.core.experiments.validation.ExperimentValidator
-import com.imglmd.physicsexps.presentation.screens.compare.CompareViewModel
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.feature.history.presentation.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
@@ -88,14 +87,5 @@ val viewModelModule = module {
 
     viewModel {
         SolutionViewModel(get(), get())
-    }
-
-    viewModel { params ->
-        CompareViewModel(
-            params.get(),
-            get(),
-            get(),
-            get()
-        )
     }
 }

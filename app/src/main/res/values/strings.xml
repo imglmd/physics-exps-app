@@ -2,9 +2,7 @@
     <string name="app_name">PhysicsExps</string>
 
     <string name="reset_zoom">Reset zoom</string>
-    <string name="run_1">Run 1</string>
-    <string name="run_2">Run 2</string>
-    <string name="insufficient_data">Insufficient data for comparison</string>
+
     <string name="advanced_mode">Advanced mode</string>
     <string name="additional_params">Additional parameters enabled</string>
     <string name="key_params">Key parameters only</string>
