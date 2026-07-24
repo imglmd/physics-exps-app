@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -21,11 +19,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.feature.history.R
+import com.imglmd.feature.history.domain.model.HistoryFilter
+import com.imglmd.feature.history.domain.model.SortOrder
 import com.imglmd.feature.history.presentation.HistoryContract
-import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.presentation.core.getStringByKey
-import com.imglmd.physicsexps.presentation.model.HistoryFilter
-import com.imglmd.physicsexps.presentation.model.SortOrder
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -115,12 +113,12 @@ fun FilterChipsRow(
                     selectedTrailingIconColor = colors.onPrimaryContainer
                 ),
                 leadingIcon = {
-                    Icon(Icons.Outlined.DateRange, null, Modifier.size(16.dp))
+                    Icon(ImageVector.vectorResource(R.drawable.date_range), null, Modifier.size(16.dp))
                 },
                 trailingIcon = if (hasDateFilter) {
                     {
                         Icon(
-                            Icons.Default.Close,
+                            ImageVector.vectorResource(R.drawable.close_small),
                             contentDescription = null,
                             modifier = Modifier.size(14.dp)
                         )
@@ -157,7 +155,7 @@ fun FilterChipsRow(
                     onClick = { onIntent(HistoryContract.Intent.ClearFilters) },
                     label = { Text(stringResource(R.string.reset), style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = {
-                        Icon(Icons.Default.Close, null, Modifier.size(16.dp))
+                        Icon(ImageVector.vectorResource(R.drawable.close_small), null, Modifier.size(16.dp))
                     }
                 )
             }

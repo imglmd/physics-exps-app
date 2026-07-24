@@ -69,7 +69,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.core.net.toUri
 import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 
 @Composable
 fun ResultScreen(

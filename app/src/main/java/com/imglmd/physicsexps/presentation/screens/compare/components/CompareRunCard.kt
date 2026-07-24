@@ -25,11 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.model.InputItem
 import com.imglmd.physicsexps.presentation.screens.compare.CompareItem
 import java.text.SimpleDateFormat

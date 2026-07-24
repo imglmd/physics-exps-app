@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.di
 
+import com.imglmd.feature.history.historyModule
 import com.imglmd.physicsexps.core.network.di.networkModule
 import com.imglmd.physicsexps.experiments.experimentsModule
 import com.imglmd.physicsexps.feature.constants.di.constantsModule
@@ -18,5 +19,7 @@ val appModules = listOf(
     remoteModule,
 
     constantsModule,
-    settingsModule
+    settingsModule,
+    historyModule,
+    stringProvidersModule
 )

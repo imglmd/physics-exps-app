@@ -36,7 +36,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.core.ui.utils.normalizePoints
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.Zoom

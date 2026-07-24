@@ -58,7 +58,7 @@ import com.imglmd.physicsexps.core.ui.component.ExperimentAppBar
 import com.imglmd.physicsexps.core.ui.component.IconPosition
 import com.imglmd.physicsexps.core.ui.component.PrimaryButton
 import com.imglmd.physicsexps.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentCarousel
 import com.imglmd.physicsexps.presentation.screens.experiment.components.ExperimentTextField
 import org.koin.compose.viewmodel.koinViewModel

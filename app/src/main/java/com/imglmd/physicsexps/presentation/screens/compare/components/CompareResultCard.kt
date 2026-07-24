@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imglmd.physicsexps.core.ui.icons.AppIcons
 import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import kotlin.math.abs
 
 private const val COLLAPSED_COUNT = 4

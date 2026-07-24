@@ -45,7 +45,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.feature.history.R
@@ -122,7 +124,7 @@ fun HistoryScreen(
                         )
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Delete,
+                            imageVector = ImageVector.vectorResource(R.drawable.delete),
                             contentDescription = stringResource(R.string.delete_all)
                         )
                     }
@@ -236,7 +238,7 @@ fun HistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Delete,
+                        imageVector = ImageVector.vectorResource(R.drawable.delete),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.error
                     )
@@ -389,7 +391,7 @@ private fun EmptyHistory(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Outlined.DateRange,
+                imageVector = ImageVector.vectorResource(R.drawable.date_range),
                 contentDescription = null,
                 modifier = Modifier.size(36.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
