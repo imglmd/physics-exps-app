@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,16 +26,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.presentation.model.HistoryItemUi
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.take
 import kotlin.text.uppercase
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.vectorResource
+import com.imglmd.feature.history.R
+import com.imglmd.feature.history.presentation.model.HistoryItemUi
+import com.imglmd.physicsexps.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 @Composable
 fun HistoryCard(
@@ -143,7 +144,7 @@ fun HistoryCard(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.DateRange,
+                        imageVector = ImageVector.vectorResource(R.drawable.date_range),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(12.dp)

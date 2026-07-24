@@ -9,9 +9,7 @@
     <string name="additional_params">Additional parameters enabled</string>
     <string name="key_params">Key parameters only</string>
     <string name="start_exp">Start the experiment</string>
-    <string name="newest_first">Newest first</string>
-    <string name="old_ones_first">Old ones first</string>
-    <string name="period">Period</string>
+
     <string name="reset">Reset</string>
     <string name="select_exps">Select experiments</string>
     <string name="delete_all">Delete all</string>
@@ -20,10 +18,7 @@
     <string name="delete_history">Delete history?</string>
     <string name="delete_exps">All experiments will be permanently deleted.</string>
 
-    <string name="no_exps">There are no experiments yet.</string>
-    <string name="try_reset">Try changing the filters\\nor resetting them</string>
-    <string name="run_first">Run the first experiment — \\nthe results will appear here.</string>
-    <string name="compare">"Compare "</string>
+
     <string name="offline_mode">Offline Mode</string>
     <string name="all_history">All history</string>
     <string name="last">Last</string>

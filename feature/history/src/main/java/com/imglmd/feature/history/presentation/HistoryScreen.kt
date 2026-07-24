@@ -187,7 +187,7 @@ fun HistoryScreen(
                     ),
                     enabled = pickerState.selectedStartDateMillis != null
                 ) {
-                    Text(stringResource(R.string.apply))
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.apply))
                 }
             },
             dismissButton = {
@@ -197,7 +197,7 @@ fun HistoryScreen(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel))
                 }
             }
         ) {
@@ -262,7 +262,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
                     )
                 ) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.delete), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -272,7 +272,7 @@ fun HistoryScreen(
                         containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                     )
                 ) {
-                    Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(com.imglmd.physicsexps.core.ui.R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
@@ -352,7 +352,7 @@ private fun Content(
             PrimaryButton(
                 enabled = state.selectedIds.size >= 2,
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = padding.calculateBottomPadding() + 10.dp).padding(horizontal = 16.dp),
-                text = stringResource(R.string.compare) + "(${state.selectedIds.size})",
+                text = stringResource(R.string.compare) + " (${state.selectedIds.size})",
                 icon = AppIcons.ChevronRight,
                 iconPosition = IconPosition.EdgeEnd,
                 onClick = { onIntent(HistoryContract.Intent.ConfirmSelection) }
@@ -367,7 +367,7 @@ private fun EmptyHistory(
     modifier: Modifier = Modifier
 ) {
     val title = if (hasFilters) {
-        stringResource(R.string.nothing_found)
+        stringResource(com.imglmd.physicsexps.core.ui.R.string.nothing_found)
     } else {
         stringResource(R.string.no_exps)
     }
