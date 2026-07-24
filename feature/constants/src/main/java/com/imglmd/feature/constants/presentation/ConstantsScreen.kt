@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.constants.presentation
+package com.imglmd.feature.constants.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -51,16 +51,17 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.core.ui.component.RadioGroup
 import com.imglmd.core.ui.component.RadioOption
 import com.imglmd.core.ui.icons.AppIcons
 import com.imglmd.core.ui.preferences.PreferenceGroup
 import com.imglmd.core.ui.preferences.PreferenceSlider
-import com.imglmd.physicsexps.feature.constants.R
-import com.imglmd.physicsexps.feature.constants.domain.model.Category
-import com.imglmd.physicsexps.feature.constants.domain.model.Constant
-import com.imglmd.physicsexps.feature.constants.presentation.component.CategoryItem
+import com.imglmd.feature.constants.domain.model.Category
+import com.imglmd.feature.constants.domain.model.Constant
+import com.imglmd.feature.constants.presentation.component.CategoryItem
+import com.imglmd.feature.constants.R
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -166,7 +167,7 @@ private fun ScreenHeader(
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.weight(1f),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = TextAlign.Center
         )
 
         IconButton(onClick = onSettingsClick) {

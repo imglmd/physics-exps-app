@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.constants.presentation.component
+package com.imglmd.feature.constants.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.feature.constants.domain.model.Constant
-import com.imglmd.physicsexps.feature.constants.presentation.ConstantsPreferences
+import com.imglmd.feature.constants.domain.model.Constant
+import com.imglmd.feature.constants.presentation.ConstantsPreferences
 
 @Composable
 fun CategoryItem(

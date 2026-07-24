@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.constants.domain.model
+package com.imglmd.feature.constants.domain.model
 
 data class Category(
     val icon: Int,

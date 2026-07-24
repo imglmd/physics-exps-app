@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.constants.presentation.component
+package com.imglmd.feature.constants.presentation.component
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -33,11 +33,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.core.ui.haptic.LocalHapticManager
-import com.imglmd.physicsexps.feature.constants.R
-import com.imglmd.physicsexps.feature.constants.domain.model.Constant
-import com.imglmd.physicsexps.feature.constants.presentation.ConstantsPreferences
-import com.imglmd.physicsexps.feature.constants.presentation.CopyMode
-import com.imglmd.physicsexps.feature.constants.presentation.util.format
+import com.imglmd.feature.constants.domain.model.Constant
+import com.imglmd.feature.constants.R
+import com.imglmd.feature.constants.presentation.ConstantsPreferences
+import com.imglmd.feature.constants.presentation.CopyMode
+import com.imglmd.feature.constants.presentation.util.format
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 

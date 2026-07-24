@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.feature.constants.presentation.util
+package com.imglmd.feature.constants.presentation.util
 
-import com.imglmd.physicsexps.feature.constants.domain.model.NumberValue
+import com.imglmd.feature.constants.domain.model.NumberValue
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.Locale

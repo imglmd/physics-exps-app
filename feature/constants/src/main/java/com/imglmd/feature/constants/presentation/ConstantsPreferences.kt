@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.feature.constants.presentation
+package com.imglmd.feature.constants.presentation
 
 data class ConstantsPreferences(
     val digits: Int = 5,
