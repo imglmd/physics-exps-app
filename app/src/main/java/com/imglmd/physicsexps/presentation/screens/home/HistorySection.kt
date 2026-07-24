@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.network.OnlineState
+import com.imglmd.core.network.OnlineState
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
 import com.imglmd.physicsexps.presentation.screens.home.components.ConnectionIndicator
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryCard

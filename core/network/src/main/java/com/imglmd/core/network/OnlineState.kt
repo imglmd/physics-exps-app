@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.network
+package com.imglmd.core.network
 
 data class OnlineState(
     val hasInternet: Boolean = false,

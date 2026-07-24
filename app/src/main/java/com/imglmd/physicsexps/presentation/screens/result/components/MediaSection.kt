@@ -51,7 +51,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.network.OnlineState
+import com.imglmd.core.network.OnlineState
 import com.imglmd.physicsexps.domain.model.Media
 import com.imglmd.core.ui.utils.rememberShimmerBrush
 import java.text.SimpleDateFormat

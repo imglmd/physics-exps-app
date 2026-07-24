@@ -3,7 +3,7 @@ package com.imglmd.physicsexps.di
 import com.imglmd.physicsexps.BuildConfig
 import com.imglmd.physicsexps.core.OfflineModeProviderImpl
 import com.imglmd.physicsexps.core.OnlineStateManager
-import com.imglmd.physicsexps.core.network.OfflineModeProvider
+import com.imglmd.core.network.OfflineModeProvider
 import com.imglmd.physicsexps.data.TokenStorage
 import com.imglmd.physicsexps.data.remote.ApiService
 import com.imglmd.physicsexps.data.remote.AuthInterceptor

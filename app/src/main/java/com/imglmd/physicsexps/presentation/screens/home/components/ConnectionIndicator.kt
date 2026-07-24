@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.network.OnlineState
+import com.imglmd.core.network.OnlineState
 
 data class ConnectionState(
     val iconRes: Int,

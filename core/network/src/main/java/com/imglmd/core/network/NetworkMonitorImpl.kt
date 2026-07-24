@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.core.network
+package com.imglmd.core.network
 
 import android.content.Context
 import android.net.ConnectivityManager

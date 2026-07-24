@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.home
 
-import com.imglmd.physicsexps.core.network.OnlineState
+import com.imglmd.core.network.OnlineState
 import com.imglmd.physicsexps.experiments.model.Experiment
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
 
