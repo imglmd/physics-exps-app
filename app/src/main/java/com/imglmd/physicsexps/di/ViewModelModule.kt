@@ -71,19 +71,6 @@ val viewModelModule = module {
         )
     }
 
-    viewModel { params ->
-
-        HistoryViewModel(
-            params.get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
 
     viewModel {
         SolutionViewModel(get(), get())
