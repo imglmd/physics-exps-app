@@ -7,7 +7,7 @@ import com.imglmd.physicsexps.experiments.validation.ValidationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CalculateExperimentUseCase(
+class CalculateExperimentUseCase( // todo хз пока куда деть, но куда-то надо
     private val registry: ExperimentRegistry,
     private val validator: ExperimentValidator
 ) {

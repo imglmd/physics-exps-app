@@ -32,8 +32,8 @@ import com.imglmd.physicsexps.R
 import com.imglmd.physicsexps.core.ui.component.IconPosition
 import com.imglmd.physicsexps.core.ui.component.PrimaryButton
 import com.imglmd.physicsexps.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.presentation.alignSeries
-import com.imglmd.physicsexps.presentation.normalizePoints
+import com.imglmd.physicsexps.core.ui.utils.alignSeries
+import com.imglmd.physicsexps.core.ui.utils.normalizePoints
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareChartCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareResultsCard
 import com.imglmd.physicsexps.presentation.screens.compare.components.CompareRunCard

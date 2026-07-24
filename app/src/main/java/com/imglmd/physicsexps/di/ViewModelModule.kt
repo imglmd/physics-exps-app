@@ -3,7 +3,7 @@ package com.imglmd.physicsexps.di
 import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.compare.CompareViewModel
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
-import com.imglmd.physicsexps.presentation.screens.history.HistoryViewModel
+import com.imglmd.feature.history.presentation.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
 import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
 import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel

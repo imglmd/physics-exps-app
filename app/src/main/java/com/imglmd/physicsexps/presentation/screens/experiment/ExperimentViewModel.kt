@@ -2,9 +2,9 @@ package com.imglmd.physicsexps.presentation.screens.experiment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imglmd.physicsexps.data.InMemoryResultRepository
+import com.imglmd.feature.history.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
-import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.physicsexps.experiments.usecase.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCase
 import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
 import com.imglmd.physicsexps.experiments.validation.ValidationError

@@ -3,8 +3,8 @@ package com.imglmd.physicsexps.presentation.screens.compare
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.experiments.ExperimentRegistry
-import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
+import com.imglmd.feature.history.domain.usecase.GetResultUseCase
+import com.imglmd.feature.history.domain.usecase.GetRunUseCase
 import com.imglmd.physicsexps.presentation.model.InputItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

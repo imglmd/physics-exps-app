@@ -2,7 +2,7 @@ package com.imglmd.physicsexps.presentation.screens.home
 
 import com.imglmd.physicsexps.core.network.OnlineState
 import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.imglmd.feature.history.presentation.model.HistoryItemUi
 
 
 data class HomeState(

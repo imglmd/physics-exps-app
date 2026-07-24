@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
-import com.imglmd.physicsexps.data.InMemoryResultRepository
+import com.imglmd.feature.history.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.model.Comment
 import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
@@ -13,10 +13,10 @@ import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.media.DeleteMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.media.GetMediaUseCase
 import com.imglmd.physicsexps.domain.usecase.media.UploadMediaUseCase
-import com.imglmd.physicsexps.domain.usecase.run.DeleteRunUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetResultUseCase
-import com.imglmd.physicsexps.domain.usecase.run.GetRunUseCase
-import com.imglmd.physicsexps.domain.usecase.run.SaveRunUseCase
+import com.imglmd.feature.history.domain.usecase.DeleteRunUseCase
+import com.imglmd.feature.history.domain.usecase.GetResultUseCase
+import com.imglmd.feature.history.domain.usecase.GetRunUseCase
+import com.imglmd.feature.history.domain.usecase.SaveRunUseCase
 import com.imglmd.physicsexps.experiments.model.ExperimentResult
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateBack
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateChart
