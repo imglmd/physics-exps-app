@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
+import com.imglmd.core.experiments.validation.ExperimentValidator
 import com.imglmd.physicsexps.presentation.screens.compare.CompareViewModel
 import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
 import com.imglmd.feature.history.presentation.HistoryViewModel

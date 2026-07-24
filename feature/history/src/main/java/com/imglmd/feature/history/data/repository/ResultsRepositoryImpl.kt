@@ -3,7 +3,7 @@ package com.imglmd.feature.history.data.repository
 import com.imglmd.feature.history.data.local.ResultEntity
 import com.imglmd.feature.history.data.local.ResultsDao
 import com.imglmd.feature.history.domain.repository.ResultsRepository
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 import kotlinx.serialization.json.Json
 
 class ResultsRepositoryImpl(

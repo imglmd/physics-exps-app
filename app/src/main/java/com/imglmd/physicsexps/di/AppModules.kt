@@ -2,7 +2,7 @@ package com.imglmd.physicsexps.di
 
 import com.imglmd.feature.history.historyModule
 import com.imglmd.core.network.di.networkModule
-import com.imglmd.physicsexps.experiments.experimentsModule
+import com.imglmd.core.experiments.experimentsModule
 import com.imglmd.physicsexps.feature.constants.di.constantsModule
 import com.imglmd.physicsexps.feature.settings.di.settingsModule
 

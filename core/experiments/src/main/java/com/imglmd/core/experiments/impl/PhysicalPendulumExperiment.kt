@@ -1,14 +1,15 @@
-package com.imglmd.physicsexps.experiments.impl
+package com.imglmd.core.experiments.impl
 
-import com.imglmd.physicsexps.experiments.ExpConstants
-import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
-import com.imglmd.physicsexps.experiments.model.InputField
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.experiments.model.SolutionStep
-import com.imglmd.physicsexps.experiments.validation.ValidationError
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import com.imglmd.core.experiments.ExpConstants
+import com.imglmd.core.experiments.model.Experiment
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.InputField
+import com.imglmd.core.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.SolutionStep
+import com.imglmd.core.experiments.validation.ValidationError
+import com.imglmd.core.experiments.validation.ValidationResult
 import java.lang.Math.sin
+
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt
@@ -20,13 +21,17 @@ class PhysicalPendulumExperiment: Experiment {
     override val inputFields = listOf(
         InputField("moment", "moment", "I", "kg_m_2", required = true),
         InputField("weight", "weight", "m", "kg", required = true, min = 0.0),
-        InputField("distance", "dist_ax", "d",
-            "m", required = true, min = 0.0)
+        InputField(
+            "distance", "dist_ax", "d",
+            "m", required = true, min = 0.0
+        )
     )
 
     override val additionalInputFields = listOf(
-        InputField("angle", "def_ang", "α", "ang", min = 0.0,
-            required = false)
+        InputField(
+            "angle", "def_ang", "α", "ang", min = 0.0,
+            required = false
+        )
     )
 
     override val xLabel = "dist_axs"
@@ -104,8 +109,12 @@ class PhysicalPendulumExperiment: Experiment {
                 add(PhysicalQuantity("period_o", "T", period, "s"))
                 add(PhysicalQuantity("linear_frequency", "ν", frequency, "hz"))
                 add(PhysicalQuantity("ang_f", "ω₀", angularFrequency, "rad_s"))
-                add(PhysicalQuantity("length_simp",
-                    "L", _l, "m"))
+                add(
+                    PhysicalQuantity(
+                        "length_simp",
+                        "L", _l, "m"
+                    )
+                )
                 if (a != null) {
                     add(PhysicalQuantity("def_ang", "α", a, "°"))
                 }
@@ -287,14 +296,16 @@ class PhysicalPendulumExperiment: Experiment {
         } else {
             steps += SolutionStep.Result(
                 listOf(
-                    (PhysicalQuantity("moment",
-                        "I", i, "kg_m_2")),
+                    (PhysicalQuantity(
+                        "moment",
+                        "I", i, "kg_m_2"
+                    )),
                     (PhysicalQuantity("weight", "m", m, "kg")),
                     (PhysicalQuantity("dist_ax", "d", d, "m")),
                     (PhysicalQuantity("period_o", "T", period, "s")),
                     (PhysicalQuantity("linear_frequency", "ν", frequency, "hz")),
                     (PhysicalQuantity("ang_f", "ω₀", angularFrequency, "rad_s")),
-                    (PhysicalQuantity("length_simp","L", _l, "m"))
+                    (PhysicalQuantity("length_simp", "L", _l, "m"))
                 )
             )
         }

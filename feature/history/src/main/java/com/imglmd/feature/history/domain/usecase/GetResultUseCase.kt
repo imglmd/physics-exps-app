@@ -1,6 +1,6 @@
 package com.imglmd.feature.history.domain.usecase
 
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 import com.imglmd.feature.history.domain.repository.ResultsRepository
 
 class GetResultUseCase(

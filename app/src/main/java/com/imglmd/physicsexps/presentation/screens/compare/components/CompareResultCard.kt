@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imglmd.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.PhysicalQuantity
 import com.imglmd.core.ui.utils.getStringByKey
 import kotlin.math.abs
 

@@ -1,6 +1,6 @@
 package com.imglmd.feature.history.domain.repository
 
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 
 
 interface ResultsRepository {

@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.experiments.validation
+package com.imglmd.core.experiments.validation
 
 sealed class ValidationResult {
     data class Success(val values: Map<String, Double>): ValidationResult()

@@ -47,7 +47,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
 import com.imglmd.core.ui.icons.AppIcons
-import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.core.experiments.model.Experiment
 import com.imglmd.core.ui.utils.getStringByKey
 import com.imglmd.physicsexps.presentation.screens.home.components.ExperimentItem
 import com.imglmd.physicsexps.presentation.screens.home.components.HomeHistoryEmpty

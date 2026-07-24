@@ -13,8 +13,8 @@ import com.imglmd.feature.history.domain.usecase.GetRunUseCase
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
 import com.imglmd.core.ui.utils.downsamplePoints
 import com.imglmd.core.ui.utils.normalizePoints
-import com.imglmd.physicsexps.experiments.usecase.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.experiments.usecase.GetExperimentByIdUseCase
+import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

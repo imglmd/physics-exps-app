@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.experiments
+package com.imglmd.core.experiments
 
 import kotlin.math.PI
 

@@ -1,6 +1,6 @@
 package com.imglmd.feature.history.presentation.model
 
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.PhysicalQuantity
 
 data class HistoryItemUi(
     val id: Int,

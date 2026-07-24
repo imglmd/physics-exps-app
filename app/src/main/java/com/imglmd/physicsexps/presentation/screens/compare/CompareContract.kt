@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.presentation.screens.compare
 
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 import com.imglmd.physicsexps.presentation.model.InputItem
 
 interface CompareContract {

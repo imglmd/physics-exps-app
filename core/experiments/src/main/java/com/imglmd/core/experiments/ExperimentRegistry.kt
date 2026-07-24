@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.experiments
+package com.imglmd.core.experiments
 
-import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.core.experiments.model.Experiment
 
 class ExperimentRegistry( //todo сделать internal
     private val experiments: List<Experiment>

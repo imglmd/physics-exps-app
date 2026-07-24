@@ -3,7 +3,7 @@ package com.imglmd.feature.history.presentation
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.domain.model.SortOrder
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
-import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.core.experiments.model.Experiment
 
 interface HistoryContract {
 

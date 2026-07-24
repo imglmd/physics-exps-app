@@ -17,7 +17,7 @@ import com.imglmd.feature.history.domain.usecase.DeleteRunUseCase
 import com.imglmd.feature.history.domain.usecase.GetResultUseCase
 import com.imglmd.feature.history.domain.usecase.GetRunUseCase
 import com.imglmd.feature.history.domain.usecase.SaveRunUseCase
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateBack
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateChart
 import com.imglmd.physicsexps.presentation.screens.result.ResultContract.Effect.NavigateCompare

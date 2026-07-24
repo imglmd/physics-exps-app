@@ -4,7 +4,7 @@ import android.net.Uri
 import com.imglmd.core.network.OnlineState
 import com.imglmd.physicsexps.domain.model.Comment
 import com.imglmd.physicsexps.domain.model.Media
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.ExperimentResult
 
 object ResultContract {
 

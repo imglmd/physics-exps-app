@@ -7,8 +7,8 @@ import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
-import com.imglmd.physicsexps.experiments.usecase.GetAllExperimentsUseCase
-import com.imglmd.physicsexps.experiments.usecase.GetExperimentByIdUseCase
+import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentPreviewsUseCase
 import com.imglmd.physicsexps.domain.usecase.media.DeleteMediaUseCase

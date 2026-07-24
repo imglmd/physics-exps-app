@@ -1,13 +1,14 @@
-package com.imglmd.physicsexps.experiments.impl
+package com.imglmd.core.experiments.impl
 
-import com.imglmd.physicsexps.experiments.ExpConstants
-import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
-import com.imglmd.physicsexps.experiments.model.InputField
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.experiments.model.SolutionStep
-import com.imglmd.physicsexps.experiments.validation.ValidationError
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import com.imglmd.core.experiments.ExpConstants
+import com.imglmd.core.experiments.model.Experiment
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.InputField
+import com.imglmd.core.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.SolutionStep
+import com.imglmd.core.experiments.validation.ValidationError
+import com.imglmd.core.experiments.validation.ValidationResult
+
 import kotlin.math.abs
 
 class DopplerEffectExperiment: Experiment {
@@ -15,11 +16,23 @@ class DopplerEffectExperiment: Experiment {
     override val category = "phonics"
     override val description = "doppler_desc"
     override val inputFields = listOf(
-        InputField("v_obs", "obs_v", "vₒ", "m_s",
-            required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("v_source", "sor_v", "vₛ", "m_s",
-            required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR),
-        InputField("frequency", "initial_frequency", "fₛ", "hz", required = true, min = 20.0, max = 20000.0),
+        InputField(
+            "v_obs", "obs_v", "vₒ", "m_s",
+            required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR
+        ),
+        InputField(
+            "v_source", "sor_v", "vₛ", "m_s",
+            required = true, max = ExpConstants.SPEED_OF_SOUND_IN_AIR
+        ),
+        InputField(
+            "frequency",
+            "initial_frequency",
+            "fₛ",
+            "hz",
+            required = true,
+            min = 20.0,
+            max = 20000.0
+        ),
     )
     override val xLabel = "sv"
     override val yLabel = "rm"

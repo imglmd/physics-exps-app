@@ -1,11 +1,12 @@
-package com.imglmd.physicsexps.experiments.impl
+package com.imglmd.core.experiments.impl
 
-import com.imglmd.physicsexps.experiments.ExpConstants
-import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
-import com.imglmd.physicsexps.experiments.model.InputField
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.experiments.model.SolutionStep
+import com.imglmd.core.experiments.ExpConstants
+import com.imglmd.core.experiments.model.Experiment
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.InputField
+import com.imglmd.core.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.SolutionStep
+
 
 import kotlin.math.ln
 import kotlin.math.pow
@@ -56,10 +57,14 @@ class RadioactiveDecayExperiment: Experiment {
                 PhysicalQuantity("in_count", "N₀", N0, ""),
                 PhysicalQuantity("half_life_", "T", period, "s"),
                 PhysicalQuantity("decay_time", "t", time, "s"),
-                PhysicalQuantity("nmb_rem", "N",
-                    N, ""),
-                PhysicalQuantity("rad_const", "λ",
-                    constRadioactiveDecay, "s_1"),
+                PhysicalQuantity(
+                    "nmb_rem", "N",
+                    N, ""
+                ),
+                PhysicalQuantity(
+                    "rad_const", "λ",
+                    constRadioactiveDecay, "s_1"
+                ),
                 PhysicalQuantity("av_life", "τ", srTime, "s")
             ),
             points = getPoints(map),

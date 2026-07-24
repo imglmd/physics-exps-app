@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.experiments.validation
+package com.imglmd.core.experiments.validation
 
-import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.core.experiments.model.Experiment
 
 class ExperimentValidator {
 

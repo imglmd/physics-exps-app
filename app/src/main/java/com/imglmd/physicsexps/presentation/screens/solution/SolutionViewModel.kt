@@ -3,8 +3,8 @@ package com.imglmd.physicsexps.presentation.screens.solution
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.feature.history.data.InMemoryResultRepository
-import com.imglmd.physicsexps.experiments.ExperimentRegistry
-import com.imglmd.physicsexps.experiments.model.SolutionStep
+import com.imglmd.core.experiments.ExperimentRegistry
+import com.imglmd.core.experiments.model.SolutionStep
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

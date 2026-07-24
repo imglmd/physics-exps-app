@@ -4,7 +4,7 @@ import com.imglmd.feature.history.domain.model.ExperimentRun
 import com.imglmd.feature.history.domain.repository.ExperimentRunsRepository
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.domain.model.SortOrder
-import com.imglmd.physicsexps.experiments.usecase.GetExperimentByIdUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

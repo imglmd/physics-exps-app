@@ -1,7 +1,7 @@
-package com.imglmd.physicsexps.experiments.usecase
+package com.imglmd.core.experiments.usecase
 
-import com.imglmd.physicsexps.experiments.ExperimentRegistry
-import com.imglmd.physicsexps.experiments.model.Experiment
+import com.imglmd.core.experiments.ExperimentRegistry
+import com.imglmd.core.experiments.model.Experiment
 
 class GetExperimentByIdUseCase(
     private val registry: ExperimentRegistry

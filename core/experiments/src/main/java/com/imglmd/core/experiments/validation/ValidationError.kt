@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.experiments.validation
+package com.imglmd.core.experiments.validation
 
 sealed class ValidationError {
 

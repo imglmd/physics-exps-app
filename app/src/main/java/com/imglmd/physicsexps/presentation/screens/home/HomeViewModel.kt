@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.feature.history.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.auth.AuthState
-import com.imglmd.physicsexps.experiments.ExperimentRegistry
+import com.imglmd.core.experiments.ExperimentRegistry
 import com.imglmd.physicsexps.domain.usecase.auth.EnsureAuthorizedUseCase
-import com.imglmd.physicsexps.experiments.usecase.GetAllExperimentsUseCase
+import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
 import com.imglmd.feature.history.domain.usecase.GetLastRunsUseCase
 import com.imglmd.feature.history.domain.usecase.GetResultUseCase
 import com.imglmd.feature.history.domain.usecase.GetRunUseCase

@@ -1,13 +1,14 @@
-package com.imglmd.physicsexps.experiments.impl
+package com.imglmd.core.experiments.impl
 
-import com.imglmd.physicsexps.experiments.ExpConstants
-import com.imglmd.physicsexps.experiments.model.Experiment
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
-import com.imglmd.physicsexps.experiments.model.InputField
-import com.imglmd.physicsexps.experiments.model.PhysicalQuantity
-import com.imglmd.physicsexps.experiments.model.SolutionStep
-import com.imglmd.physicsexps.experiments.validation.ValidationError
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import com.imglmd.core.experiments.ExpConstants
+import com.imglmd.core.experiments.model.Experiment
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.model.InputField
+import com.imglmd.core.experiments.model.PhysicalQuantity
+import com.imglmd.core.experiments.model.SolutionStep
+import com.imglmd.core.experiments.validation.ValidationError
+import com.imglmd.core.experiments.validation.ValidationResult
+
 import kotlin.math.pow
 
 class FreeFallExperiment: Experiment {
@@ -58,7 +59,7 @@ class FreeFallExperiment: Experiment {
         return ExperimentResult(
             experimentId = this.id,
             quantities = listOf(
-                PhysicalQuantity("initial_velocity", "v₀",v0, "m_s"),
+                PhysicalQuantity("initial_velocity", "v₀", v0, "m_s"),
                 PhysicalQuantity("body_dur", "t", t, "s"),
                 PhysicalQuantity(
                     label = "v_moment",

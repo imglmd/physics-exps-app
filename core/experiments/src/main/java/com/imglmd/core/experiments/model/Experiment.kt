@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.experiments.model
+package com.imglmd.core.experiments.model
 
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import com.imglmd.core.experiments.validation.ValidationResult
 
 interface Experiment {
     val id: String
