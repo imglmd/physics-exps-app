@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.repository
+package com.imglmd.core.auth
 
 interface AuthRepository {
     suspend fun registerDevice(deviceId: String, deviceName: String)

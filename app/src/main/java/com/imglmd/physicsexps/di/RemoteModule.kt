@@ -4,7 +4,6 @@ import com.imglmd.physicsexps.BuildConfig
 import com.imglmd.physicsexps.core.OfflineModeProviderImpl
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.core.network.OfflineModeProvider
-import com.imglmd.physicsexps.data.TokenStorage
 import com.imglmd.physicsexps.data.remote.ApiService
 import com.imglmd.physicsexps.data.remote.AuthInterceptor
 import com.imglmd.physicsexps.data.remote.RemoteConfig
@@ -30,8 +29,6 @@ val remoteModule = module {
         }
     }
 
-    single { TokenStorage(get()) }
-
     single { AuthInterceptor(get()) }
 
     single {
@@ -41,14 +38,7 @@ val remoteModule = module {
     }
 
     single<ApiService> {
-        val networkJson: Json = get()
-        val remoteConfig: RemoteConfig = get()
-        Retrofit.Builder()
-            .baseUrl(remoteConfig.baseUrl)
-            .client(get<OkHttpClient>())
-            .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
-            .build()
-            .create(ApiService::class.java)
+        get<Retrofit>().create(ApiService::class.java)
     }
 
     single<OfflineModeProvider> {

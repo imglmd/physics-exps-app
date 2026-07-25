@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data
+package com.imglmd.core.auth
 
 import android.content.Context
 import androidx.core.content.edit

@@ -1,5 +1,6 @@
 package com.imglmd.physicsexps.di
 
+import com.imglmd.core.auth.authModule
 import com.imglmd.feature.history.historyModule
 import com.imglmd.core.network.di.networkModule
 import com.imglmd.core.experiments.experimentsModule
@@ -23,5 +24,6 @@ val appModules = listOf(
     settingsModule,
     historyModule,
     stringProvidersModule,
-    compareModule
+    compareModule,
+    authModule
 )

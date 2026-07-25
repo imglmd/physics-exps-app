@@ -1,12 +1,9 @@
-package com.imglmd.physicsexps.data.repository
+package com.imglmd.core.auth
 
-import com.imglmd.physicsexps.data.TokenStorage
-import com.imglmd.physicsexps.data.remote.ApiService
-import com.imglmd.physicsexps.data.remote.dto.RegisterRequestDto
-import com.imglmd.physicsexps.domain.repository.AuthRepository
+import com.imglmd.core.auth.dto.RegisterRequestDto
 
 class AuthRepositoryImpl(
-    private val api: ApiService,
+    private val api: AuthApi,
     private val tokenStorage: TokenStorage
 ): AuthRepository {
     override suspend fun registerDevice(
