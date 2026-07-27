@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.imglmd.physicsexps.core.ui.haptic.HapticManagerImpl
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
-import com.imglmd.physicsexps.feature.settings.domain.model.AppSettings
+import com.imglmd.core.ui.haptic.HapticManagerImpl
+import com.imglmd.core.ui.haptic.LocalHapticManager
+import com.imglmd.feature.settings.domain.model.AppSettings
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI

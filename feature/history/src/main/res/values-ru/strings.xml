@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_period">Выберите период</string>
+    <string name="delete_history">Удалить историю?</string>
+    <string name="delete_exps">Все эксперименты будут удалены без возможности восстановления.</string>
+
+    <string name="newest_first">Сначала новые</string>
+    <string name="old_ones_first">Сначала старые</string>
+    <string name="period">Период</string>
+
+    <string name="reset">Сбросить</string>
+
+    <string name="try_reset">Попробуйте изменить фильтры \n или сбросить их</string>
+    <string name="run_first">Проведите первый эксперимент —\nрезультаты появятся здесь</string>
+    <string name="no_exps">Пока нет экспериментов</string>
+    <string name="compare">"Сравнить"</string>
+    <string name="delete_all">Удалить всё</string>
+    <string name="select_exps">Выберите эксперименты</string>
+</resources>

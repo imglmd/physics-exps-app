@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.imglmd.physicsexps.feature.constants"
+    namespace = "com.imglmd.feature.constants"
     compileSdk {
         version = release(37)
     }

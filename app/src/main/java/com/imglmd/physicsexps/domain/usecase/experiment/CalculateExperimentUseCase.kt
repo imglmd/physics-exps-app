@@ -1,13 +1,13 @@
 package com.imglmd.physicsexps.domain.usecase.experiment
 
-import com.imglmd.physicsexps.experiments.ExperimentRegistry
-import com.imglmd.physicsexps.experiments.model.ExperimentResult
-import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
+import com.imglmd.core.experiments.ExperimentRegistry
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.core.experiments.validation.ExperimentValidator
+import com.imglmd.core.experiments.validation.ValidationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CalculateExperimentUseCase(
+class CalculateExperimentUseCase( // todo хз пока куда деть, но куда-то надо
     private val registry: ExperimentRegistry,
     private val validator: ExperimentValidator
 ) {
@@ -17,7 +17,7 @@ class CalculateExperimentUseCase(
             val result: ExperimentResult,
             val inputs: Map<String, Double>
         ): Result()
-        data class ValidationError(val errors: List<com.imglmd.physicsexps.experiments.validation.ValidationError>): Result()
+        data class ValidationError(val errors: List<com.imglmd.core.experiments.validation.ValidationError>): Result()
         data class Failure(val message: String): Result()
     }
 

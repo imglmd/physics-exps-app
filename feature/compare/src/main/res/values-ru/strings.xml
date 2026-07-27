@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="insufficient_data">Недостаточно данных для сравнения</string>
+    <string name="reset_zoom">Сбросить масштаб</string>
+
+    <string name="run_1">Запуск 1</string>
+    <string name="run_2">Запуск 2</string>
+</resources>

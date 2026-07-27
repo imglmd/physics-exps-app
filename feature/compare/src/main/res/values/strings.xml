@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="insufficient_data">Insufficient data for comparison</string>
+    <string name="reset_zoom">Reset zoom</string>
+
+    <string name="run_1">Run 1</string>
+    <string name="run_2">Run 2</string>
+</resources>

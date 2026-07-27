@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.core.ui.icons.AppIcons
+import com.imglmd.core.ui.icons.AppIcons
 
 @Composable
 fun HomeHistoryEmpty(
@@ -36,7 +36,7 @@ fun HomeHistoryEmpty(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(com.imglmd.physicsexps.core.ui.R.string.history),
+                text = stringResource(com.imglmd.core.ui.R.string.history),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )

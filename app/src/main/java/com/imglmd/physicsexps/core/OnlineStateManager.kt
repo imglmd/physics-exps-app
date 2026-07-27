@@ -1,8 +1,8 @@
 package com.imglmd.physicsexps.core
 
-import com.imglmd.physicsexps.core.network.NetworkMonitor
-import com.imglmd.physicsexps.core.network.OfflineModeProvider
-import com.imglmd.physicsexps.core.network.OnlineState
+import com.imglmd.core.network.NetworkMonitor
+import com.imglmd.core.network.OfflineModeProvider
+import com.imglmd.core.network.OnlineState
 import com.imglmd.physicsexps.domain.usecase.auth.PingUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

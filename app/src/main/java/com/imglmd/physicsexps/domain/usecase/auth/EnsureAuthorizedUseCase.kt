@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.auth
 
-import com.imglmd.physicsexps.domain.repository.AuthRepository
+import com.imglmd.core.auth.AuthRepository
 
 class EnsureAuthorizedUseCase(
     private val authRepository: AuthRepository,

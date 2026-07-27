@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.imglmd.physicsexps.feature.settings"
+    namespace = "com.imglmd.feature.settings"
     compileSdk { version = release(37) }
     defaultConfig { minSdk = 24 }
     compileOptions {

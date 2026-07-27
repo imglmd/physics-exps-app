@@ -1,0 +1,14 @@
+package com.imglmd.feature.history.presentation.model
+
+import com.imglmd.core.experiments.model.PhysicalQuantity
+
+data class HistoryItemUi(
+    val id: Int,
+    val experimentId: String,
+    val experimentName: String,
+    val category: String,
+    val date: Long,
+    val inputs: Map<String, Double> = emptyMap(),
+    val points: List<Pair<Double, Double>> = emptyList(),
+    val quantities: List<PhysicalQuantity> = emptyList(),
+)

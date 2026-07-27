@@ -2,7 +2,6 @@ package com.imglmd.physicsexps.data.repository
 
 import com.imglmd.physicsexps.data.mapper.toUi
 import com.imglmd.physicsexps.data.remote.ApiService
-import com.imglmd.physicsexps.data.remote.RemoteConfig
 import com.imglmd.physicsexps.domain.model.Media
 import com.imglmd.physicsexps.domain.model.MediaList
 import com.imglmd.physicsexps.domain.repository.MediaRepository

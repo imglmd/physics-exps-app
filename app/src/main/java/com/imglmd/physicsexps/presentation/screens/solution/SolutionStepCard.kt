@@ -40,8 +40,8 @@ import com.hrm.latex.renderer.Latex
 import com.hrm.latex.renderer.LatexAutoWrap
 import com.hrm.latex.renderer.model.LatexConfig
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.experiments.model.SolutionStep
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.core.experiments.model.SolutionStep
+import com.imglmd.core.ui.utils.getStringByKey
 
 @Composable
 fun SolutionStepCard(

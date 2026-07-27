@@ -34,6 +34,9 @@ coil = "2.7.0"
 appcompat = "1.7.1"
 material = "1.14.0"
 jetbrainsKotlinJvm = "2.4.0"
+junitVersion = "4.13.2"
+androidxJunit = "1.3.0"
+espressoCore = "3.7.0"
 
 [libraries]
 
@@ -84,10 +87,6 @@ vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", ve
 # Latex
 latex-renderer = { module = "io.github.huarangmeng:latex-renderer", version.ref = "latex" }
 
-# Tests
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidJunit" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }

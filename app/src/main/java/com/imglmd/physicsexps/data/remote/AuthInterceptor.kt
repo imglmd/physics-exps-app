@@ -1,9 +1,10 @@
 package com.imglmd.physicsexps.data.remote
 
-import com.imglmd.physicsexps.data.TokenStorage
+import com.imglmd.core.auth.TokenStorage
 import okhttp3.Interceptor
 import okhttp3.Response
 
+//todo перенести в core:network
 class AuthInterceptor(
     private val tokenStorage: TokenStorage
 ): Interceptor {

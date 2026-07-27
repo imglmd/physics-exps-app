@@ -2,14 +2,14 @@ package com.imglmd.physicsexps.presentation.screens.experiment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imglmd.physicsexps.data.InMemoryResultRepository
+import com.imglmd.feature.history.data.InMemoryResultRepository
 import com.imglmd.physicsexps.domain.usecase.experiment.CalculateExperimentUseCase
-import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentByIdUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
 import com.imglmd.physicsexps.domain.usecase.experiment.GetExperimentImagesUseCase
-import com.imglmd.physicsexps.experiments.validation.ExperimentValidator
-import com.imglmd.physicsexps.experiments.validation.ValidationError
-import com.imglmd.physicsexps.experiments.validation.ValidationResult
-import com.imglmd.physicsexps.feature.settings.domain.usecase.GetSettingsUseCase
+import com.imglmd.core.experiments.validation.ExperimentValidator
+import com.imglmd.core.experiments.validation.ValidationError
+import com.imglmd.core.experiments.validation.ValidationResult
+import com.imglmd.feature.settings.domain.usecase.GetSettingsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

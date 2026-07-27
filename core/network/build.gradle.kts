@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.imglmd.physicsexps.core.network"
+    namespace = "com.imglmd.core.network"
     compileSdk {
         version = release(37)
     }

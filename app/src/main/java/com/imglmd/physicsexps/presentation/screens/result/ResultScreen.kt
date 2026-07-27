@@ -57,8 +57,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.experiments.ExperimentRegistry
-import com.imglmd.physicsexps.core.ui.component.ExperimentAppBar
+import com.imglmd.core.experiments.ExperimentRegistry
+import com.imglmd.core.ui.component.ExperimentAppBar
 import com.imglmd.physicsexps.presentation.screens.result.components.ChartCard
 import com.imglmd.physicsexps.presentation.screens.result.components.CommentSection
 import com.imglmd.physicsexps.presentation.screens.result.components.MediaSection
@@ -68,8 +68,8 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import androidx.core.net.toUri
-import com.imglmd.physicsexps.core.ui.haptic.LocalHapticManager
-import com.imglmd.physicsexps.presentation.core.getStringByKey
+import com.imglmd.core.ui.haptic.LocalHapticManager
+import com.imglmd.core.ui.utils.getStringByKey
 
 @Composable
 fun ResultScreen(

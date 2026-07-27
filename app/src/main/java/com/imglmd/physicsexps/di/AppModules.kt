@@ -1,9 +1,12 @@
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.core.network.di.networkModule
-import com.imglmd.physicsexps.experiments.experimentsModule
-import com.imglmd.physicsexps.feature.constants.di.constantsModule
-import com.imglmd.physicsexps.feature.settings.di.settingsModule
+import com.imglmd.core.auth.authModule
+import com.imglmd.feature.history.historyModule
+import com.imglmd.core.network.di.networkModule
+import com.imglmd.core.experiments.experimentsModule
+import com.imglmd.feature.compare.compareModule
+import com.imglmd.feature.constants.constantsModule
+import com.imglmd.feature.settings.settingsModule
 
 val appModules = listOf(
     coreModule,
@@ -18,5 +21,9 @@ val appModules = listOf(
     remoteModule,
 
     constantsModule,
-    settingsModule
+    settingsModule,
+    historyModule,
+    stringProvidersModule,
+    compareModule,
+    authModule
 )

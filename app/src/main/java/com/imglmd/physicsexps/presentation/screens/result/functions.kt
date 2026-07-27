@@ -1,27 +1,17 @@
 package com.imglmd.physicsexps.presentation.screens.result
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Typeface
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.imglmd.physicsexps.R
-import androidx.core.graphics.scale
-import androidx.core.graphics.createBitmap
-import com.imglmd.physicsexps.presentation.core.getStringByKey
 
 
 fun saveResultAsPdf(

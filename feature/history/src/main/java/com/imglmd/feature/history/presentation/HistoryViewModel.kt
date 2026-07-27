@@ -1,0 +1,223 @@
+package com.imglmd.feature.history.presentation
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.imglmd.feature.history.data.InMemoryResultRepository
+
+import com.imglmd.feature.history.domain.model.ExperimentRun
+import com.imglmd.feature.history.domain.model.HistoryFilter
+import com.imglmd.feature.history.domain.usecase.DeleteAllRunsUseCase
+import com.imglmd.feature.history.domain.usecase.GetFilteredRunsUseCase
+import com.imglmd.feature.history.domain.usecase.GetResultUseCase
+import com.imglmd.feature.history.domain.usecase.GetRunUseCase
+import com.imglmd.feature.history.presentation.model.HistoryItemUi
+import com.imglmd.core.ui.utils.downsamplePoints
+import com.imglmd.core.ui.utils.normalizePoints
+import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
+import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlin.collections.chunked
+import kotlin.collections.find
+
+class HistoryViewModel(
+    preselectedIds: List<Int>,
+    private val getResultUseCase: GetResultUseCase,
+    private val getExperiment: GetExperimentByIdUseCase,
+    private val getRunUseCase: GetRunUseCase,
+    private val resultRepository: InMemoryResultRepository,
+    private val deleteAllRunsUseCase: DeleteAllRunsUseCase,
+    private val getFilteredRunsUseCase: GetFilteredRunsUseCase,
+    private val getAllExperimentsUseCase: GetAllExperimentsUseCase
+) : ViewModel() {
+    private val _state = MutableStateFlow(
+        HistoryContract.State(
+            isLoading = true,
+            selectedIds = preselectedIds
+        )
+    )
+    val state = _state.asStateFlow()
+
+    private val _filter = MutableStateFlow(HistoryFilter())
+
+    private val _actionFlow = MutableSharedFlow<HistoryContract.Action>()
+    val actionFlow = _actionFlow.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            if (preselectedIds.isNotEmpty()) {
+                val firstRun = getRunUseCase(preselectedIds.first())
+                _filter.value = _filter.value.copy(
+                    experimentId = firstRun.experimentId
+                )
+            }
+
+            loadHistory()
+        }
+    }
+
+    fun onIntent(intent: HistoryContract.Intent) {
+        when (intent) {
+            is HistoryContract.Intent.NavigateToResult -> navigateToResult(intent.resultId)
+
+            HistoryContract.Intent.ShowDeleteDialog -> _state.update { it.copy(showDeleteDialog = true) }
+            HistoryContract.Intent.HideDeleteDialog -> _state.update { it.copy(showDeleteDialog = false) }
+            HistoryContract.Intent.DeleteAll -> deleteAllHistory()
+
+            is HistoryContract.Intent.SetDateRange -> _filter.update { it.copy(dateFrom = intent.from, dateTo = intent.to) }
+            is HistoryContract.Intent.SetExperimentFilter -> _filter.update { it.copy(experimentId = intent.experimentId) }
+            is HistoryContract.Intent.SetSortOrder -> _filter.update { it.copy(sortOrder = intent.order) }
+            HistoryContract.Intent.ClearFilters -> _filter.value = HistoryFilter()
+
+            HistoryContract.Intent.ConfirmSelection -> viewModelScope.launch {
+                _actionFlow.emit(HistoryContract.Action.ReturnSelection(_state.value.selectedIds))
+            }
+            is HistoryContract.Intent.ToggleSelection -> handleToggleSelection(intent.id)
+        }
+    }
+
+    private fun handleToggleSelection(id: Int) {
+        _state.update { st ->
+
+            val newList = st.selectedIds.toMutableList()
+            val clickedItem = st.history.find { it.id == id } ?: return@update st
+
+            if (newList.contains(id)) {
+                newList.remove(id)
+
+                if (newList.isEmpty()) {
+                    _filter.update { it.copy(experimentId = null) }
+                }
+
+                return@update st.copy(selectedIds = newList)
+            }
+
+            if (newList.size >= 2) return@update st
+
+            if (newList.isEmpty()) {
+                _filter.update {
+                    it.copy(experimentId = clickedItem.experimentId)
+                }
+            }
+
+            val selectedItems = st.history.filter { newList.contains(it.id) }
+
+            val isSameExperiment = selectedItems.all {
+                it.experimentId == clickedItem.experimentId
+            }
+
+            if (!isSameExperiment) return@update st
+
+            newList.add(id)
+
+            st.copy(selectedIds = newList)
+        }
+    }
+
+    private fun loadHistory() {
+        viewModelScope.launch {
+
+            val experiments = getAllExperimentsUseCase()
+
+            getFilteredRunsUseCase(_filter)
+                .flowOn(Dispatchers.IO)
+                .collectLatest { runs ->
+
+                    _state.update {
+                        it.copy(
+                            history = emptyList(),
+                            isLoading = true,
+                            availableExperiments = experiments,
+                            filter = _filter.value,
+                        )
+                    }
+
+                    val resultList = mutableListOf<HistoryItemUi>()
+
+                    runs.chunked(5).forEach { chunk ->
+
+                        val processed = chunk.mapNotNull { run ->
+                            runCatching { processRun(run) }.getOrNull()
+                        }
+
+                        resultList += processed
+
+                        _state.update {
+                            it.copy(
+                                history = resultList.toList(),
+                                isLoading = true
+                            )
+                        }
+                    }
+
+                    _state.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun navigateToResult(id: Int) {
+        viewModelScope.launch {
+            val run = getRunUseCase(id)
+
+            val inputs = runCatching {
+                Json.decodeFromString<Map<String, Double>>(run.inputData)
+            }.getOrDefault(emptyMap())
+
+            val result = getResultUseCase(id) ?: return@launch
+
+            resultRepository.save(result, inputs)
+
+            _actionFlow.emit(HistoryContract.Action.NavigateToResult(id))
+        }
+    }
+
+    private suspend fun processRun(run: ExperimentRun): HistoryItemUi {
+        val inputs = runCatching {
+            Json.decodeFromString<Map<String, Double>>(run.inputData)
+        }.getOrDefault(emptyMap())
+
+        val experiment = runCatching {
+            getExperiment(run.experimentId)
+        }.getOrNull()
+
+        val result = getResultUseCase(run.id)
+
+        return HistoryItemUi(
+            id = run.id,
+            experimentId = run.experimentId,
+            experimentName = experiment?.id ?: run.experimentId,
+            category = experiment?.category ?: "",
+            date = run.date,
+            inputs = inputs,
+            points = normalizePoints(
+                downsamplePoints(result?.points ?: emptyList(), 30)
+            ),
+            quantities = result?.quantities ?: emptyList()
+        )
+    }
+
+    private fun deleteAllHistory() {
+        viewModelScope.launch {
+            deleteAllRunsUseCase()
+            _state.update {
+                it.copy(
+                    showDeleteDialog = false,
+                    history = emptyList(),
+                    isLoading = false
+                )
+            }
+        }
+    }
+}

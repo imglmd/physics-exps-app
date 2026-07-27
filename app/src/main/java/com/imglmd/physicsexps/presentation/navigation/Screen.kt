@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import com.imglmd.feature.history.presentation.HistoryMode
 import com.imglmd.physicsexps.R
 import kotlinx.serialization.Serializable
 
@@ -60,11 +61,4 @@ sealed interface Screen {
 
     @Serializable
     data class Compare(val runIds: List<Int>) : Screen
-}
-
-
-@Serializable
-enum class HistoryMode {
-    NORMAL,
-    SELECTION
 }

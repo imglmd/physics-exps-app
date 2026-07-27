@@ -5,8 +5,8 @@ import com.imglmd.physicsexps.data.remote.dto.ExperimentPreviewDto
 import com.imglmd.physicsexps.data.remote.dto.MediaDto
 import com.imglmd.physicsexps.data.remote.dto.MediaListDto
 import com.imglmd.physicsexps.data.remote.dto.MediaTempUrlDto
-import com.imglmd.physicsexps.data.remote.dto.RegisterRequestDto
-import com.imglmd.physicsexps.data.remote.dto.RegisterResponseDto
+import com.imglmd.core.auth.dto.RegisterRequestDto
+import com.imglmd.core.auth.dto.RegisterResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -19,11 +19,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @POST("/register-device")
-    suspend fun registerDevice(
-        @Body request: RegisterRequestDto
-    ): RegisterResponseDto
-
     @GET("/api/media-temp-url")
     suspend fun getMediaTempUrl(
         @Query("path") path: String

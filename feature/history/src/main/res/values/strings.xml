@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_period">Select period</string>
+    <string name="delete_history">Delete history?</string>
+    <string name="delete_exps">All experiments will be permanently deleted.</string>
+
+    <string name="newest_first">Newest first</string>
+    <string name="old_ones_first">Old ones first</string>
+    <string name="period">Period</string>
+
+    <string name="reset">Reset</string>
+
+
+    <string name="try_reset">Try changing the filters\nor resetting them</string>
+    <string name="run_first">Run the first experiment —\nthe results will appear here.</string>
+    <string name="no_exps">There are no experiments yet.</string>
+    <string name="compare">"Compare"</string>
+    <string name="delete_all">Delete all</string>
+    <string name="select_exps">Select experiments</string>
+</resources>

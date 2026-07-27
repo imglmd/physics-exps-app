@@ -26,11 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.imglmd.physicsexps.presentation.core.getStringByKey
-import com.imglmd.physicsexps.presentation.model.HistoryItemUi
+import com.imglmd.core.ui.utils.getStringByKey
+import com.imglmd.feature.history.presentation.model.HistoryItemUi
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
