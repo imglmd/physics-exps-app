@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.remote
+package com.imglmd.feature.experiment.data.remote
 
 import com.imglmd.core.auth.TokenStorage
 import okhttp3.Interceptor

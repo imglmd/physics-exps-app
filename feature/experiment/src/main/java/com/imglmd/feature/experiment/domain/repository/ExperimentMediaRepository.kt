@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.repository
+package com.imglmd.feature.experiment.domain.repository
 
 interface ExperimentMediaRepository {
     suspend fun getPreviewUrls(): Map<String, String>

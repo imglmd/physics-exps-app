@@ -24,6 +24,7 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:experiments"))
+    implementation(project(":core:auth"))
     implementation(project(":feature:settings"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -35,4 +36,12 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.kotlinx.serialization)
+
+    implementation(libs.vico.compose.m3)
+
+    implementation(libs.latex.renderer)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.coil.compose)
 }

@@ -1,9 +1,8 @@
-package com.imglmd.physicsexps.domain.repository
+package com.imglmd.feature.experiment.domain.repository
 
-import com.imglmd.physicsexps.domain.model.Media
-import com.imglmd.physicsexps.domain.model.MediaList
+import com.imglmd.feature.experiment.domain.model.Media
+import com.imglmd.feature.experiment.domain.model.MediaList
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 interface MediaRepository {
     suspend fun getMedias(runId: String): MediaList

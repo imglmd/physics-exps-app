@@ -3,11 +3,10 @@ package com.imglmd.physicsexps.domain.usecase.media
 import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import com.imglmd.physicsexps.domain.model.Media
-import com.imglmd.physicsexps.domain.repository.MediaRepository
+import com.imglmd.feature.experiment.domain.model.Media
+import com.imglmd.feature.experiment.domain.repository.MediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

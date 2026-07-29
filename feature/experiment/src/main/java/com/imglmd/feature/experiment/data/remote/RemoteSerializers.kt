@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.remote
+package com.imglmd.feature.experiment.data.remote
 
 import java.time.Instant
 import kotlinx.serialization.KSerializer

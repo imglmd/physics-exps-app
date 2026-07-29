@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.data.remote.RemoteConfig
+import com.imglmd.feature.experiment.data.remote.RemoteConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

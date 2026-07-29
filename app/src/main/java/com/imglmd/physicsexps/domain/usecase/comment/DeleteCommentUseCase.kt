@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.comment
 
-import com.imglmd.physicsexps.domain.repository.CommentRepository
+import com.imglmd.feature.experiment.domain.repository.CommentRepository
 
 class DeleteCommentUseCase(
     private val commentRepository: CommentRepository

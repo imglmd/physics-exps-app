@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.auth
 
-import com.imglmd.physicsexps.data.remote.ApiService
+import com.imglmd.feature.experiment.data.remote.ApiService
 
 class PingUseCase(
     private val api: ApiService

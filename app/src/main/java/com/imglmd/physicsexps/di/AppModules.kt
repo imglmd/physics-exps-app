@@ -13,8 +13,6 @@ val appModules = listOf(
     coreModule,
     networkModule,
 
-    databaseModule,
-    repositoryModule,
     useCaseModule,
     viewModelModule,
     experimentsModule,

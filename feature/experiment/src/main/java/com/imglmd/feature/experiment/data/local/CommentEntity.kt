@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.data.database.models
+package com.imglmd.feature.experiment.data.local.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

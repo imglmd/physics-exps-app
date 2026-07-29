@@ -47,7 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.imglmd.physicsexps.R
-import com.imglmd.physicsexps.domain.model.Comment
+import com.imglmd.feature.experiment.domain.model.Comment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

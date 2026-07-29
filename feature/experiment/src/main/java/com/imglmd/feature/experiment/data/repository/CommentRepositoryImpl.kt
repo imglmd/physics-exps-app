@@ -1,10 +1,10 @@
-package com.imglmd.physicsexps.data.repository
+package com.imglmd.feature.experiment.data.repository
 
-import com.imglmd.physicsexps.data.database.CommentsDao
-import com.imglmd.physicsexps.data.mapper.toModel
-import com.imglmd.physicsexps.data.mapper.toUi
-import com.imglmd.physicsexps.domain.model.Comment
-import com.imglmd.physicsexps.domain.repository.CommentRepository
+import com.imglmd.feature.experiment.data.local.CommentsDao
+import com.imglmd.feature.experiment.data.mapper.toModel
+import com.imglmd.feature.experiment.data.mapper.toUi
+import com.imglmd.feature.experiment.domain.model.Comment
+import com.imglmd.feature.experiment.domain.repository.CommentRepository
 
 class CommentRepositoryImpl(
     private val commentsDao: CommentsDao

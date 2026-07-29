@@ -1,7 +1,7 @@
 package com.imglmd.physicsexps.domain.usecase.media
 
-import com.imglmd.physicsexps.domain.model.MediaList
-import com.imglmd.physicsexps.domain.repository.MediaRepository
+import com.imglmd.feature.experiment.domain.model.MediaList
+import com.imglmd.feature.experiment.domain.repository.MediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

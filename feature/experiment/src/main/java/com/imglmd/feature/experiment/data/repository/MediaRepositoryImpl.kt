@@ -1,17 +1,17 @@
-package com.imglmd.physicsexps.data.repository
+package com.imglmd.feature.experiment.data.repository
 
-import com.imglmd.physicsexps.data.mapper.toUi
-import com.imglmd.physicsexps.data.remote.ApiService
-import com.imglmd.physicsexps.domain.model.Media
-import com.imglmd.physicsexps.domain.model.MediaList
-import com.imglmd.physicsexps.domain.repository.MediaRepository
+import com.imglmd.feature.experiment.data.mapper.toUi
+import com.imglmd.feature.experiment.data.remote.ApiService
+import com.imglmd.feature.experiment.domain.model.Media
+import com.imglmd.feature.experiment.domain.model.MediaList
+import com.imglmd.feature.experiment.domain.repository.MediaRepository
 import okhttp3.MultipartBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class MediaRepositoryImpl(
     private val apiService: ApiService,
-) : MediaRepository {
+): MediaRepository {
     override suspend fun getMedias(runId: String): MediaList {
         return apiService.getMedia(runId).toUi()
     }

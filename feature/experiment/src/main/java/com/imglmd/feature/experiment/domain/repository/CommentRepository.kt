@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.domain.repository
+package com.imglmd.feature.experiment.domain.repository
 
-import com.imglmd.physicsexps.domain.model.Comment
+import com.imglmd.feature.experiment.domain.model.Comment
 
 interface CommentRepository {
     suspend fun getCommentsByRunId(runId: Int):List<Comment>

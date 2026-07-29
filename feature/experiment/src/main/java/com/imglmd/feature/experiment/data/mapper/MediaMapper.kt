@@ -1,9 +1,9 @@
-package com.imglmd.physicsexps.data.mapper
+package com.imglmd.feature.experiment.data.mapper
 
-import com.imglmd.physicsexps.data.remote.dto.MediaDto
-import com.imglmd.physicsexps.data.remote.dto.MediaListDto
-import com.imglmd.physicsexps.domain.model.Media
-import com.imglmd.physicsexps.domain.model.MediaList
+import com.imglmd.feature.experiment.data.remote.dto.MediaDto
+import com.imglmd.feature.experiment.data.remote.dto.MediaListDto
+import com.imglmd.feature.experiment.domain.model.Media
+import com.imglmd.feature.experiment.domain.model.MediaList
 
 fun Media.toDto(): MediaDto {
     return MediaDto(mediaId = mediaId, filename = filename, url = url, size = size, createdAt = createdAt,

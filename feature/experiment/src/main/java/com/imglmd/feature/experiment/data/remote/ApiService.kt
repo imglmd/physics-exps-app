@@ -1,15 +1,12 @@
-package com.imglmd.physicsexps.data.remote
+package com.imglmd.feature.experiment.data.remote
 
-import com.imglmd.physicsexps.data.remote.dto.ExperimentImagesDto
-import com.imglmd.physicsexps.data.remote.dto.ExperimentPreviewDto
-import com.imglmd.physicsexps.data.remote.dto.MediaDto
-import com.imglmd.physicsexps.data.remote.dto.MediaListDto
-import com.imglmd.physicsexps.data.remote.dto.MediaTempUrlDto
-import com.imglmd.core.auth.dto.RegisterRequestDto
-import com.imglmd.core.auth.dto.RegisterResponseDto
+import com.imglmd.feature.experiment.data.remote.dto.ExperimentImagesDto
+import com.imglmd.feature.experiment.data.remote.dto.ExperimentPreviewDto
+import com.imglmd.feature.experiment.data.remote.dto.MediaDto
+import com.imglmd.feature.experiment.data.remote.dto.MediaListDto
+import com.imglmd.feature.experiment.data.remote.dto.MediaTempUrlDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart

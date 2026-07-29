@@ -1,7 +1,7 @@
 package com.imglmd.physicsexps.domain.usecase.media
 
-import com.imglmd.physicsexps.data.remote.ApiService
-import com.imglmd.physicsexps.data.remote.RemoteConfig
+import com.imglmd.feature.experiment.data.remote.ApiService
+import com.imglmd.feature.experiment.data.remote.RemoteConfig
 
 class GetMediaSignedUrlUseCase(
     private val api: ApiService,

@@ -1,6 +1,6 @@
-package com.imglmd.physicsexps.data.remote.dto
+package com.imglmd.feature.experiment.data.remote.dto
 
-import com.imglmd.physicsexps.data.remote.StringLikeSerializer
+import com.imglmd.feature.experiment.data.remote.StringLikeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

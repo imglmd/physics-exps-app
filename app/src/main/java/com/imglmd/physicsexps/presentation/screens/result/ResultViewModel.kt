@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.physicsexps.core.OnlineStateManager
 import com.imglmd.feature.experiment.data.InMemoryResultRepository
-import com.imglmd.physicsexps.domain.model.Comment
+import com.imglmd.feature.experiment.domain.model.Comment
 import com.imglmd.physicsexps.domain.usecase.comment.AddCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.DeleteCommentUseCase
 import com.imglmd.physicsexps.domain.usecase.comment.GetCommentsUseCase

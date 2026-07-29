@@ -1,4 +1,4 @@
-package com.imglmd.physicsexps.domain.model
+package com.imglmd.feature.experiment.domain.model
 
 import kotlinx.serialization.Serializable
 

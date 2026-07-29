@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.domain.usecase.experiment
 
-import com.imglmd.physicsexps.domain.repository.ExperimentMediaRepository
+import com.imglmd.feature.experiment.domain.repository.ExperimentMediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,12 +1,8 @@
-package com.imglmd.physicsexps.data.database
+package com.imglmd.feature.experiment.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.imglmd.feature.experiment.data.local.ExperimentRunEntity
-import com.imglmd.feature.experiment.data.local.ExperimentRunsDao
-import com.imglmd.feature.experiment.data.local.ResultEntity
-import com.imglmd.feature.experiment.data.local.ResultsDao
-import com.imglmd.physicsexps.data.database.models.CommentEntity
+import com.imglmd.feature.experiment.data.local.models.CommentEntity
 
 
 @Database(

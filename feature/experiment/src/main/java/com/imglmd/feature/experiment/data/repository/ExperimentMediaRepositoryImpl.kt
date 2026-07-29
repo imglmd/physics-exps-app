@@ -1,8 +1,8 @@
-package com.imglmd.physicsexps.data.repository
+package com.imglmd.feature.experiment.data.repository
 
-import com.imglmd.physicsexps.data.remote.ApiService
-import com.imglmd.physicsexps.data.remote.RemoteConfig
-import com.imglmd.physicsexps.domain.repository.ExperimentMediaRepository
+import com.imglmd.feature.experiment.data.remote.ApiService
+import com.imglmd.feature.experiment.data.remote.RemoteConfig
+import com.imglmd.feature.experiment.domain.repository.ExperimentMediaRepository
 
 class ExperimentMediaRepositoryImpl(
     private val apiService: ApiService,
