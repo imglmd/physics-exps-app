@@ -37,6 +37,9 @@ jetbrainsKotlinJvm = "2.4.0"
 junitVersion = "4.13.2"
 androidxJunit = "1.3.0"
 espressoCore = "3.7.0"
+junitJunit = "4.13.2"
+androidxJunitVersion = "1.3.0"
+espressoCoreVersion = "3.7.0"
 
 [libraries]
 
@@ -93,6 +96,9 @@ converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "co
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

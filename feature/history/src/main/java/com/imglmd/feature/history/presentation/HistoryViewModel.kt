@@ -2,14 +2,14 @@ package com.imglmd.feature.history.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imglmd.feature.history.data.InMemoryResultRepository
+import com.imglmd.feature.experiment.data.InMemoryResultRepository
 
-import com.imglmd.feature.history.domain.model.ExperimentRun
+import com.imglmd.feature.experiment.domain.model.ExperimentRun
 import com.imglmd.feature.history.domain.model.HistoryFilter
-import com.imglmd.feature.history.domain.usecase.DeleteAllRunsUseCase
+import com.imglmd.feature.experiment.domain.usecase.DeleteAllRunsUseCase
 import com.imglmd.feature.history.domain.usecase.GetFilteredRunsUseCase
-import com.imglmd.feature.history.domain.usecase.GetResultUseCase
-import com.imglmd.feature.history.domain.usecase.GetRunUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetResultUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetRunUseCase
 import com.imglmd.feature.history.presentation.model.HistoryItemUi
 import com.imglmd.core.ui.utils.downsamplePoints
 import com.imglmd.core.ui.utils.normalizePoints

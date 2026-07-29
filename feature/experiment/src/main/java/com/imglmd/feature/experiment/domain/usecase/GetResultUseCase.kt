@@ -1,7 +1,7 @@
-package com.imglmd.feature.history.domain.usecase
+package com.imglmd.feature.experiment.domain.usecase
 
 import com.imglmd.core.experiments.model.ExperimentResult
-import com.imglmd.feature.history.domain.repository.ResultsRepository
+import com.imglmd.feature.experiment.domain.repository.ResultsRepository
 
 class GetResultUseCase(
     private val repository: ResultsRepository

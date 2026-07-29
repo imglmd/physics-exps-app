@@ -1,8 +1,8 @@
-package com.imglmd.feature.history.data.repository
+package com.imglmd.feature.experiment.data.repository
 
-import com.imglmd.feature.history.data.local.ResultEntity
-import com.imglmd.feature.history.data.local.ResultsDao
-import com.imglmd.feature.history.domain.repository.ResultsRepository
+import com.imglmd.feature.experiment.data.local.ResultEntity
+import com.imglmd.feature.experiment.data.local.ResultsDao
+import com.imglmd.feature.experiment.domain.repository.ResultsRepository
 import com.imglmd.core.experiments.model.ExperimentResult
 import kotlinx.serialization.json.Json
 

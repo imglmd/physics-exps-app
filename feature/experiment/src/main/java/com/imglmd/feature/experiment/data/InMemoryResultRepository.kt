@@ -1,4 +1,4 @@
-package com.imglmd.feature.history.data
+package com.imglmd.feature.experiment.data
 
 import com.imglmd.core.experiments.model.ExperimentResult
 

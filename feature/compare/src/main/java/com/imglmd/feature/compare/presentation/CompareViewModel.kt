@@ -3,8 +3,8 @@ package com.imglmd.feature.compare.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.imglmd.core.experiments.ExperimentRegistry
-import com.imglmd.feature.history.domain.usecase.GetResultUseCase
-import com.imglmd.feature.history.domain.usecase.GetRunUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetResultUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetRunUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.imglmd.feature.history.data.local.ExperimentRunEntity
+import com.imglmd.feature.experiment.data.local.ExperimentRunEntity
 
 @Entity("comments",
     foreignKeys = [

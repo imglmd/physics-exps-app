@@ -1,6 +1,6 @@
-package com.imglmd.feature.history.domain.usecase
+package com.imglmd.feature.experiment.domain.usecase
 
-import com.imglmd.feature.history.domain.repository.ExperimentRunsRepository
+import com.imglmd.feature.experiment.domain.repository.ExperimentRunsRepository
 
 class DeleteRunUseCase(
     private val runsRepository: ExperimentRunsRepository,

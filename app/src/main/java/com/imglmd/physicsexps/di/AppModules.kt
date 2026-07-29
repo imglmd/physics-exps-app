@@ -6,6 +6,7 @@ import com.imglmd.core.network.di.networkModule
 import com.imglmd.core.experiments.experimentsModule
 import com.imglmd.feature.compare.compareModule
 import com.imglmd.feature.constants.constantsModule
+import com.imglmd.feature.experiment.experimentFeatModule
 import com.imglmd.feature.settings.settingsModule
 
 val appModules = listOf(
@@ -25,5 +26,6 @@ val appModules = listOf(
     historyModule,
     stringProvidersModule,
     compareModule,
-    authModule
+    authModule,
+    experimentFeatModule
 )

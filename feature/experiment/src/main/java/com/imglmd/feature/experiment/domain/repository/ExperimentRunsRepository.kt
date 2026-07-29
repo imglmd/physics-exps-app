@@ -1,6 +1,6 @@
-package com.imglmd.feature.history.domain.repository
+package com.imglmd.feature.experiment.domain.repository
 
-import com.imglmd.feature.history.domain.model.ExperimentRun
+import com.imglmd.feature.experiment.domain.model.ExperimentRun
 import kotlinx.coroutines.flow.Flow
 
 interface ExperimentRunsRepository {

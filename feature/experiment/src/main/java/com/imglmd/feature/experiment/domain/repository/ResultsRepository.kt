@@ -1,4 +1,4 @@
-package com.imglmd.feature.history.domain.repository
+package com.imglmd.feature.experiment.domain.repository
 
 import com.imglmd.core.experiments.model.ExperimentResult
 

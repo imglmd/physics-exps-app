@@ -1,7 +1,7 @@
-package com.imglmd.feature.history.data.mapper
+package com.imglmd.feature.experiment.data.mapper
 
-import com.imglmd.feature.history.data.local.ExperimentRunEntity
-import com.imglmd.feature.history.domain.model.ExperimentRun
+import com.imglmd.feature.experiment.data.local.ExperimentRunEntity
+import com.imglmd.feature.experiment.domain.model.ExperimentRun
 
 fun ExperimentRunEntity.toUi(): ExperimentRun {
     return ExperimentRun(

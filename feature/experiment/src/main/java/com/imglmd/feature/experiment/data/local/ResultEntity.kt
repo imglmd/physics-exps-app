@@ -1,4 +1,4 @@
-package com.imglmd.feature.history.data.local
+package com.imglmd.feature.experiment.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

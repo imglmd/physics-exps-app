@@ -1,4 +1,4 @@
-package com.imglmd.feature.history.domain.model
+package com.imglmd.feature.experiment.domain.model
 
 data class ExperimentRun (
     val id: Int = 0,

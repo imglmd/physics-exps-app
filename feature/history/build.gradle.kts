@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:experiments"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:experiment"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

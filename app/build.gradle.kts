@@ -102,6 +102,7 @@ dependencies {
     implementation(project(":feature:constants"))
     implementation(project(":feature:history"))
     implementation(project(":feature:compare"))
+    implementation(project(":feature:experiment"))
     implementation(project(":core:ui"))
     implementation(project(":core:auth"))
     implementation(project(":core:network"))
