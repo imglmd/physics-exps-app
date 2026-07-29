@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.imglmd.core.ui.icons.AppIcons
 import com.imglmd.feature.history.R
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.domain.model.SortOrder
@@ -118,7 +119,7 @@ fun FilterChipsRow(
                 trailingIcon = if (hasDateFilter) {
                     {
                         Icon(
-                            ImageVector.vectorResource(R.drawable.close_small),
+                            AppIcons.Close,
                             contentDescription = null,
                             modifier = Modifier.size(14.dp)
                         )
@@ -155,7 +156,7 @@ fun FilterChipsRow(
                     onClick = { onIntent(HistoryContract.Intent.ClearFilters) },
                     label = { Text(stringResource(R.string.reset), style = MaterialTheme.typography.labelMedium) },
                     leadingIcon = {
-                        Icon(ImageVector.vectorResource(R.drawable.close_small), null, Modifier.size(16.dp))
+                        Icon(AppIcons.Close, null, Modifier.size(16.dp))
                     }
                 )
             }

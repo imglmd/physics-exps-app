@@ -24,6 +24,12 @@ object AppIcons {
         ImageVector.vectorResource(R.drawable.refresh)
     val Tune @Composable get() =
         ImageVector.vectorResource(R.drawable.tune)
+    val Error @Composable get() =
+        ImageVector.vectorResource(R.drawable.error)
+    val Close @Composable get() =
+        ImageVector.vectorResource(R.drawable.close)
+    val Delete @Composable get() =
+        ImageVector.vectorResource(R.drawable.delete)
     val Rocket @Composable get() =
         ImageVector.vectorResource(R.drawable.rocket_filled)
     val RocketOutlined @Composable get() =

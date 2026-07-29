@@ -1,11 +1,11 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.core.experiments.validation.ExperimentValidator
-import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentViewModel
+import com.imglmd.feature.experiment.presentation.experiment.ExperimentViewModel
 import com.imglmd.feature.history.presentation.HistoryViewModel
 import com.imglmd.physicsexps.presentation.screens.home.HomeViewModel
-import com.imglmd.physicsexps.presentation.screens.result.ResultViewModel
-import com.imglmd.physicsexps.presentation.screens.solution.SolutionViewModel
+import com.imglmd.feature.experiment.presentation.result.ResultViewModel
+import com.imglmd.feature.experiment.presentation.solution.SolutionViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -56,7 +56,6 @@ val viewModelModule = module {
             runId,
             get(),
             get(APP_SCOPE),
-            get(),
             get(),
             get(),
             get(),

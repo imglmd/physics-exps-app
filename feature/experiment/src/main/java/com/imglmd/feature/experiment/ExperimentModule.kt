@@ -20,6 +20,15 @@ import com.imglmd.feature.experiment.domain.usecase.GetLastRunsUseCase
 import com.imglmd.feature.experiment.domain.usecase.GetResultUseCase
 import com.imglmd.feature.experiment.domain.usecase.GetRunUseCase
 import com.imglmd.feature.experiment.domain.usecase.SaveRunUseCase
+import com.imglmd.feature.experiment.domain.usecase.comment.AddCommentUseCase
+import com.imglmd.feature.experiment.domain.usecase.comment.DeleteCommentUseCase
+import com.imglmd.feature.experiment.domain.usecase.comment.GetCommentsUseCase
+import com.imglmd.feature.experiment.domain.usecase.experiment.CalculateExperimentUseCase
+import com.imglmd.feature.experiment.domain.usecase.experiment.GetExperimentImagesUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.DeleteMediaUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.GetMediaSignedUrlUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.GetMediaUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.UploadMediaUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -46,6 +55,18 @@ val experimentFeatModule = module {
 
     single<ExperimentRunsRepository> { ExperimentRunsRepositoryImpl(get()) }
     single<ResultsRepository> { ResultsRepositoryImpl(get()) }
+
+    factory { AddCommentUseCase(get()) }
+    factory { DeleteCommentUseCase(get()) }
+    factory { GetCommentsUseCase(get()) }
+
+    factory { CalculateExperimentUseCase(get(), get()) }
+    factory { GetExperimentImagesUseCase(get()) }
+
+    factory { DeleteMediaUseCase(get()) }
+    factory { GetMediaSignedUrlUseCase(get(), get()) }
+    factory { GetMediaUseCase(get(), get()) }
+    factory { UploadMediaUseCase(get()) }
 
     factory { SaveRunUseCase(get(), get(), get()) }
     factory { GetRunUseCase(get()) }

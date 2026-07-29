@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:experiments"))
     implementation(project(":core:auth"))
+    implementation(project(":core:network"))
     implementation(project(":feature:settings"))
 
     implementation(platform(libs.androidx.compose.bom))

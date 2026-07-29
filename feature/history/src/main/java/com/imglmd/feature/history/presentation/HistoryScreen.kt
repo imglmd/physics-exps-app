@@ -124,7 +124,7 @@ fun HistoryScreen(
                         )
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.delete),
+                            imageVector = AppIcons.Delete,
                             contentDescription = stringResource(R.string.delete_all)
                         )
                     }
@@ -238,7 +238,7 @@ fun HistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.delete),
+                        imageVector = AppIcons.Delete,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.error
                     )

@@ -3,15 +3,15 @@
 package com.imglmd.physicsexps.di
 
 import com.imglmd.feature.compare.presentation.CompareScreen
+import com.imglmd.feature.experiment.presentation.experiment.ExperimentScreen
+import com.imglmd.feature.experiment.presentation.result.FullScreenChartScreen
+import com.imglmd.feature.experiment.presentation.result.ResultScreen
+import com.imglmd.feature.experiment.presentation.solution.SolutionScreen
 import com.imglmd.feature.history.presentation.HistoryMode
+import com.imglmd.feature.history.presentation.HistoryScreen
 import com.imglmd.physicsexps.presentation.navigation.Navigator
 import com.imglmd.physicsexps.presentation.navigation.Screen
 import com.imglmd.physicsexps.presentation.screens.TabHostScreen
-import com.imglmd.physicsexps.presentation.screens.experiment.ExperimentScreen
-import com.imglmd.feature.history.presentation.HistoryScreen
-import com.imglmd.physicsexps.presentation.screens.result.FullScreenChartScreen
-import com.imglmd.physicsexps.presentation.screens.result.ResultScreen
-import com.imglmd.physicsexps.presentation.screens.solution.SolutionScreen
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
