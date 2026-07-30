@@ -12,10 +12,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-val APP_SCOPE = named("appScope")
-
 val coreModule = module {
-    single<CoroutineScope>(APP_SCOPE) {
+    single<CoroutineScope>(named("appScope")) {
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
 

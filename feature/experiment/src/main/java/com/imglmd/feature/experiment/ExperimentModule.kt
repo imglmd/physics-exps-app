@@ -29,7 +29,12 @@ import com.imglmd.feature.experiment.domain.usecase.media.DeleteMediaUseCase
 import com.imglmd.feature.experiment.domain.usecase.media.GetMediaSignedUrlUseCase
 import com.imglmd.feature.experiment.domain.usecase.media.GetMediaUseCase
 import com.imglmd.feature.experiment.domain.usecase.media.UploadMediaUseCase
+import com.imglmd.feature.experiment.presentation.experiment.ExperimentViewModel
+import com.imglmd.feature.experiment.presentation.result.ResultViewModel
+import com.imglmd.feature.experiment.presentation.solution.SolutionViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val experimentFeatModule = module {
@@ -75,4 +80,49 @@ val experimentFeatModule = module {
     factory { GetLastRunsUseCase(get()) }
     factory { DeleteRunUseCase(get()) }
     factory { DeleteAllRunsUseCase(get()) }
+
+    viewModel { params ->
+
+        val inputs: Map<String, String>? = params.getOrNull()
+        val replaceRunId: Int? = params.getOrNull()
+
+        ExperimentViewModel(
+            id = params.get(),
+            inputs = inputs,
+            replaceRunId = replaceRunId,
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+
+    viewModel { params ->
+
+        val runId: Int? = params.getOrNull()
+
+        ResultViewModel(
+            runId,
+            get(),
+            get(named("appScope")),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+
+
+    viewModel {
+        SolutionViewModel(get(), get())
+    }
 }
