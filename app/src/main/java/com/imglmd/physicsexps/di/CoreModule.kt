@@ -1,6 +1,6 @@
 package com.imglmd.physicsexps.di
 
-import com.imglmd.physicsexps.data.remote.RemoteConfig
+import com.imglmd.feature.experiment.data.remote.RemoteConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,10 +12,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-val APP_SCOPE = named("appScope")
-
 val coreModule = module {
-    single<CoroutineScope>(APP_SCOPE) {
+    single<CoroutineScope>(named("appScope")) {
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
 

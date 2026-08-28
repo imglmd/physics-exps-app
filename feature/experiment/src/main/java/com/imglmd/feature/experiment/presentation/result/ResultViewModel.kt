@@ -1,0 +1,406 @@
+package com.imglmd.feature.experiment.presentation.result
+
+import android.content.Context
+import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.imglmd.feature.experiment.data.InMemoryResultRepository
+import com.imglmd.feature.experiment.domain.model.Comment
+import com.imglmd.feature.experiment.domain.usecase.DeleteRunUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetResultUseCase
+import com.imglmd.feature.experiment.domain.usecase.GetRunUseCase
+import com.imglmd.feature.experiment.domain.usecase.SaveRunUseCase
+import com.imglmd.core.experiments.model.ExperimentResult
+import com.imglmd.feature.experiment.domain.usecase.comment.AddCommentUseCase
+import com.imglmd.feature.experiment.domain.usecase.comment.DeleteCommentUseCase
+import com.imglmd.feature.experiment.domain.usecase.comment.GetCommentsUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.DeleteMediaUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.GetMediaUseCase
+import com.imglmd.feature.experiment.domain.usecase.media.UploadMediaUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+
+//todo переписать и вернуть оффлайн режим
+class ResultViewModel(
+    private val runId: Int?,
+    private val appContext: Context,
+    private val appScope: CoroutineScope,
+    private val resultRepository: InMemoryResultRepository,
+    private val saveRunUseCase: SaveRunUseCase,
+    private val deleteRunUseCase: DeleteRunUseCase,
+    private val getRunUseCase: GetRunUseCase,
+    private val getResultUseCase: GetResultUseCase,
+    private val getCommentsUseCase: GetCommentsUseCase,
+    private val deleteCommentUseCase: DeleteCommentUseCase,
+    private val addCommentUseCase: AddCommentUseCase,
+    private val getMediaUseCase: GetMediaUseCase,
+    private val uploadMediaUseCase: UploadMediaUseCase,
+    private val deleteMediaUseCase: DeleteMediaUseCase,
+    //private val onlineStateManager: OnlineStateManager
+): ViewModel() {
+
+    private val _state = MutableStateFlow<ResultContract.State>(ResultContract.State.Loading)
+    val state = _state.asStateFlow()
+
+    private val _effect = Channel<ResultContract.Effect>(Channel.BUFFERED)
+    val effect = _effect.receiveAsFlow()
+
+    private val isNewRun: Boolean = runId == null
+    private var savedRunId: Int? = runId
+    private var savedRemoteRunId: String? = null
+
+    private val json = Json
+
+    init {
+        //observeOnlineState()
+        if (isNewRun) {
+            initNewRun()
+        } else {
+            loadExistingRun(runId!!)
+        }
+    }
+
+    private fun initNewRun() {
+        val bundle = resultRepository.get()
+        if (bundle == null) {
+            _state.value = ResultContract.State.Error("Результат не найден")
+            return
+        }
+
+        _state.value = ResultContract.State.Success(
+            result = bundle.result,
+            //onlineState = onlineStateManager.state.value,
+            isSaved = false,
+            isSaving = true
+        )
+        saveRun(bundle.result, bundle.inputs, bundle.replaceRunId)
+    }
+
+    private fun loadExistingRun(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            runCatching {
+                val run = getRunUseCase(id)
+                savedRemoteRunId = run.remoteId
+
+                getResultUseCase(id)
+            }
+                .onSuccess { result ->
+                    if (result != null) {
+                        //_state.value = ResultContract.State.Success(result, onlineState = onlineStateManager.state.value)
+                        _state.value = ResultContract.State.Success(result)
+                        loadComments()
+                        loadMedia()
+                    } else {
+                        _state.value = ResultContract.State.Error("Результат не найден в базе")
+                    }
+                }
+                .onFailure {
+                    _state.value = ResultContract.State.Error("Ошибка загрузки: ${it.message}")
+                }
+        }
+    }
+
+    fun onIntent(intent: ResultContract.Intent) = when (intent) {
+        ResultContract.Intent.Back -> handleBack()
+        ResultContract.Intent.Save -> emit(ResultContract.Effect.NavigateHome)
+        ResultContract.Intent.Delete -> deleteRunThenNavigate(ResultContract.Effect.NavigateHome)
+        ResultContract.Intent.Change -> handleChange()
+        ResultContract.Intent.Compare -> emit(
+            ResultContract.Effect.NavigateCompare(
+                savedRunId ?: 0
+            )
+        )
+        ResultContract.Intent.OpenChart -> savedRunId?.let { emit(ResultContract.Effect.NavigateChart(it)) }
+        ResultContract.Intent.OpenSolution -> emit(ResultContract.Effect.NavigateSolution)
+        ResultContract.Intent.RefreshMedia -> loadMedia()
+        is ResultContract.Intent.AddComment -> addComment(intent.text)
+        is ResultContract.Intent.DeleteComment -> deleteComment(intent.id)
+        is ResultContract.Intent.UploadMedia -> uploadMedia(intent.uri)
+        is ResultContract.Intent.DeleteMedia -> deleteMedia(intent.mediaId)
+    }
+
+    private fun handleBack() {
+        if (isNewRun) {
+            deleteRunThenNavigate(ResultContract.Effect.NavigateBack)
+        } else {
+            emit(ResultContract.Effect.NavigateBack)
+        }
+    }
+
+    private fun handleChange() {
+        val id = savedRunId ?: return
+        viewModelScope.launch {
+            runCatching { getRunUseCase(id) }
+                .onSuccess { run ->
+                    val inputs: Map<String, Double> = json.decodeFromString(run.inputData)
+                    emit(
+                        ResultContract.Effect.NavigateExperiment(
+                            id = run.experimentId,
+                            inputs = inputs.mapValues { it.value.toString() },
+                            replaceRunId = id
+                        )
+                    )
+                }
+        }
+    }
+
+    private fun saveRun(
+        result: ExperimentResult,
+        inputs: Map<String, Double>,
+        replaceRunId: Int?
+    ) {
+        viewModelScope.launch {
+            runCatching { saveRunUseCase(result, inputs) }
+                .onSuccess { newId ->
+                    savedRunId = newId
+
+                    val run = getRunUseCase(newId)
+                    savedRemoteRunId = run.remoteId
+
+                    if (replaceRunId != null) {
+                        appScope.launch {
+                            runCatching {
+                                deleteRemoteMediaForRun(replaceRunId)
+                                deleteRunUseCase(replaceRunId)
+                            }
+                        }
+                    }
+
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isSaved = true, isSaving = false)
+                        } else {
+                            state
+                        }
+                    }
+                    loadComments()
+                    loadMedia()
+                }
+                .onFailure {
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isSaving = false)
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun deleteRunThenNavigate(effect: ResultContract.Effect) {
+        val id = savedRunId
+        emit(effect)
+
+        if (id != null) {
+            appScope.launch {
+                runCatching {
+                    deleteRemoteMediaForRun(id)
+                    deleteRunUseCase(id)
+                }
+            }
+        }
+    }
+   /* private fun deleteRunThen(onSuccess: suspend () -> Unit) {
+        viewModelScope.launch {
+            val id = savedRunId
+            if (id != null) {
+                // deleteRemoteMediaForRun(id)
+                runCatching { deleteRunUseCase(id) }
+                    .onSuccess { onSuccess() }
+            } else {
+                onSuccess()
+            }
+        }
+    }*/
+
+    /*private fun observeOnlineState() {
+        viewModelScope.launch {
+            onlineStateManager.state.collect { onlineState ->
+                _state.update { state ->
+                    if (state is ResultContract.State.Success) {
+                        state.copy(onlineState = onlineState)
+                    } else {
+                        state
+                    }
+                }
+            }
+        }
+    }*/
+
+    private fun loadComments() {
+        val id = savedRunId ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val comments = getCommentsUseCase(id)
+            _state.update { state ->
+                if (state is ResultContract.State.Success) {
+                    state.copy(comments = comments)
+                } else {
+                    state
+                }
+            }
+        }
+    }
+
+    private fun addComment(text: String) {
+        val id = savedRunId ?: return
+        viewModelScope.launch {
+            addCommentUseCase(Comment(experimentRunId = id, text = text))
+            loadComments()
+        }
+    }
+
+    private fun deleteComment(id: Int) {
+        viewModelScope.launch {
+            deleteCommentUseCase(id)
+            loadComments()
+        }
+    }
+
+    private fun loadMedia(showLoading: Boolean = true) {
+        //if (!onlineStateManager.state.value.canUseOnlineFeatures) return
+
+        val remoteId = savedRemoteRunId ?: return
+
+        if (showLoading) {
+            _state.update { state ->
+                if (state is ResultContract.State.Success) {
+                    state.copy(
+                        isMediaLoading = true,
+                        mediaErrorMessage = null
+                    )
+                } else {
+                    state
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            getMediaUseCase(remoteId)
+                .onSuccess { mediaList ->
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                media = mediaList.media,
+                                isMediaLoading = false,
+                                mediaErrorMessage = null
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+                .onFailure { throwable ->
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                isMediaLoading = false,
+                                mediaErrorMessage = throwable.userMessage(
+                                    "Не удалось загрузить вложения"
+                                )
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun uploadMedia(uri: Uri) {
+        //if (!onlineStateManager.state.value.canUseOnlineFeatures) return
+
+        val remoteId = savedRemoteRunId ?: return
+
+        _state.update { state ->
+            if (state is ResultContract.State.Success) {
+                state.copy(
+                    isMediaUploading = true,
+                    mediaErrorMessage = null
+                )
+            } else {
+                state
+            }
+        }
+
+        viewModelScope.launch {
+            uploadMediaUseCase(appContext, uri, remoteId)
+                .onSuccess {
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(isMediaUploading = false)
+                        } else {
+                            state
+                        }
+                    }
+                    loadMedia(showLoading = false)
+                }
+                .onFailure { e ->
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                isMediaUploading = false,
+                                mediaErrorMessage = e.userMessage(
+                                    "Не удалось загрузить файл"
+                                )
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun deleteMedia(mediaId: String) {
+        //if (!onlineStateManager.state.value.canUseOnlineFeatures) return
+
+        val remoteId = savedRemoteRunId ?: return
+
+        viewModelScope.launch {
+            deleteMediaUseCase(remoteId, mediaId)
+                .onSuccess {
+                    loadMedia(showLoading = false)
+                }
+                .onFailure { throwable ->
+                    _state.update { state ->
+                        if (state is ResultContract.State.Success) {
+                            state.copy(
+                                mediaErrorMessage = throwable.userMessage(
+                                    "Не удалось удалить файл"
+                                )
+                            )
+                        } else {
+                            state
+                        }
+                    }
+                }
+        }
+    }
+
+    private suspend fun deleteRemoteMediaForRun(runId: Int) {
+        val run = getRunUseCase(runId)
+        val remoteId = run.remoteId
+
+        val media = getMediaUseCase(remoteId).getOrNull()?.media.orEmpty()
+
+        media.forEach { item -> deleteMediaUseCase(remoteId, item.mediaId) }
+    }
+
+    private fun Throwable.userMessage(defaultMessage: String): String {
+        val message = message?.trim().orEmpty()
+        return if (message.isEmpty()) defaultMessage else message
+    }
+
+    private fun emit(effect: ResultContract.Effect) {
+        viewModelScope.launch { _effect.send(effect) }
+    }
+}

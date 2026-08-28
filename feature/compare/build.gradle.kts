@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":feature:history"))
     implementation(project(":core:experiments"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:experiment"))
 
     implementation(libs.kotlinx.serialization)
 

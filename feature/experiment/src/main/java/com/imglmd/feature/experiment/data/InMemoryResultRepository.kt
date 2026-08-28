@@ -1,0 +1,25 @@
+package com.imglmd.feature.experiment.data
+
+import com.imglmd.core.experiments.model.ExperimentResult
+
+
+data class ResultBundle(
+    val result: ExperimentResult,
+    val inputs: Map<String, Double>,
+    val replaceRunId: Int? = null // айди старого run, который нужно удалить после сохранения нового
+)
+
+class InMemoryResultRepository {
+    private var bundle: ResultBundle? = null
+
+    fun save(
+        result: ExperimentResult,
+        inputs: Map<String, Double>,
+        replaceRunId: Int? = null
+    ) {
+        bundle = ResultBundle(result, inputs, replaceRunId)
+    }
+
+    fun get(): ResultBundle? = bundle
+    fun clear() { bundle = null }
+}

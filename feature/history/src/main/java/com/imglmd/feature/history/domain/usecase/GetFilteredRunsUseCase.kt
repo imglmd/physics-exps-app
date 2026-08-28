@@ -1,7 +1,7 @@
 package com.imglmd.feature.history.domain.usecase
 
-import com.imglmd.feature.history.domain.model.ExperimentRun
-import com.imglmd.feature.history.domain.repository.ExperimentRunsRepository
+import com.imglmd.feature.experiment.domain.model.ExperimentRun
+import com.imglmd.feature.experiment.domain.repository.ExperimentRunsRepository
 import com.imglmd.feature.history.domain.model.HistoryFilter
 import com.imglmd.feature.history.domain.model.SortOrder
 import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase

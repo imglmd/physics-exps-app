@@ -13,9 +13,12 @@ import com.imglmd.core.experiments.impl.SpringPendulumExperiment
 import com.imglmd.core.experiments.model.Experiment
 import com.imglmd.core.experiments.usecase.GetAllExperimentsUseCase
 import com.imglmd.core.experiments.usecase.GetExperimentByIdUseCase
+import com.imglmd.core.experiments.validation.ExperimentValidator
 import org.koin.dsl.module
 
 val experimentsModule = module {
+    single { ExperimentValidator() }
+
     factory { GetAllExperimentsUseCase(get()) }
     factory { GetExperimentByIdUseCase(get()) }
 
