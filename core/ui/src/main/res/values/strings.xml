@@ -19,7 +19,6 @@
     <string name="search">Search</string>
 
     <string name="mechanics">Mechanics</string>
-    <string name="pendulum">Mathematical pendulum</string>
     <string name="physical_pendulum">Physical pendulum</string>
     <string name="spring_pendulum">Spring pendulum</string>
     <string name="harmonic_vibrations">Harmonic oscillations</string>

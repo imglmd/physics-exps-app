@@ -68,8 +68,8 @@ class ExperimentsStringProvider: StringKeyProvider {
         "harmonic_vibrations_desc" -> R.string.harmonic_vibrations_desc
         "joule_lenz" -> com.imglmd.core.ui.R.string.joule_lenz
         "joule_lenz_desc" -> R.string.joule_lenz_desc
-        "pendulum_desc" -> R.string.pendulum_desc
-        "pendulum" -> com.imglmd.core.ui.R.string.pendulum
+        "pendulum_desc" -> com.imglmd.feature.experiment.R.string.pendulum_desc
+        "pendulum" -> com.imglmd.feature.experiment.R.string.pendulum
         "physical_pendulum_desc" -> R.string.physical_pendulum_desc
         "physical_pendulum" -> com.imglmd.core.ui.R.string.physical_pendulum
         "projectile_motion_desc" -> R.string.projectile_motion_desc
@@ -177,22 +177,22 @@ class ExperimentsStringProvider: StringKeyProvider {
         "osc_fr" -> R.string.osc_fr
         "max_speed" -> R.string.max_speed
         "max_height" -> R.string.max_height
-        "math_step_1" -> R.string.math_step_1
-        "math_step_2" -> R.string.math_step_2
-        "math_step_3" -> R.string.math_step_3
-        "math_step_4" -> R.string.math_step_4
-        "math_step_5" -> R.string.math_step_5
-        "math_step_6" -> R.string.math_step_6
-        "math_step_7" -> R.string.math_step_7
-        "math_step_8" -> R.string.math_step_8
-        "math_step_9" -> R.string.math_step_9
-        "math_step_10" -> R.string.math_step_10
-        "math_step_11" -> R.string.math_step_11
-        "math_step_12" -> R.string.math_step_12
-        "math_step_13" -> R.string.math_step_13
-        "math_step_14" -> R.string.math_step_14
-        "math_step_15" -> R.string.math_step_15
-        "math_step_16" -> R.string.math_step_16
+        "math_step_1" -> com.imglmd.feature.experiment.R.string.math_step_1
+        "math_step_2" -> com.imglmd.feature.experiment.R.string.math_step_2
+        "math_step_3" -> com.imglmd.feature.experiment.R.string.math_step_3
+        "math_step_4" -> com.imglmd.feature.experiment.R.string.math_step_4
+        "math_step_5" -> com.imglmd.feature.experiment.R.string.math_step_5
+        "math_step_6" -> com.imglmd.feature.experiment.R.string.math_step_6
+        "math_step_7" -> com.imglmd.feature.experiment.R.string.math_step_7
+        "math_step_8" -> com.imglmd.feature.experiment.R.string.math_step_8
+        "math_step_9" -> com.imglmd.feature.experiment.R.string.math_step_9
+        "math_step_10" -> com.imglmd.feature.experiment.R.string.math_step_10
+        "math_step_11" -> com.imglmd.feature.experiment.R.string.math_step_11
+        "math_step_12" -> com.imglmd.feature.experiment.R.string.math_step_12
+        "math_step_13" -> com.imglmd.feature.experiment.R.string.math_step_13
+        "math_step_14" -> com.imglmd.feature.experiment.R.string.math_step_14
+        "math_step_15" -> com.imglmd.feature.experiment.R.string.math_step_15
+        "math_step_16" -> com.imglmd.feature.experiment.R.string.math_step_16
         "weight" -> R.string.weight
         "dist_ax" -> R.string.dist_ax
         "kg" -> R.string.kg

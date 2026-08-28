@@ -20,7 +20,6 @@
     <string name="search">Поиск</string>
 
     <string name="mechanics">Механика</string>
-    <string name="pendulum">Математический маятник</string>
     <string name="physical_pendulum">Физический маятник</string>
     <string name="spring_pendulum">Пружинный маятник</string>
     <string name="harmonic_vibrations">Гармонические колебания</string>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pendulum">Mathematical pendulum</string>
+    <string name="pendulum_desc">A mathematical pendulum is a model of a body suspended from a massless string that oscillates under the influence of gravity.</string>
+
+    <string name="math_step_1">The period of a mathematical pendulum depends only on the length of the string and the acceleration due to gravity.</string>
+    <string name="math_step_2">Knowing the length of the string and the acceleration due to gravity, we can find the period of oscillation.</string>
+    <string name="math_step_3">Knowing the length of the string and the period of oscillation, we will find the acceleration due to gravity.</string>
+    <string name="math_step_4">Knowing the period of oscillation and the acceleration due to gravity, we can find the length of the string.</string>
+    <string name="math_step_5">Knowing the period, we calculate the linear oscillation frequency.</string>
+    <string name="math_step_6">Let us calculate the angular frequency - the number of oscillations in 2π seconds.</string>
+    <string name="math_step_7">Let\'s find the amplitude of oscillation of a mathematical pendulum.</string>
+    <string name="math_step_8">Let\'s find the maximum speed of the mathematical pendulum; it is reached at the moment it passes through the equilibrium position.</string>
+    <string name="math_step_9">Let\'s find the maximum height to which the mathematical pendulum rises; this is reached at the extreme points of the oscillation amplitude, where the velocity is zero.</string>
+    <string name="math_step_10">Let\'s find the period of oscillation.</string>
+    <string name="math_step_11">Let\'s find the acceleration due to gravity.</string>
+    <string name="math_step_12">Let\'s find the length of the thread.</string>
+    <string name="math_step_13">Let\'s find the linear oscillation frequency.</string>
+    <string name="math_step_14">Let\'s find the angular frequency.</string>
+    <string name="math_step_15">Let\'s find the amplitude of oscillation of a mathematical pendulum.</string>
+    <string name="math_step_16">Let\'s find the maximum speed of a mathematical pendulum.</string>
+    <string name="math_step_17">Let\'s find the maximum height to which the mathematical pendulum rises.</string>
+</resources>
